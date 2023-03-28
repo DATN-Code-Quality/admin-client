@@ -1,30 +1,28 @@
-import React from "react";
+import React from 'react';
 
-import { ConfigProvider } from "antd";
-import locale from "antd/es/locale/vi_VN";
-import ReactDOM from "react-dom/client";
-import { Provider } from "react-redux";
-import { BrowserRouter } from "react-router-dom";
+import { ConfigProvider } from 'antd';
+import locale from 'antd/es/locale/vi_VN';
+import ReactDOM from 'react-dom/client';
+import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
 
-import Store from "./adapters/redux/store";
-import App from "./App";
-import "dayjs/locale/vi";
-import "src/ui/css/style.less";
+import Store from './adapters/redux/store';
+import App from './App';
+import 'dayjs/locale/vi';
+import 'antd-button-color/dist/css/style.less';
+import './ui/css/style.less';
+import './theme.less';
+
+import weekday from "dayjs/plugin/weekday"
+import localeData from "dayjs/plugin/localeData"
+import dayjs from 'dayjs';
+
+dayjs.extend(weekday)
+dayjs.extend(localeData)
 
 const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
+  document.getElementById('root') as HTMLElement
 );
-// root.render(
-//   <Provider store={Store}>
-//     <React.StrictMode>
-//       <ConfigProvider locale={locale}>
-//         <BrowserRouter>
-//           <App />
-//         </BrowserRouter>
-//       </ConfigProvider>
-//     </React.StrictMode>
-//   </Provider>
-// );
 
 root.render(
   <Provider store={Store}>

@@ -1,58 +1,60 @@
-import React from "react";
+import React, { useEffect } from 'react';
 
-import "./Login.less";
+import { Button, Form, Layout, message, Tabs, Input } from 'antd';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
-import { Button, Form, Input, Layout, message, Tabs } from "antd";
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { useAuth } from '~/src/adapters/appService/auth.service';
+import { authSelector } from '~/src/adapters/redux/selectors/auth';
+import { metaFormLogin } from '~/src/ui/modules/login/containers/props';
+import FormBuilder from '~/src/ui/shared/forms/FormBuilder';
+// import ZaloLogo from '~/src/ui/assets/images/zalo-logo.svg';
+import ZaloLogo from '~/src/ui/assets/images/icon-zalo.png';
+import Logo from '~/src/ui/assets/images/logo.png';
+import ROUTE from '~/src/constant/routes';
+import Card from '~/src/ui/shared/card';
 
-import { useAuth } from "src/adapters/appService/auth.service";
+import './Login.less'
 
-import FormBuilder from "src/ui/shared/forms";
-
-import { metaFormLogin } from "./props";
-
-const Login = () => {
-  const { loginMicrosoft } = useAuth();
+function Login() {
+  const { loginZalo } = useAuth();
+  const navigate = useNavigate();
+  const { roles, name } = useSelector(authSelector);
   const onFinish = (values: any) => {
-    loginMicrosoft();
+    loginZalo(values);
   };
 
   const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
+    console.log('Failed:', errorInfo);
   };
+
+  useEffect(() => {
+    if (roles && name) {
+      navigate(ROUTE.DASHBOARD);
+    }
+  }, []);
+
   return (
     <Layout className="cms-layout-app cms-layout-app-login">
-      <Tabs defaultActiveKey="2">
-        <Tabs.TabPane tab="Login now" key="2">
-          <Form
-            name="basic"
-            labelCol={{ span: 8 }}
-            initialValues={{ remember: true }}
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
-            autoComplete="off"
-          >
-            <FormBuilder meta={metaFormLogin} />
-            <div className="login-action-container">
-              <Button
-                className="login-action-item"
-                type="primary"
-                htmlType="submit"
-              >
-                Submit
-              </Button>
-              <Button
-                className="login-action-item"
-                type="primary"
-                onClick={loginMicrosoft}
-              >
-                Microsoft 365
-              </Button>
-            </div>
-          </Form>
-        </Tabs.TabPane>
-      </Tabs>
+      <Card
+        className="card-form-login"
+        bodyClassName="card-form-login__body"
+      >
+        <div className="logo-login-container">
+          <img className="logo-login" src={Logo} />
+        </div>
+        <Button type="primary" onClick={loginZalo} className="login-button">
+          {/* <img className="icon" alt="" src={ZaloLogo} onClick={loginZalo} /> */}
+          Login with Zalo
+        </Button>
+        {/* <div className="zalo-wrap-img">
+          <span className="text-login-with">Login with:</span>
+          <img className="icon" alt="" src={ZaloLogo} onClick={loginZalo} />
+        </div> */}
+      </Card>
     </Layout>
   );
-};
+}
 
 export default Login;

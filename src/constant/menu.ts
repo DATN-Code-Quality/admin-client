@@ -1,126 +1,75 @@
-import { lazy } from "react";
+import { lazy } from 'react';
 
-import {
-  DownloadOutlined,
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  SettingOutlined,
-} from "@ant-design/icons";
+import { DownloadOutlined } from '@ant-design/icons';
 
-import { ROLE } from "./role";
-import ROUTE from "./routes";
+import ROUTE from './routes';
+import { Role } from './enum';
 
-const ViewJobPost = lazy(
-  () => import("../ui/modules/job-post/containers/ViewJobPost")
-);
+const ViewUser = lazy(() => import('../ui/modules/user/containers/ViewUser'));
 
-const CreateJobPost = lazy(
-  () => import("../ui/modules/job-post/containers/CreateJobPost")
-);
+const ViewPartner = lazy(() => import('../ui/modules/partner/containers/ViewPartner'));
 
-const UpdateJobPost = lazy(
-  () => import("../ui/modules/job-post/containers/CreateJobPost")
-);
+const Login = lazy(() => import('../ui/modules/login/containers/Login'));
 
-const ViewCompany = lazy(
-  () => import("../ui/modules/company/containers/ViewCompany")
-);
+const Dashboard = lazy(() => import('../ui/modules/dashboard/containers/Dashboard'));
 
-const CreateCompany = lazy(
-  () => import("../ui/modules/company/containers/CreateCompany")
-);
-
-const UpdateCompany = lazy(
-  () => import("../ui/modules/company/containers/CreateCompany")
-);
-
-const ViewCareerType = lazy(
-  () => import("../ui/modules/career-type/containers/ViewCareerType")
-);
-
-const CreateCareerType = lazy(
-  () => import("../ui/modules/career-type/containers/CreateCareerType")
-);
-
-const UpdateCareerType = lazy(
-  () => import("../ui/modules/career-type/containers/CreateCareerType")
-);
-
-const Login = lazy(() => import("../ui/modules/login/containers/Login"));
+const SessionLog = lazy(() => import('../ui/modules/session-log/containers/SessionLog'));
 
 export const MAIN_ROUTES = [
   {
     path: ROUTE.LOGIN,
-    name: "login",
+    name: 'login',
     element: Login,
   },
   {
-    path: ROUTE.JOB_POST.LIST,
-    name: "JobPosts",
-    element: ViewJobPost,
+    path: ROUTE.DASHBOARD,
+    name: 'dashboard',
+    element: Dashboard,
   },
   {
-    path: ROUTE.JOB_POST.CREATE_JOB_POST,
-    name: "createJobPost",
-    element: CreateJobPost,
+    path: ROUTE.SESSION_LOG,
+    name: 'sessionLog',
+    element: SessionLog,
   },
   {
-    path: ROUTE.JOB_POST.UPDATE_JOB_POST,
-    name: "updateJobPost",
-    element: UpdateJobPost,
+    path: ROUTE.USER.LIST,
+    name: 'users',
+    element: ViewUser,
   },
   {
-    path: ROUTE.COMPANY.LIST,
-    name: "Companies",
-    element: ViewCompany,
-  },
-  {
-    path: ROUTE.COMPANY.CREATE_COMPANY,
-    name: "createCompany",
-    element: CreateCompany,
-  },
-  {
-    path: ROUTE.COMPANY.UPDATE_COMPANY,
-    name: "updateCompany",
-    element: UpdateCompany,
-  },
-  {
-    path: ROUTE.CAREER_TYPE.LIST,
-    name: "CareerTypes",
-    element: ViewCareerType,
-  },
-  {
-    path: ROUTE.CAREER_TYPE.CREATE_CAREER_TYPE,
-    name: "createCareerType",
-    element: CreateCareerType,
-  },
-  {
-    path: ROUTE.CAREER_TYPE.UPDATE_CAREER_TYPE,
-    name: "updateCareerType",
-    element: UpdateCareerType,
+    path: ROUTE.PARTNER.LIST,
+    name: 'Partners',
+    element: ViewPartner,
   },
 ];
 
-export const appMenu = [
+export const menus = [
   {
-    id: "jobPost",
-    name: "Bài đăng tuyển dụng",
-    icon: DownloadOutlined,
-    route: ROUTE.JOB_POST.LIST,
-    role: [ROLE.Admin],
+    id: 'dashboard',
+    name: 'Dashboard',
+    // icon: DownloadOutlined,
+    route: ROUTE.DASHBOARD,
+    role: [Role.ROOT_ADMIN, Role.SYSTEM_ADMIN, Role.USER],
   },
   {
-    id: "company",
-    name: "Công ty",
-    icon: DownloadOutlined,
-    route: ROUTE.COMPANY.LIST,
-    role: [ROLE.Admin],
+    id: 'sessionLog',
+    name: 'Logs',
+    // icon: DownloadOutlined,
+    route: ROUTE.SESSION_LOG,
+    role: [Role.ROOT_ADMIN, Role.SYSTEM_ADMIN, Role.USER],
   },
   {
-    id: "careerType",
-    name: "Ngành nghề",
-    icon: DownloadOutlined,
-    route: ROUTE.CAREER_TYPE.LIST,
-    role: [ROLE.Admin],
+    id: 'user',
+    name: 'Users',
+    // icon: DownloadOutlined,
+    route: ROUTE.USER.LIST,
+    role: [Role.ROOT_ADMIN, Role.SYSTEM_ADMIN, Role.USER],
+  },
+  {
+    id: 'partner',
+    name: 'Partners',
+    // icon: DownloadOutlined,
+    route: ROUTE.PARTNER.LIST,
+    role: [Role.ROOT_ADMIN, Role.SYSTEM_ADMIN, Role.USER],
   },
 ];

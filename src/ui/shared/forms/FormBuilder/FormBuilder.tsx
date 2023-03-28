@@ -1,11 +1,12 @@
-import React from "react";
+import React from 'react';
 
-import { Col, Row, Form, FormInstance } from "antd";
-import find from "lodash/find";
-import isArray from "lodash/isArray";
-import PropTypes from "prop-types";
+import { Col, Row, Form, FormInstance } from 'antd';
+import find from 'lodash/find';
+import isArray from 'lodash/isArray';
+import PropTypes from 'prop-types';
 
-import FormBuilderField from "./FormBuilderField";
+import FormBuilderField from './FormBuilderField';
+import './FormBuilder.less';
 
 const isV4 = !!Form.useForm;
 
@@ -13,7 +14,7 @@ const widgetMap = {};
 
 function getWidget(widget) {
   if (!widget) return null;
-  if (typeof widget === "string") {
+  if (typeof widget === 'string') {
     if (!widgetMap[widget] || !widgetMap[widget].widget) {
       throw new Error(
         `Widget '${widget}' not found, did you defined it by FormBuilder.defineComponent?`
@@ -87,7 +88,7 @@ export interface IField {
   getValueProps?: (value) => void;
   normalize?: (value, prevValue, allValues) => void;
   disabled?: boolean;
-  clear?: "left" | "right" | "both";
+  clear?: 'left' | 'right' | 'both';
   forwardRef?: boolean;
   noFormItem?: boolean;
   noStyle?: boolean;
@@ -178,7 +179,7 @@ function FormBuilderInner(props: IProps) {
       let j = 0;
       (j < columns || j === 0) && // total col span is less than columns
       i < elements.length && // element exist
-      (!["left", "both"].includes(fields[i].clear) || j === 0); // field doesn't need to start a new row
+      (!['left', 'both'].includes(fields[i].clear) || j === 0); // field doesn't need to start a new row
 
     ) {
       const fieldSpan = fields[i].colSpan || 1;
@@ -188,7 +189,7 @@ function FormBuilderInner(props: IProps) {
         </Col>
       );
       j += fieldSpan;
-      if (["both", "right"].includes(fields[i].clear)) {
+      if (['both', 'right'].includes(fields[i].clear)) {
         i += 1;
         break;
       }
@@ -218,12 +219,12 @@ FormBuilder.useForceUpdate = () => {
 };
 
 FormBuilder.useForm = (f) => {
-  throw new Error("FormBuilder.useForm is removed. Please use Form.useForm().");
+  throw new Error('FormBuilder.useForm is removed. Please use Form.useForm().');
 };
 
 FormBuilder.createForm = (ctx) => {
   throw new Error(
-    "FormBuilder.createForm is removed. Please use Form.useForm for functional component and ref for class component."
+    'FormBuilder.createForm is removed. Please use Form.useForm for functional component and ref for class component.'
   );
 };
 FormBuilder.propTypes = {

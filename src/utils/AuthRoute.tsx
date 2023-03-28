@@ -1,6 +1,6 @@
-import React, { memo } from "react";
+import React, { memo } from 'react';
 
-import { IRoute } from "./route";
+import { IRoute } from './route';
 
 interface AuthProps {
   route: IRoute;

@@ -1,9 +1,7 @@
 import { SET_USER_INFO, LOG_OUT } from "../actions/auth";
 
 const defaultState = {
-  user_id: 0,
   name: "",
-  avatar: "",
   roles: [],
 };
 

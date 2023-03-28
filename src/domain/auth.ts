@@ -1,6 +1,7 @@
+import { PartnerType } from "../constant/enum";
+
 export interface Auth {
-  user_id: number;
   name: string;
-  avatar: string;
-  roles: string[];
+  partner_type: PartnerType;
+  roles: string;
 }

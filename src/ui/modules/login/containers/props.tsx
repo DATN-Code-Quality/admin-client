@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 export const metaFormLogin = {
   formItemLayout: [4, 16],
@@ -7,17 +7,17 @@ export const metaFormLogin = {
   },
   fields: [
     {
-      label: "Username",
-      key: "username",
+      label: 'Username',
+      key: 'username',
       required: true,
-      message: "Vui lòng nhập username ",
+      message: 'Vui lòng nhập username ',
     },
     {
-      label: "Password",
-      key: "password",
-      widget: "password",
+      label: 'Password',
+      key: 'password',
+      widget: 'password',
       required: true,
-      message: "Vui lòng nhập password",
+      message: 'Vui lòng nhập password',
     },
   ],
 };

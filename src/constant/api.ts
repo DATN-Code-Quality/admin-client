@@ -2,76 +2,69 @@ import { DOMAIN_API_URL } from ".";
 
 export const API_UPLOAD_IMAGE = `${DOMAIN_API_URL}/upload/image_url`;
 
-export const LOCATION = {
+export const DASHBOARD = {
   GET: {
-    LOCATION: "/location",
+    OVERVIEW: "/api-overview",
+  }
+};
+
+export const SESSION_LOG = {
+  GET: {
+    SESSION_LOG: "/session-logs",
+  }
+};
+
+
+export const USER = {
+  GET: {
+    USERS: "/user",
+  },
+  POST: {
+    CREATE_USER: "/user",
+  },
+  PUT: {
+    UPDATE_USER: "/user",
   },
 };
 
-export const COMPANY = {
+export const PARTNER = {
   GET: {
-    COMPANIES: "/company",
+    PARTNERS: "/partner",
   },
   POST: {
-    CREATE_COMPANY: "/company",
+    CREATE_PARTNER: "/partner",
   },
   PUT: {
-    UPDATE_COMPANY: "/company",
+    UPDATE_PARTNER: "/partner",
   },
 };
 
-export const CAREER_TYPE = {
+export const AGENCY = {
   GET: {
-    CAREER_TYPES: "/career-type",
+    AGENCIES: "/agencies",
   },
   POST: {
-    CREATE_CAREER_TYPE: "/career-type",
+    CREATE_AGENCY: "/agencies",
   },
   PUT: {
-    UPDATE_CAREER_TYPE: "/career-type",
-  },
-};
-
-export const JOB_APPLICATION = {
-  GET: {
-    JOB_APPLICATIONS: "/job-application",
-    DOWNLOAD_REPORT: "/job-application/download-report",
-  },
-  POST: {
-    CREATE_APPLICATION: "/job-application",
-  },
-  PUT: {
-    UPDATE_APPLICATION: "/job-application",
-  },
-};
-
-export const JOB_POST = {
-  GET: {
-    JOB_POSTS: "/job-post",
-  },
-  POST: {
-    CREATE_JOB_POST: "/job-post",
-  },
-  PUT: {
-    UPDATE_JOB_POST: "/job-post",
+    UPDATE_AGENCY: "/agencies",
   },
 };
 
 export const AUTH = {
   GET: {
-    LOGIN_MICROSOFT: "/auth/login-via-microsoft",
+    LOGIN_ZALO: "/auth/login-via-zalo",
     CHECK_SESSION: "/auth/session",
     LOGOUT: "/auth/logout",
   },
 };
-
 const API = {
+  DASHBOARD,
+  SESSION_LOG,
   AUTH,
-  COMPANY,
-  CAREER_TYPE,
-  JOB_APPLICATION,
-  JOB_POST,
-  LOCATION,
+  USER,
+  PARTNER,
+  AGENCY,
 };
 
 export default API;

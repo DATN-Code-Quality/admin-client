@@ -1,5 +1,6 @@
-import { message } from "antd";
-import dayjs, { Dayjs } from "dayjs";
+import { message } from 'antd';
+import dayjs, { Dayjs } from 'dayjs';
+import Is from './is';
 
 export const buildParams = (data?: any) => {
   if (data) {
@@ -10,10 +11,10 @@ export const buildParams = (data?: any) => {
     let queryData = {};
     try {
       queryData = Object.fromEntries(
-        Object.entries(dataEdited).filter(([_, v]) => v != null && v !== "")
+        Object.entries(dataEdited).filter(([_, v]) => v != null && v !== '')
       );
     } catch (err) {
-      console.error("Có lỗi xảy ra: ", err);
+      console.error('Có lỗi xảy ra: ', err);
     }
 
     return Object.keys(queryData)
@@ -22,12 +23,43 @@ export const buildParams = (data?: any) => {
           ? `${key}=[${queryData[key]}]`
           : `${key}=${encodeURIComponent(queryData[key])}`
       )
-      .join("&");
+      .join('&');
   }
-  return "";
+  return '';
 };
 export const buildURLWithParam = (url: string, query?: any) => {
   return `${url}?${buildParams(query)}`;
+};
+
+export const removeFromArr = (arr: any[], value: any, key: string) => {
+  if (Is.empty(arr)) {
+      return arr;
+  }
+  let index;
+  if (key) {
+      index = arr.findIndex(item => item[key] === value);
+  } else {
+      index = arr.indexOf(value);
+  }
+  if (index < 0) {
+      return arr;
+  }
+  return [...arr.slice(0, index), ...arr.slice(index + 1)];
+};
+
+export const findAndReplace = (arr: any[], value: any, key: string) => {
+  if (Is.empty(arr)) {
+      return arr;
+  }
+  let index;
+  if (key) {
+      index = arr.findIndex(item => item[key] === value[key]);
+  }
+  if (index < 0) {
+      return arr;
+  }
+  arr[index] = value;
+  return [...arr];
 };
 
 export const fromEntries = (iterable) => {
@@ -42,14 +74,14 @@ export const insertAt = (arr: any[], item: any, index = 0) => {
 };
 
 // TO DO: rewrite this
-export function asyncAction(title = "", actionFn) {
+export function asyncAction(title = '', actionFn) {
   return Promise.resolve()
     .then(() => actionFn())
     .then((data) => {
       if (data && data.code !== 0) {
         message.error(
           `${title} thất bại! [${
-            data.code ? `code: ${data.code} | ` : ""
+            data.code ? `code: ${data.code} | ` : ''
           }message: ${data.msg}]`
         );
         return undefined;
@@ -63,12 +95,12 @@ export function asyncAction(title = "", actionFn) {
       if (title && data && data.code) {
         message.error(
           `${title} thất bại! [${
-            data.code ? `code: ${data.code} | ` : ""
+            data.code ? `code: ${data.code} | ` : ''
           }message: ${data.msg}]`
         );
       } else {
         message.error(
-          `${title} thất bại!${data?.msg ? ` | ${data?.msg}` : ""}`
+          `${title} thất bại!${data?.msg ? ` | ${data?.msg}` : ''}`
         );
       }
       return Promise.reject(data);
@@ -94,7 +126,7 @@ export const renderDuration = (
 };
 
 export const renderDateTime = (dateTime: number) =>
-  dayjs(dateTime).format("DD/MM/YYYY HH:mm A");
+  dayjs(dateTime).format('DD/MM/YYYY HH:mm A');
 
 export const removeUndefined = (obj) => {
   return Object.keys(obj).reduce((acc, key) => {
@@ -128,10 +160,10 @@ export const dateToUnix = (
 
 export const removeAccents = (str) => {
   return str
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/đ/g, "d")
-    .replace(/Đ/g, "D");
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/đ/g, 'd')
+    .replace(/Đ/g, 'D');
 };
 
 export const compareString = (a, b) => {
@@ -156,13 +188,13 @@ export function extend(obj1, obj2) {
 }
 
 // function to format number to locale
-export const formatNumber = (number, locale?: "vi-VN") => {
+export const formatNumber = (number, locale = 'vi-VN') => {
   return number.toLocaleString(locale);
 };
 
 // function to format date to locale
-export const formatDate = (date, locale?: "vi-VN") => {
-  return date && dayjs(Number(date)).format("DD/MM/YYYY HH:mm:ss");
+export const formatDate = (date, locale?: 'vi-VN', format?: string) => {
+  return date && dayjs(Number(date)).format(format || 'DD/MM/YYYY HH:mm:ss');
 };
 
 export function debounce(func, timeout = 300) {
@@ -177,7 +209,7 @@ export function debounce(func, timeout = 300) {
 
 export function getCookie(name) {
   function escape(s) {
-    return s.replace(/([.*+?\^$(){}|\[\]\/\\])/g, "\\$1");
+    return s.replace(/([.*+?\^$(){}|\[\]\/\\])/g, '\\$1');
   }
 
   const match = document.cookie.match(
@@ -189,10 +221,21 @@ export function getCookie(name) {
 // use reverse map to create the type from enum's values
 export type ReverseMap<T> = T[keyof T];
 
-export const getPromiseSettleResponseValue = (res, defaultValue = {}) => {
-  if (res.status === "fulfilled") {
-    return res.value;
-  }
-  console.log(res.reason);
-  return defaultValue;
+export function capitalizeFirstLetter(string: string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+export const getMappingLabelByValue = (map: any, value: any) => {
+  const result = map.find((item) => item[0] === value);
+  return result ? result[1] : '';
+};
+
+export const generateMappingList = (list: any[], keyField: any, valueField: any) => {
+  return list.map((item) => [item[keyField], item[valueField]]);
+};
+
+export const addDays = (date: Date, days: number): Date => {
+  const result = new Date(date);
+  result.setDate(result.getDate() + parseInt(days));
+  return result;
 };

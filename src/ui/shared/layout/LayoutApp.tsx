@@ -1,24 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 
 import {
-  DownloadOutlined,
+  LogoutOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  SettingOutlined,
-} from "@ant-design/icons";
-import { Layout, Menu, Button } from "antd";
-import { pathToRegexp } from "path-to-regexp";
-import { useSelector } from "react-redux";
-import { useNavigate, Link } from "react-router-dom";
+  MobileOutlined,
+  UserOutlined,
+  WindowsOutlined,
+} from '@ant-design/icons';
+import { Layout, Menu, Button, Dropdown, Space, MenuProps, Avatar } from 'antd';
+import { pathToRegexp } from 'path-to-regexp';
+import { useSelector } from 'react-redux';
+import { useNavigate, Link } from 'react-router-dom';
 
-import "./LayoutApp.less";
-import { useAuth } from "src/adapters/appService/auth.service";
-import { authSelector } from "src/adapters/redux/selectors/auth";
+import './LayoutApp.less';
 
-import { MAIN_ROUTES, appMenu } from "src/constant/menu";
-import ROUTE from "src/constant/routes";
-import { arrayToTree, queryAncestors } from "src/utils/menu";
-import { renderRoutes } from "src/utils/route";
+import { useAuth } from '~/src/adapters/appService/auth.service';
+import { authSelector } from '~/src/adapters/redux/selectors/auth';
+import { MAIN_ROUTES, menus } from '~/src/constant/menu';
+import useQuery from '~/src/hooks/useQuery';
+import { arrayToTree, queryAncestors } from '~/src/utils/menu';
+import { renderRoutes } from '~/src/utils/route';
+import { capitalizeFirstLetter } from '~/src/utils';
+import ROUTE from '~/src/constant/routes';
 
 const { Header, Sider, Content } = Layout;
 
@@ -49,7 +53,7 @@ const generateMenus = (data, appType?) => {
     }
     return (
       <Menu.Item key={item.id}>
-        <Link to={item.route}>
+        <Link to={`${item.route}` || '#'}>
           {!!item.icon && <item.icon />}
           <span>{item.name}</span>
         </Link>
@@ -58,18 +62,17 @@ const generateMenus = (data, appType?) => {
   });
 };
 
-const LayoutApp = () => {
+function LayoutApp() {
   const navigate = useNavigate();
   const { roles, name } = useSelector(authSelector);
   const [collapsed, setCollapsed] = useState<boolean>(false);
-  const { checkLogin, logout } = useAuth();
-  const menus = appMenu;
+  const query = useQuery();
+  const { checkSession, logout } = useAuth();
 
-  // const filteredMenus = menus.filter(filterRole(roles));
-  const filteredMenus = menus;
+  const filteredMenus = menus.filter(filterRole(roles));
 
   // Generating tree-structured data for menu content.
-  const menuTree = arrayToTree(filteredMenus, "id", "menuParentId");
+  const menuTree = arrayToTree(filteredMenus, 'id', 'menuParentId');
 
   // Find a menu that matches the pathname.
   const currentMenu = menus.find(
@@ -78,56 +81,65 @@ const LayoutApp = () => {
 
   // Find the key that should be selected according to the current menu.
   const selectedKeys = currentMenu
-    ? queryAncestors(menus, currentMenu, "menuParentId").map((_) => _.id)
+    ? queryAncestors(menus, currentMenu, 'menuParentId').map((_) => _.id)
     : [];
 
   useEffect(() => {
-    checkLogin()
-      .then((data) => data)
+    checkSession()
+      .then((data) => {
+        navigate(ROUTE.DASHBOARD, { replace: true });
+      })
       .catch((err) => {
         navigate(ROUTE.LOGIN, { replace: true });
       });
   }, []);
 
+  const itemsAvatar: MenuProps['items'] = [
+    {
+      key: 'logout',
+      label: <a onClick={() => logout()}>Log out</a>,
+      icon: <LogoutOutlined />,
+    },
+  ];
+
   return (
     <Layout className="cms-layout-app">
-      <Sider trigger={null} collapsible collapsed={collapsed} width={300}>
-        <div className="logo" />
-        <Menu mode="inline" theme="dark" selectedKeys={selectedKeys}>
-          {generateMenus(menuTree)}
-        </Menu>
-      </Sider>
       <Layout className="site-layout">
-        <Header
-          className="site-layout-background-header"
-          style={{ padding: 0 }}
-        >
-          {React.createElement(
-            collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
-            {
-              className: "trigger",
-              // onClick: () => setCollapsed(!collapsed),
-            }
-          )}
-          <div className="action-container">
-            <Button className="btn-logout" size="middle" onClick={logout}>
-              Đăng xuất
-            </Button>
+        <Header className="site-layout-background-header">
+          <div className="logo" onClick={() => navigate(ROUTE.DASHBOARD)} />
+          {/* <div className="logo" /> */}
+          <Menu
+            className="menu-header"
+            mode="horizontal"
+            selectedKeys={selectedKeys}
+          >
+            {generateMenus(menuTree)}
+          </Menu>
+          <div className="top-right-container">
+            <div className="action-container">
+              <Dropdown
+                menu={{
+                  items: itemsAvatar,
+                }}
+              >
+                <Space>
+                  <Avatar
+                    icon={<UserOutlined />}
+                    style={{ verticalAlign: 'middle' }}
+                    size="small"
+                  />
+                  {name}
+                </Space>
+              </Dropdown>
+            </div>
           </div>
         </Header>
-        <Content
-          className="site-layout-background"
-          style={{
-            margin: "24px 16px",
-            padding: 24,
-            minHeight: 280,
-          }}
-        >
+        <Content className="site-layout-background">
           {renderRoutes(MAIN_ROUTES)}
         </Content>
       </Layout>
     </Layout>
   );
-};
+}
 
 export default LayoutApp;

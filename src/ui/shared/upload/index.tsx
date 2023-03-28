@@ -1,12 +1,11 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
-import { Upload, message } from "antd";
-import { UploadChangeParam } from "antd/lib/upload";
+import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import { Upload, message } from 'antd';
+import { UploadChangeParam } from 'antd/lib/upload';
 
-import logger from "src/utils/logger";
-
-import { WidgetProps } from "../forms/FormBuilder/FormBuilder";
+import { WidgetProps } from '~/src/ui/shared/forms/FormBuilder/FormBuilder';
+import logger from '~/src/utils/logger';
 
 interface UploadButtonProps extends WidgetProps {
   api?: string;
@@ -17,9 +16,9 @@ const UploadButton: React.FC<UploadButtonProps> = (props) => {
   const [loading, setLoading] = useState(false);
 
   const beforeUpload = (file: File) => {
-    const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
+    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
     if (!isJpgOrPng) {
-      message.error("Bạn chỉ có thể upload file JPG/PNG!");
+      message.error('Bạn chỉ có thể upload file JPG/PNG!');
     }
     return isJpgOrPng;
   };
@@ -32,33 +31,33 @@ const UploadButton: React.FC<UploadButtonProps> = (props) => {
   );
 
   const handleChange = (info: UploadChangeParam) => {
-    if (info.file.status === "uploading") {
+    if (info.file.status === 'uploading') {
       setLoading(true);
-      logger.debug("uploading!");
+      logger.debug('uploading!');
       return;
     }
 
-    if (info.file.status === "done") {
+    if (info.file.status === 'done') {
       setLoading(false);
-      logger.debug("uploaded!", info.file);
+      logger.debug('uploaded!', info.file);
 
       const urlFile: string = info.file.response?.data?.url;
 
       if (urlFile) {
-        logger.debug("urlFile | uploaded", urlFile);
+        logger.debug('urlFile | uploaded', urlFile);
         onChange(urlFile);
       } else {
         message.error(
           `${info.file.name} file uploaded failed | error: ${
-            info.file.response?.data?.detail || "Không xác định"
+            info.file.response?.data?.detail || 'Không xác định'
           }`
         );
         return;
       }
     }
 
-    if (info.file.status === "error") {
-      logger.debug("error", info.file);
+    if (info.file.status === 'error') {
+      logger.debug('error', info.file);
       setLoading(false);
       message.error(`${info.file.name} file upload failed`);
     }
@@ -81,7 +80,7 @@ const UploadButton: React.FC<UploadButtonProps> = (props) => {
       method="post"
     >
       {value ? (
-        <img src={value} alt="avatar" style={{ width: "100%" }} />
+        <img src={value} alt="avatar" style={{ width: '100%' }} />
       ) : (
         uploadButton
       )}

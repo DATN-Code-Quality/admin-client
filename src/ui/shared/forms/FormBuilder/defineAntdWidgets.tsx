@@ -10,17 +10,17 @@ import {
   Upload,
   Slider,
   DatePicker,
-} from "antd";
+} from 'antd';
 
-import FormBuilder from "./FormBuilder";
+import FormBuilder from './FormBuilder';
 
 const { RangePicker } = DatePicker;
 
-const isObject = (item) => typeof item === "object" && item !== null;
+const isObject = (item) => typeof item === 'object' && item !== null;
 
 const mapOptions = (options) => {
   if (!Array.isArray(options)) {
-    throw new Error("Options should be array in form builder meta.");
+    throw new Error('Options should be array in form builder meta.');
   }
   return options.map((opt) => {
     if (Array.isArray(opt)) {
@@ -33,28 +33,28 @@ const mapOptions = (options) => {
   });
 };
 
-FormBuilder.defineWidget("checkbox", Checkbox, (field) => {
-  return { ...field, valuePropName: "checked" };
+FormBuilder.defineWidget('checkbox', Checkbox, (field) => {
+  return { ...field, valuePropName: 'checked' };
 });
 
-FormBuilder.defineWidget("switch", Switch, (field) => {
-  return { ...field, valuePropName: "checked" };
+FormBuilder.defineWidget('switch', Switch, (field) => {
+  return { ...field, valuePropName: 'checked' };
 });
 
-FormBuilder.defineWidget("button", Button);
-FormBuilder.defineWidget("input", Input);
-FormBuilder.defineWidget("password", Input.Password);
-FormBuilder.defineWidget("textarea", Input.TextArea);
-FormBuilder.defineWidget("number", InputNumber);
-FormBuilder.defineWidget("date-picker", DatePicker);
-FormBuilder.defineWidget("radio", Radio);
-FormBuilder.defineWidget("search", Input.Search);
-FormBuilder.defineWidget("autocomplete", AutoComplete);
-FormBuilder.defineWidget("upload", Upload);
-FormBuilder.defineWidget("slider", Slider);
-FormBuilder.defineWidget("range-picker", RangePicker);
+FormBuilder.defineWidget('button', Button);
+FormBuilder.defineWidget('input', Input);
+FormBuilder.defineWidget('password', Input.Password);
+FormBuilder.defineWidget('textarea', Input.TextArea);
+FormBuilder.defineWidget('number', InputNumber);
+FormBuilder.defineWidget('date-picker', DatePicker);
+FormBuilder.defineWidget('radio', Radio);
+FormBuilder.defineWidget('search', Input.Search);
+FormBuilder.defineWidget('autocomplete', AutoComplete);
+FormBuilder.defineWidget('upload', Upload);
+FormBuilder.defineWidget('slider', Slider);
+FormBuilder.defineWidget('range-picker', RangePicker);
 
-FormBuilder.defineWidget("radio-group", Radio.Group, (field) => {
+FormBuilder.defineWidget('radio-group', Radio.Group, (field) => {
   const RadioComp = field.buttonGroup ? Radio.Button : Radio;
   if (field.options && !field.children) {
     return {
@@ -73,7 +73,7 @@ FormBuilder.defineWidget("radio-group", Radio.Group, (field) => {
   return field;
 });
 
-FormBuilder.defineWidget("checkbox-group", Checkbox.Group, (field) => {
+FormBuilder.defineWidget('checkbox-group', Checkbox.Group, (field) => {
   if (field.options && !field.children) {
     return {
       ...field,
@@ -86,7 +86,7 @@ FormBuilder.defineWidget("checkbox-group", Checkbox.Group, (field) => {
   }
   return field;
 });
-FormBuilder.defineWidget("select", Select, (field) => {
+FormBuilder.defineWidget('select', Select, (field) => {
   if (field.options && !field.children) {
     return {
       ...field,

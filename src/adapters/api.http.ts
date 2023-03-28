@@ -1,12 +1,7 @@
 /* eslint-disable no-use-before-define */
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 
-import { DOMAIN_API_URL, ResponseData, ApiStatus } from "src/constant";
-import { buildURLWithParam, extend } from "src/utils";
-
-import { authSelector } from "./redux/selectors/auth";
-import store from "./redux/store";
+import { DOMAIN_API_URL, ResponseData } from "~/src/constant";
+import { buildURLWithParam, extend } from "~/src/utils";
 
 export function fetch(
   url,
@@ -210,9 +205,9 @@ function validResp<T>(resp: ResponseData<T>): Promise<ResponseData<T>> {
 }
 
 export function formatResponse<T>(response): T {
-  const { code, data, success } = response;
+  const { success } = response;
   if (success) {
-    return data;
+    return response;
   }
   throw new Error(JSON.stringify(response));
 }

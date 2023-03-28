@@ -1,0 +1,146 @@
+// @table-prefix-cls: ~'ant-table';
+
+// .@{table-prefix-cls} {
+//     &-item-active {
+//         a {
+//             color: @neutral-nf;
+//         }
+//     }
+//     &-thead {
+//         tr {
+//             th {
+//                 border-bottom: 2px solid @neutral-n4;
+//                 color: @neutral-n3;
+//                 font-weight: 600;
+//                 vertical-align: bottom;
+//                 &::before{
+//                     content: initial !important;
+//                 }
+//                 &:first-child {
+//                     &:after {
+//                         content: '';
+//                         display: inline-block;
+//                         vertical-align: bottom;
+//                     }
+//                 }
+//                 &:hover {
+//                     .is-hovering {
+//                         opacity: 1;
+//                     }
+//                 }
+//                 .is-hovering {
+//                     color: @neutral-n4;
+//                     opacity: 0;
+//                 }
+//                 .@{table-prefix-cls}-column-sorter-inner {
+//                     display: none;
+//                 }
+//                 &.@{table-prefix-cls}-column-sort {
+//                     background: @neutral-nf;
+//                 }
+//                 &.@{table-prefix-cls}-column-has-sorters {
+//                     &:hover {
+//                         background: @blue-b7;
+//                     }
+//                     .@{table-prefix-cls}-column-sorters {
+//                         padding: 0;
+//                     }
+//                 }
+//                 .icon_sort {
+//                     margin-left: 15px;
+//                     color: @blue-b3;
+//                 }
+//             }
+//         }
+//     }
+//     &-tbody {
+//         overflow-y: auto !important;
+//         tr {
+//             td {
+//                 color: @neutral-n2;
+//                 border-bottom: 1px solid @neutral-n5;
+//                 padding: 6px 16px;
+//                 &.@{table-prefix-cls}-column-sort {
+//                     &:hover {
+//                         background: @blue-b7;
+//                     }
+//                 }
+//             }
+//             &:not(&:hover) {
+//                 td {
+//                     &.@{table-prefix-cls}-column-sort {
+//                         background: #fff;
+//                         &:hover {
+//                             background: @blue-b7;
+//                         }
+//                     }
+//                 }
+//             }
+//             &.@{table-prefix-cls}-placeholder {
+//                 td {
+//                     border-bottom: none;
+//                 }
+//             }
+//         }
+//     }
+//     &-content {
+//         th {
+//             border-bottom: 2px solid @neutral-n4;
+//         }
+//         .@{table-prefix-cls}-expanded-row-fixed {
+//             padding: 0;
+//         }
+//     }
+//     &.@{table-prefix-cls}-small {
+//         font-size: 13px;
+//         line-height: 20px;
+//         .@{table-prefix-cls}-thead {
+//             tr {
+//                 height: 58px;
+//                 th {
+//                     font-size: 13px;
+//                     line-height: 20px;
+//                     padding: 8px 16px !important;
+//                 }
+//             }
+//         }
+//         .@{table-prefix-cls}-tbody{
+//             tr > td{
+//                 padding: 6px 16px;
+//             }
+//         }
+//     }
+//     &:not(.@{table-prefix-cls}-small) {
+//         font-size: 16px;
+//         .@{table-prefix-cls}-thead {
+//             tr {
+//                 height: 74px;
+//                 th {
+//                     font-size: 16px;
+//                     line-height: 24px;
+//                     padding: 12px 16px !important;
+
+//                     &.@{table-prefix-cls}-column-sort {
+//                         padding: 12px 16px !important;
+//                     }
+//                     &.@{table-prefix-cls}-column-has-sorters {
+//                         padding: 12px 16px !important;
+//                     }
+//                 }
+//             }
+//         }
+//     }
+//     &-ping-right {
+//         .@{table-prefix-cls}-container::after {
+//             box-shadow: initial;
+//         }
+//     }
+//     &-ping-left {
+//         .@{table-prefix-cls}-cell-fix-left-last::after {
+//             box-shadow: inset 10px 0 8px -8px rgba(0, 0, 0, 0.08);
+//         }
+//     }
+// }
+// &-column-sorter {
+//     display: none;
+// }

@@ -1,4 +1,4 @@
-import { Auth } from "src/domain/auth";
+import { Auth } from "../../domain/auth";
 
 export interface StoreState {
   auth: Auth;

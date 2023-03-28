@@ -1,9 +1,72 @@
-.login-action-container {
-  margin-right: 80px;
+.cms-layout-app-login {
+  padding-top: 20vh;
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  margin: 0 auto;
+  background-image: url(../../assets/images/background-login.png);
+  background-size: 100% 100%;
+
+  .card-form-login {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 400px;
+    max-width: 75vh;
+    height: 280px;
+    max-height: 90vh;
+    
+    &__body {
+      height: 100%;
+      padding-top: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      
+    }
+  }
+
+  .logo-login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 32px;
+  }
+
+  .logo-login {
+    width: 234px;
+    height: 40px;
+    margin: 0 auto;
+  }
+
+  .zalo-wrap-img {
+    width: auto;
+
+    .text-login-with {
+      margin-right: 10px;
+      font-size: 15px;
+    }
+
+    .icon {
+      width: 50px;
+      filter: sepia(100%) grayscale(100%);
+    }
+
+    .icon:hover {
+      width: 50px;
+      filter: none;
+    }
+  }
+
+  .login-button {
+    height: 40px;
+    width: 100%;
+
+    .icon {
+      width: 32px;
+      margin-right: 10px;
+    }
+  }
 }
 
-.login-action-item {
-  margin-right: 20px;
-}
+

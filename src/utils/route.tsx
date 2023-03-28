@@ -1,8 +1,8 @@
-import React, { Suspense } from "react";
+import React, { Suspense } from 'react';
 
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes } from 'react-router-dom';
 
-import Loading from "src/ui/shared/loading";
+import Loading from '~/src/ui/shared/loading';
 
 export interface IRouteBase {
   id?: number;
@@ -48,7 +48,7 @@ export function renderRoutes(routes: IRoute[], role?: number[]) {
 export function flattenRoute(routeList: IRoute[], deep: boolean): IRoute[] {
   const result: IRoute[] = [];
 
-  for (const route of routeList) {
+  routeList.forEach((route) => {
     result.push({
       ...route,
     });
@@ -56,7 +56,7 @@ export function flattenRoute(routeList: IRoute[], deep: boolean): IRoute[] {
     if (route.children && deep) {
       result.push(...flattenRoute(route.children, deep));
     }
-  }
+  });
 
   return result;
 }
@@ -76,15 +76,15 @@ export function findRoutesByPaths(
   basename?: string
 ): IRoute[] {
   return routeList.filter(
-    (child: IRoute) => pathList.indexOf((basename || "") + child.path) !== -1
+    (child: IRoute) => pathList.indexOf((basename || '') + child.path) !== -1
   );
 }
 
 export function getPagePathList(pathname?: string): string[] {
   return (pathname || window.location.pathname)
-    .split("/")
+    .split('/')
     .filter(Boolean)
     .map((value, index, array) =>
-      "/".concat(array.slice(0, index + 1).join("/"))
+      '/'.concat(array.slice(0, index + 1).join('/'))
     );
 }

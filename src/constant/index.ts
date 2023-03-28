@@ -1,17 +1,15 @@
-export const IS_DEVELOPMENT =
-  document.location.href.indexOf("localhost") > -1 ||
-  document.location.href.indexOf("dev") > -1;
-export const IS_PRODUCTION = process.env.REACT_APP_ENV === "production";
-export const DOMAIN_API_URL = process.env.REACT_APP_API_URL;
+import { ChartType, PartnerType, Role, ServiceType, StateStatus } from './enum';
 
-export enum AppType {
-  MOBILE = 1,
-  MINIAPP = 2,
-  WEBSITE = 3,
-}
+export const IS_DEVELOPMENT =
+  document.location.href.indexOf('localhost') > -1 ||
+  document.location.href.indexOf('dev') > -1;
+export const IS_PRODUCTION = import.meta.env.VITE_ENV === 'production';
+
+export const DOMAIN_API_URL = import.meta.env.VITE_API_URL;
+
 export interface ResponseData<T> {
   msg: string;
-  code: string;
+  code: number;
   data: T;
   success: boolean;
   total?: number;
@@ -19,78 +17,40 @@ export interface ResponseData<T> {
   empty?: boolean;
 }
 
-export enum ApiStatus {
-  SUCCESS = 0,
-  UNAUTHORIZED = 403,
-}
-
-export enum StateStatus {
-  INACTIVE = 0,
-  ACTIVE = 1,
-}
-
 export const MAP_STATE_STATUS = [
-  [StateStatus.INACTIVE, "Inactive"],
-  [StateStatus.ACTIVE, "Active"],
+  [StateStatus.ACTIVE, 'Active'],
+  [StateStatus.INACTIVE, 'Inactive'],
 ];
 
-export enum Gender {
-  UNKNOWN = 0,
-  MALE = 1,
-  FEMALE = 2,
-  OTHER = 3,
-}
-
-export const MAP_GENDER = [
-  [Gender.UNKNOWN, "Unknown"],
-  [Gender.MALE, "Male"],
-  [Gender.FEMALE, "Female"],
-  [Gender.OTHER, "Other"],
+export const MAP_PARTNER_TYPE = [
+  [PartnerType.PARTNER, 'Partner'],
+  [PartnerType.AGENCY, 'Agency'],
 ];
 
-export enum SalaryType {
-  MONTH = 0,
-  YEAR = 1,
-  HOUR = 2,
-  DAY = 3,
-}
-
-export const MAP_SALARY_TYPE = [
-  [SalaryType.MONTH, "Tháng"],
-  [SalaryType.YEAR, "Năm"],
-  [SalaryType.HOUR, "Giờ"],
-  [SalaryType.DAY, "Ngày"],
+export const MAP_SERVICE_TYPE = [
+  [ServiceType.ALL, 'All'],
+  [ServiceType.EKYC, 'EKYC'],
+  [ServiceType.VIDEO_EKYC, 'Video EKYC'],
+  [ServiceType.ID_OCR, 'ID OCR'],
+  [ServiceType.ID_FRAUD, 'ID Fraud'],
+  [ServiceType.LIVE_NESS, 'LiveNess'],
+  [ServiceType.ID_SELFIE_FACE_MATCHING, 'ID Selfie Face Matching'],
 ];
 
-export enum SalaryUnit {
-  VND = 0,
-  USD = 1,
-}
-
-export enum SalaryTypeInfo {
-  UPTO = 1,
-  EQUAL = 2,
-}
-
-export const MAP_SALARY_UNIT = [
-  [SalaryUnit.VND, "VND"],
-  [SalaryUnit.USD, "USD"],
+export const MAP_CHART_TYPE = [
+  [ChartType.DAY, 'Day'],
+  [ChartType.WEEK, 'Week'],
+  [ChartType.MONTH, 'Month'],
 ];
 
-export const MAP_SALARY_TYPE_INFO = [
-  [SalaryTypeInfo.EQUAL, "Lương cơ bản"],
-  [SalaryTypeInfo.UPTO, "Lương lên đến"],
+export const MAP_ROLES = [
+  [Role.GUEST, 'Guest'],
+  [Role.ROOT_ADMIN, '.Root Admin'],
+  [Role.ADMIN, 'Admin'],
+  [Role.SYSTEM_ADMIN, 'System Admin'],
+  [Role.USER, 'User'],
 ];
 
+export const DEFAULT_PAGE_SIZE = 5;
 
-export enum LocationType {
-  CITY = 1,
-  DISTRICT = 2,
-  WARD = 3,
-}
-
-export const MAP_LOCATION_TYPE = [
-  [LocationType.CITY, "City"],
-  [LocationType.DISTRICT, "District"],
-  [LocationType.WARD, "Ward"],
-];
+export const PAGE_SIZE_OPTIONS = [5, 10, 20, 50];

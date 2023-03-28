@@ -1,6 +1,6 @@
-import { API_UPLOAD_IMAGE } from "src/constant/api";
-
 // Custom Upload Adapter
+import { API_UPLOAD_IMAGE } from "~/src/constant/api";
+
 export class UploadAdapter {
   loader: any;
 
@@ -25,11 +25,11 @@ export class UploadAdapter {
       })
         .then((response) => response.json())
         .then((res) => {
-          console.log("hereacs", res?.data?.url)
+          console.log("hereacs", res?.data?.url);
           return { default: res?.data?.url };
         })
         .catch((error) => {
-          console.log("error", error)
+          console.log("error", error);
           Promise.reject(error?.message ?? genericError);
         });
     });

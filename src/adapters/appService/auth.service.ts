@@ -2,37 +2,22 @@ import { message } from "antd";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { ResponseData } from "src/constant";
-import API from "src/constant/api";
-import ROUTE from "src/constant/routes";
-import { mockAuth } from "src/mock/auth.mock";
-
-import { getWithPath } from "../api.http";
-import { setUserInfo } from "../redux/actions/auth";
+import { getWithPath, postWithPath } from "~/src/adapters/api.http";
+import { setUserInfo } from "~/src/adapters/redux/actions/auth";
+import { ResponseData } from "~/src/constant";
+import API from "~/src/constant/api";
+import ROUTE from "~/src/constant/routes";
+import { Auth } from "~/src/domain/auth";
+import { mockAuth } from "~/src/mock/auth.mock";
 
 export function useAuth() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   return {
-    async checkLogin(): Promise<ResponseData<any>> {
-      // const resp = await getWithPath(API.AUTH.GET.CHECK_SESSION);
-      const resp = await mockAuth().checkLogin();
-      if (resp.success) {
-        const auth = resp.data;
-        if (auth.roles) {
-          auth.roles = [auth.roles];
-        }
-        dispatch(setUserInfo(auth));
-        navigate(ROUTE.JOB_POST.LIST);
-      } else {
-        navigate(ROUTE.LOGIN);
-      }
-      return resp;
-    },
-    async loginMicrosoft(): Promise<ResponseData<string>> {
+    async loginZalo(): Promise<ResponseData<string>> {
       try {
         // const resp = await getWithPath(`${API.AUTH.GET.LOGIN_MICROSOFT}`);
-        const resp = await mockAuth().loginMicrosoft();
+        const resp = await mockAuth().loginZalo();
         if (resp.success) {
           const { data: callbackUrl } = resp;
           window.location.href = callbackUrl;
@@ -42,7 +27,22 @@ export function useAuth() {
         return resp;
       } catch (e) {
         message.error("Đăng nhập thất bại!");
+        throw e;
       }
+    },
+    async checkSession(): Promise<ResponseData<Auth>> {
+      // const resp = await getWithPath(`${API.AUTH.GET.CHECK_SESSION}`);
+      const resp = await mockAuth().checkSession();
+      if (resp.success) {
+        const auth = resp.data;
+        if (auth.roles) {
+          auth.roles = JSON.parse(auth.roles);
+        }
+        dispatch(setUserInfo(auth));
+      } else {
+        throw new Error(JSON.stringify(resp));
+      }
+      return resp;
     },
     async logout(): Promise<ResponseData<any>> {
       // const resp = await getWithPath(`${API.AUTH.GET.LOGOUT}`);
@@ -50,9 +50,7 @@ export function useAuth() {
       if (resp.success) {
         dispatch(
           setUserInfo({
-            user_id: 0,
             name: "",
-            avatar: "",
             roles: [],
           })
         );
