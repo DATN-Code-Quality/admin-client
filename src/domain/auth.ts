@@ -1,4 +1,4 @@
-import { PartnerType } from "../constant/enum";
+import { PartnerType } from '../constant/enum';
 
 export interface Auth {
   name: string;

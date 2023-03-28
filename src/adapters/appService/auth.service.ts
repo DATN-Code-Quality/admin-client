@@ -1,14 +1,14 @@
-import { message } from "antd";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { message } from 'antd';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
-import { getWithPath, postWithPath } from "~/src/adapters/api.http";
-import { setUserInfo } from "~/src/adapters/redux/actions/auth";
-import { ResponseData } from "~/src/constant";
-import API from "~/src/constant/api";
-import ROUTE from "~/src/constant/routes";
-import { Auth } from "~/src/domain/auth";
-import { mockAuth } from "~/src/mock/auth.mock";
+import { getWithPath, postWithPath } from '~/adapters/api.http';
+import { setUserInfo } from '~/adapters/redux/actions/auth';
+import { ResponseData } from '~/constant';
+import API from '~/constant/api';
+import ROUTE from '~/constant/routes';
+import { Auth } from '~/domain/auth';
+import { mockAuth } from '~/mock/auth.mock';
 
 export function useAuth() {
   const dispatch = useDispatch();
@@ -26,7 +26,7 @@ export function useAuth() {
         }
         return resp;
       } catch (e) {
-        message.error("Đăng nhập thất bại!");
+        message.error('Đăng nhập thất bại!');
         throw e;
       }
     },
@@ -50,7 +50,7 @@ export function useAuth() {
       if (resp.success) {
         dispatch(
           setUserInfo({
-            name: "",
+            name: '',
             roles: [],
           })
         );

@@ -1,5 +1,5 @@
 import { PaginationProps } from 'antd';
-import { ResponseData } from '~/src/constant';
+import { ResponseData } from '~/constant';
 
 export type ListProps<T> = {
     fetchFn: (params: any) => Promise<ResponseData<T[]>>;

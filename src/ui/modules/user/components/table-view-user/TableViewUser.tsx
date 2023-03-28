@@ -1,26 +1,27 @@
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { Space } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
-import { usePartner } from '~/src/adapters/appService/partner.service';
-import { useUser } from '~/src/adapters/appService/user.service';
-import { PAGE_SIZE_OPTIONS } from '~/src/constant';
-import { Partner } from '~/src/domain/partner';
-import useList from '~/src/hooks/useList';
-import Card from '~/src/ui/shared/card';
-import BaseFilter from '~/src/ui/shared/forms/baseFilter';
-import BaseModal from '~/src/ui/shared/modal';
-import { ButtonType } from '~/src/ui/shared/modal/props';
-import BaseTable from '~/src/ui/shared/tables';
-import TableToolbar from '~/src/ui/shared/toolbar';
-import { formatNumber } from '~/src/utils';
 import {
   columnTableUser,
   metaCreateUser,
   metaFilterUser,
-  metaUpdateUser
+  metaUpdateUser,
 } from './props';
+
+import { usePartner } from '~/adapters/appService/partner.service';
+import { useUser } from '~/adapters/appService/user.service';
+import { PAGE_SIZE_OPTIONS } from '~/constant';
+import { Partner } from '~/domain/partner';
+import useList from '~/hooks/useList';
+import Card from '~/ui/shared/card';
+import BaseFilter from '~/ui/shared/forms/baseFilter';
+import BaseModal from '~/ui/shared/modal';
+import { ButtonType } from '~/ui/shared/modal/props';
+import BaseTable from '~/ui/shared/tables';
+import TableToolbar from '~/ui/shared/toolbar';
+import { formatNumber } from '~/utils';
 
 function TableViewUser() {
   const navigate = useNavigate();
@@ -40,7 +41,7 @@ function TableViewUser() {
   };
 
   const handleCreateOrUpdate = useCallback((value, id) => {
-    let dataSubmit = {
+    const dataSubmit = {
       name: value.name,
       engName: value.engName,
       groupId: value.groupId,
@@ -53,11 +54,10 @@ function TableViewUser() {
       return createUser(dataSubmit).then((data) => {
         onAddItem(data);
       });
-    } else {
-      return updateUser(dataSubmit).then((data) => {
-        onEditItem(data, 'user_id');
-      });
     }
+    return updateUser(dataSubmit).then((data) => {
+      onEditItem(data, 'user_id');
+    });
   }, []);
 
   const handleBlockUser = (id) => {
@@ -72,19 +72,19 @@ function TableViewUser() {
       dataIndex: 'action',
       width: 100,
       render: (_, record, index) => {
-        let meta = metaUpdateUser(record, { partners });
+        const meta = metaUpdateUser(record, { partners });
         return (
           <Space size="small">
             <BaseModal
               onOkFn={handleCreateOrUpdate}
-              itemTitle={''}
+              itemTitle=""
               id={record.user_id}
               mode={ButtonType.EDIT}
               meta={meta}
             />
             <BaseModal
               onOkFn={handleBlockUser}
-              itemTitle={'Bạn có muốn chặn user'}
+              itemTitle="Bạn có muốn chặn user"
               id={record.user_id}
               mode={ButtonType.UNBLOCK}
               isDelete
@@ -112,7 +112,7 @@ function TableViewUser() {
         >
           <BaseModal
             onOkFn={handleCreateOrUpdate}
-            itemTitle={''}
+            itemTitle=""
             id={0}
             mode={ButtonType.CREATE}
             meta={metaCreateUser({ partners })}

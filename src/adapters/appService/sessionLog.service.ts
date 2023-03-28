@@ -1,19 +1,18 @@
-import { message } from "antd";
-import { useNavigate } from "react-router-dom";
-
-import { User } from "~/src/domain/user";
-
-import API from "~/src/constant/api";
-import ROUTE from "~/src/constant/routes";
-import { mockSessionLog } from "~/src/mock/sessionLog.mock";
+import { message } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 import {
   postWithPath,
   putWithPath,
   formatResponse,
   getWithPath,
-} from "../api.http";
-import { ResponseData } from "~/src/constant";
+} from '../api.http';
+
+import { ResponseData } from '~/constant';
+import API from '~/constant/api';
+import ROUTE from '~/constant/routes';
+import { User } from '~/domain/user';
+import { mockSessionLog } from '~/mock/sessionLog.mock';
 
 export function useSessionLog() {
   const navigate = useNavigate();

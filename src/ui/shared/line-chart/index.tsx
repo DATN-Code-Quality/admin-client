@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
+
+import dayjs from 'dayjs';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
-import dayjs from 'dayjs';
-//import { chartLabelsFormatter, tooltipConfigs, formatContentTooltipLine } from '../utils';
-//import { ILineChartData } from './interfaces';
+// import { chartLabelsFormatter, tooltipConfigs, formatContentTooltipLine } from '../utils';
+// import { ILineChartData } from './interfaces';
 
 import './chart.less';
 
@@ -15,12 +16,10 @@ export function formatTooltip(this: any, chartRef) {
   console.log('formatTooltip', this);
   const type = chartRef?.chart?.options?.chart?.type;
   if (type === STACKED_CHART_TYPE.BAR) {
-    return (
-      `<span class="color-n2 fw_600">${this.x}</span><br/>` +
-      this.points
-        .map(
-          (point) =>
-            ` <div class="tooltip-items">
+    return `<span class="color-n2 fw_600">${this.x}</span><br/>${this.points
+      .map(
+        (point) =>
+          ` <div class="tooltip-items">
                 <span class="left color-n4 ">
                      <span style="background-color: ${
                        point.color
@@ -31,9 +30,8 @@ export function formatTooltip(this: any, chartRef) {
                     ${formatNumber(point.y)}
                 </span>
             </div>`
-        )
-        .join('')
-    );
+      )
+      .join('')}`;
   }
   if (this.series) {
     return `
@@ -49,28 +47,27 @@ export function formatTooltip(this: any, chartRef) {
         <span class="ml-8 right color-n2 ">
             ${
               this.percentage
-                ? this.percentage.toFixed(2) + '%'
+                ? `${this.percentage.toFixed(2)}%`
                 : formatNumber(this.y)
             }${this.series.tooltipOptions.valueSuffix || ''}
         </span>
         </div>`;
-  } else {
-    const sum = this.points
-      .map((item) => item.y)
-      .reduce((total, item) => total + item);
-    return (
-      `<span class="color-n2 fw_600">Ngày ${dayjs(this.x).format(
-        'DD/MM'
-      )}</span><br/>` +
-      `<div class="tooltip-items"><span class="left color-n4 fw_600">Tổng chi tiêu</span>
+  }
+  const sum = this.points
+    .map((item) => item.y)
+    .reduce((total, item) => total + item);
+  return (
+    `<span class="color-n2 fw_600">Ngày ${dayjs(this.x).format(
+      'DD/MM'
+    )}</span><br/>` +
+    `<div class="tooltip-items"><span class="left color-n4 fw_600">Tổng chi tiêu</span>
                 <span class="ml-8 right color-n2 fw_600 ">
                     ${formatNumber(sum)}&nbsp;đ
                 </span>
-            </div>` +
-      this.points
-        .map(
-          (point) =>
-            ` <div class="tooltip-items">
+            </div>${this.points
+              .map(
+                (point) =>
+                  ` <div class="tooltip-items">
                 <span class="left color-n4 ">
                 ${point.series.userOptions.name}:
                 </span> 
@@ -78,10 +75,9 @@ export function formatTooltip(this: any, chartRef) {
                     ${formatNumber(point.y)}&nbsp;đ
                 </span>
             </div>`
-        )
-        .join('')
-    );
-  }
+              )
+              .join('')}`
+  );
 }
 
 export function isNumber(value: any): boolean {
@@ -121,23 +117,18 @@ export function formatContentTooltipLine(this) {
 }
 export function formatContentTooltipLineShared(this) {
   const renderTooltipItems = this.points.reduce((s, point) => {
-    return (
-      s +
-      `<div class="tooltip-items">
+    return `${s}<div class="tooltip-items">
                          </span>
                             ${point.series.userOptions.name}:
                         </span>
                         <span class="ml-8 right color-n2">
                         ${formatNumber(point.y)}
                         </span>
-                    </div>`
-    );
+                    </div>`;
   }, '');
-  return (
-    `<span class="color-n2 fw_600">${dayjs(this.x).format(
-      'DD/MM/YYYY'
-    )}</span><br/>` + renderTooltipItems
-  );
+  return `<span class="color-n2 fw_600">${dayjs(this.x).format(
+    'DD/MM/YYYY'
+  )}</span><br/>${renderTooltipItems}`;
 }
 export const tooltipConfigs = {
   backgroundColor: '#FDF7FF',
@@ -166,8 +157,8 @@ export const tooltipConfigs = {
 export function test(this) {
   console.log(this);
   return this.points.reduce(function (s, point) {
-    return s + '<br/>' + point.series.name + ': ' + point.y + 'm';
-  }, '<b>' + this.x + '</b>');
+    return `${s}<br/>${point.series.name}: ${point.y}m`;
+  }, `<b>${this.x}</b>`);
 }
 
 export function chartLabelsFormatter() {
@@ -180,7 +171,8 @@ export function chartLabelsFormatter() {
   // } else return `${formatNumber(this.value)}`;
   if (this.value >= 1000) {
     return `${formatNumber(this.value / 1000)}K`;
-  } else return `${formatNumber(this.value)}`;
+  }
+  return `${formatNumber(this.value)}`;
 }
 export interface ChartDataRow {
   x: number;
@@ -211,14 +203,14 @@ const LineChart: React.FC<LineChartProps> = (props) => {
     credits: {
       enabled: false,
     },
-    colors: colors,
+    colors,
     title: {
       text: '',
     },
     xAxis: {
       type: 'datetime',
       labels: {
-        formatter: function () {
+        formatter() {
           return dayjs(this.value).format('DD/MM');
         },
       },
@@ -290,10 +282,7 @@ const LineChart: React.FC<LineChartProps> = (props) => {
 
   return (
     <>
-      <HighchartsReact
-        highcharts={Highcharts}
-        options={chartOptions}
-      ></HighchartsReact>
+      <HighchartsReact highcharts={Highcharts} options={chartOptions} />
     </>
   );
 };

@@ -1,13 +1,13 @@
 const ROUTE = {
-  DASHBOARD: "/dashboard",
-  SESSION_LOG: "/session-log",
+  DASHBOARD: '/dashboard',
+  SESSION_LOG: '/session-log',
   USER: {
-    LIST: "/user/list",
+    LIST: '/user/list',
   },
   PARTNER: {
-    LIST: "/partner/list",
+    LIST: '/partner/list',
   },
-  LOGIN: "/login",
+  LOGIN: '/login',
 };
 
 export default ROUTE;

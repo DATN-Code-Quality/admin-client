@@ -4,7 +4,8 @@ import { SearchOutlined } from '@ant-design/icons';
 import { Button, Form } from 'antd';
 
 import FormBuilder from './FormBuilder';
-import logger from '~/src/utils/logger';
+
+import logger from '~/utils/logger';
 
 type BaseFilterProps = {
   loading: boolean;
@@ -40,7 +41,7 @@ const BaseFilter: React.FC<BaseFilterProps> = (props) => {
     const submitFilter = normalizeFn ? normalizeFn(values) : values;
     logger.info('submitFilter', values);
     logger.info('submitFilter', submitFilter);
-    onFilter(submitFilter); 
+    onFilter(submitFilter);
   };
 
   return (

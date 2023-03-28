@@ -1,5 +1,6 @@
 import { message } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
+
 import Is from './is';
 
 export const buildParams = (data?: any) => {
@@ -33,30 +34,30 @@ export const buildURLWithParam = (url: string, query?: any) => {
 
 export const removeFromArr = (arr: any[], value: any, key: string) => {
   if (Is.empty(arr)) {
-      return arr;
+    return arr;
   }
   let index;
   if (key) {
-      index = arr.findIndex(item => item[key] === value);
+    index = arr.findIndex((item) => item[key] === value);
   } else {
-      index = arr.indexOf(value);
+    index = arr.indexOf(value);
   }
   if (index < 0) {
-      return arr;
+    return arr;
   }
   return [...arr.slice(0, index), ...arr.slice(index + 1)];
 };
 
 export const findAndReplace = (arr: any[], value: any, key: string) => {
   if (Is.empty(arr)) {
-      return arr;
+    return arr;
   }
   let index;
   if (key) {
-      index = arr.findIndex(item => item[key] === value[key]);
+    index = arr.findIndex((item) => item[key] === value[key]);
   }
   if (index < 0) {
-      return arr;
+    return arr;
   }
   arr[index] = value;
   return [...arr];
@@ -230,7 +231,11 @@ export const getMappingLabelByValue = (map: any, value: any) => {
   return result ? result[1] : '';
 };
 
-export const generateMappingList = (list: any[], keyField: any, valueField: any) => {
+export const generateMappingList = (
+  list: any[],
+  keyField: any,
+  valueField: any
+) => {
   return list.map((item) => [item[keyField], item[valueField]]);
 };
 

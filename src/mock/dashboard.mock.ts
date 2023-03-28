@@ -1,5 +1,6 @@
-import { ResponseData } from '~/src/constant';
 import { mockApi } from './mock.helper';
+
+import { ResponseData } from '~/constant';
 
 const getTotalRequest = (data) => {
   return data.reduce((acc, cur) => acc + cur.value, 0);

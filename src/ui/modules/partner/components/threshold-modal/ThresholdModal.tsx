@@ -1,8 +1,7 @@
-
 import { Modal } from 'antd';
 
-import { Threshold } from '~/src/domain/partner';
-import { formatDate } from '~/src/utils';
+import { Threshold } from '~/domain/partner';
+import { formatDate } from '~/utils';
 import './ThresholdModal.less';
 
 export interface ThresholdModalProps {

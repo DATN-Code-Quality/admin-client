@@ -1,5 +1,5 @@
-import { Storage } from "~/src/adapters/storage.helper";
-import { ReverseMap } from "~/src/utils";
+import { Storage } from "~/adapters/storage.helper";
+import { ReverseMap } from "~/utils";
 
 export enum LocalCacheKey {}
 // userInfo = "userInfo", EXAMPLE

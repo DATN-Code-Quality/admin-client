@@ -1,6 +1,6 @@
-import { ResponseData } from '~/src/constant';
-import { removeFromArr, findAndReplace, insertAt } from '~/src/utils';
-import logger from '~/src/utils/logger';
+import { ResponseData } from '~/constant';
+import { removeFromArr, findAndReplace, insertAt } from '~/utils';
+import logger from '~/utils/logger';
 
 const SET_LOADING = 'setLoading';
 const FETCH_SUCCESS = 'fetchSuccess';

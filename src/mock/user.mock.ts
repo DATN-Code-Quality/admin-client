@@ -1,8 +1,9 @@
-import { User } from '~/src/domain/user';
-
-import { ResponseData } from '~/src/constant';
 import { Role, StateStatus } from '../constant/enum';
+
 import { mockApi } from './mock.helper';
+
+import { ResponseData } from '~/constant';
+import { User } from '~/domain/user';
 
 export function mockUser() {
   return {

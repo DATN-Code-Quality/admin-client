@@ -1,7 +1,7 @@
 import { applyMiddleware, compose, createStore } from "redux";
 import thunkMiddleware from "redux-thunk";
 
-import { IS_PRODUCTION } from "~/src/constant";
+import { IS_PRODUCTION } from "~/constant";
 
 import RootReducer from "../reducers";
 

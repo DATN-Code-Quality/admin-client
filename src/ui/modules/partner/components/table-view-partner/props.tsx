@@ -1,12 +1,13 @@
 import React from 'react';
 
+import { Button, Input, Tag } from 'antd';
 import { ColumnType } from 'antd/lib/table';
 import dayjs from 'dayjs';
-import { PartnerType, StateStatus } from '~/src/constant/enum';
-import { IMetaFormBuilder } from '~/src/ui/shared/forms/FormBuilder/FormBuilder';
-import { generateMappingList, getMappingLabelByValue } from '~/src/utils';
-import { MAP_PARTNER_TYPE, MAP_STATE_STATUS } from '~/src/constant';
-import { Button, Input, Tag } from 'antd';
+
+import { MAP_PARTNER_TYPE, MAP_STATE_STATUS } from '~/constant';
+import { PartnerType, StateStatus } from '~/constant/enum';
+import { IMetaFormBuilder } from '~/ui/shared/forms/FormBuilder/FormBuilder';
+import { generateMappingList, getMappingLabelByValue } from '~/utils';
 
 export const metaFilterPartner = () => {
   return {
@@ -222,13 +223,16 @@ export const metaCreatePartner = ({ type, agencies, handleSelectType }) => {
         widgetProps: {
           placeholder: 'Input Partner ID',
         },
-      },
+      }
     );
   }
   return meta;
 };
 
-export const metaUpdatePartner = (record, { type, agencies, handleSelectType }) => {
+export const metaUpdatePartner = (
+  record,
+  { type, agencies, handleSelectType }
+) => {
   const meta: any = {
     formItemLayout: [6, 20],
     fields: [
@@ -309,7 +313,7 @@ export const metaUpdatePartner = (record, { type, agencies, handleSelectType }) 
         widgetProps: {
           placeholder: 'Input Partner ID',
         },
-      },
+      }
     );
   }
   return meta;

@@ -2,18 +2,24 @@ import { lazy } from 'react';
 
 import { DownloadOutlined } from '@ant-design/icons';
 
-import ROUTE from './routes';
 import { Role } from './enum';
+import ROUTE from './routes';
 
 const ViewUser = lazy(() => import('../ui/modules/user/containers/ViewUser'));
 
-const ViewPartner = lazy(() => import('../ui/modules/partner/containers/ViewPartner'));
+const ViewPartner = lazy(
+  () => import('../ui/modules/partner/containers/ViewPartner')
+);
 
 const Login = lazy(() => import('../ui/modules/login/containers/Login'));
 
-const Dashboard = lazy(() => import('../ui/modules/dashboard/containers/Dashboard'));
+const Dashboard = lazy(
+  () => import('../ui/modules/dashboard/containers/Dashboard')
+);
 
-const SessionLog = lazy(() => import('../ui/modules/session-log/containers/SessionLog'));
+const SessionLog = lazy(
+  () => import('../ui/modules/session-log/containers/SessionLog')
+);
 
 export const MAIN_ROUTES = [
   {

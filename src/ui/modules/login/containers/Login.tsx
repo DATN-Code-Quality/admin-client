@@ -1,21 +1,21 @@
 import React, { useEffect } from 'react';
 
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Layout, message, Tabs, Input } from 'antd';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { useAuth } from '~/src/adapters/appService/auth.service';
-import { authSelector } from '~/src/adapters/redux/selectors/auth';
-import { metaFormLogin } from '~/src/ui/modules/login/containers/props';
-import FormBuilder from '~/src/ui/shared/forms/FormBuilder';
-// import ZaloLogo from '~/src/ui/assets/images/zalo-logo.svg';
-import ZaloLogo from '~/src/ui/assets/images/icon-zalo.png';
-import Logo from '~/src/ui/assets/images/logo.png';
-import ROUTE from '~/src/constant/routes';
-import Card from '~/src/ui/shared/card';
+import { useAuth } from '~/adapters/appService/auth.service';
+import { authSelector } from '~/adapters/redux/selectors/auth';
+import ROUTE from '~/constant/routes';
+import ZaloLogo from '~/ui/assets/images/icon-zalo.png';
+import Logo from '~/ui/assets/images/logo.png';
+import { metaFormLogin } from '~/ui/modules/login/containers/props';
+import Card from '~/ui/shared/card';
+import FormBuilder from '~/ui/shared/forms/FormBuilder';
+// import ZaloLogo from '~/ui/assets/images/zalo-logo.svg';
 
-import './Login.less'
+import './Login.less';
 
 function Login() {
   const { loginZalo } = useAuth();
@@ -37,10 +37,7 @@ function Login() {
 
   return (
     <Layout className="cms-layout-app cms-layout-app-login">
-      <Card
-        className="card-form-login"
-        bodyClassName="card-form-login__body"
-      >
+      <Card className="card-form-login" bodyClassName="card-form-login__body">
         <div className="logo-login-container">
           <img className="logo-login" src={Logo} />
         </div>

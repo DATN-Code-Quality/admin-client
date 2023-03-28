@@ -15,14 +15,14 @@ import { useNavigate, Link } from 'react-router-dom';
 
 import './LayoutApp.less';
 
-import { useAuth } from '~/src/adapters/appService/auth.service';
-import { authSelector } from '~/src/adapters/redux/selectors/auth';
-import { MAIN_ROUTES, menus } from '~/src/constant/menu';
-import useQuery from '~/src/hooks/useQuery';
-import { arrayToTree, queryAncestors } from '~/src/utils/menu';
-import { renderRoutes } from '~/src/utils/route';
-import { capitalizeFirstLetter } from '~/src/utils';
-import ROUTE from '~/src/constant/routes';
+import { useAuth } from '~/adapters/appService/auth.service';
+import { authSelector } from '~/adapters/redux/selectors/auth';
+import { MAIN_ROUTES, menus } from '~/constant/menu';
+import ROUTE from '~/constant/routes';
+import useQuery from '~/hooks/useQuery';
+import { capitalizeFirstLetter } from '~/utils';
+import { arrayToTree, queryAncestors } from '~/utils/menu';
+import { renderRoutes } from '~/utils/route';
 
 const { Header, Sider, Content } = Layout;
 

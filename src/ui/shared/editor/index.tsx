@@ -1,15 +1,15 @@
-import React from "react";
+import React from 'react';
 
-import { CKEditor } from "@ckeditor/ckeditor5-react";
+import { CKEditor } from '@ckeditor/ckeditor5-react';
 
-import { uploadAdapterPlugin } from "./UploadAdapter";
+import { uploadAdapterPlugin } from './UploadAdapter';
 
-import "./style.less";
+import './style.less';
 // eslint-disable-next-line import/order
-import ClassicEditor from "ckeditor5-custom-build";
+import ClassicEditor from 'ckeditor5-custom-build';
 
 const Editor = (props) => {
-  const { value = "", onChange } = props;
+  const { value = '', onChange } = props;
   const random = (Math.random() + 1).toString(36).substring(7);
   let _editor = null;
   return (
@@ -21,15 +21,15 @@ const Editor = (props) => {
             previewsInData: true,
           },
           allowedContent: true,
-          extraAllowedContent: "table(*)",
+          extraAllowedContent: 'table(*)',
           image: {
             toolbar: [
-              "imageStyle:inline",
-              "imageStyle:wrapText",
-              "imageStyle:breakText",
-              "|",
-              "toggleImageCaption",
-              "imageTextAlternative",
+              'imageStyle:inline',
+              'imageStyle:wrapText',
+              'imageStyle:breakText',
+              '|',
+              'toggleImageCaption',
+              'imageTextAlternative',
             ],
           },
           autoParagraph: false,

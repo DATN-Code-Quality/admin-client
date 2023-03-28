@@ -1,19 +1,18 @@
-import { message } from "antd";
-import { useNavigate } from "react-router-dom";
-
-import { User } from "~/src/domain/user";
-
-import API from "~/src/constant/api";
-import ROUTE from "~/src/constant/routes";
-import { mockUser } from "~/src/mock/user.mock";
+import { message } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 import {
   postWithPath,
   putWithPath,
   formatResponse,
   getWithPath,
-} from "../api.http";
-import { ResponseData } from "~/src/constant";
+} from '../api.http';
+
+import { ResponseData } from '~/constant';
+import API from '~/constant/api';
+import ROUTE from '~/constant/routes';
+import { User } from '~/domain/user';
+import { mockUser } from '~/mock/user.mock';
 
 export function useUser() {
   const navigate = useNavigate();
@@ -26,25 +25,18 @@ export function useUser() {
     },
 
     async createUser(body): Promise<ResponseData<User>> {
-      const data = await postWithPath(
-        `${API.USER.POST.CREATE_USER}`,
-        {},
-        body
-      );
+      const data = await postWithPath(`${API.USER.POST.CREATE_USER}`, {}, body);
       if (data.success) {
         message.success(`Tạo mới user thành công!`);
         navigate(ROUTE.USER.LIST);
       } else {
-        message.error("Tạo mới user thất bại!");
+        message.error('Tạo mới user thất bại!');
       }
       return formatResponse(data);
     },
 
     async getDetailUser(id: number): Promise<ResponseData<User>> {
-      const data = await getWithPath(
-        `${API.USER.GET.USERS}/${id}`,
-        {}
-      );
+      const data = await getWithPath(`${API.USER.GET.USERS}/${id}`, {});
       return formatResponse(data);
     },
 
@@ -81,5 +73,4 @@ export function useUser() {
       return formatResponse(data);
     },
   };
-  
 }

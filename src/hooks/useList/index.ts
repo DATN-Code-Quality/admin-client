@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useReducer } from 'react';
 import { listReducer, listActions } from './listStore';
-import logger from '~/src/utils/logger';
-import { DEFAULT_PAGE_SIZE } from '~/src/constant';
+import logger from '~/utils/logger';
+import { DEFAULT_PAGE_SIZE } from '~/constant';
 import { ListActions, ListProps, ListState } from './listType';
 
 const STATE_DEFAULT: ListState<any> = {

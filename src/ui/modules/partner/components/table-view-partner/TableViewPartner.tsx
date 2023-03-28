@@ -1,28 +1,30 @@
-import { useCallback, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import { Space } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
-import { usePartner } from '~/src/adapters/appService/partner.service';
-import { PAGE_SIZE_OPTIONS } from '~/src/constant';
-import { PartnerType } from '~/src/constant/enum';
-import { Threshold } from '~/src/domain/partner';
-import useDialog from '~/src/hooks/useDialog';
-import useList from '~/src/hooks/useList';
-import Card from '~/src/ui/shared/card';
-import BaseFilter from '~/src/ui/shared/forms/baseFilter';
-import BaseModal from '~/src/ui/shared/modal';
-import { ButtonType } from '~/src/ui/shared/modal/props';
-import BaseTable from '~/src/ui/shared/tables';
-import TableToolbar from '~/src/ui/shared/toolbar';
-import { formatNumber } from '~/src/utils';
 import { ThresholdModal } from '../threshold-modal';
+
 import {
   columnTablePartner,
   metaCreatePartner,
   metaFilterPartner,
   metaUpdatePartner,
 } from './props';
+
+import { usePartner } from '~/adapters/appService/partner.service';
+import { PAGE_SIZE_OPTIONS } from '~/constant';
+import { PartnerType } from '~/constant/enum';
+import { Threshold } from '~/domain/partner';
+import useDialog from '~/hooks/useDialog';
+import useList from '~/hooks/useList';
+import Card from '~/ui/shared/card';
+import BaseFilter from '~/ui/shared/forms/baseFilter';
+import BaseModal from '~/ui/shared/modal';
+import { ButtonType } from '~/ui/shared/modal/props';
+import BaseTable from '~/ui/shared/tables';
+import TableToolbar from '~/ui/shared/toolbar';
+import { formatNumber } from '~/utils';
 import './TableViewPartner.less';
 
 function TableViewPartner() {
@@ -49,12 +51,12 @@ function TableViewPartner() {
   };
 
   const handleCreateOrUpdate = useCallback((value, id) => {
-    let dataSubmit = {
+    const dataSubmit = {
       name: value.name,
       engName: value.engName,
       groupId: value.groupId,
       status: value.status,
-      id: id,
+      id,
       priority: value.priority,
     };
     if (!id) {
@@ -62,11 +64,10 @@ function TableViewPartner() {
       return createPartner(dataSubmit).then((data) => {
         onAddItem(data);
       });
-    } else {
-      return updatePartner(dataSubmit).then((data) => {
-        onEditItem(data, 'id');
-      });
     }
+    return updatePartner(dataSubmit).then((data) => {
+      onEditItem(data, 'id');
+    });
   }, []);
 
   const handleBlockPartner = (id) => {
@@ -86,7 +87,7 @@ function TableViewPartner() {
       dataIndex: 'action',
       width: 100,
       render: (_, record, index) => {
-        let meta = metaUpdatePartner(record, {
+        const meta = metaUpdatePartner(record, {
           type,
           agencies,
           handleSelectType,
@@ -95,14 +96,14 @@ function TableViewPartner() {
           <Space size="small">
             <BaseModal
               onOkFn={handleCreateOrUpdate}
-              itemTitle={''}
+              itemTitle=""
               id={record.id}
               mode={ButtonType.EDIT}
               meta={meta}
             />
             <BaseModal
               onOkFn={handleBlockPartner}
-              itemTitle={'Bạn có muốn chặn partner'}
+              itemTitle="Bạn có muốn chặn partner"
               id={record.id}
               mode={ButtonType.BLOCK}
               isDelete
@@ -126,7 +127,7 @@ function TableViewPartner() {
         >
           <BaseModal
             onOkFn={handleCreateOrUpdate}
-            itemTitle={''}
+            itemTitle=""
             id={0}
             mode={ButtonType.CREATE}
             meta={metaCreatePartner({ type, agencies, handleSelectType })}

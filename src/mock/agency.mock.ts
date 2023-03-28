@@ -1,8 +1,9 @@
-import { Partner, Threshold } from '~/src/domain/partner';
-
-import { ResponseData } from '~/src/constant';
 import { PartnerType, StateStatus } from '../constant/enum';
+
 import { mockApi } from './mock.helper';
+
+import { ResponseData } from '~/constant';
+import { Partner, Threshold } from '~/domain/partner';
 
 const mockThresholds: Threshold[] = [
   {

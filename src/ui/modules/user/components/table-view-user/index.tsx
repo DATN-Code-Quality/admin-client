@@ -1,3 +1,4 @@
-import TableViewUser from './TableViewUser';
 import { columnTableUser } from './props';
+import TableViewUser from './TableViewUser';
+
 export { TableViewUser, columnTableUser };

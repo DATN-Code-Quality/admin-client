@@ -2,6 +2,9 @@ import React from 'react';
 
 import { ConfigProvider } from 'antd';
 import locale from 'antd/es/locale/vi_VN';
+import dayjs from 'dayjs';
+import localeData from 'dayjs/plugin/localeData';
+import weekday from 'dayjs/plugin/weekday';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -13,12 +16,8 @@ import 'antd-button-color/dist/css/style.less';
 import './ui/css/style.less';
 import './theme.less';
 
-import weekday from "dayjs/plugin/weekday"
-import localeData from "dayjs/plugin/localeData"
-import dayjs from 'dayjs';
-
-dayjs.extend(weekday)
-dayjs.extend(localeData)
+dayjs.extend(weekday);
+dayjs.extend(localeData);
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

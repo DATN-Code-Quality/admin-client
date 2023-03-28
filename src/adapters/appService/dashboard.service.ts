@@ -1,19 +1,18 @@
-import { message } from "antd";
-import { useNavigate } from "react-router-dom";
-
-import { User } from "~/src/domain/user";
-
-import API from "~/src/constant/api";
-import ROUTE from "~/src/constant/routes";
-import { mockDashboard } from "~/src/mock/dashboard.mock";
+import { message } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 import {
   postWithPath,
   putWithPath,
   formatResponse,
   getWithPath,
-} from "../api.http";
-import { ResponseData } from "~/src/constant";
+} from '../api.http';
+
+import { ResponseData } from '~/constant';
+import API from '~/constant/api';
+import ROUTE from '~/constant/routes';
+import { User } from '~/domain/user';
+import { mockDashboard } from '~/mock/dashboard.mock';
 
 export function useDashboard() {
   const navigate = useNavigate();

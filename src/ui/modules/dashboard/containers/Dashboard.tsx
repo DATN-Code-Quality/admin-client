@@ -1,16 +1,17 @@
-import { useEffect, useState } from 'react';
-
-import { useDashboard } from '~/src/adapters/appService/dashboard.service';
-import Card from '~/src/ui/shared/card';
-import LineChart, { ILineChartData } from '~/src/ui/shared/line-chart';
+import React, { useEffect, useState } from 'react';
 
 import { Button } from 'antd';
-import { usePartner } from '~/src/adapters/appService/partner.service';
-import BaseFilter from '~/src/ui/shared/forms/baseFilter';
-import { formatNumber } from '~/src/utils';
-import './Dashboard.less';
+
 import { metaFilterDashboard, metaFilterOverview } from './props';
-import Loading from '~/src/ui/shared/loading';
+
+import { useDashboard } from '~/adapters/appService/dashboard.service';
+import { usePartner } from '~/adapters/appService/partner.service';
+import Card from '~/ui/shared/card';
+import BaseFilter from '~/ui/shared/forms/baseFilter';
+import LineChart, { ILineChartData } from '~/ui/shared/line-chart';
+import Loading from '~/ui/shared/loading';
+import { formatNumber } from '~/utils';
+import './Dashboard.less';
 
 function Dashboard() {
   const { getOverview } = useDashboard();
@@ -86,7 +87,7 @@ function Dashboard() {
           <div className="overall-container">
             {series?.map((item) => {
               return (
-                <div className="overall-item">
+                <div className="overall-item" key={item.name}>
                   <p className="overall-item__label">{item.name}</p>
                   <p
                     className="overall-item__value"

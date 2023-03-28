@@ -1,5 +1,6 @@
-import { ResponseData } from '~/src/constant';
 import { mockApi } from './mock.helper';
+
+import { ResponseData } from '~/constant';
 
 export function mockSessionLog() {
   return {

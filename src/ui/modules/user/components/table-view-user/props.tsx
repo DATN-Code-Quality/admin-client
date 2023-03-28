@@ -1,8 +1,9 @@
 import { ColumnType } from 'antd/lib/table';
-import { MAP_ROLES } from '~/src/constant';
-import { StateStatus } from '~/src/constant/enum';
-import { IMetaFormBuilder } from '~/src/ui/shared/forms/FormBuilder/FormBuilder';
-import { generateMappingList, getMappingLabelByValue } from '~/src/utils';
+
+import { MAP_ROLES } from '~/constant';
+import { StateStatus } from '~/constant/enum';
+import { IMetaFormBuilder } from '~/ui/shared/forms/FormBuilder/FormBuilder';
+import { generateMappingList, getMappingLabelByValue } from '~/utils';
 
 export const metaFilterUser = () => {
   return {

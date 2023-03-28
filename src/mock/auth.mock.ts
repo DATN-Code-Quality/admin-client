@@ -1,4 +1,4 @@
-import { ResponseData } from '~/src/constant';
+import { ResponseData } from '~/constant';
 import { mockApi } from './mock.helper';
 
 export function mockAuth() {

@@ -1,4 +1,4 @@
-import { StateStatus } from "../constant/enum";
+import { StateStatus } from '../constant/enum';
 
 export interface User {
   user_id: number;

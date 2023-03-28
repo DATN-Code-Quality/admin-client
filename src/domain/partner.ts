@@ -1,4 +1,4 @@
-import { PartnerType, StateStatus } from "../constant/enum";
+import { PartnerType, StateStatus } from '../constant/enum';
 
 export interface Threshold {
   model: string;

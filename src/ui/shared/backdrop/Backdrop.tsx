@@ -1,6 +1,6 @@
-import React, { FC } from "react";
+import React, { FC } from 'react';
 
-import "./Backdrop.less";
+import './Backdrop.less';
 
 interface BackdropProps {
   children?: any;

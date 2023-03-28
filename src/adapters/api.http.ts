@@ -1,7 +1,7 @@
 /* eslint-disable no-use-before-define */
 
-import { DOMAIN_API_URL, ResponseData } from "~/src/constant";
-import { buildURLWithParam, extend } from "~/src/utils";
+import { DOMAIN_API_URL, ResponseData } from '~/constant';
+import { buildURLWithParam, extend } from '~/utils';
 
 export function fetch(
   url,
@@ -10,16 +10,16 @@ export function fetch(
   timeOut?: 10
 ): Promise<ResponseData<any>> {
   const defaultHeaders = {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   };
   const exOptions = extend(
     {
-      credentials: "include",
+      credentials: 'include',
       headers: defaultHeaders,
     },
     options
   );
-  if (options?.responseType === "arraybuffer") {
+  if (options?.responseType === 'arraybuffer') {
     return window.fetch(buildURLWithParam(url, params), exOptions).then(toBlob);
   }
   return window
@@ -95,7 +95,7 @@ export const postWithUrlBinary = (
   return fetch(
     url,
     params,
-    extend({ body: formData, method: "POST" }, options),
+    extend({ body: formData, method: 'POST' }, options),
     timeOut
   );
 };
@@ -143,7 +143,7 @@ export const postWithUrl = (
   options?: {},
   timeOut?: 10
 ) => {
-  return post(url, params, data, extend({ method: "POST" }, options), timeOut);
+  return post(url, params, data, extend({ method: 'POST' }, options), timeOut);
 };
 
 export const putWithUrl = (
@@ -153,7 +153,7 @@ export const putWithUrl = (
   options?: {},
   timeOut?: 10
 ) => {
-  return post(url, params, data, extend({ method: "PUT" }, options), timeOut);
+  return post(url, params, data, extend({ method: 'PUT' }, options), timeOut);
 };
 
 export const deleteWithPath = (
@@ -177,7 +177,7 @@ export const deleteWithUrl = (
     url,
     params,
     data,
-    extend({ method: "DELETE" }, options),
+    extend({ method: 'DELETE' }, options),
     timeOut
   );
 };

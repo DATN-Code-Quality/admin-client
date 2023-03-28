@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { useSessionLog } from '~/src/adapters/appService/sessionLog.service';
+import { useSessionLog } from '~/adapters/appService/sessionLog.service';
 
 function SessionLog() {
   const { getSessionLog } = useSessionLog();
@@ -15,7 +15,6 @@ function SessionLog() {
   }, []);
 
   console.log(data);
-
 
   return <></>;
 }

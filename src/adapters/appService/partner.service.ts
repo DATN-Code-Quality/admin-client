@@ -1,20 +1,19 @@
-import { message } from "antd";
-import { useNavigate } from "react-router-dom";
-
-import { Partner } from "~/src/domain/partner";
-
-import API from "~/src/constant/api";
-import ROUTE from "~/src/constant/routes";
-import { mockPartner } from "~/src/mock/partner.mock";
+import { message } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 import {
   postWithPath,
   putWithPath,
   formatResponse,
   getWithPath,
-} from "../api.http";
-import { ResponseData } from "~/src/constant";
-import { mockAgency } from "~/src/mock/agency.mock";
+} from '../api.http';
+
+import { ResponseData } from '~/constant';
+import API from '~/constant/api';
+import ROUTE from '~/constant/routes';
+import { Partner } from '~/domain/partner';
+import { mockAgency } from '~/mock/agency.mock';
+import { mockPartner } from '~/mock/partner.mock';
 
 export function usePartner() {
   const navigate = useNavigate();
@@ -42,16 +41,13 @@ export function usePartner() {
         message.success(`Tạo mới partner thành công!`);
         navigate(ROUTE.PARTNER.LIST);
       } else {
-        message.error("Tạo mới partner thất bại!");
+        message.error('Tạo mới partner thất bại!');
       }
       return formatResponse(data);
     },
 
     async getDetailPartner(id: number): Promise<ResponseData<Partner>> {
-      const data = await getWithPath(
-        `${API.PARTNER.GET.PARTNERS}/${id}`,
-        {}
-      );
+      const data = await getWithPath(`${API.PARTNER.GET.PARTNERS}/${id}`, {});
       return formatResponse(data);
     },
 

@@ -1,5 +1,5 @@
 // Custom Upload Adapter
-import { API_UPLOAD_IMAGE } from "~/src/constant/api";
+import { API_UPLOAD_IMAGE } from "~/constant/api";
 
 export class UploadAdapter {
   loader: any;

@@ -4,8 +4,8 @@ import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { Upload, message } from 'antd';
 import { UploadChangeParam } from 'antd/lib/upload';
 
-import { WidgetProps } from '~/src/ui/shared/forms/FormBuilder/FormBuilder';
-import logger from '~/src/utils/logger';
+import { WidgetProps } from '~/ui/shared/forms/FormBuilder/FormBuilder';
+import logger from '~/utils/logger';
 
 interface UploadButtonProps extends WidgetProps {
   api?: string;

@@ -1,7 +1,8 @@
 import dayjs from 'dayjs';
-import { MAP_CHART_TYPE, MAP_SERVICE_TYPE } from '~/src/constant';
-import { IMetaFormBuilder } from '~/src/ui/shared/forms/FormBuilder/FormBuilder';
-import { addDays, generateMappingList } from '~/src/utils';
+
+import { MAP_CHART_TYPE, MAP_SERVICE_TYPE } from '~/constant';
+import { IMetaFormBuilder } from '~/ui/shared/forms/FormBuilder/FormBuilder';
+import { addDays, generateMappingList } from '~/utils';
 
 export const metaFilterDashboard = ({ partners }) => {
   const mappingPartnerList = generateMappingList(partners, 'id', 'name');
@@ -9,7 +10,10 @@ export const metaFilterDashboard = ({ partners }) => {
   const last7Days = addDays(currentDate, -7);
 
   const dateFormat = 'DD-MM-YYYY';
-  const initialRangeValue = [dayjs(last7Days, dateFormat), dayjs(currentDate, dateFormat)];
+  const initialRangeValue = [
+    dayjs(last7Days, dateFormat),
+    dayjs(currentDate, dateFormat),
+  ];
   return {
     fields: [
       {
