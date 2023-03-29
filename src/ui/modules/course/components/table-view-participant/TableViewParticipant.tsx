@@ -24,7 +24,7 @@ import BaseTable from '~/ui/shared/tables';
 import TableToolbar from '~/ui/shared/toolbar';
 import { formatNumber } from '~/utils';
 
-function TableViewUser() {
+function TableViewParticipant() {
   const navigate = useNavigate();
   const { getAllUsers, createUser, updateUser, blockUser } = useUser();
   const { getAllPartners } = usePartner();
@@ -102,12 +102,12 @@ function TableViewUser() {
 
   return (
     <>
-      <BaseFilter
-        loading={list.isLoading}
-        meta={metaFilterUser()}
-        onFilter={onFilterChange}
-      />
       <Card>
+        <BaseFilter
+          loading={list.isLoading}
+          meta={metaFilterUser()}
+          onFilter={onFilterChange}
+        />
         <TableToolbar
           title={`Tìm thấy ${formatNumber(list.items?.length || 0)} user`}
         >
@@ -142,4 +142,4 @@ function TableViewUser() {
   );
 }
 
-export default TableViewUser;
+export default TableViewParticipant;

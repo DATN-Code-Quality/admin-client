@@ -13,8 +13,8 @@ export enum Role {
   GUEST = 1,
   ROOT_ADMIN = 2,
   ADMIN = 3,
-  SYSTEM_ADMIN = 4,
-  USER = 5,
+  TEACHER = 4,
+  STUDENT = 5,
 }
 
 export enum StateStatus {

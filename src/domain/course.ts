@@ -6,7 +6,7 @@ export interface Course {
   dueDate: Date;
   moodleCourseId: string;
   description: string;
-  attachmentFileLink: string;
+  attachmentFileLink?: string;
   config: string;
   status: StateStatus;
   created_at: number;

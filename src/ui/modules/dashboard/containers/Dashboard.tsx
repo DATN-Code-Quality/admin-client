@@ -4,8 +4,8 @@ import { Button } from 'antd';
 
 import { metaFilterDashboard, metaFilterOverview } from './props';
 
+import { useCourse } from '~/adapters/appService/course.service';
 import { useDashboard } from '~/adapters/appService/dashboard.service';
-import { usePartner } from '~/adapters/appService/partner.service';
 import Card from '~/ui/shared/card';
 import BaseFilter from '~/ui/shared/forms/baseFilter';
 import LineChart, { ILineChartData } from '~/ui/shared/line-chart';
@@ -15,14 +15,14 @@ import './Dashboard.less';
 
 function Dashboard() {
   const { getOverview } = useDashboard();
-  const { getAllPartners } = usePartner();
-  const [partners, setPartners] = useState<any[]>([]);
+  const { getAllCourses } = useCourse();
+  const [courses, setCourses] = useState<any[]>([]);
   const [data, setData] = useState<any>({});
   const [loading, setLoading] = useState(false);
   const series: any[] = data.overview;
 
-  const handleGetListPartner = () => {
-    getAllPartners().then((res) => setPartners(res.data));
+  const handleGetListCourse = () => {
+    getAllCourses().then((res) => setCourses(res.data));
   };
 
   const fetchData = async (params?) => {
@@ -54,14 +54,14 @@ function Dashboard() {
 
   useEffect(() => {
     handleFilterDashboard();
-    handleGetListPartner();
+    handleGetListCourse();
   }, []);
 
   return (
     <>
       <BaseFilter
         loading={loading}
-        meta={metaFilterDashboard({ partners })}
+        meta={metaFilterDashboard({ courses })}
         filterOnChange
         showSubmitButton={false}
         onFilter={handleFilterDashboard}

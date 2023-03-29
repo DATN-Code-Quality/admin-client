@@ -45,10 +45,10 @@ export const MAP_CHART_TYPE = [
 
 export const MAP_ROLES = [
   [Role.GUEST, 'Guest'],
-  [Role.ROOT_ADMIN, '.Root Admin'],
+  [Role.ROOT_ADMIN, 'Root Admin'],
   [Role.ADMIN, 'Admin'],
-  [Role.SYSTEM_ADMIN, 'System Admin'],
-  [Role.USER, 'User'],
+  [Role.TEACHER, 'Teacher'],
+  [Role.STUDENT, 'Student'],
 ];
 
 export const DEFAULT_PAGE_SIZE = 5;

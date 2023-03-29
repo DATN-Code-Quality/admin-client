@@ -11,7 +11,7 @@ import {
 import { Layout, Menu, Button, Dropdown, Space, MenuProps, Avatar } from 'antd';
 import { pathToRegexp } from 'path-to-regexp';
 import { useSelector } from 'react-redux';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 
 import './LayoutApp.less';
 
@@ -75,9 +75,16 @@ function LayoutApp() {
   const menuTree = arrayToTree(filteredMenus, 'id', 'menuParentId');
 
   // Find a menu that matches the pathname.
-  const currentMenu = menus.find(
+  let currentMenu = menus.find(
     (_) => _.route && pathToRegexp(_.route).exec(location.pathname)
   );
+
+  if (!currentMenu) {
+    const pathnameArr = location.pathname.split('/');
+    currentMenu = menus.find(
+      (_) => _.route && _.route.includes(pathnameArr[1])
+    );
+  }
 
   // Find the key that should be selected according to the current menu.
   const selectedKeys = currentMenu

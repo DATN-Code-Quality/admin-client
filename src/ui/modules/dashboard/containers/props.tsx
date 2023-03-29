@@ -4,8 +4,8 @@ import { MAP_CHART_TYPE, MAP_SERVICE_TYPE } from '~/constant';
 import { IMetaFormBuilder } from '~/ui/shared/forms/FormBuilder/FormBuilder';
 import { addDays, generateMappingList } from '~/utils';
 
-export const metaFilterDashboard = ({ partners }) => {
-  const mappingPartnerList = generateMappingList(partners, 'id', 'name');
+export const metaFilterDashboard = ({ courses }) => {
+  const mappingCourseList = generateMappingList(courses, 'id', 'name');
   const currentDate = new Date();
   const last7Days = addDays(currentDate, -7);
 
@@ -17,8 +17,8 @@ export const metaFilterDashboard = ({ partners }) => {
   return {
     fields: [
       {
-        key: 'partner_id',
-        options: mappingPartnerList,
+        key: 'course_id',
+        options: mappingCourseList,
         widget: 'select',
         widgetProps: {
           mode: 'multiple',
@@ -27,7 +27,7 @@ export const metaFilterDashboard = ({ partners }) => {
             minWidth: '24rem',
             maxWidth: '24rem',
           },
-          placeholder: 'Partner',
+          placeholder: 'Course',
           allowClear: true,
         },
       },
@@ -73,7 +73,7 @@ export const metaFilterOverview = () => {
   return {
     fields: [
       {
-        key: 'service_type',
+        key: 'assignment_id',
         options: MAP_SERVICE_TYPE,
         widget: 'select',
         widgetProps: {
@@ -81,7 +81,7 @@ export const metaFilterOverview = () => {
             minWidth: '12rem',
             maxWidth: '12rem',
           },
-          placeholder: 'Service',
+          placeholder: 'Assignment',
           allowClear: true,
         },
       },
@@ -93,7 +93,7 @@ export const metaFilterExecutionTime = () => {
   return {
     fields: [
       {
-        key: 'service_type',
+        key: 'assignment_id',
         options: MAP_SERVICE_TYPE,
         widget: 'select',
         widgetProps: {
@@ -101,7 +101,7 @@ export const metaFilterExecutionTime = () => {
             minWidth: '12rem',
             maxWidth: '12rem',
           },
-          placeholder: 'Service',
+          placeholder: 'Assignment',
           allowClear: true,
         },
       },
