@@ -22,6 +22,7 @@ import { ButtonType } from '~/ui/shared/modal/props';
 import BaseTable from '~/ui/shared/tables';
 import TableToolbar from '~/ui/shared/toolbar';
 import { formatNumber } from '~/utils';
+import Button from 'antd-button-color';
 
 function TableViewUser() {
   const navigate = useNavigate();
@@ -110,6 +111,8 @@ function TableViewUser() {
         <TableToolbar
           title={`Tìm thấy ${formatNumber(list.items?.length || 0)} user`}
         >
+          <Button type="primary" className='mr-4'>Sync Moodle</Button>
+          <Button type="primary" className='mr-4'>Import Excel</Button>
           <BaseModal
             onOkFn={handleCreateOrUpdate}
             itemTitle=""

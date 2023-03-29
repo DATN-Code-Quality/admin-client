@@ -12,7 +12,7 @@ export function mockAuth() {
         roles: '[2]',
       });
     },
-    async loginZalo(): Promise<ResponseData<string>> {
+    async loginMicrosoft(): Promise<ResponseData<string>> {
       return mockApi('http://localhost:3000/');
     },
     async logout(): Promise<ResponseData<string>> {

@@ -21,7 +21,7 @@ export const metaFilterUser = () => {
 export const columnTableUser = ({ partners }): ColumnType<any>[] => [
   {
     title: 'ID',
-    dataIndex: 'user_id',
+    dataIndex: 'id',
     width: 70,
   },
   {
@@ -63,8 +63,8 @@ export const columnTableUser = ({ partners }): ColumnType<any>[] => [
     },
   },
   {
-    title: 'State',
-    dataIndex: 'state',
+    title: 'Status',
+    dataIndex: 'status',
     width: 100,
     render: (value) => {
       return <p>{value === StateStatus.ACTIVE ? 'Active' : 'Inactive'}</p>;

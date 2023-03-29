@@ -14,10 +14,10 @@ export function useAuth() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   return {
-    async loginZalo(): Promise<ResponseData<string>> {
+    async loginMicrosoft(): Promise<ResponseData<string>> {
       try {
         // const resp = await getWithPath(`${API.AUTH.GET.LOGIN_MICROSOFT}`);
-        const resp = await mockAuth().loginZalo();
+        const resp = await mockAuth().loginMicrosoft();
         if (resp.success) {
           const { data: callbackUrl } = resp;
           window.location.href = callbackUrl;

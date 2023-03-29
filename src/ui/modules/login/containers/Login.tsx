@@ -18,11 +18,11 @@ import FormBuilder from '~/ui/shared/forms/FormBuilder';
 import './Login.less';
 
 function Login() {
-  const { loginZalo } = useAuth();
+  const { loginMicrosoft } = useAuth();
   const navigate = useNavigate();
   const { roles, name } = useSelector(authSelector);
   const onFinish = (values: any) => {
-    loginZalo(values);
+    loginMicrosoft(values);
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -39,12 +39,63 @@ function Login() {
     <Layout className="cms-layout-app cms-layout-app-login">
       <Card className="card-form-login" bodyClassName="card-form-login__body">
         <div className="logo-login-container">
-          <img className="logo-login" src={Logo} />
+          {/* <img className="logo-login" src={Logo} /> */}
         </div>
-        <Button type="primary" onClick={loginZalo} className="login-button">
-          {/* <img className="icon" alt="" src={ZaloLogo} onClick={loginZalo} /> */}
-          Login with Zalo
-        </Button>
+        <div className="layout-form-login">
+          <Form
+            name="basic"
+            initialValues={{ remember: true }}
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
+            autoComplete="off"
+          >
+            <Form.Item
+              name="username"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your Username!',
+                },
+              ]}
+            >
+              <Input
+                prefix={<UserOutlined className="site-form-item-icon" />}
+                placeholder="Username"
+              />
+            </Form.Item>
+            <Form.Item
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your Password!',
+                },
+              ]}
+            >
+              <Input
+                prefix={<LockOutlined className="site-form-item-icon" />}
+                type="password"
+                placeholder="Password"
+              />
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit" className="login-button">
+                Login
+              </Button>
+            </Form.Item>
+          </Form>
+          <Button
+            type="primary"
+            ghost
+            onClick={loginMicrosoft}
+            className="login-button login-button-microsoft"
+          >
+            Login with Microsoft 365
+          </Button>
+        </div>
+        {/* <Button type="primary" onClick={loginZalo} className="login-button">
+          Login with Microsoft 365
+        </Button> */}
         {/* <div className="zalo-wrap-img">
           <span className="text-login-with">Login with:</span>
           <img className="icon" alt="" src={ZaloLogo} onClick={loginZalo} />
