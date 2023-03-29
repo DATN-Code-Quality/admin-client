@@ -8,12 +8,6 @@ export const DASHBOARD = {
   },
 };
 
-export const SESSION_LOG = {
-  GET: {
-    SESSION_LOG: '/session-logs',
-  },
-};
-
 export const USER = {
   GET: {
     USERS: '/user',
@@ -59,7 +53,6 @@ export const AUTH = {
 };
 const API = {
   DASHBOARD,
-  SESSION_LOG,
   AUTH,
   USER,
   PARTNER,
