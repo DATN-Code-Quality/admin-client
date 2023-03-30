@@ -21,16 +21,16 @@ const ViewCourseList = lazy(
   () => import('../ui/modules/course/containers/ViewCourseList')
 );
 
-const CreateCourse = lazy(
-  () => import('../ui/modules/course/containers/ViewOrCreateCourse')
-);
-
-const UpdateCourse = lazy(
+const CreateOrViewCourse = lazy(
   () => import('../ui/modules/course/containers/ViewOrCreateCourse')
 );
 
 const ViewCourseDetail = lazy(
   () => import('../ui/modules/course/containers/ViewCourseDetail')
+);
+
+const CreateOrViewAssignment = lazy(
+  () => import('../ui/modules/course/containers/ViewOrCreateAssignment')
 );
 
 export const MAIN_ROUTES = [
@@ -62,17 +62,27 @@ export const MAIN_ROUTES = [
   {
     path: ROUTE.COURSE.CREATE,
     name: 'createCourse',
-    element: CreateCourse,
+    element: CreateOrViewCourse,
   },
   {
     path: ROUTE.COURSE.EDIT,
     name: 'updateCourse',
-    element: UpdateCourse,
+    element: CreateOrViewCourse,
   },
   {
     path: ROUTE.COURSE.DETAIL,
     name: 'courseDetail',
     element: ViewCourseDetail,
+  },
+  {
+    path: ROUTE.COURSE.CREATE_ASSIGNMENT,
+    name: 'createCourseAssignment',
+    element: CreateOrViewAssignment,
+  },
+  {
+    path: ROUTE.COURSE.EDIT_ASSIGNMENT,
+    name: 'updateCourseAssignment',
+    element: CreateOrViewAssignment,
   },
 ];
 
@@ -91,7 +101,7 @@ export const menus = [
     route: ROUTE.USER.LIST,
     role: [Role.ROOT_ADMIN, Role.TEACHER, Role.STUDENT],
   },
-  
+
   {
     id: 'course',
     name: 'Courses',

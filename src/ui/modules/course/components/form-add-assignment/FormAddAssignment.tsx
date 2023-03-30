@@ -3,21 +3,24 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Form, Input, message, Space } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
-import { metaFormAddCourse } from './props';
+import { metaFormAddAssignment } from './props';
 
-import { useCourse } from '~/adapters/appService/course.service';
+import { useAssignment } from '~/adapters/appService/assignment.service';
 import { MAP_STATE_STATUS } from '~/constant';
 import ROUTE from '~/constant/routes';
 import FormBuilder from '~/ui/shared/forms';
 import Loading from '~/ui/shared/loading';
 import { getMappingLabelByValue } from '~/utils';
+import dayjs from 'dayjs';
 
-const FormAddCourse = ({ id, initialViewMode = false }) => {
+const FormAddAssignment = ({ courseId, id, initialViewMode = false }) => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  const { getDetailCourse, createCourse, updateCourse } = useCourse();
+  const { getDetailAssignment, createAssignment, updateAssignment } =
+    useAssignment();
   const [loading, setLoading] = useState<boolean>(false);
   const [viewMode, setViewMode] = useState<boolean>(initialViewMode);
+  const [submissionType, setSubmissionType] = useState<any>(null);
   const [formValues, setFormValues] = useState({});
 
   const handleSubmitFail = (errMsg) => (err) => {
@@ -38,7 +41,7 @@ const FormAddCourse = ({ id, initialViewMode = false }) => {
     message.success('Cập nhật thành công!');
     // TODO: remove hardcode
     if (!initialViewMode) {
-      navigate(ROUTE.COURSE.LIST);
+      navigate(`${ROUTE.COURSE.DETAIL}?id=${courseId}`);
       return;
     }
     setViewMode(true);
@@ -51,27 +54,33 @@ const FormAddCourse = ({ id, initialViewMode = false }) => {
     };
     if (id) {
       dataSubmit.id = id;
-      updateCourse(dataSubmit)
+      updateAssignment(dataSubmit)
         .then(handleSubmitSuccess('Cập nhật Ngành nghề thành công!'))
         .catch(handleSubmitFail('Cập nhật Ngành nghề thất bại!'))
         .finally(() => setLoading(false));
     } else {
-      createCourse(dataSubmit)
+      createAssignment(dataSubmit)
         .then(handleSubmitSuccess('Cập nhật Ngành nghề thành công!'))
         .catch(handleSubmitFail('Cập nhật Ngành nghề thất bại!'))
         .finally(() => setLoading(false));
     }
   }, []);
 
-  const handleEditCourse = () => {
+  const handleEditAssignment = () => {
     setViewMode(false);
+  };
+
+  const handleChangeSubmissionType = (e) => {
+    console.log(e.target.value);
+    setSubmissionType(e.target.value);
   };
 
   useEffect(() => {
     if (id) {
       setLoading(true);
-      getDetailCourse(id).then((res) => {
+      getDetailAssignment(id).then((res) => {
         console.log(res);
+        res.data.dueDate = dayjs(res.data.dueDate);
         form.setFieldsValue(res.data);
         setFormValues(res.data);
         setLoading(false);
@@ -87,7 +96,7 @@ const FormAddCourse = ({ id, initialViewMode = false }) => {
       {viewMode && (
         <Form form={form} className="form-edit-view view-mode">
           <div className="group_field">
-            <label>Course Name: </label>
+            <label>Assignment Name: </label>
             <div className="field_value">{formValues?.name}</div>
           </div>
           <div className="group_field">
@@ -102,7 +111,11 @@ const FormAddCourse = ({ id, initialViewMode = false }) => {
           </div>
           <Form.Item>
             <Space>
-              <Button type="primary" size="large" onClick={handleEditCourse}>
+              <Button
+                type="primary"
+                size="large"
+                onClick={handleEditAssignment}
+              >
                 Edit thông tin
               </Button>
             </Space>
@@ -116,7 +129,12 @@ const FormAddCourse = ({ id, initialViewMode = false }) => {
           layout="vertical"
           className="form-edit-view"
         >
-          <FormBuilder meta={metaFormAddCourse()} />
+          <FormBuilder
+            meta={metaFormAddAssignment({
+              submissionType,
+              handleChangeSubmissionType,
+            })}
+          />
           <Form.Item>
             <Space>
               <Button type="primary" htmlType="submit" size="large">
@@ -130,4 +148,4 @@ const FormAddCourse = ({ id, initialViewMode = false }) => {
   );
 };
 
-export default FormAddCourse;
+export default FormAddAssignment;
