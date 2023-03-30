@@ -94,7 +94,7 @@ function LayoutApp() {
   useEffect(() => {
     checkSession()
       .then((data) => {
-        if (location.pathname === ROUTE.LOGIN) {
+        if ([ROUTE.LOGIN, ROUTE.INDEX].includes(location.pathname)) {
           navigate(ROUTE.DASHBOARD, { replace: true });
         }
       })
