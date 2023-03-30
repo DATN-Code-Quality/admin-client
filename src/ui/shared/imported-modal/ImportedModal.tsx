@@ -2,7 +2,9 @@ import React from 'react';
 
 import { Checkbox, Form, Modal } from 'antd';
 
+import { Assignment } from '~/domain/assignment';
 import { Course } from '~/domain/course';
+import { User } from '~/domain/user';
 import { formatDate } from '~/utils';
 import './ImportedModal.less';
 
@@ -10,7 +12,7 @@ export interface ImportedModalProps {
   visible: boolean;
   onOk: () => void;
   onCancel: () => void;
-  data: Course[];
+  data: Course[] | User[] | Assignment[];
 }
 
 const ImportedModal: React.FC<ImportedModalProps> = ({

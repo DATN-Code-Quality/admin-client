@@ -22,11 +22,11 @@ const ViewCourseList = lazy(
 );
 
 const CreateCourse = lazy(
-  () => import('../ui/modules/course/containers/CreateCourse')
+  () => import('../ui/modules/course/containers/ViewOrCreateCourse')
 );
 
 const UpdateCourse = lazy(
-  () => import('../ui/modules/course/containers/CreateCourse')
+  () => import('../ui/modules/course/containers/ViewOrCreateCourse')
 );
 
 const ViewCourseDetail = lazy(
