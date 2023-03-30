@@ -27,6 +27,7 @@ import { ButtonType } from '~/ui/shared/modal/props';
 import BaseTable from '~/ui/shared/tables';
 import TableToolbar from '~/ui/shared/toolbar';
 import { formatNumber } from '~/utils';
+import { SyncOutlined, UploadOutlined } from '@ant-design/icons';
 
 function TableViewUser() {
   const navigate = useNavigate();
@@ -142,10 +143,22 @@ function TableViewUser() {
         <TableToolbar
           title={`Tìm thấy ${formatNumber(list.items?.length || 0)} user`}
         >
-          <Button type="primary" className="mr-4" onClick={handleSyncMoodle}>
+          <Button
+            type="primary"
+            className="mr-4"
+            icon={<SyncOutlined />}
+            loading={list.isLoading}
+            onClick={handleSyncMoodle}
+          >
             Sync Moodle
           </Button>
-          <Button type="primary" className="mr-4" onClick={handleImportExcel}>
+          <Button
+            type="primary"
+            className="mr-4"
+            icon={<UploadOutlined />}
+            loading={list.isLoading}
+            onClick={handleImportExcel}
+          >
             Import Excel
           </Button>
           <BaseModal
@@ -153,21 +166,20 @@ function TableViewUser() {
             itemTitle=""
             id={0}
             mode={ButtonType.CREATE}
+            loading={list.isLoading}
             meta={metaCreateUser({ partners })}
           />
         </TableToolbar>
-        {list.items.length > 0 && partners.length > 0 && (
-          <BaseTable
-            idKey="user_id"
-            columns={columnTableProps({ partners })}
-            data={list}
-            paginationProps={{
-              showSizeChanger: true,
-              pageSizeOptions: PAGE_SIZE_OPTIONS,
-            }}
-            onChange={onPageChange}
-          />
-        )}
+        <BaseTable
+          idKey="user_id"
+          columns={columnTableProps({ partners })}
+          data={list}
+          paginationProps={{
+            showSizeChanger: true,
+            pageSizeOptions: PAGE_SIZE_OPTIONS,
+          }}
+          onChange={onPageChange}
+        />
       </Card>
       {importedUsers.length > 0 && (
         <>

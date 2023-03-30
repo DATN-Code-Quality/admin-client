@@ -61,6 +61,7 @@ const FormAddCourse = ({ id, initialViewMode = false }) => {
 
   useEffect(() => {
     if (id) {
+      setLoading(true);
       getDetailCourse(id).then((res) => {
         console.log(res);
         form.setFieldsValue(res.data);

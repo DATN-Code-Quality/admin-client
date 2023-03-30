@@ -1,6 +1,11 @@
 import React, { useCallback, useState } from 'react';
 
-import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import {
+  EditOutlined,
+  PlusCircleOutlined,
+  SyncOutlined,
+  UploadOutlined,
+} from '@ant-design/icons';
 import { Modal, Space } from 'antd';
 import Button from 'antd-button-color';
 import { useNavigate } from 'react-router-dom';
@@ -117,32 +122,43 @@ function TableViewCourse() {
         <TableToolbar
           title={`Tìm thấy ${formatNumber(list.items?.length || 0)} course`}
         >
-          <Button type="primary" className="mr-4" onClick={handleSyncMoodle}>
+          <Button
+            type="primary"
+            className="mr-4"
+            icon={<SyncOutlined />}
+            loading={list.isLoading}
+            onClick={handleSyncMoodle}
+          >
             Sync Moodle
           </Button>
-          <Button type="primary" className="mr-4" onClick={handleImportExcel}>
+          <Button
+            type="primary"
+            className="mr-4"
+            icon={<UploadOutlined />}
+            loading={list.isLoading}
+            onClick={handleImportExcel}
+          >
             Import Excel
           </Button>
           <Button
             type="primary"
             icon={<PlusCircleOutlined />}
+            loading={list.isLoading}
             onClick={handleCreateCourse}
           >
             Tạo mới
           </Button>
         </TableToolbar>
-        {list.items.length > 0 && (
-          <BaseTable
-            idKey="id"
-            columns={columnTableProps()}
-            data={list}
-            paginationProps={{
-              showSizeChanger: true,
-              pageSizeOptions: PAGE_SIZE_OPTIONS,
-            }}
-            onChange={onPageChange}
-          />
-        )}
+        <BaseTable
+          idKey="id"
+          columns={columnTableProps()}
+          data={list}
+          paginationProps={{
+            showSizeChanger: true,
+            pageSizeOptions: PAGE_SIZE_OPTIONS,
+          }}
+          onChange={onPageChange}
+        />
       </Card>
       {importedCourses.length > 0 && (
         <>
