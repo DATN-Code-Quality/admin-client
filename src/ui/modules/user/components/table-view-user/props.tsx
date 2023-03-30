@@ -34,6 +34,15 @@ export const columnTableUser = ({ partners }): ColumnType<any>[] => [
     },
   },
   {
+    title: 'Email',
+    dataIndex: 'email',
+    width: 200,
+    ellipsis: true,
+    sorter: (a, b) => {
+      return a.email.localeCompare(b.email);
+    },
+  },
+  {
     title: 'Roles',
     dataIndex: 'roles',
     width: 100,
@@ -45,21 +54,6 @@ export const columnTableUser = ({ partners }): ColumnType<any>[] => [
     },
     render: (value) => {
       return <p>{getMappingLabelByValue(MAP_ROLES, value[0])}</p>;
-    },
-  },
-  {
-    title: 'Partner',
-    dataIndex: 'partner_id',
-    width: 140,
-    ellipsis: true,
-    filters: partners.map((partner) => ({
-      text: partner.name,
-      value: partner.id,
-    })),
-    onFilter: (value: number, record) => record.partner_id === value,
-    render: (value) => {
-      const partner = partners.find((partner) => partner.id === value);
-      return <p>{partner?.name || ''}</p>;
     },
   },
   {
@@ -87,27 +81,23 @@ export const metaCreateUser = ({ partners }) => {
         },
       },
       {
+        key: 'email',
+        label: 'Email:',
+        required: true,
+        message: 'Please input',
+        widgetProps: {
+          placeholder: 'Input Email',
+          type: 'email',
+        },
+      },
+      {
         key: 'phone_number',
         label: 'Phone Number:',
         required: true,
         message: 'Please input',
         widgetProps: {
           placeholder: 'Input Phone Number',
-        },
-      },
-      {
-        key: 'partner_id',
-        label: 'Partner:',
-        options: mappingPartnerList,
-        widget: 'select',
-        required: true,
-        message: 'Please input',
-        widgetProps: {
-          style: {
-            minWidth: '12rem',
-          },
-          placeholder: 'Input Partner',
-          allowClear: true,
+          inputMode: 'numeric',
         },
       },
     ],
@@ -122,38 +112,33 @@ export const metaUpdateUser = (record, { partners }) => {
       {
         key: 'name',
         label: 'Name:',
-        initialValue: record.name,
         required: true,
+        initialValue: record.name,
         message: 'Please input',
         widgetProps: {
           placeholder: 'Input Name',
         },
       },
       {
-        key: 'phone_number',
-        label: 'Phone Number:',
-        initialValue: record.phone_number,
+        key: 'email',
+        label: 'Email:',
         required: true,
-        disabled: true,
+        initialValue: record.email,
         message: 'Please input',
         widgetProps: {
-          placeholder: 'Input Phone Number',
+          placeholder: 'Input Email',
+          type: 'email',
         },
       },
       {
-        key: 'partner_id',
-        label: 'Partner:',
-        initialValue: record.partner_id,
-        options: mappingPartnerList,
-        widget: 'select',
+        key: 'phone_number',
+        label: 'Phone Number:',
         required: true,
+        initialValue: record.phone_number,
         message: 'Please input',
         widgetProps: {
-          style: {
-            minWidth: '12rem',
-          },
-          placeholder: 'Input Partner',
-          allowClear: true,
+          placeholder: 'Input Phone Number',
+          inputMode: 'numeric',
         },
       },
     ],

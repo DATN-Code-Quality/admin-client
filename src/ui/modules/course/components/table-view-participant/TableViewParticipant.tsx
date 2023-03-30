@@ -71,6 +71,7 @@ function TableViewParticipant() {
     ...columnTableUser({ partners }),
     {
       dataIndex: 'action',
+      title: 'Action',
       width: 100,
       render: (_, record, index) => {
         const meta = metaUpdateUser(record, { partners });
@@ -109,7 +110,9 @@ function TableViewParticipant() {
           onFilter={onFilterChange}
         />
         <TableToolbar
-          title={`Tìm thấy ${formatNumber(list.items?.length || 0)} user`}
+          title={`Tìm thấy ${formatNumber(
+            list.items?.length || 0
+          )} participant`}
         >
           <Button type="primary" className="mr-4">
             Sync Moodle

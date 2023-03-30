@@ -15,9 +15,13 @@ import { usePartner } from '~/adapters/appService/partner.service';
 import { useUser } from '~/adapters/appService/user.service';
 import { PAGE_SIZE_OPTIONS } from '~/constant';
 import { Partner } from '~/domain/partner';
+import { User } from '~/domain/user';
+import useDialog from '~/hooks/useDialog';
 import useList from '~/hooks/useList';
 import Card from '~/ui/shared/card';
 import BaseFilter from '~/ui/shared/forms/baseFilter';
+import ImportedModal from '~/ui/shared/imported-modal';
+import Loading from '~/ui/shared/loading';
 import BaseModal from '~/ui/shared/modal';
 import { ButtonType } from '~/ui/shared/modal/props';
 import BaseTable from '~/ui/shared/tables';
@@ -30,7 +34,10 @@ function TableViewUser() {
   const { getAllPartners } = usePartner();
 
   const [partners, setPartners] = useState<Partner[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const [importedUsers, setImportedUsers] = useState<User[]>([]);
+  const [importedModalVisible, importedModalActions] = useDialog();
 
   const [list, { onPageChange, onAddItem, onEditItem, onFilterChange }] =
     useList({
@@ -39,6 +46,28 @@ function TableViewUser() {
 
   const handleGetListPartner = () => {
     getAllPartners().then((res) => setPartners(res.data));
+  };
+
+  const handleSyncMoodle = async () => {
+    try {
+      setLoading(true);
+      const res = await getAllUsers();
+      setImportedUsers([...res.data, ...res.data, ...res.data]);
+      importedModalActions.handleOpen();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleImportExcel = async () => {
+    try {
+      setLoading(true);
+      const res = await getAllUsers();
+      setImportedUsers([...res.data, ...res.data, ...res.data]);
+      importedModalActions.handleOpen();
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleCreateOrUpdate = useCallback((value, id) => {
@@ -71,6 +100,7 @@ function TableViewUser() {
     ...columnTableUser({ partners }),
     {
       dataIndex: 'action',
+      title: 'Action',
       width: 100,
       render: (_, record, index) => {
         const meta = metaUpdateUser(record, { partners });
@@ -102,6 +132,7 @@ function TableViewUser() {
 
   return (
     <>
+      {loading && <Loading />}
       <BaseFilter
         loading={list.isLoading}
         meta={metaFilterUser()}
@@ -111,10 +142,10 @@ function TableViewUser() {
         <TableToolbar
           title={`Tìm thấy ${formatNumber(list.items?.length || 0)} user`}
         >
-          <Button type="primary" className="mr-4">
+          <Button type="primary" className="mr-4" onClick={handleSyncMoodle}>
             Sync Moodle
           </Button>
-          <Button type="primary" className="mr-4">
+          <Button type="primary" className="mr-4" onClick={handleImportExcel}>
             Import Excel
           </Button>
           <BaseModal
@@ -138,6 +169,16 @@ function TableViewUser() {
           />
         )}
       </Card>
+      {importedUsers.length > 0 && (
+        <>
+          <ImportedModal
+            visible={importedModalVisible}
+            data={importedUsers}
+            onOk={importedModalActions.handleClose}
+            onCancel={importedModalActions.handleClose}
+          />
+        </>
+      )}
     </>
   );
 }

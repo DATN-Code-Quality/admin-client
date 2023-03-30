@@ -1,5 +1,6 @@
 const ROUTE = {
   DASHBOARD: '/dashboard',
+  HISTORY: '/history',
   USER: {
     LIST: '/user/list',
   },

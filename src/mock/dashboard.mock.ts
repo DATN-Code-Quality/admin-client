@@ -23,69 +23,69 @@ export function mockDashboard() {
       const randomSuccessData = [
         {
           date: '2023-03-03',
-          value: Math.floor(Math.random() * 10000),
+          value: Math.floor(Math.random() * 100),
         },
         {
           date: '2023-03-04',
-          value: Math.floor(Math.random() * 10000),
+          value: Math.floor(Math.random() * 100),
         },
         {
           date: '2023-03-05',
-          value: Math.floor(Math.random() * 10000),
+          value: Math.floor(Math.random() * 100),
         },
         {
           date: '2023-03-06',
-          value: Math.floor(Math.random() * 10000),
+          value: Math.floor(Math.random() * 100),
         },
         {
           date: '2023-03-07',
-          value: Math.floor(Math.random() * 10000),
+          value: Math.floor(Math.random() * 100),
         },
         {
           date: '2023-03-08',
-          value: Math.floor(Math.random() * 10000),
+          value: Math.floor(Math.random() * 100),
         },
         {
           date: '2023-03-09',
-          value: Math.floor(Math.random() * 10000),
+          value: Math.floor(Math.random() * 100),
         },
         {
           date: '2023-03-10',
-          value: Math.floor(Math.random() * 10000),
+          value: Math.floor(Math.random() * 100),
         },
       ];
       const randomFailData = [
         {
           date: '2023-03-03',
-          value: Math.floor(Math.random() * 10000),
+          value: Math.floor(Math.random() * 100),
         },
         {
           date: '2023-03-04',
-          value: Math.floor(Math.random() * 10000),
+          value: Math.floor(Math.random() * 100),
         },
         {
           date: '2023-03-05',
-          value: Math.floor(Math.random() * 10000),
+          value: Math.floor(Math.random() * 100),
         },
         {
           date: '2023-03-06',
-          value: Math.floor(Math.random() * 10000),
+          value: Math.floor(Math.random() * 100),
         },
         {
           date: '2023-03-07',
-          value: Math.floor(Math.random() * 10000),
+          value: Math.floor(Math.random() * 100),
         },
         {
           date: '2023-03-08',
-          value: Math.floor(Math.random() * 10000),
+          value: Math.floor(Math.random() * 100),
         },
         {
           date: '2023-03-09',
-          value: Math.floor(Math.random() * 10000),
+          value: Math.floor(Math.random() * 100),
         },
         {
           date: '2023-03-10',
-          value: Math.floor(Math.random() * 10000),
+          value: Math.floor(Math.random() * 100),
         },
       ];
       const randomTotalData = getRandomTotalData(
@@ -97,14 +97,14 @@ export function mockDashboard() {
         api_overview_list: [
           {
             key: 'total',
-            name: 'Total Request',
+            name: 'Total Submission',
             color: '#429EFF',
             data: randomTotalData,
             total: getTotalRequest(randomTotalData),
           },
           {
             key: 'success',
-            name: 'Successful',
+            name: 'Pass',
             color: '#00C853',
             data: randomSuccessData,
             total: getTotalRequest(randomSuccessData),
