@@ -28,7 +28,7 @@ function ViewCourseDetailContainer() {
     {
       label: 'Assignment',
       key: 'assignment',
-      children: <TableViewAssignment />,
+      children: <TableViewAssignment courseId={id} />,
     },
     {
       label: 'Submission',

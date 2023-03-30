@@ -10,13 +10,11 @@ export const metaFormAddCourse = () => {
         key: 'name',
         label: 'Course Name:',
         required: true,
-        message: 'Please input Course Name',
       },
       {
         key: 'description',
         label: 'Description:',
         required: true,
-        message: 'Please input Description',
         widget: Editor,
       },
       {
@@ -25,7 +23,6 @@ export const metaFormAddCourse = () => {
         options: MAP_STATE_STATUS,
         widget: 'select',
         required: true,
-        message: 'Please input Status',
         widgetProps: {
           style: {
             minWidth: '12rem',

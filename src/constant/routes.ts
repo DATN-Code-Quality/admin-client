@@ -9,7 +9,8 @@ const ROUTE = {
     DETAIL: '/course/detail',
     CREATE: '/course/create',
     EDIT: '/course/edit',
-    PARTICIPANT: '/course/participant',
+    CREATE_ASSIGNMENT: '/course/create-assignment',
+    EDIT_ASSIGNMENT: '/course/edit-assignment',
   },
   PARTNER: {
     LIST: '/partner/list',

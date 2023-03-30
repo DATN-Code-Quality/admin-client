@@ -75,7 +75,6 @@ export const metaCreateUser = ({ partners }) => {
         key: 'name',
         label: 'Name:',
         required: true,
-        message: 'Please input',
         widgetProps: {
           placeholder: 'Input Name',
         },
@@ -84,7 +83,6 @@ export const metaCreateUser = ({ partners }) => {
         key: 'email',
         label: 'Email:',
         required: true,
-        message: 'Please input',
         widgetProps: {
           placeholder: 'Input Email',
           type: 'email',
@@ -94,7 +92,6 @@ export const metaCreateUser = ({ partners }) => {
         key: 'phone_number',
         label: 'Phone Number:',
         required: true,
-        message: 'Please input',
         widgetProps: {
           placeholder: 'Input Phone Number',
           inputMode: 'numeric',
@@ -114,7 +111,6 @@ export const metaUpdateUser = (record, { partners }) => {
         label: 'Name:',
         required: true,
         initialValue: record.name,
-        message: 'Please input',
         widgetProps: {
           placeholder: 'Input Name',
         },
@@ -124,7 +120,6 @@ export const metaUpdateUser = (record, { partners }) => {
         label: 'Email:',
         required: true,
         initialValue: record.email,
-        message: 'Please input',
         widgetProps: {
           placeholder: 'Input Email',
           type: 'email',
@@ -135,7 +130,6 @@ export const metaUpdateUser = (record, { partners }) => {
         label: 'Phone Number:',
         required: true,
         initialValue: record.phone_number,
-        message: 'Please input',
         widgetProps: {
           placeholder: 'Input Phone Number',
           inputMode: 'numeric',

@@ -30,7 +30,7 @@ import { formatNumber } from '~/utils';
 
 import './TableViewAssignment.less';
 
-function TableViewAssignment() {
+function TableViewAssignment({ courseId }) {
   const navigate = useNavigate();
   const { getAssignmentsByCourseId, blockCourse } = useCourse();
 
@@ -69,11 +69,13 @@ function TableViewAssignment() {
   };
 
   const handleCreateAssignment = async () => {
-    navigate(ROUTE.COURSE.CREATE);
+    navigate(`${ROUTE.COURSE.CREATE_ASSIGNMENT}?course_id=${courseId}`);
   };
 
   const handleUpdateAssignment = async (id) => {
-    navigate(`${ROUTE.COURSE.EDIT}?id=${id}`);
+    navigate(
+      `${ROUTE.COURSE.EDIT_ASSIGNMENT}?course_id=${courseId}&assignment_id=${id}`
+    );
   };
 
   const handleBlockAssignment = (id) => {
