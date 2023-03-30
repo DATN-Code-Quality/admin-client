@@ -91,18 +91,19 @@ export const menus = [
     route: ROUTE.USER.LIST,
     role: [Role.ROOT_ADMIN, Role.TEACHER, Role.STUDENT],
   },
-  {
-    id: 'partner',
-    name: 'Partners',
-    // icon: DownloadOutlined,
-    route: ROUTE.PARTNER.LIST,
-    role: [Role.ROOT_ADMIN, Role.TEACHER, Role.STUDENT],
-  },
+  
   {
     id: 'course',
     name: 'Courses',
     // icon: DownloadOutlined,
     route: ROUTE.COURSE.LIST,
+    role: [Role.ROOT_ADMIN, Role.TEACHER, Role.STUDENT],
+  },
+  {
+    id: 'history',
+    name: 'History',
+    // icon: DownloadOutlined,
+    route: ROUTE.HISTORY,
     role: [Role.ROOT_ADMIN, Role.TEACHER, Role.STUDENT],
   },
 ];

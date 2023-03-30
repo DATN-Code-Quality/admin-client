@@ -104,7 +104,7 @@ function Dashboard() {
           {series && <LineChart series={series} colors={[]} />}
         </div>
       </Card>
-      <Card className="dashboard-card" title="Execution time">
+      <Card className="dashboard-card" title="Submission">
         <div className="action-container">
           <BaseFilter
             loading={loading}

@@ -39,7 +39,7 @@ function Login() {
     <Layout className="cms-layout-app cms-layout-app-login">
       <Card className="card-form-login" bodyClassName="card-form-login__body">
         <div className="logo-login-container">
-          {/* <img className="logo-login" src={Logo} /> */}
+          <img className="logo-login" src={Logo} />
         </div>
         <div className="layout-form-login">
           <Form
@@ -59,6 +59,7 @@ function Login() {
               ]}
             >
               <Input
+                size="large"
                 prefix={<UserOutlined className="site-form-item-icon" />}
                 placeholder="Username"
               />
@@ -73,6 +74,7 @@ function Login() {
               ]}
             >
               <Input
+                size="large"
                 prefix={<LockOutlined className="site-form-item-icon" />}
                 type="password"
                 placeholder="Password"

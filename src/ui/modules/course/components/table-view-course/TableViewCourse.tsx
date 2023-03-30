@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 
 import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
-import { Space } from 'antd';
+import { Modal, Space } from 'antd';
 import Button from 'antd-button-color';
 import { useNavigate } from 'react-router-dom';
 
@@ -10,9 +10,13 @@ import { columnTableCourse, metaFilterCourse } from './props';
 import { useCourse } from '~/adapters/appService/course.service';
 import { PAGE_SIZE_OPTIONS } from '~/constant';
 import ROUTE from '~/constant/routes';
+import { Course } from '~/domain/course';
+import useDialog from '~/hooks/useDialog';
 import useList from '~/hooks/useList';
 import Card from '~/ui/shared/card';
 import BaseFilter from '~/ui/shared/forms/baseFilter';
+import ImportedModal from '~/ui/shared/imported-modal';
+import Loading from '~/ui/shared/loading';
 import BaseModal from '~/ui/shared/modal';
 import { ButtonType } from '~/ui/shared/modal/props';
 import BaseTable from '~/ui/shared/tables';
@@ -26,12 +30,37 @@ function TableViewCourse() {
   const { getAllCourses, createCourse, updateCourse, blockCourse } =
     useCourse();
 
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const [importedCourses, setImportedCourses] = useState<Course[]>([]);
+  const [importedModalVisible, importedModalActions] = useDialog();
 
   const [list, { onPageChange, onAddItem, onEditItem, onFilterChange }] =
     useList({
       fetchFn: (args) => getAllCourses(args),
     });
+
+  const handleSyncMoodle = async () => {
+    try {
+      setLoading(true);
+      const res = await getAllCourses();
+      setImportedCourses([...res.data, ...res.data, ...res.data]);
+      importedModalActions.handleOpen();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleImportExcel = async () => {
+    try {
+      setLoading(true);
+      const res = await getAllCourses();
+      setImportedCourses([...res.data, ...res.data, ...res.data]);
+      importedModalActions.handleOpen();
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleCreateCourse = async () => {
     navigate(ROUTE.COURSE.CREATE);
@@ -78,6 +107,7 @@ function TableViewCourse() {
 
   return (
     <>
+      {loading && <Loading />}
       <BaseFilter
         loading={list.isLoading}
         meta={metaFilterCourse()}
@@ -87,10 +117,10 @@ function TableViewCourse() {
         <TableToolbar
           title={`Tìm thấy ${formatNumber(list.items?.length || 0)} course`}
         >
-          <Button type="primary" className="mr-4">
+          <Button type="primary" className="mr-4" onClick={handleSyncMoodle}>
             Sync Moodle
           </Button>
-          <Button type="primary" className="mr-4">
+          <Button type="primary" className="mr-4" onClick={handleImportExcel}>
             Import Excel
           </Button>
           <Button
@@ -114,6 +144,16 @@ function TableViewCourse() {
           />
         )}
       </Card>
+      {importedCourses.length > 0 && (
+        <>
+          <ImportedModal
+            visible={importedModalVisible}
+            data={importedCourses}
+            onOk={importedModalActions.handleClose}
+            onCancel={importedModalActions.handleClose}
+          />
+        </>
+      )}
     </>
   );
 }
