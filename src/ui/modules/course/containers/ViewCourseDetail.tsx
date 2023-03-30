@@ -2,7 +2,10 @@ import React from 'react';
 
 import { Tabs } from 'antd';
 
+import { TableViewAssignment } from '../components/table-view-assignment';
 import { TableViewParticipant } from '../components/table-view-participant';
+
+import ViewOrCreateCourse from './ViewOrCreateCourse';
 
 import useQuery from '~/hooks/useQuery';
 import Card from '~/ui/shared/card';
@@ -10,11 +13,12 @@ import Card from '~/ui/shared/card';
 function ViewCourseDetailContainer() {
   const query = useQuery();
   const type: any = query.get('type');
+  const id = query.get('id');
   const items = [
     {
       label: 'Overview',
       key: 'overview',
-      children: <TableViewParticipant />,
+      children: <ViewOrCreateCourse initialViewMode />,
     },
     {
       label: 'Participant',
@@ -24,7 +28,7 @@ function ViewCourseDetailContainer() {
     {
       label: 'Assignment',
       key: 'assignment',
-      children: <TableViewParticipant />,
+      children: <TableViewAssignment />,
     },
     {
       label: 'Submission',

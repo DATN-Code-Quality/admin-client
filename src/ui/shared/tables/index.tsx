@@ -9,6 +9,7 @@ import SkeletonTable from './skeleton';
 import logger from '~/utils/logger';
 // import EmptyContent from '../empty';
 import './style.less';
+import { DEFAULT_PAGE_SIZE } from '~/constant';
 
 type DragContainerProps = {
   handleOnDrop: (...args) => void;
@@ -146,7 +147,13 @@ const BaseTable = <T extends object>(props: BaseTableProps<T>) => {
   }
 
   if (isLoading && !isFetched)
-    return <SkeletonTable {...rest} rowCount={10} columns={columns} />;
+    return (
+      <SkeletonTable
+        {...rest}
+        rowCount={DEFAULT_PAGE_SIZE + 1}
+        columns={columns}
+      />
+    );
 
   return (
     <Table

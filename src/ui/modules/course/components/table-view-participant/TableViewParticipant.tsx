@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
+import { SyncOutlined, UploadOutlined } from '@ant-design/icons';
 import { Space } from 'antd';
 import Button from 'antd-button-color';
 import { useNavigate } from 'react-router-dom';
@@ -114,10 +115,20 @@ function TableViewParticipant() {
             list.items?.length || 0
           )} participant`}
         >
-          <Button type="primary" className="mr-4">
+          <Button
+            type="primary"
+            className="mr-4"
+            icon={<SyncOutlined />}
+            loading={list.isLoading}
+          >
             Sync Moodle
           </Button>
-          <Button type="primary" className="mr-4">
+          <Button
+            type="primary"
+            className="mr-4"
+            icon={<UploadOutlined />}
+            loading={list.isLoading}
+          >
             Import Excel
           </Button>
           <BaseModal
@@ -125,21 +136,20 @@ function TableViewParticipant() {
             itemTitle=""
             id={0}
             mode={ButtonType.CREATE}
+            loading={list.isLoading}
             meta={metaCreateUser({ partners })}
           />
         </TableToolbar>
-        {list.items.length > 0 && partners.length > 0 && (
-          <BaseTable
-            idKey="user_id"
-            columns={columnTableProps({ partners })}
-            data={list}
-            paginationProps={{
-              showSizeChanger: true,
-              pageSizeOptions: PAGE_SIZE_OPTIONS,
-            }}
-            onChange={onPageChange}
-          />
-        )}
+        <BaseTable
+          idKey="user_id"
+          columns={columnTableProps({ partners })}
+          data={list}
+          paginationProps={{
+            showSizeChanger: true,
+            pageSizeOptions: PAGE_SIZE_OPTIONS,
+          }}
+          onChange={onPageChange}
+        />
       </Card>
     </>
   );

@@ -8,19 +8,25 @@ import useQuery from '~/hooks/useQuery';
 import Card from '~/ui/shared/card';
 import Loading from '~/ui/shared/loading';
 
-const CreateCourse = () => {
+const ViewOrCreateCourse = ({ initialViewMode = false }) => {
   const query = useQuery();
   const id: any = query.get('id');
   const renderTitle = () => {
-    const preTitle = id ? 'Cập nhật ' : 'Tạo mới ';
+    let preTitle = 'Tạo mới ';
+    if (id && initialViewMode) {
+      preTitle = 'Thông tin ';
+    }
+    if (id && !initialViewMode) {
+      preTitle = 'Cập nhật ';
+    }
     return `${preTitle}Course`;
   };
   return (
     <Card className="card-edit-view">
       <PageHeader className="site-page-header" title={renderTitle()} ghost />
-      <FormAddCourse id={id} />
+      <FormAddCourse id={id} initialViewMode={initialViewMode} />
     </Card>
   );
 };
 
-export default CreateCourse;
+export default ViewOrCreateCourse;

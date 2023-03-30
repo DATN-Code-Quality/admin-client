@@ -10,12 +10,12 @@ import { Modal, Space } from 'antd';
 import Button from 'antd-button-color';
 import { useNavigate } from 'react-router-dom';
 
-import { columnTableCourse, metaFilterCourse } from './props';
+import { columnTableAssignment, metaFilterCourse } from './props';
 
 import { useCourse } from '~/adapters/appService/course.service';
 import { PAGE_SIZE_OPTIONS } from '~/constant';
 import ROUTE from '~/constant/routes';
-import { Course } from '~/domain/course';
+import { Assignment } from '~/domain/assignment';
 import useDialog from '~/hooks/useDialog';
 import useList from '~/hooks/useList';
 import Card from '~/ui/shared/card';
@@ -28,28 +28,29 @@ import BaseTable from '~/ui/shared/tables';
 import TableToolbar from '~/ui/shared/toolbar';
 import { formatNumber } from '~/utils';
 
-import './TableViewCourse.less';
+import './TableViewAssignment.less';
 
-function TableViewCourse() {
+function TableViewAssignment() {
   const navigate = useNavigate();
-  const { getAllCourses, createCourse, updateCourse, blockCourse } =
-    useCourse();
+  const { getAssignmentsByCourseId, blockCourse } = useCourse();
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  const [importedCourses, setImportedCourses] = useState<Course[]>([]);
+  const [importedAssignments, setImportedAssignments] = useState<Assignment[]>(
+    []
+  );
   const [importedModalVisible, importedModalActions] = useDialog();
 
   const [list, { onPageChange, onAddItem, onEditItem, onFilterChange }] =
     useList({
-      fetchFn: (args) => getAllCourses(args),
+      fetchFn: (args) => getAssignmentsByCourseId(args),
     });
 
   const handleSyncMoodle = async () => {
     try {
       setLoading(true);
-      const res = await getAllCourses();
-      setImportedCourses([...res.data, ...res.data, ...res.data]);
+      const res = await getAssignmentsByCourseId('');
+      setImportedAssignments([...res.data, ...res.data, ...res.data]);
       importedModalActions.handleOpen();
     } finally {
       setLoading(false);
@@ -59,30 +60,30 @@ function TableViewCourse() {
   const handleImportExcel = async () => {
     try {
       setLoading(true);
-      const res = await getAllCourses();
-      setImportedCourses([...res.data, ...res.data, ...res.data]);
+      const res = await getAssignmentsByCourseId('');
+      setImportedAssignments([...res.data, ...res.data, ...res.data]);
       importedModalActions.handleOpen();
     } finally {
       setLoading(false);
     }
   };
 
-  const handleCreateCourse = async () => {
+  const handleCreateAssignment = async () => {
     navigate(ROUTE.COURSE.CREATE);
   };
 
-  const handleUpdateCourse = async (id) => {
+  const handleUpdateAssignment = async (id) => {
     navigate(`${ROUTE.COURSE.EDIT}?id=${id}`);
   };
 
-  const handleBlockCourse = (id) => {
+  const handleBlockAssignment = (id) => {
     return blockCourse(id).then((data) => {
       onEditItem(data, 'id');
     });
   };
 
   const columnTableProps = () => [
-    ...columnTableCourse(),
+    ...columnTableAssignment(),
     {
       dataIndex: 'action',
       title: 'Action',
@@ -95,11 +96,11 @@ function TableViewCourse() {
               size="small"
               ghost
               icon={<EditOutlined />}
-              onClick={() => handleUpdateCourse(record.id)}
+              onClick={() => handleUpdateAssignment(record.id)}
             />
             <BaseModal
-              onOkFn={handleBlockCourse}
-              itemTitle="Bạn có muốn chặn course"
+              onOkFn={handleBlockAssignment}
+              itemTitle="Bạn có muốn chặn assignment"
               id={record.id}
               mode={ButtonType.BLOCK}
               isDelete
@@ -120,7 +121,7 @@ function TableViewCourse() {
       />
       <Card>
         <TableToolbar
-          title={`Tìm thấy ${formatNumber(list.items?.length || 0)} course`}
+          title={`Tìm thấy ${formatNumber(list.items?.length || 0)} assignment`}
         >
           <Button
             type="primary"
@@ -144,7 +145,7 @@ function TableViewCourse() {
             type="primary"
             icon={<PlusCircleOutlined />}
             loading={list.isLoading}
-            onClick={handleCreateCourse}
+            onClick={handleCreateAssignment}
           >
             Tạo mới
           </Button>
@@ -160,11 +161,11 @@ function TableViewCourse() {
           onChange={onPageChange}
         />
       </Card>
-      {importedCourses.length > 0 && (
+      {importedAssignments.length > 0 && (
         <>
           <ImportedModal
             visible={importedModalVisible}
-            data={importedCourses}
+            data={importedAssignments}
             onOk={importedModalActions.handleClose}
             onCancel={importedModalActions.handleClose}
           />
@@ -174,4 +175,4 @@ function TableViewCourse() {
   );
 }
 
-export default TableViewCourse;
+export default TableViewAssignment;

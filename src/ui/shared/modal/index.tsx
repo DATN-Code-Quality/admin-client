@@ -19,6 +19,7 @@ interface BaseModalProps extends ModalProps {
   onCloseFn?: () => void;
   initializeFn?: (...args) => void;
   mode: ButtonType;
+  loading?: boolean;
   meta?: IMetaFormBuilder;
   disabledModal?: boolean;
   itemTitle?: string;
@@ -36,6 +37,7 @@ const BaseModal: React.FC<BaseModalProps> = (props) => {
     itemTitle,
     disabledModal,
     mode,
+    loading,
     onOkFn,
     initializeFn,
     cancelText = 'Huỷ',
@@ -80,6 +82,7 @@ const BaseModal: React.FC<BaseModalProps> = (props) => {
         {...MAP_BUTTON_PROPS[mode]}
         onClick={handleOpen}
         disabled={disabledModal}
+        loading={loading}
         className="modal-btn"
       />
       {visible && (
