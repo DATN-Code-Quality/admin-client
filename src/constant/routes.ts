@@ -1,4 +1,5 @@
 const ROUTE = {
+  INDEX: '/',
   DASHBOARD: '/dashboard',
   HISTORY: '/history',
   USER: {
