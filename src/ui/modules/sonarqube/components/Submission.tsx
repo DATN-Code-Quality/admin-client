@@ -12,7 +12,7 @@ import './index.less';
 
 const Submission = () => {
   const { getIssuesSubmission, getIssuesWithSource } = useSonarqube();
-
+  const issueSelected = useSelector(SonarqubeSelector.getIssueSelected);
   const dispatch = useDispatch();
 
   const data = useSelector(SonarqubeSelector.getSubmissionIssues);
@@ -23,7 +23,7 @@ const Submission = () => {
     );
     if (response.error !== 0) return;
     const { issues: dataRes } = response;
-    const { components, issues } = dataRes || { components: [], issues: [] };
+    const { issues } = dataRes || { components: [], issues: [] };
     const issuesOfComponents: Record<string, unknown> = {};
     issues?.reduce((objectResult, issue) => {
       if (objectResult[issue.component]) {
@@ -49,26 +49,25 @@ const Submission = () => {
     handleFetchData();
   }, [handleFetchData]);
 
-  useEffect(() => {
-    getIssuesWithSource();
-  }, []);
   return (
-    <div>
-      <DetailSubmission />
-      {Object.values(data).map((componentIssues) => {
-        return componentIssues.map((issue) => (
-          <div
-            className="issue-component"
-            key={issue.key}
-            onClick={() => {
-              handleSetIssue(issue);
-            }}
-          >
-            {issue.message}
-          </div>
-        ));
-      })}
-    </div>
+    <>
+      {issueSelected && <DetailSubmission />}
+
+      {!issueSelected &&
+        Object.values(data).map((componentIssues) => {
+          return componentIssues.map((issue) => (
+            <div
+              className="issue-component"
+              key={issue.key}
+              onClick={() => {
+                handleSetIssue(issue);
+              }}
+            >
+              {issue.message}
+            </div>
+          ));
+        })}
+    </>
   );
 };
 

@@ -1040,11 +1040,9 @@ export function useSonarqube() {
       return response;
     },
 
-    async getIssuesWithSource() {
+    async getIssuesWithSource(componentIssue: string) {
       // axios
-      //   .get(
-      //     'http://localhost:5000/api/sonarqube/source/01f5d8de-a0c8-4b19-aa10-9e15f9a9a29c_ASS_0001_1680197484196%3ASource%2FcrawlData.py'
-      //   )
+      //   .get(`http://localhost:5000/api/sonarqube/source/${componentIssue}`)
       //   .then((res) => {
       //     console.log(res);
       //   });
