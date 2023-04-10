@@ -51,6 +51,12 @@ export const AUTH = {
     LOGOUT: '/auth/logout',
   },
 };
+
+export const SONARQUBE = {
+  GET: {
+    ISSUES_SUBMISSION: '/sonarqube/issue/e25b393e-cf56-4e12-8a0b-e7213648ac76',
+  },
+};
 const API = {
   DASHBOARD,
   AUTH,
