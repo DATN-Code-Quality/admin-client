@@ -10,16 +10,21 @@ import { LINE_EMPTY_CODE } from '~/constant';
 
 const DetailSubmission = () => {
   const { getIssuesWithSource } = useSonarqube();
+  const issueSelected = useSelector(SonarqubeSelector.getIssueSelected);
+  const [componentIssue, setComponentIssue] = useState<string>('');
 
   const submissionIssues = useSelector(SonarqubeSelector.getSubmissionIssues);
+
+  const [selected, setSelected] = useState();
 
   const [data, setData] = useState([]);
 
   const handleGetDetail = useCallback(async () => {
-    const response = await getIssuesWithSource();
+    if (!componentIssue) return;
+    const response = await getIssuesWithSource(componentIssue);
     if (response.error !== 0) return;
     setData(response.sources);
-  }, []);
+  }, [componentIssue]);
 
   const issueList = useMemo(() => {
     const result = {};
@@ -36,46 +41,104 @@ const DetailSubmission = () => {
     [issueList]
   );
 
-  console.log(Object.keys(lineIssueList), submissionIssues);
+  useEffect(() => {
+    setComponentIssue(issueSelected?.component);
+    setSelected(issueSelected);
+  }, [issueSelected, issueSelected?.component]);
+
   useEffect(() => {
     handleGetDetail();
   }, [handleGetDetail]);
-  return (
-    <div>
-      {data?.map((item, index) => {
-        // console.log(issueList.);
-        const isExistIssues =
-          item.code !== LINE_EMPTY_CODE && lineIssueList.includes(+item.line);
-        return (
-          <div
-            key={`${item.code}_${item.line}`}
-            style={{ display: 'flex', alignItems: 'flex-start' }}
-          >
-            <p>{index}</p>
-            <div
-              className={
-                item.code !== LINE_EMPTY_CODE ? 'line-code-detail' : ''
-              }
-              style={{ paddingBottom: isExistIssues ? '8px' : '0' }}
-            >
-              <p className="source-line-code code">{parse(item.code)}</p>
-              {isExistIssues && (
-                //   <div>test</div>
-                <div
-                  className="issue-component mt-2 "
 
-                  //   onClick={() => {
-                  //     handleSetIssue(issue);
-                  //   }}
+  const handleSelect = useCallback(
+    (item: any) => {
+      setSelected(item);
+      if (componentIssue !== item.component) {
+        setComponentIssue(() => item.component);
+      }
+    },
+    [componentIssue]
+  );
+
+  const renderListIssues = useCallback(
+    (fileName: string, issueData: any) => {
+      const fileNameShort = fileName.substring(fileName.lastIndexOf('/') + 1);
+      return (
+        <div>
+          <p style={{ marginBottom: '8px', textAlign: 'right' }}>
+            {fileNameShort}
+          </p>
+          {issueData?.map((item) => {
+            return (
+              <div
+                key={item.key}
+                className={`issue-message ${
+                  selected?.key === item.key ? 'active' : ''
+                }`}
+                onClick={() => handleSelect(item)}
+              >
+                {item.message}
+              </div>
+            );
+          })}
+        </div>
+      );
+    },
+    [selected]
+  );
+
+  return (
+    <div className="detail-submission ">
+      <div>
+        {Object.keys(submissionIssues)?.map((file) => {
+          return renderListIssues(file, submissionIssues[file] || []);
+        })}
+      </div>
+      <div>
+        <p className="mb-2 text-right">{issueSelected.component}</p>
+        <div className="issues-container">
+          {data?.map((item, index) => {
+            // console.log(issueList.);
+            const isExistIssues =
+              item.code !== LINE_EMPTY_CODE &&
+              lineIssueList.includes(+item.line);
+
+            const isActiveLine =
+              isExistIssues && issueList[+item.line]?.key === selected?.key;
+
+            return (
+              <div
+                key={`${item.code}_${item.line}`}
+                className={`pl-6 line-code-container ${
+                  isActiveLine ? 'active' : ''
+                }`}
+              >
+                <div className="line-index">{index + 1}</div>
+                <div
+                  className={`${
+                    item.code !== LINE_EMPTY_CODE
+                      ? 'line-code-detail'
+                      : 'empty-line'
+                  } bg-white`}
+                  style={{ paddingBottom: isExistIssues ? '8px' : '0' }}
                 >
-                  {issueList[+item.line].message}
+                  <p className="source-line-code code">{parse(item.code)}</p>
+                  {isExistIssues && (
+                    <div
+                      className="issue-component mt-2 "
+                      //   onClick={() => {
+                      //     handleSetIssue(issue);
+                      //   }}
+                    >
+                      {issueList[+item.line].message}
+                    </div>
+                  )}
                 </div>
-              )}
-              {item.code === LINE_EMPTY_CODE && <div className="my-6"></div>}
-            </div>
-          </div>
-        );
-      })}
+              </div>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 };
