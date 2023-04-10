@@ -1,9 +1,9 @@
-import { applyMiddleware, compose, createStore } from "redux";
-import thunkMiddleware from "redux-thunk";
+import { applyMiddleware, compose, createStore } from 'redux';
+import thunkMiddleware from 'redux-thunk';
 
-import { IS_PRODUCTION } from "~/constant";
+import RootReducer from '../reducers';
 
-import RootReducer from "../reducers";
+import { IS_PRODUCTION } from '~/constant';
 
 const composeWithDevTools =
   !IS_PRODUCTION && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
