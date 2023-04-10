@@ -51,6 +51,8 @@ export const MAP_ROLES = [
   [Role.STUDENT, 'Student'],
 ];
 
+export const LINE_EMPTY_CODE = '';
+
 export const DEFAULT_PAGE_SIZE = 5;
 
 export const PAGE_SIZE_OPTIONS = [5, 10, 20, 50];
