@@ -33,6 +33,14 @@ const CreateOrViewAssignment = lazy(
   () => import('../ui/modules/course/containers/ViewOrCreateAssignment')
 );
 
+const Sonarqube = lazy(
+  () => import('../ui/modules/sonarqube/containers/Sonarqube')
+);
+
+const SonarqubeSubmission = lazy(
+  () => import('../ui/modules/sonarqube/containers/Submission')
+);
+
 export const MAIN_ROUTES = [
   {
     path: ROUTE.LOGIN,
@@ -84,6 +92,17 @@ export const MAIN_ROUTES = [
     name: 'updateCourseAssignment',
     element: CreateOrViewAssignment,
   },
+  {
+    path: ROUTE.SONARQUBE.LIST,
+    name: 'Sonarqube',
+    element: Sonarqube,
+  },
+
+  {
+    path: ROUTE.SONARQUBE.SUBMISSION,
+    name: 'Submission',
+    element: SonarqubeSubmission,
+  },
 ];
 
 export const menus = [
@@ -114,6 +133,13 @@ export const menus = [
     name: 'History',
     // icon: DownloadOutlined,
     route: ROUTE.HISTORY,
+    role: [Role.ROOT_ADMIN, Role.TEACHER, Role.STUDENT],
+  },
+  {
+    id: 'sonarqube',
+    name: 'Sonarqube',
+    // icon: DownloadOutlined,
+    route: ROUTE.SONARQUBE.LIST,
     role: [Role.ROOT_ADMIN, Role.TEACHER, Role.STUDENT],
   },
 ];

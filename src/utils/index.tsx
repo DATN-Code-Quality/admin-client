@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 import { message } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 
@@ -243,4 +244,71 @@ export const addDays = (date: Date, days: number): Date => {
   const result = new Date(date);
   result.setDate(result.getDate() + parseInt(days));
   return result;
+};
+
+export const convertNlocToScale = (val: string) => {
+  if (val === 'NO_DATA') {
+    return null; // return null for NO_DATA
+  }
+  const lowerBound = val.split('-')[0];
+  if (lowerBound === '*') {
+    return 1;
+  }
+  if (+lowerBound <= 1000) {
+    return 2;
+  }
+  if (+lowerBound <= 10000) {
+    return 3;
+  }
+  if (+lowerBound <= 100000) {
+    return 4;
+  }
+  return 5;
+};
+
+export const renderColorRatting = (val: number, className: string) => {
+  if (val === 1)
+    return (
+      <span
+        className={className}
+        style={{ display: 'inline-block', background: '#0a0' }}
+      >
+        A
+      </span>
+    );
+  if (val === 2)
+    return (
+      <span
+        className={className}
+        style={{ display: 'inline-block', background: '#b0d513' }}
+      >
+        B
+      </span>
+    );
+  if (val === 3)
+    return (
+      <span
+        className={className}
+        style={{ display: 'inline-block', background: '#eabe06' }}
+      >
+        C
+      </span>
+    );
+  if (val === 4)
+    return (
+      <span
+        className={className}
+        style={{ display: 'inline-block', background: '#ed7d20' }}
+      >
+        D
+      </span>
+    );
+  return (
+    <span
+      className={className}
+      style={{ display: 'inline-block', background: '#d4333f' }}
+    >
+      E
+    </span>
+  );
 };

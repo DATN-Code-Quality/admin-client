@@ -17,6 +17,10 @@ const ROUTE = {
     LIST: '/partner/list',
   },
   LOGIN: '/login',
+  SONARQUBE: {
+    LIST: '/sonarqube/list',
+    SUBMISSION: '/sonarqube/submission',
+  },
 };
 
 export default ROUTE;
