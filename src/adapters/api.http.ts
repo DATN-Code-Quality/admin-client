@@ -1,6 +1,7 @@
 /* eslint-disable no-use-before-define */
 
 import { DOMAIN_API_URL, ResponseData } from '~/constant';
+import { ApiStatus } from '~/constant/enum';
 import { buildURLWithParam, extend } from '~/utils';
 
 export function fetch(
@@ -198,15 +199,15 @@ function toBlob(resp) {
 }
 
 function validResp<T>(resp: ResponseData<T>): Promise<ResponseData<T>> {
-  if (resp?.success) {
+  if (resp?.status === ApiStatus.SUCCESS) {
     return Promise.resolve(resp);
   }
   return Promise.reject(resp);
 }
 
-export function formatResponse<T>(response): T {
-  const { success } = response;
-  if (success) {
+export function formatResponse<T>(response): ResponseData<T> {
+  const { status } = response;
+  if (status === ApiStatus.SUCCESS) {
     return response;
   }
   throw new Error(JSON.stringify(response));

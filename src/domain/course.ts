@@ -9,6 +9,7 @@ export interface Course {
   attachmentFileLink?: string;
   config: string;
   status: StateStatus;
-  created_at: number;
-  updated_at: number;
+  createdAt?: number;
+  updatedAt?: number;
+  deletedAt?: number;
 }

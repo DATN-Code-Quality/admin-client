@@ -164,6 +164,7 @@ function TableViewCourse() {
         <>
           <ImportedModal
             visible={importedModalVisible}
+            type="course"
             data={importedCourses}
             onOk={importedModalActions.handleClose}
             onCancel={importedModalActions.handleClose}

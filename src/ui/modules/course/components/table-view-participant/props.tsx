@@ -61,7 +61,7 @@ export const columnTableUser = ({ partners }): ColumnType<any>[] => [
     dataIndex: 'status',
     width: 100,
     render: (value) => {
-      return <p>{value === StateStatus.ACTIVE ? 'Active' : 'Inactive'}</p>;
+      return <p>{value === StateStatus.INACTIVE ? 'Active' : 'Inactive'}</p>;
     },
   },
 ];

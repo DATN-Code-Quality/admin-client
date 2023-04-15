@@ -26,7 +26,14 @@
   }
 
   &__name {
-    flex-basis: 35%;
+    flex-basis: 20%;
+    -webkit-box-flex: 0;
+    flex-grow: 0;
+    max-width: 35%;
+  }
+
+  &__email {
+    flex-basis: 20%;
     -webkit-box-flex: 0;
     flex-grow: 0;
     max-width: 35%;
@@ -46,12 +53,18 @@
     max-width: 15%;
   }
 
-  &__actions {
-    flex-basis: 10%;
-    -webkit-box-flex: 0;
-    flex-grow: 0;
-    max-width: 10%;
-    text-align: center;
+  &__checkboxgroup {
+
+    .ant-checkbox-group {
+      display: flex;
+      flex-direction: column;
+      align-items: end;
+      .ant-checkbox-group-item {
+        margin-right: 0;
+        margin-bottom: 16px;
+      }
+    }
+
   }
 }
 
@@ -63,4 +76,20 @@
 .import-modal-item-container {
   height: 450px;
   overflow-y: auto;
+  display: flex;
+
+  &__info {
+    flex-basis: 90%;
+    -webkit-box-flex: 0;
+    flex-grow: 0;
+    max-width: 90%;
+  }
+
+  &__actions {
+    flex-basis: 10%;
+    -webkit-box-flex: 0;
+    flex-grow: 0;
+    max-width: 10%;
+    text-align: center;
+  }
 }

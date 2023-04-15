@@ -10,13 +10,14 @@ export const DASHBOARD = {
 
 export const USER = {
   GET: {
-    USERS: '/user',
+    USERS: '/user/get-all-user',
+    MOODLE_USERS: '/user-moodle/get-all-users',
   },
   POST: {
-    CREATE_USER: '/user',
+    CREATE_USER: '/user/add-users',
   },
   PUT: {
-    UPDATE_USER: '/user',
+    UPDATE_USER: '/user/update-user',
   },
 };
 

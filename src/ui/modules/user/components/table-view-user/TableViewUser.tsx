@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
+import { SyncOutlined, UploadOutlined } from '@ant-design/icons';
 import { Space } from 'antd';
 import Button from 'antd-button-color';
 import { useNavigate } from 'react-router-dom';
@@ -27,17 +28,18 @@ import { ButtonType } from '~/ui/shared/modal/props';
 import BaseTable from '~/ui/shared/tables';
 import TableToolbar from '~/ui/shared/toolbar';
 import { formatNumber } from '~/utils';
-import { SyncOutlined, UploadOutlined } from '@ant-design/icons';
 
 function TableViewUser() {
   const navigate = useNavigate();
-  const { getAllUsers, createUser, updateUser, blockUser } = useUser();
+  const { getAllUsers, getAllMoodleUsers, createUser, updateUser, blockUser } =
+    useUser();
   const { getAllPartners } = usePartner();
 
   const [partners, setPartners] = useState<Partner[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   const [importedUsers, setImportedUsers] = useState<User[]>([]);
+  const [isSyncMoodle, setIsSyncMoodle] = useState<boolean>(false);
   const [importedModalVisible, importedModalActions] = useDialog();
 
   const [list, { onPageChange, onAddItem, onEditItem, onFilterChange }] =
@@ -52,8 +54,9 @@ function TableViewUser() {
   const handleSyncMoodle = async () => {
     try {
       setLoading(true);
-      const res = await getAllUsers();
-      setImportedUsers([...res.data, ...res.data, ...res.data]);
+      setIsSyncMoodle(true);
+      const res = await getAllMoodleUsers();
+      setImportedUsers(res.data);
       importedModalActions.handleOpen();
     } finally {
       setLoading(false);
@@ -63,12 +66,22 @@ function TableViewUser() {
   const handleImportExcel = async () => {
     try {
       setLoading(true);
+      setIsSyncMoodle(false);
       const res = await getAllUsers();
       setImportedUsers([...res.data, ...res.data, ...res.data]);
       importedModalActions.handleOpen();
     } finally {
       setLoading(false);
     }
+  };
+  const handleImportModalOk = async (values) => {
+    if (isSyncMoodle) {
+      const dataSubmit = values.data;
+      console.log(dataSubmit);
+      createUser(dataSubmit);
+    }
+    importedModalActions.handleClose();
+    return values;
   };
 
   const handleCreateOrUpdate = useCallback((value, id) => {
@@ -185,8 +198,10 @@ function TableViewUser() {
         <>
           <ImportedModal
             visible={importedModalVisible}
+            type="user"
+            id="email"
             data={importedUsers}
-            onOk={importedModalActions.handleClose}
+            onOk={handleImportModalOk}
             onCancel={importedModalActions.handleClose}
           />
         </>
