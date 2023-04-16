@@ -30,11 +30,6 @@ function ViewCourseDetailContainer() {
       key: 'assignment',
       children: <TableViewAssignment courseId={id} />,
     },
-    {
-      label: 'Submission',
-      key: 'submission',
-      children: <TableViewParticipant />,
-    },
   ];
 
   return (

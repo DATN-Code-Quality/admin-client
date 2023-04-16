@@ -32,12 +32,18 @@ import './TableViewCourse.less';
 
 function TableViewCourse() {
   const navigate = useNavigate();
-  const { getAllCourses, createCourse, updateCourse, blockCourse } =
-    useCourse();
+  const {
+    getAllCourses,
+    getAllMoodleCourses,
+    createCourse,
+    updateCourse,
+    blockCourse,
+  } = useCourse();
 
   const [loading, setLoading] = useState<boolean>(false);
 
   const [importedCourses, setImportedCourses] = useState<Course[]>([]);
+  const [isSyncMoodle, setIsSyncMoodle] = useState<boolean>(false);
   const [importedModalVisible, importedModalActions] = useDialog();
 
   const [list, { onPageChange, onAddItem, onEditItem, onFilterChange }] =
@@ -48,8 +54,10 @@ function TableViewCourse() {
   const handleSyncMoodle = async () => {
     try {
       setLoading(true);
-      const res = await getAllCourses();
-      setImportedCourses([...res.data, ...res.data, ...res.data]);
+      setIsSyncMoodle(true);
+      const res = await getAllMoodleCourses();
+      console.log(res);
+      setImportedCourses(res.data);
       importedModalActions.handleOpen();
     } finally {
       setLoading(false);
@@ -65,6 +73,16 @@ function TableViewCourse() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleImportModalOk = async (values) => {
+    if (isSyncMoodle) {
+      const dataSubmit = values.data;
+      console.log(dataSubmit);
+      createCourse(dataSubmit);
+    }
+    importedModalActions.handleClose();
+    return values;
   };
 
   const handleCreateCourse = async () => {
@@ -165,8 +183,9 @@ function TableViewCourse() {
           <ImportedModal
             visible={importedModalVisible}
             type="course"
+            id="moodleCourseId"
             data={importedCourses}
-            onOk={importedModalActions.handleClose}
+            onOk={handleImportModalOk}
             onCancel={importedModalActions.handleClose}
           />
         </>

@@ -21,6 +21,50 @@ export const USER = {
   },
 };
 
+export const COURSE = {
+  GET: {
+    COURSES: '/course/get-all-course',
+    COURSE: '/course/get-course',
+    MOODLE_COURSES: '/course-moodle/get-all-courses',
+  },
+  POST: {
+    CREATE_COURSE: '/course/add-courses',
+  },
+  PUT: {
+    UPDATE_COURSE: '/course/update-course',
+  },
+};
+
+export const ASSIGNMENT = {
+  GET: {
+    ASSIGNMENTS: '/assignment/get-all-assignment',
+    ASSIGNMENT: '/assignment/get-assignment',
+    MOODLE_ASSIGNMENTS_BY_COURSE_ID:
+      '/assignment-moodle/get-assignments-by-course-id',
+  },
+  POST: {
+    CREATE_ASSIGNMENT: '/assignment/add-assignments',
+  },
+  PUT: {
+    UPDATE_ASSIGNMENT: '/assignment/update-assignment',
+  },
+};
+
+export const SUBMISSION = {
+  GET: {
+    SUBMISSIONS: '/submission/get-all-submission',
+    SUBMISSION: '/submission/get-submission',
+    MOODLE_SUBMISSIONS_BY_ASSIGNMENT_ID:
+      '/submission-moodle/get-submissions-by-assignment-id',
+  },
+  POST: {
+    CREATE_SUBMISSION: '/submission/add-submissions',
+  },
+  PUT: {
+    UPDATE_SUBMISSION: '/submission/update-submission',
+  },
+};
+
 export const PARTNER = {
   GET: {
     PARTNERS: '/partner',
@@ -62,6 +106,9 @@ const API = {
   DASHBOARD,
   AUTH,
   USER,
+  COURSE,
+  ASSIGNMENT,
+  SUBMISSION,
   PARTNER,
   AGENCY,
 };

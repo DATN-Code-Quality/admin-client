@@ -12,6 +12,7 @@ import { ResponseData } from '~/constant';
 import API from '~/constant/api';
 import ROUTE from '~/constant/routes';
 import { User } from '~/domain/user';
+import { removeSubmitProps } from '~/dto/baseDTO';
 import { UserDTO, userFromDTO, userToDTO } from '~/dto/user';
 import { mockUser } from '~/mock/user.mock';
 
@@ -43,7 +44,7 @@ export function useUser() {
 
     async createUser(body): Promise<ResponseData<User[]>> {
       const submitData = body.map((user) => {
-        return userToDTO(user);
+        return removeSubmitProps(userToDTO(user));
       });
       const response = await postWithPath(
         `${API.USER.POST.CREATE_USER}`,
