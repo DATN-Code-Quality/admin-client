@@ -1,0 +1,31 @@
+.assignment-name {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.submission-container {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 16px;
+  min-height: 200px;
+  margin-top: 16px;
+  background: '#ccc';
+}
+
+.submission-container .title {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.btn-show-result {
+  background: blue;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+}

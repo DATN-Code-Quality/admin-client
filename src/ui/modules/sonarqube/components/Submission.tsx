@@ -14,13 +14,16 @@ const Submission = () => {
   const { getIssuesSubmission, getIssuesWithSource } = useSonarqube();
   const issueSelected = useSelector(SonarqubeSelector.getIssueSelected);
   const dispatch = useDispatch();
-
   const data = useSelector(SonarqubeSelector.getSubmissionIssues);
+  const assignmentSelected = useSelector(
+    SonarqubeSelector.getAssignmentSelected
+  );
+
+  const [loading, setLoading] = useState(false);
 
   const handleFetchData = useCallback(async () => {
-    const response = await getIssuesSubmission(
-      'e25b393e-cf56-4e12-8a0b-e7213648ac76'
-    );
+    if (!assignmentSelected) return;
+    const response = await getIssuesSubmission(assignmentSelected);
     if (response.error !== 0) return;
     const { issues: dataRes } = response;
     const { issues } = dataRes || { components: [], issues: [] };
@@ -36,7 +39,7 @@ const Submission = () => {
       return objectResult;
     }, issuesOfComponents);
     dispatch(setSubmissionIssues(issuesOfComponents));
-  }, []);
+  }, [assignmentSelected]);
 
   const handleSetIssue = useCallback(
     (issue) => {

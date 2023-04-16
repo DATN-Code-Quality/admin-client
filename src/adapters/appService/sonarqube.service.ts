@@ -1041,12 +1041,18 @@ export function useSonarqube() {
     },
 
     async getIssuesWithSource(componentIssue: string) {
-      // axios
-      //   .get(`http://localhost:5000/api/sonarqube/source/${componentIssue}`)
+      // const response = await axios
+      //   .get(
+      //     `http://localhost:5000/api/sonarqube/source/${encodeURIComponent(
+      //       componentIssue
+      //     )}`
+      //   )
       //   .then((res) => {
-      //     console.log(res);
+      //     return res.data;
       //   });
-      const response = {
+
+      // return response;
+      return {
         error: 0,
         sources: [
           {
@@ -1171,7 +1177,6 @@ export function useSonarqube() {
           },
         ],
       };
-      return response;
     },
   };
 }

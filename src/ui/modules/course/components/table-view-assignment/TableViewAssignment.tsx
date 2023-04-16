@@ -29,10 +29,13 @@ import TableToolbar from '~/ui/shared/toolbar';
 import { formatNumber } from '~/utils';
 
 import './TableViewAssignment.less';
+import Submission from '../submission';
 
 function TableViewAssignment({ courseId }) {
   const navigate = useNavigate();
   const { getAssignmentsByCourseId, blockCourse } = useCourse();
+
+  const [assignmentSelected, setAssignmentSelected] = useState(null);
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -84,8 +87,10 @@ function TableViewAssignment({ courseId }) {
     });
   };
 
+  console.log(assignmentSelected);
+
   const columnTableProps = () => [
-    ...columnTableAssignment(),
+    ...columnTableAssignment(setAssignmentSelected),
     {
       dataIndex: 'action',
       title: 'Action',
@@ -115,64 +120,71 @@ function TableViewAssignment({ courseId }) {
 
   return (
     <>
-      {loading && <Loading />}
-      <BaseFilter
-        loading={list.isLoading}
-        meta={metaFilterCourse()}
-        onFilter={onFilterChange}
-      />
-      <Card>
-        <TableToolbar
-          title={`Tìm thấy ${formatNumber(list.items?.length || 0)} assignment`}
-        >
-          <Button
-            type="primary"
-            className="mr-4"
-            icon={<SyncOutlined />}
-            loading={list.isLoading}
-            onClick={handleSyncMoodle}
-          >
-            Sync Moodle
-          </Button>
-          <Button
-            type="primary"
-            className="mr-4"
-            icon={<UploadOutlined />}
-            loading={list.isLoading}
-            onClick={handleImportExcel}
-          >
-            Import Excel
-          </Button>
-          <Button
-            type="primary"
-            icon={<PlusCircleOutlined />}
-            loading={list.isLoading}
-            onClick={handleCreateAssignment}
-          >
-            Tạo mới
-          </Button>
-        </TableToolbar>
-        <BaseTable
-          idKey="id"
-          columns={columnTableProps()}
-          data={list}
-          paginationProps={{
-            showSizeChanger: true,
-            pageSizeOptions: PAGE_SIZE_OPTIONS,
-          }}
-          onChange={onPageChange}
-        />
-      </Card>
-      {importedAssignments.length > 0 && (
+      {!assignmentSelected && (
         <>
-          <ImportedModal
-            visible={importedModalVisible}
-            data={importedAssignments}
-            onOk={importedModalActions.handleClose}
-            onCancel={importedModalActions.handleClose}
+          {loading && <Loading />}
+          <BaseFilter
+            loading={list.isLoading}
+            meta={metaFilterCourse()}
+            onFilter={onFilterChange}
           />
+          <Card>
+            <TableToolbar
+              title={`Tìm thấy ${formatNumber(
+                list.items?.length || 0
+              )} assignment`}
+            >
+              <Button
+                type="primary"
+                className="mr-4"
+                icon={<SyncOutlined />}
+                loading={list.isLoading}
+                onClick={handleSyncMoodle}
+              >
+                Sync Moodle
+              </Button>
+              <Button
+                type="primary"
+                className="mr-4"
+                icon={<UploadOutlined />}
+                loading={list.isLoading}
+                onClick={handleImportExcel}
+              >
+                Import Excel
+              </Button>
+              <Button
+                type="primary"
+                icon={<PlusCircleOutlined />}
+                loading={list.isLoading}
+                onClick={handleCreateAssignment}
+              >
+                Tạo mới
+              </Button>
+            </TableToolbar>
+            <BaseTable
+              idKey="id"
+              columns={columnTableProps()}
+              data={list}
+              paginationProps={{
+                showSizeChanger: true,
+                pageSizeOptions: PAGE_SIZE_OPTIONS,
+              }}
+              onChange={onPageChange}
+            />
+          </Card>
+          {importedAssignments.length > 0 && (
+            <>
+              <ImportedModal
+                visible={importedModalVisible}
+                data={importedAssignments}
+                onOk={importedModalActions.handleClose}
+                onCancel={importedModalActions.handleClose}
+              />
+            </>
+          )}
         </>
       )}
+      {assignmentSelected && <Submission assignment={assignmentSelected} />}
     </>
   );
 }

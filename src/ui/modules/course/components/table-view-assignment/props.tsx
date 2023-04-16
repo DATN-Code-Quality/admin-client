@@ -23,7 +23,7 @@ export const metaFilterCourse = () => {
   } as IMetaFormBuilder;
 };
 
-export const columnTableAssignment = (): ColumnType<any>[] => [
+export const columnTableAssignment = (setAssignment): ColumnType<any>[] => [
   {
     title: 'ID',
     dataIndex: 'id',
@@ -46,9 +46,9 @@ export const columnTableAssignment = (): ColumnType<any>[] => [
     },
     render: (value, record, index) => {
       return (
-        <Link to={`${ROUTE.COURSE.DETAIL}?id=${record.id}`}>
-          <Button type="link">{value}</Button>
-        </Link>
+        <p style={{ cursor: 'pointer' }} onClick={() => setAssignment(record)}>
+          {value}
+        </p>
       );
     },
   },
