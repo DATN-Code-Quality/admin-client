@@ -12,6 +12,7 @@ export const USER = {
   GET: {
     USERS: '/user/get-all-user',
     MOODLE_USERS: '/user-moodle/get-all-users',
+    USERS_BY_COURSE_ID: '/user-moodle/get-user-course',
   },
   POST: {
     CREATE_USER: '/user/add-users',

@@ -16,22 +16,42 @@ import { usePartner } from '~/adapters/appService/partner.service';
 import { useUser } from '~/adapters/appService/user.service';
 import { PAGE_SIZE_OPTIONS } from '~/constant';
 import { Partner } from '~/domain/partner';
+import { User } from '~/domain/user';
+import useDialog from '~/hooks/useDialog';
 import useList from '~/hooks/useList';
 import Card from '~/ui/shared/card';
 import BaseFilter from '~/ui/shared/forms/baseFilter';
+import ImportedModal from '~/ui/shared/imported-modal';
+import Loading from '~/ui/shared/loading';
 import BaseModal from '~/ui/shared/modal';
 import { ButtonType } from '~/ui/shared/modal/props';
 import BaseTable from '~/ui/shared/tables';
 import TableToolbar from '~/ui/shared/toolbar';
 import { formatNumber } from '~/utils';
+import { useCourse } from '~/adapters/appService/course.service';
 
-function TableViewParticipant() {
+function TableViewParticipant({ course }) {
   const navigate = useNavigate();
-  const { getAllUsers, createUser, updateUser, blockUser } = useUser();
+  const {
+    getAllUsers,
+    getAllMoodleUsers,
+    createUser,
+    updateUser,
+    blockUser,
+  } = useUser();
+  const { getParticipantsByCourseId } = useCourse();
   const { getAllPartners } = usePartner();
 
   const [partners, setPartners] = useState<Partner[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const [importedUsers, setImportedUsers] = useState<User[]>([]);
+  const [isSyncMoodle, setIsSyncMoodle] = useState<boolean>(false);
+  const [importedModalVisible, importedModalActions] = useDialog();
+
+  useEffect(() => {
+    getParticipantsByCourseId(course.moodleCourseId);
+  }, [course]);
 
   const [list, { onPageChange, onAddItem, onEditItem, onFilterChange }] =
     useList({
@@ -40,6 +60,39 @@ function TableViewParticipant() {
 
   const handleGetListPartner = () => {
     getAllPartners().then((res) => setPartners(res.data));
+  };
+
+  const handleSyncMoodle = async () => {
+    try {
+      setLoading(true);
+      setIsSyncMoodle(true);
+      const res = await getAllMoodleUsers();
+      setImportedUsers(res.data);
+      importedModalActions.handleOpen();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleImportExcel = async () => {
+    try {
+      setLoading(true);
+      setIsSyncMoodle(false);
+      const res = await getAllUsers();
+      setImportedUsers([...res.data, ...res.data, ...res.data]);
+      importedModalActions.handleOpen();
+    } finally {
+      setLoading(false);
+    }
+  };
+  const handleImportModalOk = async (values) => {
+    if (isSyncMoodle) {
+      const dataSubmit = values.data;
+      console.log(dataSubmit);
+      createUser(dataSubmit);
+    }
+    importedModalActions.handleClose();
+    return values;
   };
 
   const handleCreateOrUpdate = useCallback((value, id) => {
@@ -104,22 +157,22 @@ function TableViewParticipant() {
 
   return (
     <>
+      {loading && <Loading />}
+      <BaseFilter
+        loading={list.isLoading}
+        meta={metaFilterUser()}
+        onFilter={onFilterChange}
+      />
       <Card>
-        <BaseFilter
-          loading={list.isLoading}
-          meta={metaFilterUser()}
-          onFilter={onFilterChange}
-        />
         <TableToolbar
-          title={`Tìm thấy ${formatNumber(
-            list.items?.length || 0
-          )} participant`}
+          title={`Tìm thấy ${formatNumber(list.items?.length || 0)} user`}
         >
           <Button
             type="primary"
             className="mr-4"
             icon={<SyncOutlined />}
             loading={list.isLoading}
+            onClick={handleSyncMoodle}
           >
             Sync Moodle
           </Button>
@@ -128,6 +181,7 @@ function TableViewParticipant() {
             className="mr-4"
             icon={<UploadOutlined />}
             loading={list.isLoading}
+            onClick={handleImportExcel}
           >
             Import Excel
           </Button>
@@ -151,6 +205,18 @@ function TableViewParticipant() {
           onChange={onPageChange}
         />
       </Card>
+      {importedUsers.length > 0 && (
+        <>
+          <ImportedModal
+            visible={importedModalVisible}
+            type="user"
+            id="email"
+            data={importedUsers}
+            onOk={handleImportModalOk}
+            onCancel={importedModalActions.handleClose}
+          />
+        </>
+      )}
     </>
   );
 }

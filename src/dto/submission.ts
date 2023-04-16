@@ -1,9 +1,9 @@
 import { StateStatus } from '../constant/enum';
 
 import { Submission } from '~/domain/submission';
+import { BaseDTO } from './baseDTO';
 
-export interface SubmissionDTO {
-  id: string;
+export interface SubmissionDTO extends BaseDTO {
   assignmentId: string;
   link: string;
   note: string | null;
@@ -14,9 +14,6 @@ export interface SubmissionDTO {
   status: string;
   grade: number | null;
   submissionMoodleId: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-  deletedAt?: Date;
 }
 
 export const submissionFromDTO = (submissionDTO: SubmissionDTO): Submission => {
@@ -32,9 +29,12 @@ export const submissionFromDTO = (submissionDTO: SubmissionDTO): Submission => {
     status: submissionDTO.status,
     grade: submissionDTO.grade,
     submissionMoodleId: submissionDTO.submissionMoodleId,
-    createdAt: submissionDTO.createdAt && new Date(submissionDTO.createdAt).getTime(),
-    updatedAt: submissionDTO.updatedAt && new Date(submissionDTO.updatedAt).getTime(),
-    deletedAt: submissionDTO.deletedAt && new Date(submissionDTO.deletedAt).getTime(),
+    createdAt:
+      submissionDTO.createdAt && new Date(submissionDTO.createdAt).getTime(),
+    updatedAt:
+      submissionDTO.updatedAt && new Date(submissionDTO.updatedAt).getTime(),
+    deletedAt:
+      submissionDTO.deletedAt && new Date(submissionDTO.deletedAt).getTime(),
   };
 };
 
@@ -52,5 +52,3 @@ export const submissionToDTO = (submission: Submission): SubmissionDTO => {
     deletedAt: new Date(submission.deletedAt),
   };
 };
-
-

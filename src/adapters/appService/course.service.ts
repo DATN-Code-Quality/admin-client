@@ -17,6 +17,7 @@ import { User } from '~/domain/user';
 import { removeSubmitProps } from '~/dto/baseDTO';
 import { CourseDTO, courseFromDTO, courseToDTO } from '~/dto/course';
 import { mockCourse } from '~/mock/course.mock';
+import { UserDTO, userFromDTO } from '~/dto/user';
 
 export function useCourse() {
   const navigate = useNavigate();
@@ -57,9 +58,16 @@ export function useCourse() {
     },
 
     async getParticipantsByCourseId(id: string): Promise<ResponseData<User[]>> {
-      // const data = await getWithPath(API.AGENCY.GET.AGENCYS);
-      const data = await mockCourse().getParticipantsByCourseId(id);
-      return formatResponse(data);
+      const response = await getWithPath(API.USER.GET.USERS_BY_COURSE_ID, {
+        userMoodleId: id,
+      });
+      const validResponse = formatResponse<UserDTO[]>(response);
+      const convertedData = validResponse.data.map(userFromDTO);
+      const covertedResponse = {
+        ...validResponse,
+        data: convertedData,
+      };
+      return covertedResponse;
     },
 
     async getAssignmentsByCourseId(

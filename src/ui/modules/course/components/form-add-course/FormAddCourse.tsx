@@ -12,7 +12,7 @@ import FormBuilder from '~/ui/shared/forms';
 import Loading from '~/ui/shared/loading';
 import { getMappingLabelByValue } from '~/utils';
 
-const FormAddCourse = ({ id, initialViewMode = false }) => {
+const FormAddCourse = ({ course, id, initialViewMode = false }) => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const { getDetailCourse, createCourse, updateCourse } = useCourse();
@@ -68,18 +68,14 @@ const FormAddCourse = ({ id, initialViewMode = false }) => {
   };
 
   useEffect(() => {
-    if (id) {
-      setLoading(true);
-      getDetailCourse(id).then((res) => {
-        console.log(res);
-        form.setFieldsValue(res.data);
-        setFormValues(res.data);
-        setLoading(false);
-      });
+    console.log(course);
+    if (course) {
+      form.setFieldsValue(course);
+      setFormValues(course);
     } else {
       setLoading(false);
     }
-  }, [id]);
+  }, [course, id]);
 
   return (
     <>

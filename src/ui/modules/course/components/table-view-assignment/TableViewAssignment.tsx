@@ -10,9 +10,9 @@ import { Modal, Space } from 'antd';
 import Button from 'antd-button-color';
 import { useNavigate } from 'react-router-dom';
 
-import { columnTableAssignment, metaFilterCourse } from './props';
+import { columnTableAssignment, metaFilterAssignment } from './props';
 
-import { useCourse } from '~/adapters/appService/course.service';
+import { useAssignment } from '~/adapters/appService/assignment.service';
 import { PAGE_SIZE_OPTIONS } from '~/constant';
 import ROUTE from '~/constant/routes';
 import { Assignment } from '~/domain/assignment';
@@ -30,27 +30,36 @@ import { formatNumber } from '~/utils';
 
 import './TableViewAssignment.less';
 
-function TableViewAssignment({ courseId }) {
+function TableViewAssignment({ course }) {
   const navigate = useNavigate();
-  const { getAssignmentsByCourseId, blockCourse } = useCourse();
+  const {
+    getAllAssignments,
+    getAssignmentByCourseId,
+    createAssignment,
+    updateAssignment,
+    blockAssignment,
+  } = useAssignment();
 
   const [loading, setLoading] = useState<boolean>(false);
 
   const [importedAssignments, setImportedAssignments] = useState<Assignment[]>(
     []
   );
+  const [isSyncMoodle, setIsSyncMoodle] = useState<boolean>(false);
   const [importedModalVisible, importedModalActions] = useDialog();
 
   const [list, { onPageChange, onAddItem, onEditItem, onFilterChange }] =
     useList({
-      fetchFn: (args) => getAssignmentsByCourseId(args),
+      fetchFn: (args) => getAllAssignments(args),
     });
 
   const handleSyncMoodle = async () => {
     try {
       setLoading(true);
-      const res = await getAssignmentsByCourseId('');
-      setImportedAssignments([...res.data, ...res.data, ...res.data]);
+      setIsSyncMoodle(true);
+      const res = await getAssignmentByCourseId(course.moodleCourseId);
+      console.log(res);
+      setImportedAssignments(res.data);
       importedModalActions.handleOpen();
     } finally {
       setLoading(false);
@@ -60,7 +69,7 @@ function TableViewAssignment({ courseId }) {
   const handleImportExcel = async () => {
     try {
       setLoading(true);
-      const res = await getAssignmentsByCourseId('');
+      const res = await getAllAssignments();
       setImportedAssignments([...res.data, ...res.data, ...res.data]);
       importedModalActions.handleOpen();
     } finally {
@@ -68,18 +77,26 @@ function TableViewAssignment({ courseId }) {
     }
   };
 
+  const handleImportModalOk = async (values) => {
+    if (isSyncMoodle) {
+      const dataSubmit = values.data;
+      console.log(dataSubmit);
+      createAssignment(dataSubmit);
+    }
+    importedModalActions.handleClose();
+    return values;
+  };
+
   const handleCreateAssignment = async () => {
-    navigate(`${ROUTE.COURSE.CREATE_ASSIGNMENT}?course_id=${courseId}`);
+    navigate(ROUTE.COURSE.CREATE_ASSIGNMENT);
   };
 
   const handleUpdateAssignment = async (id) => {
-    navigate(
-      `${ROUTE.COURSE.EDIT_ASSIGNMENT}?course_id=${courseId}&assignment_id=${id}`
-    );
+    navigate(`${ROUTE.COURSE.EDIT_ASSIGNMENT}?id=${id}`);
   };
 
   const handleBlockAssignment = (id) => {
-    return blockCourse(id).then((data) => {
+    return blockAssignment(id).then((data) => {
       onEditItem(data, 'id');
     });
   };
@@ -118,7 +135,7 @@ function TableViewAssignment({ courseId }) {
       {loading && <Loading />}
       <BaseFilter
         loading={list.isLoading}
-        meta={metaFilterCourse()}
+        meta={metaFilterAssignment()}
         onFilter={onFilterChange}
       />
       <Card>
@@ -167,8 +184,10 @@ function TableViewAssignment({ courseId }) {
         <>
           <ImportedModal
             visible={importedModalVisible}
+            type="assignment"
+            id="assignmentMoodleId"
             data={importedAssignments}
-            onOk={importedModalActions.handleClose}
+            onOk={handleImportModalOk}
             onCancel={importedModalActions.handleClose}
           />
         </>

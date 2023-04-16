@@ -8,7 +8,7 @@ import useQuery from '~/hooks/useQuery';
 import Card from '~/ui/shared/card';
 import Loading from '~/ui/shared/loading';
 
-const ViewOrCreateCourse = ({ initialViewMode = false }) => {
+const ViewOrCreateCourse = ({ course, initialViewMode = false }) => {
   const query = useQuery();
   const id: any = query.get('id');
   const renderTitle = () => {
@@ -24,7 +24,7 @@ const ViewOrCreateCourse = ({ initialViewMode = false }) => {
   return (
     <Card className="card-edit-view">
       <PageHeader className="site-page-header" title={renderTitle()} ghost />
-      <FormAddCourse id={id} initialViewMode={initialViewMode} />
+      <FormAddCourse course={course} initialViewMode={initialViewMode} />
     </Card>
   );
 };
