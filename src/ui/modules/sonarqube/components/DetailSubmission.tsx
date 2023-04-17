@@ -98,7 +98,6 @@ const DetailSubmission = () => {
     [handleSelect, selected?.key]
   );
 
-  const parentElmRef = useRef();
   const addClassIfConditionSatisfied = (
     htmlString: string,
     startError: number,
@@ -134,6 +133,19 @@ const DetailSubmission = () => {
     }
     return dataResult;
   };
+  const listIssues = useMemo(() => {
+    Object.keys(submissionIssues)?.map((file) => {
+      return submissionIssues[file];
+    });
+  }, [submissionIssues]);
+
+  // const handleRenderListIssues = useCallback(() => {
+  //   console.log('Submission', submissionIssues);
+  //   return Object.keys(submissionIssues)?.map((file, index) => {
+  //     console.log(submissionIssues);
+  //     return renderListIssues(file, listIssues[index] || []);
+  //   });
+  // }, [listIssues, renderListIssues, submissionIssues]);
 
   return (
     <>
@@ -141,13 +153,13 @@ const DetailSubmission = () => {
       {!loading && (
         <>
           <div className="detail-submission ">
-            <div>
+            <div style={{ overflow: 'auto', height: '100%' }}>
               {Object.keys(submissionIssues)?.map((file) => {
                 return renderListIssues(file, submissionIssues[file] || []);
               })}
             </div>
-            <div>
-              <p className="mb-2 text-right">{issueSelected.component}</p>
+            <div style={{ height: '100%', overflow: 'hidden' }}>
+              <p className="mb-2 text-right">{componentIssue}</p>
               <div className="issues-container">
                 {data?.map((item, index) => {
                   const isExistIssues =

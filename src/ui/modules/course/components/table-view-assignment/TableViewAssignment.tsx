@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 
 import {
   EditOutlined,
@@ -9,6 +9,8 @@ import {
 import { Modal, Space } from 'antd';
 import Button from 'antd-button-color';
 import { useNavigate } from 'react-router-dom';
+
+import Submission from '../submission';
 
 import { columnTableAssignment, metaFilterCourse } from './props';
 
@@ -29,7 +31,6 @@ import TableToolbar from '~/ui/shared/toolbar';
 import { formatNumber } from '~/utils';
 
 import './TableViewAssignment.less';
-import Submission from '../submission';
 
 function TableViewAssignment({ courseId }) {
   const navigate = useNavigate();

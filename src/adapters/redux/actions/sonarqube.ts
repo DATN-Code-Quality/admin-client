@@ -16,7 +16,7 @@ export const setDataFilter = (data: ListSonarqube) => ({
   payload: data,
 });
 
-export const setAssignmentSelected = (data: any) => ({
+export const setSubmissionSelected = (data: any) => ({
   type: SET_ASSIGNMENT_SELECTED,
   payload: data,
 });

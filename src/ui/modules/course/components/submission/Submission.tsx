@@ -1,9 +1,10 @@
-import { Card } from 'antd';
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
+
+import { Card, Pagination } from 'antd';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { useLocation } from 'react-use';
-import { setAssignmentSelected } from '~/adapters/redux/actions/sonarqube';
+
+import { setSubmissionSelected } from '~/adapters/redux/actions/sonarqube';
 
 import './style.css';
 
@@ -12,8 +13,8 @@ const Submission: React.FC<{ assignment: any }> = ({ assignment }) => {
   const navigate = useNavigate();
 
   const handleShowResult = useCallback(() => {
-    dispatch(setAssignmentSelected("e25b393e-cf56-4e12-8a0b-e7213648ac76'"));
-    navigate('/sonarqube/submission');
+    dispatch(setSubmissionSelected('e25b393e-cf56-4e12-8a0b-e7213648ac76'));
+    navigate('/sonarqube/submission?id=e25b393e-cf56-4e12-8a0b-e7213648ac76');
   }, [dispatch, navigate]);
 
   return (
