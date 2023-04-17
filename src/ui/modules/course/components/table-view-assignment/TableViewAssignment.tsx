@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 
 import {
   EditOutlined,
@@ -39,6 +39,8 @@ function TableViewAssignment({ course }) {
     updateAssignment,
     blockAssignment,
   } = useAssignment();
+
+  const [assignmentSelected, setAssignmentSelected] = useState(null);
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -101,8 +103,10 @@ function TableViewAssignment({ course }) {
     });
   };
 
+  console.log(assignmentSelected);
+
   const columnTableProps = () => [
-    ...columnTableAssignment(),
+    ...columnTableAssignment(setAssignmentSelected),
     {
       dataIndex: 'action',
       title: 'Action',
@@ -190,8 +194,63 @@ function TableViewAssignment({ course }) {
             onOk={handleImportModalOk}
             onCancel={importedModalActions.handleClose}
           />
+          <Card>
+            <TableToolbar
+              title={`Tìm thấy ${formatNumber(
+                list.items?.length || 0
+              )} assignment`}
+            >
+              <Button
+                type="primary"
+                className="mr-4"
+                icon={<SyncOutlined />}
+                loading={list.isLoading}
+                onClick={handleSyncMoodle}
+              >
+                Sync Moodle
+              </Button>
+              <Button
+                type="primary"
+                className="mr-4"
+                icon={<UploadOutlined />}
+                loading={list.isLoading}
+                onClick={handleImportExcel}
+              >
+                Import Excel
+              </Button>
+              <Button
+                type="primary"
+                icon={<PlusCircleOutlined />}
+                loading={list.isLoading}
+                onClick={handleCreateAssignment}
+              >
+                Tạo mới
+              </Button>
+            </TableToolbar>
+            <BaseTable
+              idKey="id"
+              columns={columnTableProps()}
+              data={list}
+              paginationProps={{
+                showSizeChanger: true,
+                pageSizeOptions: PAGE_SIZE_OPTIONS,
+              }}
+              onChange={onPageChange}
+            />
+          </Card>
+          {importedAssignments.length > 0 && (
+            <>
+              <ImportedModal
+                visible={importedModalVisible}
+                data={importedAssignments}
+                onOk={importedModalActions.handleClose}
+                onCancel={importedModalActions.handleClose}
+              />
+            </>
+          )}
         </>
       )}
+      {assignmentSelected && <Submission assignment={assignmentSelected} />}
     </>
   );
 }
