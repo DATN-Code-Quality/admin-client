@@ -1,4 +1,5 @@
 import {
+  SET_ASSIGNMENT_SELECTED,
   SET_DATA_FILTER,
   SET_FILTER,
   SET_ISSUE_SELECTED,
@@ -44,6 +45,8 @@ const sonarqubeReducer = (state = defaultState, action) => {
       };
     case SET_ISSUE_SELECTED:
       return { ...state, issueSelected: payload };
+    case SET_ASSIGNMENT_SELECTED:
+      return { ...state, assignmentSelected: payload };
     default:
       return state;
   }

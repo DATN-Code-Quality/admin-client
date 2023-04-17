@@ -10,7 +10,7 @@ import ROUTE from '~/constant/routes';
 import { IMetaFormBuilder } from '~/ui/shared/forms/FormBuilder/FormBuilder';
 import { getMappingLabelByValue } from '~/utils';
 
-export const metaFilterCourse = () => {
+export const metaFilterAssignment = () => {
   return {
     fields: [
       {
@@ -23,19 +23,7 @@ export const metaFilterCourse = () => {
   } as IMetaFormBuilder;
 };
 
-export const columnTableAssignment = (): ColumnType<any>[] => [
-  {
-    title: 'ID',
-    dataIndex: 'id',
-    width: 70,
-    render: (value, record, index) => {
-      return (
-        <Link to={`${ROUTE.COURSE.DETAIL}?id=${record.id}`}>
-          <Button type="link">{value}</Button>
-        </Link>
-      );
-    },
-  },
+export const columnTableAssignment = (setAssignment): ColumnType<any>[] => [
   {
     title: 'Name',
     dataIndex: 'name',
@@ -46,9 +34,9 @@ export const columnTableAssignment = (): ColumnType<any>[] => [
     },
     render: (value, record, index) => {
       return (
-        <Link to={`${ROUTE.COURSE.DETAIL}?id=${record.id}`}>
-          <Button type="link">{value}</Button>
-        </Link>
+        <p style={{ cursor: 'pointer' }} onClick={() => setAssignment(record)}>
+          {value}
+        </p>
       );
     },
   },

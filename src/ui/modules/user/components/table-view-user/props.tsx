@@ -19,11 +19,11 @@ export const metaFilterUser = () => {
 };
 
 export const columnTableUser = ({ partners }): ColumnType<any>[] => [
-  {
-    title: 'ID',
-    dataIndex: 'id',
-    width: 70,
-  },
+  // {
+  //   title: 'ID',
+  //   dataIndex: 'id',
+  //   width: 70,
+  // },
   {
     title: 'Name',
     dataIndex: 'name',
@@ -48,12 +48,10 @@ export const columnTableUser = ({ partners }): ColumnType<any>[] => [
     width: 100,
     ellipsis: true,
     sorter: (a, b) => {
-      const aRole = getMappingLabelByValue(MAP_ROLES, a.roles[0]);
-      const bRole = getMappingLabelByValue(MAP_ROLES, b.roles[0]);
-      return aRole.localeCompare(bRole);
+      return a.roles[0].localeCompare(b.roles[0]);
     },
     render: (value) => {
-      return <p>{getMappingLabelByValue(MAP_ROLES, value[0])}</p>;
+      return <p>{value[0]}</p>;
     },
   },
   {
@@ -61,7 +59,7 @@ export const columnTableUser = ({ partners }): ColumnType<any>[] => [
     dataIndex: 'status',
     width: 100,
     render: (value) => {
-      return <p>{value === StateStatus.ACTIVE ? 'Active' : 'Inactive'}</p>;
+      return <p>{value === StateStatus.INACTIVE ? 'Active' : 'Inactive'}</p>;
     },
   },
 ];

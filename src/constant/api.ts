@@ -10,13 +10,60 @@ export const DASHBOARD = {
 
 export const USER = {
   GET: {
-    USERS: '/user',
+    USERS: '/user/get-all-user',
+    MOODLE_USERS: '/user-moodle/get-all-users',
+    USERS_BY_COURSE_ID: '/user-moodle/get-user-course',
   },
   POST: {
-    CREATE_USER: '/user',
+    CREATE_USER: '/user/add-users',
   },
   PUT: {
-    UPDATE_USER: '/user',
+    UPDATE_USER: '/user/update-user',
+  },
+};
+
+export const COURSE = {
+  GET: {
+    COURSES: '/course/get-all-course',
+    COURSE: '/course/get-course',
+    MOODLE_COURSES: '/course-moodle/get-all-courses',
+  },
+  POST: {
+    CREATE_COURSE: '/course/add-courses',
+  },
+  PUT: {
+    UPDATE_COURSE: '/course/update-course',
+  },
+};
+
+export const ASSIGNMENT = {
+  GET: {
+    ASSIGNMENTS: '/assignment/get-all-assignment',
+    ASSIGNMENT: '/assignment/get-assignment',
+    MOODLE_ASSIGNMENTS_BY_COURSE_ID:
+      '/assignment-moodle/get-assignments-by-course-id',
+  },
+  POST: {
+    CREATE_ASSIGNMENT: '/assignment/add-assignments',
+  },
+  PUT: {
+    UPDATE_ASSIGNMENT: '/assignment/update-assignment',
+  },
+};
+
+export const SUBMISSION = {
+  GET: {
+    SUBMISSIONS: '/submission/get-all-submission',
+    SUBMISSION: '/submission/get-submission',
+    SUBMISSIONS_BY_ASSIGNMENT_ID: '/submission/get-submissions',
+    MOODLE_SUBMISSIONS_BY_ASSIGNMENT_ID:
+      '/submission-moodle/get-submissions-by-assignment-id',
+  },
+  POST: {
+    CREATE_SUBMISSION: '/submission/add-submissions',
+  },
+  PUT: {
+    UPDATE_SUBMISSION: '/submission/update-submission',
   },
 };
 
@@ -61,6 +108,9 @@ const API = {
   DASHBOARD,
   AUTH,
   USER,
+  COURSE,
+  ASSIGNMENT,
+  SUBMISSION,
   PARTNER,
   AGENCY,
 };

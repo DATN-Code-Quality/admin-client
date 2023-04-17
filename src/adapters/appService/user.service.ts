@@ -12,6 +12,8 @@ import { ResponseData } from '~/constant';
 import API from '~/constant/api';
 import ROUTE from '~/constant/routes';
 import { User } from '~/domain/user';
+import { removeSubmitProps } from '~/dto/baseDTO';
+import { UserDTO, userFromDTO, userToDTO } from '~/dto/user';
 import { mockUser } from '~/mock/user.mock';
 
 export function useUser() {
@@ -19,20 +21,38 @@ export function useUser() {
 
   return {
     async getAllUsers(): Promise<ResponseData<User[]>> {
-      // const data = await getWithPath(API.USER.GET.USERS);
-      const data = await mockUser().getAllUsers();
-      return formatResponse(data);
+      const response = await getWithPath(API.USER.GET.USERS);
+      const validResponse = formatResponse<UserDTO[]>(response);
+      const convertedData = validResponse.data.map(userFromDTO);
+      const covertedResponse = {
+        ...validResponse,
+        data: convertedData,
+      };
+      return covertedResponse;
     },
 
-    async createUser(body): Promise<ResponseData<User>> {
-      const data = await postWithPath(`${API.USER.POST.CREATE_USER}`, {}, body);
-      if (data.success) {
-        message.success(`Tạo mới user thành công!`);
-        navigate(ROUTE.USER.LIST);
-      } else {
-        message.error('Tạo mới user thất bại!');
-      }
-      return formatResponse(data);
+    async getAllMoodleUsers(): Promise<ResponseData<User[]>> {
+      const response = await getWithPath(API.USER.GET.MOODLE_USERS);
+      const validResponse = formatResponse<UserDTO[]>(response);
+      const convertedData = validResponse.data.map(userFromDTO);
+      const covertedResponse = {
+        ...validResponse,
+        data: convertedData,
+      };
+      return covertedResponse;
+    },
+
+    async createUser(body): Promise<ResponseData<User[]>> {
+      const submitData = body.map((user) => {
+        return removeSubmitProps(userToDTO(user));
+      });
+      const response = await postWithPath(
+        `${API.USER.POST.CREATE_USER}`,
+        {},
+        submitData
+      );
+      const validResponse = formatResponse<User[]>(response);
+      return validResponse;
     },
 
     async getDetailUser(id: number): Promise<ResponseData<User>> {
@@ -46,8 +66,6 @@ export function useUser() {
         {},
         body
       );
-      if (data.success) {
-      }
       return formatResponse(data);
     },
 
@@ -57,8 +75,6 @@ export function useUser() {
         {},
         body
       );
-      if (data.success) {
-      }
       return formatResponse(data);
     },
 
@@ -68,8 +84,6 @@ export function useUser() {
         {},
         body
       );
-      if (data.success) {
-      }
       return formatResponse(data);
     },
   };

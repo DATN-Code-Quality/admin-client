@@ -135,11 +135,11 @@ export const menus = [
     route: ROUTE.HISTORY,
     role: [Role.ROOT_ADMIN, Role.TEACHER, Role.STUDENT],
   },
-  {
-    id: 'sonarqube',
-    name: 'Sonarqube',
-    // icon: DownloadOutlined,
-    route: ROUTE.SONARQUBE.LIST,
-    role: [Role.ROOT_ADMIN, Role.TEACHER, Role.STUDENT],
-  },
+  // {
+  //   id: 'sonarqube',
+  //   name: 'Sonarqube',
+  //   // icon: DownloadOutlined,
+  //   route: ROUTE.SONARQUBE.LIST,
+  //   role: [Role.ROOT_ADMIN, Role.TEACHER, Role.STUDENT],
+  // },
 ];

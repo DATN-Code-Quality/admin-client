@@ -1,14 +1,15 @@
-import { StateStatus } from '../constant/enum';
-
 export interface Assignment {
   id: string;
   name: string;
-  dueDate: Date;
-  status: StateStatus;
+  dueDate: number;
+  status: boolean;
   courseId: string;
-  description: string;
-  attachmentFileLink: string;
+  assignmentMoodleId: string;
+  description: string | null;
+  attachmentFileLink: string | null;
   config: string;
-  created_at: number;
-  updated_at: number;
+
+  createdAt?: number;
+  updatedAt?: number;
+  deletedAt?: number;
 }

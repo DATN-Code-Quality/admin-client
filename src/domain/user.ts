@@ -1,15 +1,14 @@
 import { StateStatus } from '../constant/enum';
 
 export interface User {
-  id: number;
-  moodleId: number;
-  email: string;
+  id: string;
   name: string;
-  roles: number[];
-  phone_number: string;
-  partner_id: number;
-  partner_name?: string;
+  roles: string[];
+  email: string;
+  userId: string;
+  moodleId: string;
   status: StateStatus;
-  created_at: number;
-  updated_at: number;
+  createdAt?: number;
+  updatedAt?: number;
+  deletedAt?: number;
 }

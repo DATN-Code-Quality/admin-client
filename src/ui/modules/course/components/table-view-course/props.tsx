@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { Link } from 'react-router-dom';
 import { Button, Input, Tag } from 'antd';
 import { ColumnType } from 'antd/lib/table';
 
@@ -7,7 +8,6 @@ import { MAP_STATE_STATUS } from '~/constant';
 import ROUTE from '~/constant/routes';
 import { IMetaFormBuilder } from '~/ui/shared/forms/FormBuilder/FormBuilder';
 import { getMappingLabelByValue } from '~/utils';
-import { Link } from 'react-router-dom';
 
 export const metaFilterCourse = () => {
   return {
@@ -23,18 +23,6 @@ export const metaFilterCourse = () => {
 };
 
 export const columnTableCourse = (): ColumnType<any>[] => [
-  {
-    title: 'ID',
-    dataIndex: 'id',
-    width: 70,
-    render: (value, record, index) => {
-      return (
-        <Link to={`${ROUTE.COURSE.DETAIL}?id=${record.id}`}>
-          <Button type="link">{value}</Button>
-        </Link>
-      );
-    },
-  },
   {
     title: 'Name',
     dataIndex: 'name',

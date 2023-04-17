@@ -14,15 +14,43 @@ import ROUTE from '~/constant/routes';
 import { Assignment } from '~/domain/assignment';
 import { User } from '~/domain/user';
 import { mockAssignment } from '~/mock/assignment.mock';
+import {
+  AssignmentDTO,
+  assignmentFromDTO,
+  assignmentToDTO,
+} from '~/dto/assignment';
+import { removeSubmitProps } from '~/dto/baseDTO';
 
 export function useAssignment() {
   const navigate = useNavigate();
 
   return {
     async getAllAssignments(): Promise<ResponseData<Assignment[]>> {
-      // const data = await getWithPath(API.PARTNER.GET.PARTNERS);
-      const data = await mockAssignment().getAllAssignments();
-      return formatResponse(data);
+      // const data = await mockAssignment().getAllAssignments();
+      const response = await getWithPath(API.ASSIGNMENT.GET.ASSIGNMENTS);
+      const validResponse = formatResponse<AssignmentDTO[]>(response);
+      const convertedData = validResponse.data.map(assignmentFromDTO);
+      const covertedResponse = {
+        ...validResponse,
+        data: convertedData,
+      };
+      return covertedResponse;
+    },
+
+    async getAssignmentByCourseId(
+      id: string
+    ): Promise<ResponseData<Assignment[]>> {
+      const response = await getWithPath(
+        API.ASSIGNMENT.GET.MOODLE_ASSIGNMENTS_BY_COURSE_ID,
+        { courseMoodleId: id }
+      );
+      const validResponse = formatResponse<AssignmentDTO[]>(response);
+      const convertedData = validResponse.data.map(assignmentFromDTO);
+      const covertedResponse = {
+        ...validResponse,
+        data: convertedData,
+      };
+      return covertedResponse;
     },
 
     async getDetailAssignment(id: string): Promise<ResponseData<Assignment>> {
@@ -31,19 +59,17 @@ export function useAssignment() {
       return formatResponse(data);
     },
 
-    async createAssignment(body): Promise<ResponseData<Assignment>> {
-      const data = await postWithPath(
-        `${API.PARTNER.POST.CREATE_PARTNER}`,
+    async createAssignment(body): Promise<ResponseData<Assignment[]>> {
+      const submitData = body.map((course) => {
+        return removeSubmitProps(assignmentToDTO(course));
+      });
+      const response = await postWithPath(
+        `${API.ASSIGNMENT.POST.CREATE_ASSIGNMENT}`,
         {},
-        body
+        submitData
       );
-      if (data.success) {
-        message.success(`Tạo mới course thành công!`);
-        navigate(ROUTE.PARTNER.LIST);
-      } else {
-        message.error('Tạo mới course thất bại!');
-      }
-      return formatResponse(data);
+      const validResponse = formatResponse<Assignment[]>(response);
+      return validResponse;
     },
 
     async updateAssignment(body): Promise<ResponseData<Assignment>> {

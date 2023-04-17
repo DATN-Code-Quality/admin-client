@@ -9,7 +9,7 @@ export const mockApi = async <T>(
     setTimeout(() => {
       resolve({
         success: true,
-        code,
+        status: code,
         msg: 'success',
         data,
       });

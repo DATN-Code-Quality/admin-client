@@ -18,8 +18,8 @@ export enum Role {
 }
 
 export enum StateStatus {
-  ACTIVE = 0,
-  INACTIVE = 1,
+  INACTIVE = 0,
+  ACTIVE = 1,
 }
 
 export enum ServiceType {

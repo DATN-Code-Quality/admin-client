@@ -80,10 +80,10 @@ export function asyncAction(title = '', actionFn) {
   return Promise.resolve()
     .then(() => actionFn())
     .then((data) => {
-      if (data && data.code !== 0) {
+      if (data && data.status !== 0) {
         message.error(
           `${title} thất bại! [${
-            data.code ? `code: ${data.code} | ` : ''
+            data.status ? `status: ${data.status} | ` : ''
           }message: ${data.msg}]`
         );
         return undefined;
@@ -94,10 +94,10 @@ export function asyncAction(title = '', actionFn) {
       return data;
     })
     .catch((data) => {
-      if (title && data && data.code) {
+      if (title && data && data.status) {
         message.error(
           `${title} thất bại! [${
-            data.code ? `code: ${data.code} | ` : ''
+            data.status ? `status: ${data.status} | ` : ''
           }message: ${data.msg}]`
         );
       } else {
