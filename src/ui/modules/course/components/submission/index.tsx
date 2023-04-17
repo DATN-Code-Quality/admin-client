@@ -1,3 +1,3 @@
-import Submission from './Submission';
+import SubmissionComponent from './Submission';
 
-export default Submission;
+export default SubmissionComponent;
