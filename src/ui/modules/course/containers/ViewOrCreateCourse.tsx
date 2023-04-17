@@ -7,7 +7,7 @@ import { FormAddCourse } from '../components/form-add-course';
 import useQuery from '~/hooks/useQuery';
 import Card from '~/ui/shared/card';
 import Loading from '~/ui/shared/loading';
-import Submission from '../components/submission';
+import SubmissionComponent from '../components/submission';
 
 const ViewOrCreateCourse = ({ course, initialViewMode = false }) => {
   const query = useQuery();
