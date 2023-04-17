@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
+import { Pagination, Spin } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -12,8 +13,6 @@ import {
   setSubmissionIssues,
 } from '~/adapters/redux/actions/sonarqube';
 import SonarqubeSelector from '~/adapters/redux/selectors/sonarqube';
-
-import { Pagination, Spin } from 'antd';
 
 import './index.less';
 

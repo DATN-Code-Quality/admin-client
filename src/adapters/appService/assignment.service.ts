@@ -81,5 +81,12 @@ export function useAssignment() {
       }
       return formatResponse(data);
     },
+
+    async getSubmissionByAssignmentId(assignmentId: string) {
+      const response = await fetch(
+        `http://localhost:5000/api/submission/get-submissions?assignmentId=${assignmentId}`
+      ).then((res) => res.json());
+      return response;
+    },
   };
 }

@@ -57,8 +57,15 @@ export const SONARQUBE = {
     ISSUES_SUBMISSION: '/sonarqube/issue/e25b393e-cf56-4e12-8a0b-e7213648ac76',
   },
 };
+
+export const SUBMISSION = {
+  GET: {
+    GET_SUBMISSION_BY_ASSIGNMENT_ID: '/submission/get-submissions',
+  },
+};
 const API = {
   DASHBOARD,
+  SUBMISSION,
   AUTH,
   USER,
   PARTNER,
