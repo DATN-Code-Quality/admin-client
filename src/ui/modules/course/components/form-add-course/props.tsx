@@ -1,5 +1,4 @@
 import { MAP_STATE_STATUS } from '~/constant';
-import Editor from '~/ui/shared/editor';
 
 export const metaFormAddCourse = () => {
   const meta: any = {
@@ -15,7 +14,7 @@ export const metaFormAddCourse = () => {
         key: 'description',
         label: 'Description:',
         required: true,
-        widget: Editor,
+        // widget: Editor,
       },
       {
         key: 'status',
