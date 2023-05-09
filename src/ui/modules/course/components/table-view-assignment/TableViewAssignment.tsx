@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import {
   EditOutlined,
@@ -104,6 +104,10 @@ function TableViewAssignment({ course }) {
     });
   };
 
+  useEffect(() => {
+    setAssignmentSelected({ id: 1 });
+  }, []);
+
   const columnTableProps = () => [
     ...columnTableAssignment(setAssignmentSelected),
     {
@@ -201,7 +205,9 @@ function TableViewAssignment({ course }) {
           )}
         </>
       )}
-      {assignmentSelected && <SubmissionComponent assignment={assignmentSelected} />}
+      {assignmentSelected && (
+        <SubmissionComponent assignment={assignmentSelected} />
+      )}
     </>
   );
 }

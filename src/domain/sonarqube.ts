@@ -53,8 +53,9 @@ export interface Facet {
 }
 
 export interface SubmissionResponse {
-  error: number;
-  issues: SubmissionIssues;
+  statusCode?: number;
+  error?: number;
+  data: SubmissionIssues;
 }
 
 export interface SubmissionIssues {

@@ -1,8 +1,14 @@
+p {
+  margin: 0;
+  padding: 0;
+}
+
 .property {
   color: #333;
   font-size: 13px;
   font-weight: 600;
 }
+
 body {
   overflow: hidden;
 }
@@ -101,10 +107,17 @@ body {
 .issue-component {
   border: 2px solid #4b9fd5;
   border-radius: 4px;
-  padding: 16px 8px;
-  font-weight: 700;
+  padding: 4px 16px;
+  font-weight: 600;
   background-color: #f2dede;
   cursor: pointer;
+  max-width: 900px;
+}
+
+.issue-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .issue-component:hover {
@@ -158,7 +171,7 @@ body {
 }
 
 .line-code-container.active {
-  background: rgba(0, 0, 0, 0.08) !important;
+  background: rgba(0, 0, 0, 0.03) !important;
 }
 
 .line-code-container.active .line-index,
@@ -186,11 +199,12 @@ body {
 }
 
 .issues-container {
+  position: relative;
   background: #f3f3f3;
   border: 1px solid rgba(0, 0, 0, 0.2);
   overflow: auto;
-  height: 100%;
   border-radius: 8px;
+  flex: 1;
 }
 
 .line-index {
@@ -224,4 +238,79 @@ body {
 .cms-layout-app.site-layout.site-layout-background {
   overflow: unset;
   padding-top: 0;
+}
+
+.issue-type-container,
+.issue-type-container > p {
+  display: flex;
+  align-items: center;
+}
+
+.issue-type-container > p:first-child {
+  margin-left: 0;
+}
+
+.issue-type-container > p {
+  font-weight: 400;
+  margin-left: 16px;
+}
+
+.issue-type,
+.issue-rule {
+  font-weight: 400;
+  color: #236a97;
+  margin-left: 4px;
+}
+
+.issue-rule-container {
+  flex: 1;
+  text-align: right;
+}
+
+.submission-issues-container {
+  background: white;
+  padding: 16px;
+  border-radius: 8px;
+  overflow: auto;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.bug-label {
+  font-weight: 500;
+  font-size: 15px;
+  margin-top: 8px;
+}
+
+.ant-collapse > .ant-collapse-item > .ant-collapse-header {
+  padding-bottom: 0 !important;
+}
+
+.filter-active {
+  background: #cae3f2;
+  text-decoration: none;
+  border: 1px solid #4b9fd5;
+}
+
+.label-active-filter {
+  background: #ccc;
+  border-radius: 6px;
+  padding: 1px 8px;
+}
+
+.empty-container {
+  height: 100%;
+}
+.empty-box {
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  width: 100%;
+  margin: auto;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }

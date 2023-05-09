@@ -1,39 +1,46 @@
 /* eslint-disable no-plusplus */
 import React, {
+  Fragment,
   useCallback,
   useEffect,
   useMemo,
   useRef,
   useState,
 } from 'react';
-import { useSonarqube } from '~/adapters/appService/sonarqube.service';
 
+import { Spin } from 'antd';
 import parse from 'html-react-parser';
+import { useSelector } from 'react-redux';
+
+import IssueItem from './IssueItem';
+
+import { useSonarqube } from '~/adapters/appService/sonarqube.service';
+import SonarqubeSelector from '~/adapters/redux/selectors/sonarqube';
 
 import './index.less';
-import SonarqubeSelector from '~/adapters/redux/selectors/sonarqube';
-import { useSelector } from 'react-redux';
+
 import { LINE_EMPTY_CODE } from '~/constant';
-import { Spin } from 'antd';
 
 const DetailSubmission = () => {
   const { getIssuesWithSource } = useSonarqube();
   const issueSelected = useSelector(SonarqubeSelector.getIssueSelected);
   const [componentIssue, setComponentIssue] = useState<string>('');
+  const oldComponentIssue = useRef('');
 
   const submissionIssues = useSelector(SonarqubeSelector.getSubmissionIssues);
 
   const [selected, setSelected] = useState();
-
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
+
+  const issueContainer = useRef();
 
   const handleGetDetail = useCallback(async () => {
     if (!componentIssue) return;
     setLoading(true);
     const response = await getIssuesWithSource(componentIssue);
     if (response.error !== 0) return;
-    setData(response.sources);
+    setData(response.data);
     setLoading(false);
   }, [componentIssue]);
 
@@ -54,6 +61,7 @@ const DetailSubmission = () => {
 
   useEffect(() => {
     setComponentIssue(issueSelected?.component);
+    // oldComponentIssue.current = issueSelected?.component;
     setSelected(issueSelected);
   }, [issueSelected, issueSelected?.component]);
 
@@ -71,12 +79,25 @@ const DetailSubmission = () => {
     [componentIssue]
   );
 
+  useEffect(() => {
+    if (issueContainer?.current) {
+      const nextTop = selected?.line < 5 ? 0 : (selected?.line + 5) * 30;
+      console.log(selected?.line, nextTop);
+      issueContainer?.current?.scrollTo({
+        top: nextTop,
+        behavior: 'smooth',
+      });
+    }
+  }, [selected, componentIssue]);
+
   const renderListIssues = useCallback(
     (fileName: string, issueData: any) => {
-      const fileNameShort = fileName.substring(fileName.lastIndexOf('/') + 1);
+      const value = fileName.split(':');
+      const fileNameShort = value[value.length - 1];
       return (
         <div>
-          <p style={{ marginBottom: '8px', textAlign: 'right' }}>
+          <p style={{ marginBottom: '8px' }}>
+            <span className="font-semibold">File: </span>
             {fileNameShort}
           </p>
           {issueData?.map((item) => {
@@ -107,14 +128,14 @@ const DetailSubmission = () => {
     const content = htmlString?.replace(/<[^>]+>/g, '');
     const contentError = content?.substring(startError, endError);
 
-    const dataResult: string[] = [...(parse(htmlString) as [])];
+    const dataResult: string[] = parse(`${htmlString}`);
     for (let i = 0; i < dataResult.length; i++) {
       if (
         typeof dataResult[i] === 'string' &&
         contentError.includes(dataResult[i]?.replace(/\(\)/g, ''))
       ) {
         dataResult[i] = (
-          <span className="s source-line-code-issue">"{dataResult[i]}"</span>
+          <span className="s source-line-code-issue">{dataResult[i]}</span>
         ) as unknown as string;
       } else if (
         contentError.includes(
@@ -131,93 +152,95 @@ const DetailSubmission = () => {
         dataResult[i] = temp;
       }
     }
+
     return dataResult;
   };
-  const listIssues = useMemo(() => {
-    Object.keys(submissionIssues)?.map((file) => {
-      return submissionIssues[file];
-    });
-  }, [submissionIssues]);
-
-  // const handleRenderListIssues = useCallback(() => {
-  //   console.log('Submission', submissionIssues);
-  //   return Object.keys(submissionIssues)?.map((file, index) => {
-  //     console.log(submissionIssues);
-  //     return renderListIssues(file, listIssues[index] || []);
-  //   });
-  // }, [listIssues, renderListIssues, submissionIssues]);
 
   return (
     <>
-      {loading && <Spin />}
-      {!loading && (
-        <>
-          <div className="detail-submission ">
-            <div style={{ overflow: 'auto', height: '100%' }}>
-              {Object.keys(submissionIssues)?.map((file) => {
-                return renderListIssues(file, submissionIssues[file] || []);
-              })}
-            </div>
-            <div style={{ height: '100%', overflow: 'hidden' }}>
-              <p className="mb-2 text-right">{componentIssue}</p>
-              <div className="issues-container">
-                {data?.map((item, index) => {
-                  const isExistIssues =
-                    item.code !== LINE_EMPTY_CODE &&
-                    lineIssueList.includes(+item.line);
-
-                  const result = isExistIssues
-                    ? addClassIfConditionSatisfied(
-                        item.code,
-                        issueList[+item.line]?.textRange?.startOffset,
-                        issueList[+item.line]?.textRange?.endOffset,
-                        'source-line-code-issue'
-                      )
-                    : parse(item.code);
-
-                  const isActiveLine =
-                    isExistIssues &&
-                    issueList[+item.line]?.key === selected?.key;
-
-                  return (
-                    <div
-                      key={`${item.code}_${item.line}`}
-                      className={`pl-6 line-code-container ${
-                        isActiveLine ? 'active' : ''
-                      }`}
-                    >
-                      <div className="line-index">{index + 1}</div>
-                      <div
-                        className={`${
-                          item.code !== LINE_EMPTY_CODE
-                            ? 'line-code-detail'
-                            : 'empty-line'
-                        } bg-white`}
-                        style={{ paddingBottom: isExistIssues ? '8px' : '0' }}
-                      >
-                        <p className="source-line-code code">
-                          {/* {parse(item.code)} */}
-                          {result}
-                        </p>
-                        {isExistIssues && (
-                          <div
-                            className="issue-component mt-2 "
-                            //   onClick={() => {
-                            //     handleSetIssue(issue);
-                            //   }}
-                          >
-                            {issueList[+item.line].message}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
+      <div className="detail-submission ">
+        <div
+          style={{
+            overflow: 'hidden',
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
+          <p style={{ height: '44px' }}>Issues</p>
+          <div style={{ flex: 1, overflow: 'auto' }}>
+            {Object.keys(submissionIssues)?.map((file) => {
+              return (
+                <Fragment key={file}>
+                  {renderListIssues(file, submissionIssues[file] || [])}
+                </Fragment>
+              );
+            })}
           </div>
-        </>
-      )}
+        </div>
+        <div
+          style={{
+            height: '100%',
+            overflow: 'hidden',
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
+          <p className="mb-2 text-right" style={{ height: '44px' }}>
+            {componentIssue}
+          </p>
+          <div className="issues-container" ref={issueContainer}>
+            {data?.map((item, index) => {
+              const isExistIssues =
+                item.code !== LINE_EMPTY_CODE &&
+                lineIssueList.includes(+item.line);
+
+              const result = isExistIssues
+                ? addClassIfConditionSatisfied(
+                    item.code,
+                    issueList[+item.line]?.textRange?.startOffset,
+                    issueList[+item.line]?.textRange?.endOffset,
+                    'source-line-code-issue'
+                  )
+                : parse(`${item.code}`);
+
+              const isActiveLine =
+                isExistIssues && issueList[+item.line]?.key === selected?.key;
+
+              return (
+                <div
+                  key={`${item.code}_${item.line}`}
+                  className={`pl-6 line-code-container ${
+                    isActiveLine ? 'active' : ''
+                  }`}
+                >
+                  <div className="line-index">{index + 1}</div>
+                  <div
+                    className={`${
+                      item.code !== LINE_EMPTY_CODE
+                        ? 'line-code-detail'
+                        : 'empty-line'
+                    } bg-white`}
+                    style={{ paddingBottom: isExistIssues ? '8px' : '0' }}
+                  >
+                    <p className="source-line-code code">
+                      <pre>{result}</pre>
+                    </p>
+                    {isExistIssues && (
+                      <IssueItem issue={issueList[+item.line] || {}} />
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+            {loading && (
+              <div className="absolute top-0 left-0 h-full w-full flex items-center justify-center z-100">
+                <Spin />
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
     </>
   );
 };
