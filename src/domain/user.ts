@@ -8,7 +8,6 @@ export interface User {
   userId: string;
   moodleId: string;
   status: StateStatus;
-  createdAt?: number;
-  updatedAt?: number;
-  deletedAt?: number;
+  createdAt: number;
+  updatedAt: number;
 }

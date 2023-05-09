@@ -2,19 +2,21 @@
   margin-top: 24px;
 }
 
-.import-modal-title {
+.import-modal-title-container {
   font-weight: 500;
   font-size: 16px;
   color: #1890ff;
-}
-
-.import-modal-item {
-  font-weight: 400;
+  &__info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
 }
 
 .import-modal-item,
 .import-modal-title {
   display: flex;
+  font-weight: 400;
   justify-content: space-between;
   margin-bottom: 16px;
 
@@ -73,8 +75,8 @@
   margin-bottom: 0;
 }
 
-.import-modal-item-container {
-  height: 450px;
+.import-modal-item-container,
+.import-modal-title-container {
   overflow-y: auto;
   display: flex;
 
@@ -93,3 +95,8 @@
     text-align: center;
   }
 }
+
+.import-modal-item-container {
+  height: 450px;
+}
+

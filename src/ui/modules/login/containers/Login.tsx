@@ -18,11 +18,11 @@ import FormBuilder from '~/ui/shared/forms/FormBuilder';
 import './Login.less';
 
 function Login() {
-  const { loginMicrosoft } = useAuth();
+  const { login, loginMicrosoft } = useAuth();
   const navigate = useNavigate();
   const { roles, name } = useSelector(authSelector);
   const onFinish = (values: any) => {
-    loginMicrosoft(values);
+    login(values);
   };
 
   const onFinishFailed = (errorInfo: any) => {

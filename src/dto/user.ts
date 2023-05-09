@@ -12,7 +12,6 @@ export interface UserDTO {
   status: StateStatus;
   createdAt?: Date;
   updatedAt?: Date;
-  deletedAt?: Date;
 }
 
 export const userFromDTO = (userDTO: UserDTO): User => {
@@ -24,9 +23,8 @@ export const userFromDTO = (userDTO: UserDTO): User => {
     userId: userDTO.userId,
     moodleId: userDTO.moodleId,
     status: userDTO.status,
-    createdAt: userDTO.createdAt && new Date(userDTO.createdAt).getTime(),
-    updatedAt: userDTO.updatedAt && new Date(userDTO.updatedAt).getTime(),
-    deletedAt: userDTO.deletedAt && new Date(userDTO.deletedAt).getTime(),
+    createdAt: new Date(userDTO.createdAt || new Date()).getTime(),
+    updatedAt: new Date(userDTO.updatedAt || new Date()).getTime(),
   };
 };
 
@@ -41,6 +39,5 @@ export const userToDTO = (user: User): UserDTO => {
     status: user.status,
     createdAt: new Date(user.createdAt),
     updatedAt: new Date(user.updatedAt),
-    deletedAt: new Date(user.deletedAt),
   };
 };

@@ -14,6 +14,32 @@ export function useAuth() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   return {
+    async login({ username, password }): Promise<ResponseData<Auth>> {
+      try {
+        const resp = await postWithPath(
+          `${API.AUTH.GET.LOGIN}`,
+          {},
+          {
+            username,
+            password,
+          }
+        );
+        if (resp.success) {
+          const auth = resp.data;
+          if (auth.roles) {
+            auth.roles = JSON.parse(auth.roles);
+          }
+          dispatch(setUserInfo(auth));
+        } else {
+          throw new Error(JSON.stringify(resp));
+        }
+        return resp;
+      } catch (e) {
+        message.error('Đăng nhập thất bại!');
+        throw e;
+      }
+    },
+
     async loginMicrosoft(): Promise<ResponseData<string>> {
       try {
         // const resp = await getWithPath(`${API.AUTH.GET.LOGIN_MICROSOFT}`);

@@ -16,7 +16,6 @@ export interface Course {
   config: string;
 
   status: StateStatus;
-  createdAt?: number;
-  updatedAt?: number;
-  deletedAt?: number;
+  createdAt: number;
+  updatedAt: number;
 }
