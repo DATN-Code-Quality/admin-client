@@ -14,6 +14,10 @@ export default class SonarqubeSelector {
     return state.sonarqube?.dataResponse;
   };
 
+  static getAssignmentSelected = (state: StoreState) => {
+    return state.sonarqube.assignmentSelected;
+  };
+
   static getSubmissionIssues = (state: StoreState) => {
     return state.sonarqube.submissionIssues;
   };

@@ -3,7 +3,21 @@
   font-size: 13px;
   font-weight: 600;
 }
+body {
+  overflow: hidden;
+}
 
+.ant-layout {
+  height: 100vh;
+}
+
+.site-layout-background {
+  overflow: hidden !important;
+  margin-top: 24px !important;
+  margin-bottom: 24px !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
 .sonarqube-container {
   width: 260px;
 }
@@ -87,7 +101,7 @@
 .issue-component {
   border: 2px solid #4b9fd5;
   border-radius: 4px;
-  padding: 8px;
+  padding: 16px 8px;
   font-weight: 700;
   background-color: #f2dede;
   cursor: pointer;
@@ -163,8 +177,8 @@
   display: grid;
   grid-template-columns: 1fr 3.5fr;
   gap: 16px;
+  overflow: hidden;
   height: 100%;
-  margin-top: -16px;
 }
 
 .line-code-container:first-child {
@@ -174,7 +188,8 @@
 .issues-container {
   background: #f3f3f3;
   border: 1px solid rgba(0, 0, 0, 0.2);
-  overflow: hidden;
+  overflow: auto;
+  height: 100%;
   border-radius: 8px;
 }
 

@@ -3,7 +3,7 @@ import Submission from '../components/Submission';
 
 function SubmissionContainer() {
   return (
-    <div>
+    <div style={{ height: '100%', overflow: 'hidden' }}>
       <Submission />
     </div>
   );
