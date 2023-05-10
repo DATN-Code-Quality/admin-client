@@ -4,7 +4,7 @@ import './index.less';
 import { BugOutlined, WarningOutlined } from '@ant-design/icons';
 
 import { BugType } from '~/constant/enum';
-import { formattedCodeSmell } from '~/utils';
+// import { formattedCodeSmell } from '~/utils';
 
 const IssueItem: React.FC<{ issue; handleSetIssue?: (val: any) => void }> = ({
   issue,
@@ -28,13 +28,15 @@ const IssueItem: React.FC<{ issue; handleSetIssue?: (val: any) => void }> = ({
         startOffset !== endOffset ? `- ${endOffset}` : ''
       }`;
 
+      console.log(type);
+
       switch (type) {
         case BugType.CODE_SMELL:
           return (
             <div className="issue-type-container">
               <p>
                 <WarningOutlined style={{ fontWeight: 800 }} />
-                <span className="issue-type">{formattedCodeSmell(type)}</span>
+                {/* <span className="issue-type">{formattedCodeSmell(type)}</span> */}
               </p>
               <p>
                 Error line :{' '}
@@ -52,7 +54,7 @@ const IssueItem: React.FC<{ issue; handleSetIssue?: (val: any) => void }> = ({
             <div className="issue-type-container">
               <p>
                 <BugOutlined />
-                <span className="issue-type">{formattedCodeSmell(type)}</span>
+                {/* <span className="issue-type">{formattedCodeSmell(type)}</span> */}
               </p>
               <p>
                 Error line :{' '}

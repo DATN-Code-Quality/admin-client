@@ -13,11 +13,11 @@ import { setSubmissionSelected } from '~/adapters/redux/actions/sonarqube';
 import { Submission } from '~/domain/submission';
 import { renderColorRatting } from '~/utils';
 
-const Overview: React.FC<{ submission: Submission }> = ({ submission }) => {
+const Overview: React.FC<{ submission?: Submission }> = ({ submission }) => {
   const { getOverViewSubmission } = useSonarqube();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-    
+
   const [data, setData] = useState<Map<string, number>>(new Map());
   const handleShowResult = useCallback(() => {
     dispatch(setSubmissionSelected(submission?.id));
@@ -25,21 +25,28 @@ const Overview: React.FC<{ submission: Submission }> = ({ submission }) => {
   }, [dispatch, navigate, submission?.id]);
 
   const fetchOverview = useCallback(async () => {
-    const response = await getOverViewSubmission('123');
-    if (response.error !== 0) return {};
+    const initMap = new Map();
+    if (!submission) {
+      setData(initMap);
+      return;
+    }
+    const response = await getOverViewSubmission(submission?.id);
+    if (response.error !== 0) {
+      setData(initMap);
+      return;
+    }
     const rawData = response.data?.measures || [];
     const dataRes = rawData?.reduce((obj, item) => {
       const value = +item.history[0].value;
       obj.set(item.metric, value);
       return obj;
-    }, new Map());
+    }, initMap);
     setData(dataRes);
-    return 0;
-  }, [getOverViewSubmission]);
+  }, [submission]);
 
   useEffect(() => {
     fetchOverview();
-  }, []);
+  }, [fetchOverview]);
 
   if (!data || data?.size === 0) return <></>;
   return (

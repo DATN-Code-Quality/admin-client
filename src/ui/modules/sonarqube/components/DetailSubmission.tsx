@@ -1,3 +1,4 @@
+/* eslint-disable import/order */
 /* eslint-disable no-plusplus */
 import React, {
   Fragment,
@@ -20,6 +21,7 @@ import SonarqubeSelector from '~/adapters/redux/selectors/sonarqube';
 import './index.less';
 
 import { LINE_EMPTY_CODE } from '~/constant';
+import { Issue } from '~/domain/submission';
 
 const DetailSubmission = () => {
   const { getIssuesWithSource } = useSonarqube();
@@ -28,8 +30,7 @@ const DetailSubmission = () => {
   const oldComponentIssue = useRef('');
 
   const submissionIssues = useSelector(SonarqubeSelector.getSubmissionIssues);
-
-  const [selected, setSelected] = useState();
+  const [selected, setSelected] = useState<Issue | null>(null);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
 
@@ -45,9 +46,9 @@ const DetailSubmission = () => {
   }, [componentIssue]);
 
   const issueList = useMemo(() => {
-    const result = {};
+    const result: Record<string | number, unknown> = {};
     Object.values(submissionIssues)?.forEach((issueGroup) => {
-      issueGroup?.forEach((issue) => {
+      (issueGroup as Issue[])?.forEach((issue) => {
         result[issue?.textRange?.endLine] = issue;
       });
     });
@@ -70,7 +71,7 @@ const DetailSubmission = () => {
   }, [handleGetDetail]);
 
   const handleSelect = useCallback(
-    (item: any) => {
+    (item: Issue) => {
       setSelected(item);
       if (componentIssue !== item.component) {
         setComponentIssue(() => item.component);
@@ -80,10 +81,10 @@ const DetailSubmission = () => {
   );
 
   useEffect(() => {
+    if (!selected) return;
     if (issueContainer?.current) {
-      const nextTop = selected?.line < 5 ? 0 : (selected?.line + 5) * 30;
-      console.log(selected?.line, nextTop);
-      issueContainer?.current?.scrollTo({
+      const nextTop = selected?.line < 5 ? 0 : ((selected?.line || 0) + 5) * 30;
+      (issueContainer?.current as HTMLElement)?.scrollTo({
         top: nextTop,
         behavior: 'smooth',
       });
@@ -91,7 +92,7 @@ const DetailSubmission = () => {
   }, [selected, componentIssue]);
 
   const renderListIssues = useCallback(
-    (fileName: string, issueData: any) => {
+    (fileName: string, issueData: Issue[]) => {
       const value = fileName.split(':');
       const fileNameShort = value[value.length - 1];
       return (

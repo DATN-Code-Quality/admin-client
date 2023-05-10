@@ -54,3 +54,12 @@ p {
   text-align: center;
   text-shadow: 0 0 1px rgba(0, 0, 0, 0.35);
 }
+
+.border {
+  border: 1px solid rgba(0, 0, 0, 0.35);
+}
+
+.submission-list {
+  height: 600px;
+  overflow: auto;
+}
