@@ -5,6 +5,7 @@ import Overview from './Overview';
 import { useSubmission } from '~/adapters/appService/submission.service';
 import './style.css';
 import { Submission } from '~/domain/submission';
+import AddSubmission from './AddSubmission';
 
 const SubmissionComponent: React.FC<{ assignment: any }> = ({ assignment }) => {
   const [submissionList, setSubmissionList] = useState<Submission[]>([
@@ -332,25 +333,29 @@ const SubmissionComponent: React.FC<{ assignment: any }> = ({ assignment }) => {
   }, [fetchSubmission]);
 
   const { getSubmissionByAssignmentId } = useSubmission();
+  // change this value to change role
+  const isAdmin = false;
+  
 
   return (
     <div className="grid grid-col-2 bg-white p-4 rounded-2 gap-4">
-      <div>
-        <p className="assignment-name">{assignment?.name}</p>
-        <p>{assignment?.description}</p>
-        <div className="submission-container ">
-          <p className="title">Bài nộp</p>
+      {isAdmin && (
+        <div>
+          <p className="assignment-name">{assignment?.name}</p>
+          <p>{assignment?.description}</p>
+          <div className="submission-container ">
+            <p className="title">Bài nộp</p>
 
-          <div className="submission-list">
-            {submissionList?.map((submissionItem) => (
-              <SubmissionItem
-                key={submissionItem.id}
-                submission={submissionItem}
-                setSubmission={setSubmission}
-              />
-            ))}
-          </div>
-          {/* {submission && (
+            <div className="submission-list">
+              {submissionList?.map((submissionItem) => (
+                <SubmissionItem
+                  key={submissionItem.id}
+                  submission={submissionItem}
+                  setSubmission={setSubmission}
+                />
+              ))}
+            </div>
+            {/* {submission && (
             <>
               <a href={submission?.link} target="_blank" rel="noreferrer">
                 {submission?.link}
@@ -360,8 +365,10 @@ const SubmissionComponent: React.FC<{ assignment: any }> = ({ assignment }) => {
           {!submission && (
             <p style={{ fontSize: '16px', fontWeight: 700 }}>Chưa có bài nộp</p>
           )} */}
+          </div>
         </div>
-      </div>
+      )}
+      {!isAdmin && <AddSubmission/>}
       <Overview submission={submission} />
     </div>
   );
