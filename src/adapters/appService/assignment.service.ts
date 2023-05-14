@@ -43,7 +43,7 @@ export function useAssignment() {
       params: { courseMoodleId: string }
     ): Promise<ResponseData<Assignment[]>> {
       const response = await getWithPath(
-        `${API.ASSIGNMENT.GET.ASSIGNMENTS}/sync-assignments-by-course-id`,
+        `${API.ASSIGNMENT.GET.ASSIGNMENTS}/${courseId}/sync-assignments-by-course-id`,
         params
       );
       const validResponse = formatResponse<AssignmentDTO[]>(response);
