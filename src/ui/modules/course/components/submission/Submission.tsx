@@ -338,9 +338,9 @@ const SubmissionComponent: React.FC<{ assignment: any }> = ({ assignment }) => {
   
 
   return (
-    <div className="grid grid-col-2 bg-white p-4 rounded-2 gap-4">
+    <div className="bg-white p-4 rounded-2 gap-4">
       {isAdmin && (
-        <div>
+        <div className='grid grid-col-2 '>
           <p className="assignment-name">{assignment?.name}</p>
           <p>{assignment?.description}</p>
           <div className="submission-container ">
