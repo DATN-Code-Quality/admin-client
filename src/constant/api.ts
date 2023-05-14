@@ -54,7 +54,7 @@ export const SUBMISSION = {
   GET: {
     SUBMISSIONS: '/submission/get-all-submission',
     SUBMISSION: '/submission/get-submission',
-    SUBMISSIONS_BY_ASSIGNMENT_ID: '/submission/get-submissions',
+    SUBMISSIONS_BY_ASSIGNMENT_ID: '/submission',
     MOODLE_SUBMISSIONS_BY_ASSIGNMENT_ID:
       '/submission-moodle/get-submissions-by-assignment-id',
   },

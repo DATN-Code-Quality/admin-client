@@ -14,19 +14,14 @@ export function useSubmission() {
 
   return {
     async getSubmissionByAssignmentId(
-      id: string
-    ): Promise<ResponseData<Submission[]>> {
+      courseId: string,
+      assignmentId: string
+    ): Promise<ResponseData<{ submissions: Submission[] }>> {
       const response = await getWithPath(
-        API.SUBMISSION.GET.SUBMISSIONS_BY_ASSIGNMENT_ID,
-        { assignmentId: id }
+        `${API.SUBMISSION.GET.SUBMISSIONS_BY_ASSIGNMENT_ID}/${courseId}/${assignmentId}`
       );
-      const validResponse = formatResponse<SubmissionDTO[]>(response);
-      const convertedData = validResponse.data.map(submissionFromDTO);
-      const covertedResponse = {
-        ...validResponse,
-        data: convertedData,
-      };
-      return covertedResponse;
+
+      return response;
     },
 
     async getMoodleSubmissionByAssignmentId(

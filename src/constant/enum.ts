@@ -42,3 +42,31 @@ export enum ChartType {
   WEEK = 2,
   MONTH = 3,
 }
+
+export enum BugType {
+  CODE_SMELL = 'CODE_SMELL',
+  VULNERABILITY = 'VULNERABILITY',
+  BUG = 'BUG',
+}
+
+export enum BugTypeConstant {
+  CODE_SMELL = 'Code Smell',
+  VULNERABILITY = 'Vulnerability',
+  BUG = 'Bug',
+}
+
+export enum SeverityType {
+  MAJOR = 'MAJOR',
+  CRITICAL = 'CRITICAL',
+  BLOCKER = 'BLOCKER',
+  MINOR = 'MINOR',
+  INFO = 'INFO',
+}
+
+export enum SeverityTypeConstant {
+  MAJOR = 'Major',
+  CRITICAL = 'Critical',
+  BLOCKER = 'Blocker',
+  MINOR = 'Minor',
+  INFO = 'Info',
+}
