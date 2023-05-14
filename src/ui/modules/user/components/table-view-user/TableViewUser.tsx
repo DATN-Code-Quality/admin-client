@@ -77,7 +77,8 @@ function TableViewUser() {
   const handleImportModalOk = async (values) => {
     if (isSyncMoodle) {
       const dataSubmit = values.data;
-      createUser(dataSubmit);
+      const response = await createUser(dataSubmit);
+      response.data.map(onAddItem);
     }
     importedModalActions.handleClose();
     return values;

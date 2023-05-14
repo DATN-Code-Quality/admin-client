@@ -48,10 +48,10 @@ export const columnTableUser = ({ partners }): ColumnType<any>[] => [
     width: 100,
     ellipsis: true,
     sorter: (a, b) => {
-      return a.roles[0].localeCompare(b.roles[0]);
+      return a.roles?.[0].localeCompare(b.roles?.[0]);
     },
     render: (value) => {
-      return <p>{value[0]}</p>;
+      return <p>{value?.[0]}</p>;
     },
   },
   {

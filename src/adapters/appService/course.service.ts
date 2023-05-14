@@ -16,8 +16,8 @@ import { Course } from '~/domain/course';
 import { User } from '~/domain/user';
 import { removeSubmitProps } from '~/dto/baseDTO';
 import { CourseDTO, courseFromDTO, courseToDTO } from '~/dto/course';
-import { mockCourse } from '~/mock/course.mock';
 import { UserDTO, userFromDTO } from '~/dto/user';
+import { mockCourse } from '~/mock/course.mock';
 
 export function useCourse() {
   const navigate = useNavigate();

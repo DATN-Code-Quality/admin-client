@@ -10,7 +10,7 @@ export const DASHBOARD = {
 
 export const USER = {
   GET: {
-    USERS: '/user/users',
+    USERS: '/user/all-users',
     MOODLE_USERS: '/user/sync-users',
     USERS_BY_COURSE_ID: '/user-moodle/get-user-course',
   },
@@ -24,8 +24,8 @@ export const USER = {
 
 export const COURSE = {
   GET: {
-    COURSES: '/course/courses',
-    COURSE: '/course/get-course',
+    COURSES: '/course/all-courses',
+    COURSE: '/course',
     MOODLE_COURSES: '/course/sync-courses',
   },
   POST: {
@@ -38,13 +38,12 @@ export const COURSE = {
 
 export const ASSIGNMENT = {
   GET: {
-    ASSIGNMENTS: '/assignment/get-all-assignment',
+    ASSIGNMENTS: '/assignment',
     ASSIGNMENT: '/assignment/get-assignment',
-    MOODLE_ASSIGNMENTS_BY_COURSE_ID:
-      '/assignment-moodle/get-assignments-by-course-id',
+    MOODLE_ASSIGNMENTS: '/assignment',
   },
   POST: {
-    CREATE_ASSIGNMENT: '/assignment/add-assignments',
+    CREATE_ASSIGNMENT: '/assignment',
   },
   PUT: {
     UPDATE_ASSIGNMENT: '/assignment/update-assignment',

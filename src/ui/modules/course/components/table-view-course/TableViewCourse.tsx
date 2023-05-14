@@ -78,8 +78,8 @@ function TableViewCourse() {
   const handleImportModalOk = async (values) => {
     if (isSyncMoodle) {
       const dataSubmit = values.data;
-      console.log(dataSubmit);
-      createCourse(dataSubmit);
+      const response = await createCourse(dataSubmit);
+      response.data.map(onAddItem);
     }
     importedModalActions.handleClose();
     return values;
