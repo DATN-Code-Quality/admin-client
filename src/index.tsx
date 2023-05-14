@@ -15,6 +15,7 @@ import 'dayjs/locale/vi';
 import 'antd-button-color/dist/css/style.less';
 import './ui/css/style.less';
 import './theme.less';
+import 'antd/dist/antd.css';
 
 dayjs.extend(weekday);
 dayjs.extend(localeData);

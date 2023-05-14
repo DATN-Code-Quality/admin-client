@@ -6,6 +6,7 @@ import { useSubmission } from '~/adapters/appService/submission.service';
 import './style.css';
 import { Assignment } from '~/domain/assignment';
 import { Submission } from '~/domain/submission';
+import AddSubmission from './AddSubmission';
 
 const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
   assignment,
@@ -30,28 +31,40 @@ const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
   }, [fetchSubmission]);
 
   const { getSubmissionByAssignmentId } = useSubmission();
+  // change this value to change role
+  const isAdmin = true;
 
   return (
-    <div className="grid grid-col-2 bg-white p-4 rounded-2 gap-4">
-      <div>
-        <p className="assignment-name">{assignment?.name}</p>
-        <p>{assignment?.description}</p>
-        <div className="submission-container ">
-          <p className="title">Bài nộp</p>
+    <div className="bg-white p-4 rounded-2 gap-4">
+      {isAdmin && (
+        <div className="grid grid-col-2 bg-white p-4 rounded-2 gap-4">
+          <div>
+            <p className="assignment-name">{assignment?.name}</p>
+            <p>{assignment?.description}</p>
+            <div className="submission-container ">
+              <p className="title">Bài nộp</p>
 
-          <div className="submission-list">
-            {submissionList?.map((submissionItem) => (
-              <SubmissionItem
-                active={submission?.id === submissionItem.id}
-                key={submissionItem.id}
-                submission={submissionItem}
-                setSubmission={setSubmission}
-              />
-            ))}
+              <div className="submission-list">
+                {submissionList?.map((submissionItem) => (
+                  <SubmissionItem
+                    active={submission?.id === submissionItem.id}
+                    key={submissionItem.id}
+                    submission={submissionItem}
+                    setSubmission={setSubmission}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
+          <Overview submission={submission} assignment={assignment} />
         </div>
-      </div>
-      <Overview submission={submission} assignment={assignment} />
+      )}
+      {!isAdmin && (
+        <div>
+          <AddSubmission />
+          <Overview submission={submission} assignment={assignment} />
+        </div>
+      )}
     </div>
   );
 };

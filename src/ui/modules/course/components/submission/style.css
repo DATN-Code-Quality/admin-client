@@ -63,3 +63,30 @@ p {
   height: 600px;
   overflow: auto;
 }
+
+.submission-field{
+  width: 100px;
+}
+.submission-title{
+  font-size: 18px;
+  font-weight: 600;
+}
+.submission-row{
+  border: 1px solid #ebeced;
+}
+.submission-field-td{
+  background-color: #f8f8f8;
+  width: 200px;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 8px;
+}
+.submission-content-td{
+  background-color: 'white';
+  padding: 8px;
+  font-size: 14px;
+}
+
+.add-submission-container{
+  margin-top: 16px;
+}
