@@ -40,3 +40,8 @@ export interface Issue {
   type: string;
   scope: string;
 }
+
+export interface IssueWithSource {
+  line: number;
+  code: string;
+}

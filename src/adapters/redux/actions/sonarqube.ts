@@ -1,32 +1,21 @@
-import { ListSonarqube } from '~/domain/sonarqube';
+import { SubmissionSelected } from '~/domain/sonarqube';
+import { Issue } from '~/domain/submission';
 
-export const SET_FILTER = 'SET_FILTER';
-export const SET_DATA_FILTER = 'SET_DATA_FILTER';
-export const SET_ASSIGNMENT_SELECTED = 'SET_ASSIGNMENT_SELECTED';
+export const SET_SUBMISSION_SELECTED = 'SET_SUBMISSION_SELECTED';
 export const SET_SUBMISSION_ISSUES = 'SET_SUBMISSION_ISSUES';
 export const SET_ISSUE_SELECTED = 'SET_ISSUE_SELECTED';
 
-export const setFilter = (data) => ({
-  type: SET_FILTER,
+export const setSubmissionSelected = (data: SubmissionSelected) => ({
+  type: SET_SUBMISSION_SELECTED,
   payload: data,
 });
 
-export const setDataFilter = (data: ListSonarqube) => ({
-  type: SET_DATA_FILTER,
-  payload: data,
-});
-
-export const setSubmissionSelected = (data: any) => ({
-  type: SET_ASSIGNMENT_SELECTED,
-  payload: data,
-});
-
-export const setSubmissionIssues = (data: any) => ({
+export const setSubmissionIssues = (data: Record<string, unknown>) => ({
   type: SET_SUBMISSION_ISSUES,
   payload: data,
 });
 
-export const setIssueSelected = (data: any) => ({
+export const setIssueSelected = (data: Issue | null) => ({
   type: SET_ISSUE_SELECTED,
   payload: data,
 });

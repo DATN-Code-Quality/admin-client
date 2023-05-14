@@ -5,13 +5,10 @@ import {
   CloseOutlined,
   DownCircleFilled,
   ExclamationCircleFilled,
-  ExclamationCircleOutlined,
   FileTextOutlined,
   InfoCircleFilled,
-  InfoCircleOutlined,
   UnlockOutlined,
   UpCircleFilled,
-  UpCircleOutlined,
   WarningFilled,
   WarningOutlined,
 } from '@ant-design/icons';
@@ -124,7 +121,7 @@ const SubmissionFilter: React.FC<{
             </div>
             {filters.type && (
               <CloseOutlined
-                className="ml-auto"
+                className="ml-auto w-10"
                 onClick={(e) => {
                   e.stopPropagation();
                   setFilters((prev) => ({ ...prev, type: '' }));
@@ -165,7 +162,7 @@ const SubmissionFilter: React.FC<{
 
             {filters.file && (
               <CloseOutlined
-                className="ml-auto"
+                className="ml-auto w-10"
                 onClick={(e) => {
                   e.stopPropagation();
                   setFilters((prev) => ({ ...prev, file: '' }));
@@ -208,7 +205,7 @@ const SubmissionFilter: React.FC<{
             </div>
             {filters.severity && (
               <CloseOutlined
-                className="ml-auto"
+                className="ml-auto w-10"
                 onClick={(e) => {
                   e.stopPropagation();
                   setFilters((prev) => ({ ...prev, severity: '' }));

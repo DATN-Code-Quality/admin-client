@@ -11,7 +11,7 @@ import React, {
 
 import { Spin } from 'antd';
 import parse from 'html-react-parser';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import IssueItem from './IssueItem';
 
@@ -21,26 +21,30 @@ import SonarqubeSelector from '~/adapters/redux/selectors/sonarqube';
 import './index.less';
 
 import { LINE_EMPTY_CODE } from '~/constant';
-import { Issue } from '~/domain/submission';
+import { Issue, IssueWithSource } from '~/domain/submission';
+import { ArrowLeftOutlined } from '@ant-design/icons';
+import { setIssueSelected } from '~/adapters/redux/actions/sonarqube';
+import DetailRule from './DetailRule';
 
 const DetailSubmission = () => {
+  const dispatch = useDispatch();
+
   const { getIssuesWithSource } = useSonarqube();
   const issueSelected = useSelector(SonarqubeSelector.getIssueSelected);
   const [componentIssue, setComponentIssue] = useState<string>('');
-  const oldComponentIssue = useRef('');
 
   const submissionIssues = useSelector(SonarqubeSelector.getSubmissionIssues);
   const [selected, setSelected] = useState<Issue | null>(null);
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<IssueWithSource[]>([]);
 
-  const issueContainer = useRef();
+  const issueContainer = useRef(null);
 
   const handleGetDetail = useCallback(async () => {
     if (!componentIssue) return;
     setLoading(true);
     const response = await getIssuesWithSource(componentIssue);
-    if (response.error !== 0) return;
+    if (response.status !== 0) return;
     setData(response.data);
     setLoading(false);
   }, [componentIssue]);
@@ -59,6 +63,8 @@ const DetailSubmission = () => {
     () => Object.keys(issueList || {})?.map((item) => +item),
     [issueList]
   );
+
+  const [ruleSelected, setRuleSelected] = useState<string | null>(null);
 
   useEffect(() => {
     setComponentIssue(issueSelected?.component);
@@ -157,6 +163,10 @@ const DetailSubmission = () => {
     return dataResult;
   };
 
+  const setEmptyIssue = useCallback(() => {
+    dispatch(setIssueSelected(null));
+  }, [dispatch]);
+
   return (
     <>
       <div className="detail-submission ">
@@ -168,7 +178,17 @@ const DetailSubmission = () => {
             flexDirection: 'column',
           }}
         >
-          <p style={{ height: '44px' }}>Issues</p>
+          <div
+            className="flex items-center justify-between"
+            style={{ height: '44px' }}
+          >
+            <ArrowLeftOutlined
+              size={32}
+              className="cursor-pointer"
+              onClick={setEmptyIssue}
+            />
+            <p>Issues</p>
+          </div>
           <div style={{ flex: 1, overflow: 'auto' }}>
             {Object.keys(submissionIssues)?.map((file) => {
               return (
@@ -199,14 +219,15 @@ const DetailSubmission = () => {
               const result = isExistIssues
                 ? addClassIfConditionSatisfied(
                     item.code,
-                    issueList[+item.line]?.textRange?.startOffset,
-                    issueList[+item.line]?.textRange?.endOffset,
+                    (issueList[+item.line] as Issue)?.textRange?.startOffset,
+                    (issueList[+item.line] as Issue)?.textRange?.endOffset,
                     'source-line-code-issue'
                   )
                 : parse(`${item.code}`);
 
               const isActiveLine =
-                isExistIssues && issueList[+item.line]?.key === selected?.key;
+                isExistIssues &&
+                (issueList[+item.line] as Issue)?.key === selected?.key;
 
               return (
                 <div
@@ -228,7 +249,10 @@ const DetailSubmission = () => {
                       <pre>{result}</pre>
                     </p>
                     {isExistIssues && (
-                      <IssueItem issue={issueList[+item.line] || {}} />
+                      <IssueItem
+                        issue={issueList[+item.line] || null}
+                        setRuleSelected={setRuleSelected}
+                      />
                     )}
                   </div>
                 </div>
@@ -239,6 +263,13 @@ const DetailSubmission = () => {
                 <Spin />
               </div>
             )}
+            <div className="flex-1 bg-white">
+              <div className="line-index" />
+            </div>
+            <DetailRule
+              ruleKey={ruleSelected}
+              setRuleSelected={setRuleSelected}
+            />
           </div>
         </div>
       </div>
