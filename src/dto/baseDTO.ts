@@ -2,12 +2,11 @@ export interface BaseDTO {
   id: string;
   createdAt?: Date;
   updatedAt?: Date;
-  deletedAt?: Date;
 }
 
 export const removeSubmitProps = (
   obj: BaseDTO,
-  props: string[] = ['createdAt', 'updatedAt', 'deletedAt']
+  props: string[] = ['createdAt', 'updatedAt']
 ) => {
   const newObj = { ...obj };
   props.forEach((prop) => {

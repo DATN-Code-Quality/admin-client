@@ -10,41 +10,40 @@ export const DASHBOARD = {
 
 export const USER = {
   GET: {
-    USERS: '/user/get-all-user',
-    MOODLE_USERS: '/user-moodle/get-all-users',
+    USERS: '/user/all-users',
+    MOODLE_USERS: '/user/sync-users',
     USERS_BY_COURSE_ID: '/user-moodle/get-user-course',
   },
   POST: {
-    CREATE_USER: '/user/add-users',
+    CREATE_USER: '/user',
   },
   PUT: {
-    UPDATE_USER: '/user/update-user',
+    UPDATE_USER: '/user',
   },
 };
 
 export const COURSE = {
   GET: {
-    COURSES: '/course/get-all-course',
-    COURSE: '/course/get-course',
-    MOODLE_COURSES: '/course-moodle/get-all-courses',
+    COURSES: '/course/all-courses',
+    COURSE: '/course',
+    MOODLE_COURSES: '/course/sync-courses',
   },
   POST: {
-    CREATE_COURSE: '/course/add-courses',
+    CREATE_COURSE: '/course',
   },
   PUT: {
-    UPDATE_COURSE: '/course/update-course',
+    UPDATE_COURSE: '/course',
   },
 };
 
 export const ASSIGNMENT = {
   GET: {
-    ASSIGNMENTS: '/assignment/get-all-assignment',
+    ASSIGNMENTS: '/assignment',
     ASSIGNMENT: '/assignment/get-assignment',
-    MOODLE_ASSIGNMENTS_BY_COURSE_ID:
-      '/assignment-moodle/get-assignments-by-course-id',
+    MOODLE_ASSIGNMENTS: '/assignment',
   },
   POST: {
-    CREATE_ASSIGNMENT: '/assignment/add-assignments',
+    CREATE_ASSIGNMENT: '/assignment',
   },
   PUT: {
     UPDATE_ASSIGNMENT: '/assignment/update-assignment',
@@ -93,6 +92,7 @@ export const AGENCY = {
 
 export const AUTH = {
   GET: {
+    LOGIN: '/auth/login',
     LOGIN_ZALO: '/auth/login-via-zalo',
     CHECK_SESSION: '/auth/session',
     LOGOUT: '/auth/logout',

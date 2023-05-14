@@ -77,8 +77,8 @@ function TableViewUser() {
   const handleImportModalOk = async (values) => {
     if (isSyncMoodle) {
       const dataSubmit = values.data;
-      console.log(dataSubmit);
-      createUser(dataSubmit);
+      const response = await createUser(dataSubmit);
+      response.data.map(onAddItem);
     }
     importedModalActions.handleClose();
     return values;
@@ -100,13 +100,13 @@ function TableViewUser() {
       });
     }
     return updateUser(dataSubmit).then((data) => {
-      onEditItem(data, 'user_id');
+      onEditItem(data, 'id');
     });
   }, []);
 
   const handleBlockUser = (id) => {
     return blockUser(id).then((data) => {
-      onEditItem(data, 'user_id');
+      onEditItem(data, 'id');
     });
   };
 

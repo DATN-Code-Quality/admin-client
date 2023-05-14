@@ -13,21 +13,22 @@ import API from '~/constant/api';
 import ROUTE from '~/constant/routes';
 import { Assignment } from '~/domain/assignment';
 import { User } from '~/domain/user';
-import { mockAssignment } from '~/mock/assignment.mock';
 import {
   AssignmentDTO,
   assignmentFromDTO,
   assignmentToDTO,
 } from '~/dto/assignment';
 import { removeSubmitProps } from '~/dto/baseDTO';
+import { mockAssignment } from '~/mock/assignment.mock';
 
 export function useAssignment() {
   const navigate = useNavigate();
 
   return {
-    async getAllAssignments(): Promise<ResponseData<Assignment[]>> {
-      // const data = await mockAssignment().getAllAssignments();
-      const response = await getWithPath(API.ASSIGNMENT.GET.ASSIGNMENTS);
+    async getAllAssignments(courseId): Promise<ResponseData<Assignment[]>> {
+      const response = await getWithPath(
+        `${API.ASSIGNMENT.GET.ASSIGNMENTS}/${courseId}`
+      );
       const validResponse = formatResponse<AssignmentDTO[]>(response);
       const convertedData = validResponse.data.map(assignmentFromDTO);
       const covertedResponse = {
@@ -37,12 +38,13 @@ export function useAssignment() {
       return covertedResponse;
     },
 
-    async getAssignmentByCourseId(
-      id: string
+    async getMoodleAssignments(
+      courseId: string,
+      params: { courseMoodleId: string }
     ): Promise<ResponseData<Assignment[]>> {
       const response = await getWithPath(
-        API.ASSIGNMENT.GET.MOODLE_ASSIGNMENTS_BY_COURSE_ID,
-        { courseMoodleId: id }
+        `${API.ASSIGNMENT.GET.ASSIGNMENTS}/${courseId}/sync-assignments-by-course-id`,
+        params
       );
       const validResponse = formatResponse<AssignmentDTO[]>(response);
       const convertedData = validResponse.data.map(assignmentFromDTO);
@@ -59,12 +61,15 @@ export function useAssignment() {
       return formatResponse(data);
     },
 
-    async createAssignment(body): Promise<ResponseData<Assignment[]>> {
-      const submitData = body.map((course) => {
-        return removeSubmitProps(assignmentToDTO(course));
+    async createAssignment(
+      courseId,
+      body
+    ): Promise<ResponseData<Assignment[]>> {
+      const submitData = body.map((assignment) => {
+        return removeSubmitProps(assignmentToDTO(assignment));
       });
       const response = await postWithPath(
-        `${API.ASSIGNMENT.POST.CREATE_ASSIGNMENT}`,
+        `${API.ASSIGNMENT.POST.CREATE_ASSIGNMENT}/${courseId}/assignments`,
         {},
         submitData
       );
@@ -78,9 +83,6 @@ export function useAssignment() {
         {},
         body
       );
-      if (data.success) {
-        navigate(ROUTE.PARTNER.LIST);
-      }
       return formatResponse(data);
     },
 
@@ -90,9 +92,6 @@ export function useAssignment() {
         {},
         body
       );
-      if (data.success) {
-        navigate(ROUTE.PARTNER.LIST);
-      }
       return formatResponse(data);
     },
 
@@ -102,9 +101,6 @@ export function useAssignment() {
         {},
         body
       );
-      if (data.success) {
-        navigate(ROUTE.PARTNER.LIST);
-      }
       return formatResponse(data);
     },
   };
