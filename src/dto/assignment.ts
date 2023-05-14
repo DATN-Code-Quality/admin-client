@@ -17,19 +17,15 @@ export const assignmentFromDTO = (assignmentDTO: AssignmentDTO): Assignment => {
   return {
     id: assignmentDTO.id,
     name: assignmentDTO.name,
-    dueDate: new Date(parseInt(assignmentDTO.dueDate, 10) * 1000).getTime(),
+    dueDate: new Date(assignmentDTO.dueDate).getTime(),
     status: assignmentDTO.status,
     courseId: assignmentDTO.courseId,
     assignmentMoodleId: assignmentDTO.assignmentMoodleId,
     description: assignmentDTO.description,
     attachmentFileLink: assignmentDTO.attachmentFileLink,
     config: assignmentDTO.config,
-    createdAt:
-      assignmentDTO.createdAt && new Date(assignmentDTO.createdAt).getTime(),
-    updatedAt:
-      assignmentDTO.updatedAt && new Date(assignmentDTO.updatedAt).getTime(),
-    deletedAt:
-      assignmentDTO.deletedAt && new Date(assignmentDTO.deletedAt).getTime(),
+    createdAt: new Date(assignmentDTO.createdAt || new Date()).getTime(),
+    updatedAt: new Date(assignmentDTO.updatedAt || new Date()).getTime(),
   };
 };
 
@@ -46,6 +42,5 @@ export const assignmentToDTO = (assignment: Assignment): AssignmentDTO => {
     config: assignment.config,
     createdAt: new Date(assignment.createdAt),
     updatedAt: new Date(assignment.updatedAt),
-    deletedAt: new Date(assignment.deletedAt),
   };
 };
