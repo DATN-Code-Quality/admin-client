@@ -110,13 +110,6 @@ function TableViewAssignment({ course }) {
     });
   };
 
-  useEffect(() => {
-    setAssignmentSelected({
-      id: 'd84d3115-500a-46d4-af75-7cbfbca29055',
-      courseId: 'f7690d16-1217-453c-868e-c6fbb5d27ce6',
-    });
-  }, []);
-
   const columnTableProps = () => [
     ...columnTableAssignment(setAssignmentSelected),
     {
