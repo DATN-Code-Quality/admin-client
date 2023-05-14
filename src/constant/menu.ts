@@ -41,6 +41,8 @@ const SonarqubeSubmission = lazy(
   () => import('../ui/modules/sonarqube/containers/Submission')
 );
 
+// TODO: update allow route for each role
+
 export const MAIN_ROUTES = [
   {
     path: ROUTE.LOGIN,
@@ -51,57 +53,62 @@ export const MAIN_ROUTES = [
     path: ROUTE.DASHBOARD,
     name: 'dashboard',
     element: Dashboard,
+    roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],
   },
   {
     path: ROUTE.USER.LIST,
     name: 'users',
     element: ViewUser,
-  },
-  {
-    path: ROUTE.PARTNER.LIST,
-    name: 'Partners',
-    element: ViewPartner,
+    roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],
   },
   {
     path: ROUTE.COURSE.LIST,
     name: 'courseList',
     element: ViewCourseList,
+    roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],
   },
   {
     path: ROUTE.COURSE.CREATE,
     name: 'createCourse',
     element: CreateOrViewCourse,
+    roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],
   },
   {
     path: ROUTE.COURSE.EDIT,
     name: 'updateCourse',
     element: CreateOrViewCourse,
+    roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],
   },
   {
     path: ROUTE.COURSE.DETAIL,
     name: 'courseDetail',
     element: ViewCourseDetail,
+    roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],
   },
   {
     path: ROUTE.COURSE.CREATE_ASSIGNMENT,
     name: 'createCourseAssignment',
     element: CreateOrViewAssignment,
+    roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],
   },
   {
     path: ROUTE.COURSE.EDIT_ASSIGNMENT,
     name: 'updateCourseAssignment',
     element: CreateOrViewAssignment,
+    roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],
   },
   {
     path: ROUTE.SONARQUBE.LIST,
     name: 'Sonarqube',
     element: Sonarqube,
+    roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],
   },
 
   {
     path: ROUTE.SONARQUBE.SUBMISSION,
     name: 'Submission',
     element: SonarqubeSubmission,
+    roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],
   },
 ];
 
@@ -111,14 +118,14 @@ export const menus = [
     name: 'Dashboard',
     // icon: DownloadOutlined,
     route: ROUTE.DASHBOARD,
-    role: [Role.ROOT_ADMIN, Role.TEACHER, Role.STUDENT],
+    roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],
   },
   {
     id: 'user',
     name: 'Users',
     // icon: DownloadOutlined,
     route: ROUTE.USER.LIST,
-    role: [Role.ROOT_ADMIN, Role.TEACHER, Role.STUDENT],
+    roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],
   },
 
   {
@@ -126,14 +133,14 @@ export const menus = [
     name: 'Courses',
     // icon: DownloadOutlined,
     route: ROUTE.COURSE.LIST,
-    role: [Role.ROOT_ADMIN, Role.TEACHER, Role.STUDENT],
+    roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],
   },
   {
     id: 'history',
     name: 'History',
     // icon: DownloadOutlined,
     route: ROUTE.HISTORY,
-    role: [Role.ROOT_ADMIN, Role.TEACHER, Role.STUDENT],
+    roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],
   },
   // {
   //   id: 'sonarqube',

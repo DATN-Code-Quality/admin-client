@@ -68,7 +68,6 @@ const FormAddCourse = ({ course, id, initialViewMode = false }) => {
   };
 
   useEffect(() => {
-    console.log(course);
     if (course) {
       form.setFieldsValue(course);
       setFormValues(course);

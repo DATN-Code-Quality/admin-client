@@ -79,7 +79,6 @@ const FormAddAssignment = ({ courseId, id, initialViewMode = false }) => {
     if (id) {
       setLoading(true);
       getDetailAssignment(id).then((res) => {
-        console.log(res);
         res.data.dueDate = dayjs(res.data.dueDate);
         form.setFieldsValue(res.data);
         setFormValues(res.data);

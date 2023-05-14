@@ -25,7 +25,9 @@ export function useAssignment() {
   const navigate = useNavigate();
 
   return {
-    async getAllAssignments(courseId): Promise<ResponseData<Assignment[]>> {
+    async getAllAssignments(
+      courseId: string
+    ): Promise<ResponseData<Assignment[]>> {
       const response = await getWithPath(
         `${API.ASSIGNMENT.GET.ASSIGNMENTS}/${courseId}`
       );
@@ -56,13 +58,12 @@ export function useAssignment() {
     },
 
     async getDetailAssignment(id: string): Promise<ResponseData<Assignment>> {
-      // const data = await getWithPath(`${API.PARTNER.GET.PARTNERS}/${id}`, {});
       const data = await mockAssignment().getAssignmentById(id);
       return formatResponse(data);
     },
 
     async createAssignment(
-      courseId,
+      courseId: string,
       body
     ): Promise<ResponseData<Assignment[]>> {
       const submitData = body.map((assignment) => {

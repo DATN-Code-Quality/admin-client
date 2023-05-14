@@ -26,7 +26,6 @@ export function usePartner() {
     },
 
     async getAllAgencies(): Promise<ResponseData<Partner[]>> {
-      // const data = await getWithPath(API.AGENCY.GET.AGENCYS);
       const data = await mockAgency().getAllAgencies();
       return formatResponse(data);
     },

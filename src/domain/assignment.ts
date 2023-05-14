@@ -9,7 +9,6 @@ export interface Assignment {
   attachmentFileLink: string | null;
   config: string;
 
-  createdAt?: number;
-  updatedAt?: number;
-  deletedAt?: number;
+  createdAt: number;
+  updatedAt: number;
 }

@@ -56,7 +56,6 @@ function TableViewCourse() {
       setLoading(true);
       setIsSyncMoodle(true);
       const res = await getAllMoodleCourses();
-      console.log(res);
       setImportedCourses(res.data);
       importedModalActions.handleOpen();
     } finally {

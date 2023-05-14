@@ -10,6 +10,7 @@ import {
 
 import { ResponseData } from '~/constant';
 import API from '~/constant/api';
+import { ApiStatus } from '~/constant/enum';
 import ROUTE from '~/constant/routes';
 import { Assignment } from '~/domain/assignment';
 import { Course } from '~/domain/course';
@@ -24,7 +25,6 @@ export function useCourse() {
 
   return {
     async getAllCourses(): Promise<ResponseData<Course[]>> {
-      // const data = await mockCourse().getAllCourses();
       const response = await getWithPath(API.COURSE.GET.COURSES);
       const validResponse = formatResponse<CourseDTO[]>(response);
       const convertedData = validResponse.data.map(courseFromDTO);
@@ -70,14 +70,6 @@ export function useCourse() {
       return covertedResponse;
     },
 
-    async getAssignmentsByCourseId(
-      id: string
-    ): Promise<ResponseData<Assignment[]>> {
-      // const data = await getWithPath(API.AGENCY.GET.AGENCYS);
-      const data = await mockCourse().getAssignmentsByCourseId(id);
-      return formatResponse(data);
-    },
-
     async createCourse(body): Promise<ResponseData<Course[]>> {
       const submitData = body.map((course) => {
         return removeSubmitProps(courseToDTO(course));
@@ -92,39 +84,30 @@ export function useCourse() {
     },
 
     async updateCourse(body): Promise<ResponseData<Course>> {
-      const data = await putWithPath(
+      const response = await putWithPath(
         `${API.PARTNER.PUT.UPDATE_PARTNER}/${body?.id}`,
         {},
         body
       );
-      if (data.success) {
-        navigate(ROUTE.PARTNER.LIST);
-      }
-      return formatResponse(data);
+      return formatResponse(response);
     },
 
     async blockCourse(body): Promise<ResponseData<Course>> {
-      const data = await putWithPath(
+      const response = await putWithPath(
         `${API.PARTNER.PUT.UPDATE_PARTNER}/${body?.id}`,
         {},
         body
       );
-      if (data.success) {
-        navigate(ROUTE.PARTNER.LIST);
-      }
-      return formatResponse(data);
+      return formatResponse(response);
     },
 
     async unblockCourse(body): Promise<ResponseData<Course>> {
-      const data = await putWithPath(
+      const response = await putWithPath(
         `${API.PARTNER.PUT.UPDATE_PARTNER}/${body?.id}`,
         {},
         body
       );
-      if (data.success) {
-        navigate(ROUTE.PARTNER.LIST);
-      }
-      return formatResponse(data);
+      return formatResponse(response);
     },
   };
 }

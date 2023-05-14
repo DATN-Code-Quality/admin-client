@@ -4,6 +4,8 @@ import dayjs, { Dayjs } from 'dayjs';
 
 import Is from './is';
 
+import { Role } from '~/constant/enum';
+
 export const buildParams = (data?: any) => {
   if (data) {
     const dataEdited = {
@@ -311,4 +313,16 @@ export const renderColorRatting = (val: number, className: string) => {
       E
     </span>
   );
+};
+
+export const filterRole = (roles?: Role[], userRoles?: Role[]) => {
+  // return true;
+  if (
+    userRoles &&
+    roles &&
+    !userRoles.some((userRole) => roles?.includes(userRole))
+  ) {
+    return false;
+  }
+  return true;
 };

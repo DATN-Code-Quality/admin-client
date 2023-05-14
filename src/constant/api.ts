@@ -78,23 +78,11 @@ export const PARTNER = {
   },
 };
 
-export const AGENCY = {
-  GET: {
-    AGENCIES: '/agencies',
-  },
-  POST: {
-    CREATE_AGENCY: '/agencies',
-  },
-  PUT: {
-    UPDATE_AGENCY: '/agencies',
-  },
-};
-
 export const AUTH = {
   GET: {
     LOGIN: '/auth/login',
-    LOGIN_ZALO: '/auth/login-via-zalo',
-    CHECK_SESSION: '/auth/session',
+    LOGIN_MICROSOFT: '/auth/login/outlook',
+    CHECK_PROFILE: '/auth/profile',
     LOGOUT: '/auth/logout',
   },
 };
@@ -112,7 +100,6 @@ const API = {
   ASSIGNMENT,
   SUBMISSION,
   PARTNER,
-  AGENCY,
 };
 
 export default API;
