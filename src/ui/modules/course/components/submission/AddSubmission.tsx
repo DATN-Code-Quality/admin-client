@@ -1,6 +1,6 @@
 /* eslint-disable react/destructuring-assignment */
 import React, { useState } from "react";
-import { Button, Select } from "antd";
+import { Button, Select, UploadProps } from "antd";
 import './style.css';
 import { Option } from "antd/lib/mentions";
 import Input from "antd/lib/input/Input";
@@ -15,7 +15,6 @@ export enum SubmissionSource {
 }
 
 const AddSubmission: React.FC = () => {
-
   const [isAddSubmission, setIsAddSubmission] = useState<boolean>(false);
   return (
     <div>
@@ -82,6 +81,25 @@ const SubmmissionStatusSection = (): JSX.Element => {
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 const AddSubmissionSection = (props: { onSubmitted?: Function, }): JSX.Element => {
+  const uploadProps: UploadProps = {
+    name: 'file',
+    multiple: true,
+    // action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
+    onChange(info) {
+      const { status } = info.file;
+      if (status !== 'uploading') {
+        console.log(info.file, info.fileList);
+      }
+      if (status === 'done') {
+        // message.success(`${info.file.name} file uploaded successfully.`);
+      } else if (status === 'error') {
+        // message.error(`${info.file.name} file upload failed.`);
+      }
+    },
+    onDrop(e) {
+      console.log('Dropped files', e.dataTransfer.files);
+    },
+  };
   const [submissionSrc, setSubmissionSrc] = useState<string>('System');
   const { onSubmitted } = props;
   console.info("Submission src: " + submissionSrc)
@@ -111,7 +129,7 @@ const AddSubmissionSection = (props: { onSubmitted?: Function, }): JSX.Element =
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           {
             submissionSrc === 'System' ?
-              <Dragger {...props} style={{ width: '-moz-available' }} >
+              <Dragger {...uploadProps} style={{ width: '-moz-available' }} >
                 <p className="ant-upload-drag-icon">
                   <InboxOutlined />
                 </p>
@@ -137,10 +155,7 @@ const AddSubmissionSection = (props: { onSubmitted?: Function, }): JSX.Element =
                 }
               }}>Cancel</Button>
           </div>
-
-
         </div>
-
       </div>
 
     </div>
