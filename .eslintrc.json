@@ -26,18 +26,12 @@
     // compulsory rules
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
-    "react/react-in-jsx-scope": "off",
-    
-    "prettier/prettier":
-    0
-    //  [
-    //   "error",
-    //   {
-    //     "endOfLine": "auto"
-    //   }
-    // ]
-    ,
-    "ordered-imports": false,
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ],
 
     // custom rules
     "no-shadow": "off",
