@@ -4,12 +4,14 @@ import './index.less';
 import { BugOutlined, WarningOutlined } from '@ant-design/icons';
 
 import { BugType } from '~/constant/enum';
+import { Issue } from '~/domain/submission';
 // import { formattedCodeSmell } from '~/utils';
 
-const IssueItem: React.FC<{ issue; handleSetIssue?: (val: any) => void }> = ({
-  issue,
-  handleSetIssue,
-}) => {
+const IssueItem: React.FC<{
+  issue: Issue;
+  handleSetIssue?: (val: Issue) => void;
+  setRuleSelected: (val: string) => void;
+}> = ({ issue, handleSetIssue, setRuleSelected }) => {
   const renderBugError = useCallback(
     (
       type: string,
@@ -28,8 +30,6 @@ const IssueItem: React.FC<{ issue; handleSetIssue?: (val: any) => void }> = ({
         startOffset !== endOffset ? `- ${endOffset}` : ''
       }`;
 
-      console.log(type);
-
       switch (type) {
         case BugType.CODE_SMELL:
           return (
@@ -37,6 +37,7 @@ const IssueItem: React.FC<{ issue; handleSetIssue?: (val: any) => void }> = ({
               <p>
                 <WarningOutlined style={{ fontWeight: 800 }} />
                 {/* <span className="issue-type">{formattedCodeSmell(type)}</span> */}
+                <span className="issue-type">Code Smell</span>
               </p>
               <p>
                 Error line :{' '}
@@ -54,7 +55,7 @@ const IssueItem: React.FC<{ issue; handleSetIssue?: (val: any) => void }> = ({
             <div className="issue-type-container">
               <p>
                 <BugOutlined />
-                {/* <span className="issue-type">{formattedCodeSmell(type)}</span> */}
+                <span className="issue-type">Bug</span>
               </p>
               <p>
                 Error line :{' '}
@@ -82,7 +83,13 @@ const IssueItem: React.FC<{ issue; handleSetIssue?: (val: any) => void }> = ({
         }}
       >
         <p>{issue.message}</p>
-        <p className="issue-rule-container">
+        <p
+          className="issue-rule-container"
+          onClick={(e) => {
+            e.stopPropagation();
+            setRuleSelected(issue.rule);
+          }}
+        >
           Rule : <span className="issue-rule">{issue.rule}</span>
         </p>
         <div />

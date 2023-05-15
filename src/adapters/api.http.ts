@@ -16,7 +16,12 @@ export function fetch(
   const exOptions = extend(
     {
       credentials: 'include',
-      headers: defaultHeaders,
+      headers: {
+        ...defaultHeaders,
+        Authorization:
+          'Bearer ' +
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNzM1NTU1ZWMtZGQwNi00YmRlLTk4MGItY2VmZTE2MTQ3YWNlIiwiY3JlYXRlZEF0IjoiMjAyMy0wNS0wNlQwOTo0NDozNC4yODZaIiwidXBkYXRlZEF0IjoiMjAyMy0wNS0wNlQwOTo0NDozNC4yODZaIiwiZGVsZXRlZEF0IjpudWxsLCJuYW1lIjoiVHLDrSIsInJvbGUiOiJ1c2VyIiwiZW1haWwiOiJ0cmlAZ21haWwuY29tIiwidXNlcklkIjoiMDQiLCJtb29kbGVJZCI6IjA0Iiwic3RhdHVzIjoxfSwiaWF0IjoxNjg0MDM1MDM0LCJleHAiOjE2ODQxMjE0MzR9.-v2Owi6ZhitkLulmNs7Cuj4wqFtr0K1yHxKStbglfmU',
+      },
     },
     options
   );

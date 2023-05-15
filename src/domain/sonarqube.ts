@@ -1,3 +1,5 @@
+import { Issue, IssueWithSource } from './submission';
+
 export interface ListSonarqube {
   paging: {
     pageIndex: number;
@@ -10,9 +12,16 @@ export interface ListSonarqube {
 
 export interface Sonarqube {
   filter: Filter;
-  submissionIssues: any;
+  submissionIssues: Record<string, unknown>;
+  submissionSelected: SubmissionSelected;
+  issueSelected: Issue | null;
 }
 
+export interface SubmissionSelected {
+  submissionId: string | null;
+  courseId: string;
+  assignmentId: string;
+}
 export interface Filter {
   coverage: number;
   reliabilityRatiing: number;
@@ -53,9 +62,24 @@ export interface Facet {
 }
 
 export interface SubmissionResponse {
-  statusCode?: number;
+  status?: number;
   error?: number;
   data: SubmissionIssues;
+}
+
+export interface IssueWithSourceResponse {
+  status?: number;
+  error?: number;
+  data: IssueWithSource[];
+}
+
+export interface OverviewSubmissionResponse {
+  status?: number;
+  error?: number;
+  data: {
+    paging: Record<string, string>;
+    measures: { metric: string; history: { date: string; value: string }[] }[];
+  };
 }
 
 export interface SubmissionIssues {
