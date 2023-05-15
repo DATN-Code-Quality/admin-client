@@ -148,7 +148,7 @@ function TableViewCourse() {
           >
             Sync Moodle
           </Button>
-          <Button
+          {/* <Button
             type="primary"
             className="mr-4"
             icon={<UploadOutlined />}
@@ -164,7 +164,7 @@ function TableViewCourse() {
             onClick={handleCreateCourse}
           >
             Tạo mới
-          </Button>
+          </Button> */}
         </TableToolbar>
         <BaseTable
           idKey="id"

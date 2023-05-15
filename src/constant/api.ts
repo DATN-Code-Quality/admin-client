@@ -36,6 +36,19 @@ export const COURSE = {
   },
 };
 
+export const USER_COURSE = {
+  GET: {
+    USER_COURSE: '/user-course',
+    MOODLE_USERS_COURSE: '/user-course/sync-users',
+  },
+  POST: {
+    CREATE_COURSE: '/user-course',
+  },
+  PUT: {
+    UPDATE_COURSE: '/user-course',
+  },
+};
+
 export const ASSIGNMENT = {
   GET: {
     ASSIGNMENTS: '/assignment',
@@ -66,18 +79,6 @@ export const SUBMISSION = {
   },
 };
 
-export const PARTNER = {
-  GET: {
-    PARTNERS: '/partner',
-  },
-  POST: {
-    CREATE_PARTNER: '/partner',
-  },
-  PUT: {
-    UPDATE_PARTNER: '/partner',
-  },
-};
-
 export const AUTH = {
   GET: {
     LOGIN: '/auth/login',
@@ -97,9 +98,9 @@ const API = {
   AUTH,
   USER,
   COURSE,
+  USER_COURSE,
   ASSIGNMENT,
   SUBMISSION,
-  PARTNER,
 };
 
 export default API;

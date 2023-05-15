@@ -14,7 +14,6 @@ import ROUTE from '~/constant/routes';
 import { User } from '~/domain/user';
 import { removeSubmitProps } from '~/dto/baseDTO';
 import { UserDTO, userFromDTO, userToDTO } from '~/dto/user';
-import { mockUser } from '~/mock/user.mock';
 
 export function useUser() {
   const navigate = useNavigate();

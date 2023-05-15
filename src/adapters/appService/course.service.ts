@@ -57,10 +57,31 @@ export function useCourse() {
       return covertedResponse;
     },
 
-    async getParticipantsByCourseId(id: string): Promise<ResponseData<User[]>> {
-      const response = await getWithPath(API.USER.GET.USERS_BY_COURSE_ID, {
-        userMoodleId: id,
-      });
+    async getParticipantsByCourseId(
+      courseId: string
+    ): Promise<ResponseData<User[]>> {
+      const response = await getWithPath(
+        // `${API.USER_COURSE.GET.USER_COURSE}/${courseId}/users`
+        `${API.USER_COURSE.GET.USER_COURSE}/${courseId}/users`
+      );
+      const validResponse = formatResponse<UserDTO[]>(response);
+      const convertedData = validResponse.data.map(userFromDTO);
+      const covertedResponse = {
+        ...validResponse,
+        data: convertedData,
+      };
+      return covertedResponse;
+    },
+
+    async getMoodleParticipantsByCourseId(
+      courseId: string,
+      params: { courseMoodleId: string }
+    ): Promise<ResponseData<User[]>> {
+      const response = await getWithPath(
+        // `${API.USER_COURSE.GET.USER_COURSE}/${courseId}/users`
+        `${API.USER_COURSE.GET.MOODLE_USERS_COURSE}`,
+        params
+      );
       const validResponse = formatResponse<UserDTO[]>(response);
       const convertedData = validResponse.data.map(userFromDTO);
       const covertedResponse = {

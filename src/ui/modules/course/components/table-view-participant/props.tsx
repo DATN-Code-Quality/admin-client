@@ -18,7 +18,7 @@ export const metaFilterUser = () => {
   } as IMetaFormBuilder;
 };
 
-export const columnTableUser = ({ partners }): ColumnType<any>[] => [
+export const columnTableUser = (): ColumnType<any>[] => [
   {
     title: 'Name',
     dataIndex: 'name',
@@ -61,8 +61,7 @@ export const columnTableUser = ({ partners }): ColumnType<any>[] => [
   },
 ];
 
-export const metaCreateUser = ({ partners }) => {
-  const mappingPartnerList = generateMappingList(partners, 'id', 'name');
+export const metaCreateUser = () => {
   return {
     formItemLayout: [6, 20],
     fields: [
@@ -96,8 +95,7 @@ export const metaCreateUser = ({ partners }) => {
   };
 };
 
-export const metaUpdateUser = (record, { partners }) => {
-  const mappingPartnerList = generateMappingList(partners, 'id', 'name');
+export const metaUpdateUser = (record) => {
   return {
     formItemLayout: [6, 20],
     fields: [

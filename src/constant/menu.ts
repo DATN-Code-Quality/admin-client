@@ -7,10 +7,6 @@ import ROUTE from './routes';
 
 const ViewUser = lazy(() => import('../ui/modules/user/containers/ViewUser'));
 
-const ViewPartner = lazy(
-  () => import('../ui/modules/partner/containers/ViewPartner')
-);
-
 const Login = lazy(() => import('../ui/modules/login/containers/Login'));
 
 const Dashboard = lazy(
