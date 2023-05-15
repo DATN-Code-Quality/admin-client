@@ -42,10 +42,10 @@ export const USER_COURSE = {
     MOODLE_USERS_COURSE: '/user-course/sync-users',
   },
   POST: {
-    CREATE_COURSE: '/user-course',
+    USER_COURSE: '/user-course',
   },
   PUT: {
-    UPDATE_COURSE: '/user-course',
+    USER_COURSE: '/user-course',
   },
 };
 

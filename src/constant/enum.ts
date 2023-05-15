@@ -14,6 +14,12 @@ export enum StateStatus {
   ACTIVE = 1,
 }
 
+export enum UserStatus {
+  INACTIVE = 0,
+  ACTIVE = 1,
+  BLOCK = 2,
+}
+
 export enum ServiceType {
   ALL = 1,
   EKYC = 2,

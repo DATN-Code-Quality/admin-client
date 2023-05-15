@@ -26,8 +26,11 @@ import { formatNumber } from '~/utils';
 function TableViewParticipant({ course }) {
   const navigate = useNavigate();
   const { createUser, updateUser, blockUser } = useUser();
-  const { getParticipantsByCourseId, getMoodleParticipantsByCourseId } =
-    useCourse();
+  const {
+    getParticipantsByCourseId,
+    getMoodleParticipantsByCourseId,
+    createParticipant,
+  } = useCourse();
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -74,8 +77,8 @@ function TableViewParticipant({ course }) {
   const handleImportModalOk = async (values) => {
     if (isSyncMoodle) {
       const dataSubmit = values.data;
-      console.log(dataSubmit);
-      createUser(dataSubmit);
+      const response = await createParticipant(course.id, dataSubmit);
+      response.data.map(onAddItem);
     }
     importedModalActions.handleClose();
     return values;

@@ -1,24 +1,19 @@
-import { message } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
 import {
-  postWithPath,
-  putWithPath,
   formatResponse,
   getWithPath,
+  postWithPath,
+  putWithPath,
 } from '../api.http';
 
 import { ResponseData } from '~/constant';
 import API from '~/constant/api';
-import { ApiStatus } from '~/constant/enum';
-import ROUTE from '~/constant/routes';
-import { Assignment } from '~/domain/assignment';
 import { Course } from '~/domain/course';
 import { User } from '~/domain/user';
 import { removeSubmitProps } from '~/dto/baseDTO';
 import { CourseDTO, courseFromDTO, courseToDTO } from '~/dto/course';
 import { UserDTO, userFromDTO } from '~/dto/user';
-import { mockCourse } from '~/mock/course.mock';
 
 export function useCourse() {
   const navigate = useNavigate();
@@ -125,6 +120,18 @@ export function useCourse() {
     async unblockCourse(body): Promise<ResponseData<Course>> {
       const response = await putWithPath(
         `${API.PARTNER.PUT.UPDATE_PARTNER}/${body?.id}`,
+        {},
+        body
+      );
+      return formatResponse(response);
+    },
+
+    async createParticipant(
+      courseId: string,
+      body
+    ): Promise<ResponseData<User[]>> {
+      const response = await postWithPath(
+        `${API.USER_COURSE.POST.USER_COURSE}/${courseId}`,
         {},
         body
       );
