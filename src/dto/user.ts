@@ -37,7 +37,5 @@ export const userToDTO = (user: User): UserDTO => {
     userId: user.userId,
     moodleId: user.moodleId,
     status: user.status,
-    createdAt: new Date(user.createdAt),
-    updatedAt: new Date(user.updatedAt),
   };
 };

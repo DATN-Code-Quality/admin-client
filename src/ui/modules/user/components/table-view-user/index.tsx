@@ -1,4 +1,19 @@
-import { columnTableUser } from './props';
+import {
+  columnTableUser,
+  columnTableSyncUser,
+  metaCreateUser,
+  metaFilterSyncUser,
+  metaFilterUser,
+  metaUpdateUser,
+} from './props';
 import TableViewUser from './TableViewUser';
 
-export { TableViewUser, columnTableUser };
+export {
+  TableViewUser,
+  columnTableUser,
+  columnTableSyncUser,
+  metaCreateUser,
+  metaFilterSyncUser,
+  metaFilterUser,
+  metaUpdateUser,
+};

@@ -21,7 +21,7 @@ function ViewCourseDetailContainer() {
 
   useEffect(() => {
     getDetailCourse(id).then((res) => {
-      setCourse(res.data);
+      setCourse(res.data.course);
     });
   }, []);
 

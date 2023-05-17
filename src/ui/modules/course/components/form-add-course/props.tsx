@@ -8,48 +8,42 @@ export const metaFormAddCourse = () => {
     fields: [
       {
         key: 'name',
-        label: 'Course Name:',
+        label: 'Tên khoá học:',
+        message: 'Vui lòng không bỏ trống',
         required: true,
       },
       {
-        key: 'description',
-        label: 'Description:',
+        key: 'summary',
+        label: 'Mô tả:',
         required: true,
+        message: 'Vui lòng không bỏ trống',
         widget: Editor,
       },
       {
-        key: 'status',
-        label: 'Status:',
-        options: MAP_USER_STATUS,
-        widget: 'select',
+        key: 'startAt',
+        label: 'Ngày bắt đầu:',
+        widget: 'date-picker',
         required: true,
+        message: 'Vui lòng không bỏ trống',
         widgetProps: {
-          style: {
-            minWidth: '12rem',
-          },
-          allowClear: true,
+          autoSize: { maxRows: 20, minRows: 3 },
+          showCount: true,
+          placeholder: 'Ngày bắt đầu',
+        },
+      },
+      {
+        key: 'endAt',
+        label: 'Ngày kết thúc:',
+        widget: 'date-picker',
+        required: true,
+        message: 'Vui lòng không bỏ trống',
+        widgetProps: {
+          autoSize: { maxRows: 20, minRows: 3 },
+          showCount: true,
+          placeholder: 'Ngày kết thúc',
         },
       },
     ],
   };
   return meta;
 };
-
-// export const metaUpdateCourse = (record) => {
-//   const meta: any = {
-//     formItemLayout: [6, 20],
-//     fields: [
-//       {
-//         key: 'name',
-//         label: 'Partner Name:',
-//         required: true,
-//         initialValue: record.name,
-//         message: 'Please input',
-//         widgetProps: {
-//           placeholder: 'Input Partner Name',
-//         },
-//       },
-//     ],
-//   };
-//   return meta;
-// };

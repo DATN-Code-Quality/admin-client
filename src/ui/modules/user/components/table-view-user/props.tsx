@@ -9,12 +9,40 @@ export const metaFilterUser = () => {
   return {
     fields: [
       {
-        key: 'name',
+        key: 'search',
         widgetProps: {
-          placeholder: 'Tìm kiếm theo họ tên hoặc email',
+          placeholder: 'Tìm kiếm theo Họ tên hoặc Email',
           style: {
             minWidth: '250px',
           },
+        },
+      },
+      {
+        key: 'role',
+        options: MAP_ROLES,
+        widget: 'select',
+        widgetProps: {
+          maxTagCount: 'responsive',
+          style: {
+            minWidth: '12rem',
+            maxWidth: '12rem',
+          },
+          placeholder: 'Vai trò',
+          allowClear: true,
+        },
+      },
+      {
+        key: 'status',
+        options: MAP_USER_STATUS,
+        widget: 'select',
+        widgetProps: {
+          maxTagCount: 'responsive',
+          style: {
+            minWidth: '12rem',
+            maxWidth: '12rem',
+          },
+          placeholder: 'Trạng thái',
+          allowClear: true,
         },
       },
     ],
@@ -60,8 +88,9 @@ export const metaCreateUser = () => {
     fields: [
       {
         key: 'userId',
-        label: 'Username:',
+        label: 'Tên đăng nhập:',
         required: true,
+        message: 'Vui lòng không bỏ trống',
         widgetProps: {
           placeholder: 'Nhập username',
         },
@@ -70,6 +99,7 @@ export const metaCreateUser = () => {
         key: 'name',
         label: 'Họ tên:',
         required: true,
+        message: 'Vui lòng không bỏ trống',
         widgetProps: {
           placeholder: 'Nhập Họ tên',
         },
@@ -78,6 +108,7 @@ export const metaCreateUser = () => {
         key: 'email',
         label: 'Email:',
         required: true,
+        message: 'Vui lòng không bỏ trống',
         widgetProps: {
           placeholder: 'Nhập Email',
           type: 'email',
@@ -92,9 +123,23 @@ export const metaUpdateUser = (record) => {
     formItemLayout: [24, 24],
     fields: [
       {
+        key: 'userId',
+        label: 'Tên đăng nhập:',
+        required: true,
+        initialValue: record.userId,
+        message: 'Vui lòng không bỏ trống',
+        formItemProps: {
+          style: { display: 'none' },
+        },
+        widgetProps: {
+          placeholder: 'Nhập username',
+        },
+      },
+      {
         key: 'name',
         label: 'Họ tên:',
         required: true,
+        message: 'Vui lòng không bỏ trống',
         initialValue: record.name,
         widgetProps: {
           placeholder: 'Nhập Họ tên',
@@ -104,6 +149,7 @@ export const metaUpdateUser = (record) => {
         key: 'email',
         label: 'Email:',
         required: true,
+        message: 'Vui lòng không bỏ trống',
         initialValue: record.email,
         widgetProps: {
           placeholder: 'Nhập Email',
@@ -113,3 +159,40 @@ export const metaUpdateUser = (record) => {
     ],
   };
 };
+
+export const metaFilterSyncUser = () => {
+  return {
+    fields: [
+      {
+        key: 'search',
+        widgetProps: {
+          placeholder: 'Tìm kiếm theo Họ tên hoặc Email',
+          style: {
+            minWidth: '250px',
+          },
+        },
+      },
+    ],
+  } as IMetaFormBuilder;
+};
+
+export const columnTableSyncUser = (): ColumnType<any>[] => [
+  {
+    title: 'Họ tên',
+    dataIndex: 'name',
+    width: 200,
+    ellipsis: true,
+    sorter: (a, b) => {
+      return a.name.localeCompare(b.name);
+    },
+  },
+  {
+    title: 'Email',
+    dataIndex: 'email',
+    width: 200,
+    ellipsis: true,
+    sorter: (a, b) => {
+      return a.email.localeCompare(b.email);
+    },
+  },
+];

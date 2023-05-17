@@ -6,16 +6,22 @@ import {
   SyncOutlined,
   UploadOutlined,
 } from '@ant-design/icons';
-import { Modal, Space } from 'antd';
+import { message, Modal, Space } from 'antd';
 import Button from 'antd-button-color';
 import { useNavigate } from 'react-router-dom';
 
 import SubmissionComponent from '../submission';
 
-import { columnTableAssignment, metaFilterAssignment } from './props';
+import {
+  columnTableAssignment,
+  columnTableSyncAssignment,
+  metaFilterAssignment,
+  metaFilterSyncAssignment,
+} from './props';
 
 import { useAssignment } from '~/adapters/appService/assignment.service';
 import { PAGE_SIZE_OPTIONS } from '~/constant';
+import { MESSAGE } from '~/constant/message';
 import ROUTE from '~/constant/routes';
 import { Assignment } from '~/domain/assignment';
 import useDialog from '~/hooks/useDialog';
@@ -38,7 +44,6 @@ function TableViewAssignment({ course }) {
     getAllAssignments,
     getMoodleAssignments,
     createAssignment,
-    updateAssignment,
     blockAssignment,
   } = useAssignment();
 
@@ -46,54 +51,40 @@ function TableViewAssignment({ course }) {
   const [assignmentSelected, setAssignmentSelected] =
     useState<Assignment | null>(null);
 
-  const [importedAssignments, setImportedAssignments] = useState<Assignment[]>(
-    []
-  );
-  const [isSyncMoodle, setIsSyncMoodle] = useState<boolean>(false);
-  const [importedModalVisible, importedModalActions] = useDialog();
+  const [syncMoodleModalVisible, syncMoodleModalActions] = useDialog();
 
-  const getAssignmen = async (args?) => {
+  const handleGetAssignments = async (args?) => {
     return getAllAssignments(course.id);
   };
 
-  const [list, { onPageChange, onAddItem, onEditItem, onFilterChange }] =
-    useList({
-      fetchFn: (args) => getAssignmen(args),
+  const handleGetMoodleAssignments = async (args?) => {
+    return getMoodleAssignments(course.id, {
+      courseMoodleId: course.courseMoodleId,
     });
-
-  const handleSyncMoodle = async () => {
-    try {
-      setLoading(true);
-      setIsSyncMoodle(true);
-      const res = await getMoodleAssignments(course.id, {
-        courseMoodleId: course.moodleCourseId,
-      });
-      setImportedAssignments(res.data);
-      importedModalActions.handleOpen();
-    } finally {
-      setLoading(false);
-    }
   };
 
-  const handleImportExcel = async () => {
-    try {
-      setLoading(true);
-      const res = await getAssignmen();
-      setImportedAssignments([...res.data, ...res.data, ...res.data]);
-      importedModalActions.handleOpen();
-    } finally {
-      setLoading(false);
-    }
+  const [
+    list,
+    { onPageChange, onAddItem, onEditItem, onFilterChange, onUpdateList },
+  ] = useList({
+    fetchFn: (args) => handleGetAssignments(args),
+  });
+
+  const handleUpdateList = async () => {
+    const response = await handleGetAssignments();
+    onUpdateList(response.data);
   };
 
   const handleImportModalOk = async (values) => {
-    if (isSyncMoodle) {
-      const dataSubmit = values.data;
-      const response = await createAssignment(course.id, dataSubmit);
-      response.data.map(onAddItem);
+    try {
+      await createAssignment(course.id, values);
+      handleUpdateList();
+      message.success(MESSAGE.SUCCESS);
+    } catch (error) {
+      message.error(MESSAGE.ERROR);
+    } finally {
+      syncMoodleModalActions.handleClose();
     }
-    importedModalActions.handleClose();
-    return values;
   };
 
   const handleCreateAssignment = async () => {
@@ -160,18 +151,9 @@ function TableViewAssignment({ course }) {
                 className="mr-4"
                 icon={<SyncOutlined />}
                 loading={list.isLoading}
-                onClick={handleSyncMoodle}
+                onClick={syncMoodleModalActions.handleOpen}
               >
                 Sync Moodle
-              </Button>
-              <Button
-                type="primary"
-                className="mr-4"
-                icon={<UploadOutlined />}
-                loading={list.isLoading}
-                onClick={handleImportExcel}
-              >
-                Import Excel
               </Button>
               <Button
                 type="primary"
@@ -193,15 +175,15 @@ function TableViewAssignment({ course }) {
               onChange={onPageChange}
             />
           </Card>
-          {importedAssignments.length > 0 && (
+          {syncMoodleModalVisible && (
             <>
               <ImportedModal
-                visible={importedModalVisible}
-                type="assignment"
-                id="assignmentMoodleId"
-                data={importedAssignments}
+                idKey="moodleId"
+                baseFilterMeta={metaFilterSyncAssignment()}
+                columns={columnTableSyncAssignment()}
+                fetchFn={(args) => handleGetMoodleAssignments(args)}
                 onOk={handleImportModalOk}
-                onCancel={importedModalActions.handleClose}
+                onCancel={syncMoodleModalActions.handleClose}
               />
             </>
           )}

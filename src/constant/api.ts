@@ -16,6 +16,7 @@ export const USER = {
   },
   POST: {
     CREATE_USER: '/user',
+    IMPORT_USER: '/user/import-sync-users',
   },
   PUT: {
     UPDATE_USER: '/user',
