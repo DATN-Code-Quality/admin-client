@@ -1,7 +1,6 @@
 import { ColumnType } from 'antd/lib/table';
 
-import { MAP_ROLES } from '~/constant';
-import { StateStatus } from '~/constant/enum';
+import { UserStatus } from '~/constant/enum';
 import { IMetaFormBuilder } from '~/ui/shared/forms/FormBuilder/FormBuilder';
 import { generateMappingList, getMappingLabelByValue } from '~/utils';
 
@@ -51,7 +50,7 @@ export const columnTableUser = (): ColumnType<any>[] => [
     dataIndex: 'status',
     width: 100,
     render: (value) => {
-      return <p>{value === StateStatus.INACTIVE ? 'Active' : 'Inactive'}</p>;
+      return <p>{value === UserStatus.INACTIVE ? 'Active' : 'Inactive'}</p>;
     },
   },
 ];

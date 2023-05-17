@@ -114,7 +114,7 @@ function TableViewAssignment({ course }) {
     ...columnTableAssignment(setAssignmentSelected),
     {
       dataIndex: 'action',
-      title: 'Action',
+      title: 'Thao tác',
       width: 100,
       render: (_, record, index) => {
         return (

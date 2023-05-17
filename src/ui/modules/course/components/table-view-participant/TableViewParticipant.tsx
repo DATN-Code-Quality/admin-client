@@ -114,7 +114,7 @@ function TableViewParticipant({ course }) {
     ...columnTableUser(),
     {
       dataIndex: 'action',
-      title: 'Action',
+      title: 'Thao tác',
       width: 100,
       render: (_, record, index) => {
         const meta = metaUpdateUser(record);

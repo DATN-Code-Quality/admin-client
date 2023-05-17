@@ -1,4 +1,4 @@
-import { Role, StateStatus } from '../constant/enum';
+import { UserStatus } from '../constant/enum';
 
 import { User } from '~/domain/user';
 
@@ -9,7 +9,7 @@ export interface UserDTO {
   email: string;
   userId: string;
   moodleId: string;
-  status: StateStatus;
+  status: UserStatus;
   createdAt?: Date;
   updatedAt?: Date;
 }

@@ -15,6 +15,7 @@ export default ({ mode }) => {
   const themeVariables = lessToJS(
     fs.readFileSync(path.resolve(__dirname, './src/theme.less'), 'utf8')
   );
+  console.log(themeVariables)
   return defineConfig({
     base: process.env.VITE_ASSET_PATH,
     plugins: [
@@ -45,7 +46,7 @@ export default ({ mode }) => {
           // 支持内联 JavaScript
           javascriptEnabled: true,
           // 重写 less 变量，定制样式
-          // modifyVars: themeVariables,
+          modifyVars: themeVariables,
         },
       },
     },
@@ -55,7 +56,7 @@ export default ({ mode }) => {
     },
     resolve: {
       alias: {
-        '~': path.resolve(__dirname, './src/'),
+        '~': path.resolve(__dirname, './src'),
       },
     },
     build: {

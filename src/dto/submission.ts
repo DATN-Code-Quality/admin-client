@@ -1,7 +1,6 @@
-import { StateStatus } from '../constant/enum';
+import { BaseDTO } from './baseDTO';
 
 import { Submission } from '~/domain/submission';
-import { BaseDTO } from './baseDTO';
 
 export interface SubmissionDTO extends BaseDTO {
   assignmentId: string;

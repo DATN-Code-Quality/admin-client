@@ -118,22 +118,21 @@ export const menus = [
   },
   {
     id: 'user',
-    name: 'Users',
+    name: 'Quản lý người dùng',
     // icon: DownloadOutlined,
     route: ROUTE.USER.LIST,
     roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],
   },
-
   {
     id: 'course',
-    name: 'Courses',
+    name: 'Quản lý khoá học',
     // icon: DownloadOutlined,
     route: ROUTE.COURSE.LIST,
     roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],
   },
   {
     id: 'history',
-    name: 'History',
+    name: 'Lịch sử',
     // icon: DownloadOutlined,
     route: ROUTE.HISTORY,
     roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],

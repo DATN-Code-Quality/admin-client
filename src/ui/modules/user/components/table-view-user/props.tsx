@@ -1,7 +1,7 @@
 import { ColumnType } from 'antd/lib/table';
 
-import { MAP_ROLES } from '~/constant';
-import { StateStatus } from '~/constant/enum';
+import { MAP_ROLES, MAP_USER_STATUS } from '~/constant';
+import { UserStatus } from '~/constant/enum';
 import { IMetaFormBuilder } from '~/ui/shared/forms/FormBuilder/FormBuilder';
 import { generateMappingList, getMappingLabelByValue } from '~/utils';
 
@@ -11,7 +11,10 @@ export const metaFilterUser = () => {
       {
         key: 'name',
         widgetProps: {
-          placeholder: 'Nhập từ khoá cần tìm',
+          placeholder: 'Tìm kiếm theo họ tên hoặc email',
+          style: {
+            minWidth: '250px',
+          },
         },
       },
     ],
@@ -19,11 +22,6 @@ export const metaFilterUser = () => {
 };
 
 export const columnTableUser = (): ColumnType<any>[] => [
-  // {
-  //   title: 'ID',
-  //   dataIndex: 'id',
-  //   width: 70,
-  // },
   {
     title: 'Họ tên',
     dataIndex: 'name',
@@ -50,27 +48,30 @@ export const columnTableUser = (): ColumnType<any>[] => [
     sorter: (a, b) => {
       return a.role.localeCompare(b.role);
     },
-  },
-  {
-    title: 'Trạng thái',
-    dataIndex: 'status',
-    width: 100,
     render: (value) => {
-      return <p>{value === StateStatus.INACTIVE ? 'Active' : 'Inactive'}</p>;
+      return <p>{getMappingLabelByValue(MAP_ROLES, value)}</p>;
     },
   },
 ];
 
 export const metaCreateUser = () => {
   return {
-    formItemLayout: [6, 20],
+    formItemLayout: [24, 24],
     fields: [
+      {
+        key: 'userId',
+        label: 'Username:',
+        required: true,
+        widgetProps: {
+          placeholder: 'Nhập username',
+        },
+      },
       {
         key: 'name',
         label: 'Họ tên:',
         required: true,
         widgetProps: {
-          placeholder: 'Input Name',
+          placeholder: 'Nhập Họ tên',
         },
       },
       {
@@ -78,7 +79,7 @@ export const metaCreateUser = () => {
         label: 'Email:',
         required: true,
         widgetProps: {
-          placeholder: 'Input Email',
+          placeholder: 'Nhập Email',
           type: 'email',
         },
       },
@@ -88,7 +89,7 @@ export const metaCreateUser = () => {
 
 export const metaUpdateUser = (record) => {
   return {
-    formItemLayout: [6, 20],
+    formItemLayout: [24, 24],
     fields: [
       {
         key: 'name',
@@ -96,7 +97,17 @@ export const metaUpdateUser = (record) => {
         required: true,
         initialValue: record.name,
         widgetProps: {
-          placeholder: 'Input Name',
+          placeholder: 'Nhập Họ tên',
+        },
+      },
+      {
+        key: 'email',
+        label: 'Email:',
+        required: true,
+        initialValue: record.email,
+        widgetProps: {
+          placeholder: 'Nhập Email',
+          type: 'email',
         },
       },
     ],

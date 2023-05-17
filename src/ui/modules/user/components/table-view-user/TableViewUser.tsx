@@ -1,11 +1,16 @@
 import React, { useCallback, useState } from 'react';
 
-import { SyncOutlined } from '@ant-design/icons';
+import { SyncOutlined, UploadOutlined } from '@ant-design/icons';
 import { Space } from 'antd';
 import Button from 'antd-button-color';
 import { useNavigate } from 'react-router-dom';
 
-import { columnTableUser, metaFilterUser, metaUpdateUser } from './props';
+import {
+  columnTableUser,
+  metaCreateUser,
+  metaFilterUser,
+  metaUpdateUser,
+} from './props';
 
 import { useUser } from '~/adapters/appService/user.service';
 import { PAGE_SIZE_OPTIONS } from '~/constant';
@@ -101,7 +106,7 @@ function TableViewUser() {
     ...columnTableUser(),
     {
       dataIndex: 'action',
-      title: 'Action',
+      title: 'Thao tác',
       width: 100,
       render: (_, record, index) => {
         const meta = metaUpdateUser(record);
@@ -156,15 +161,16 @@ function TableViewUser() {
             onClick={handleImportExcel}
           >
             Import Excel
-          </Button>
+          </Button> */}
           <BaseModal
             onOkFn={handleCreateOrUpdate}
             itemTitle=""
             id={0}
             mode={ButtonType.CREATE}
-            loading={list.isLoading}
             meta={metaCreateUser()}
-          /> */}
+            loading={list.isLoading}
+            formProps={{ layout: 'vertical' }}
+          />
         </TableToolbar>
         <BaseTable
           idKey="user_id"

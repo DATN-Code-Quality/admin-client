@@ -2,7 +2,7 @@ import { UploadOutlined } from '@ant-design/icons';
 import { Upload } from 'antd';
 import Button from 'antd-button-color';
 
-import { MAP_STATE_STATUS } from '~/constant';
+import { MAP_USER_STATUS } from '~/constant';
 import Editor from '~/ui/shared/editor';
 import UploadButton from '~/ui/shared/upload';
 
@@ -106,7 +106,7 @@ export const metaFormAddAssignment = ({
     colSpan: 2,
     key: 'status',
     label: 'Status:',
-    options: MAP_STATE_STATUS,
+    options: MAP_USER_STATUS,
     widget: 'select',
     required: true,
     widgetProps: {

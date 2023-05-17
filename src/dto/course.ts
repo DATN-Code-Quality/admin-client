@@ -1,4 +1,4 @@
-import { StateStatus } from '../constant/enum';
+import { UserStatus } from '../constant/enum';
 
 import { BaseDTO } from './baseDTO';
 
@@ -31,7 +31,6 @@ export const courseFromDTO = (courseDTO: CourseDTO): Course => {
     attachmentFileLink: '',
     config: '',
 
-    status: StateStatus.ACTIVE,
     createdAt: new Date(courseDTO.createdAt || new Date()).getTime(),
     updatedAt: new Date(courseDTO.updatedAt || new Date()).getTime(),
   };

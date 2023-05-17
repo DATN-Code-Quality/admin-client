@@ -9,11 +9,6 @@ export enum ApiStatus {
   UNAUTHORIZED = 403,
 }
 
-export enum StateStatus {
-  INACTIVE = 0,
-  ACTIVE = 1,
-}
-
 export enum UserStatus {
   INACTIVE = 0,
   ACTIVE = 1,
