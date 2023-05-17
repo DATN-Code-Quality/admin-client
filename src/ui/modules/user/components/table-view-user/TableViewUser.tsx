@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import { SyncOutlined, UploadOutlined } from '@ant-design/icons';
 import { Space } from 'antd';
@@ -12,10 +12,8 @@ import {
   metaUpdateUser,
 } from './props';
 
-import { usePartner } from '~/adapters/appService/partner.service';
 import { useUser } from '~/adapters/appService/user.service';
 import { PAGE_SIZE_OPTIONS } from '~/constant';
-import { Partner } from '~/domain/partner';
 import { User } from '~/domain/user';
 import useDialog from '~/hooks/useDialog';
 import useList from '~/hooks/useList';
@@ -33,9 +31,7 @@ function TableViewUser() {
   const navigate = useNavigate();
   const { getAllUsers, getAllMoodleUsers, createUser, updateUser, blockUser } =
     useUser();
-  const { getAllPartners } = usePartner();
 
-  const [partners, setPartners] = useState<Partner[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   const [importedUsers, setImportedUsers] = useState<User[]>([]);
@@ -46,10 +42,6 @@ function TableViewUser() {
     useList({
       fetchFn: (args) => getAllUsers(args),
     });
-
-  const handleGetListPartner = () => {
-    getAllPartners().then((res) => setPartners(res.data));
-  };
 
   const handleSyncMoodle = async () => {
     try {
@@ -77,8 +69,8 @@ function TableViewUser() {
   const handleImportModalOk = async (values) => {
     if (isSyncMoodle) {
       const dataSubmit = values.data;
-      console.log(dataSubmit);
-      createUser(dataSubmit);
+      const response = await createUser(dataSubmit);
+      response.data.map(onAddItem);
     }
     importedModalActions.handleClose();
     return values;
@@ -100,24 +92,24 @@ function TableViewUser() {
       });
     }
     return updateUser(dataSubmit).then((data) => {
-      onEditItem(data, 'user_id');
+      onEditItem(data, 'id');
     });
   }, []);
 
   const handleBlockUser = (id) => {
     return blockUser(id).then((data) => {
-      onEditItem(data, 'user_id');
+      onEditItem(data, 'id');
     });
   };
 
-  const columnTableProps = ({ partners }) => [
-    ...columnTableUser({ partners }),
+  const columnTableProps = () => [
+    ...columnTableUser(),
     {
       dataIndex: 'action',
-      title: 'Action',
+      title: 'Thao tác',
       width: 100,
       render: (_, record, index) => {
-        const meta = metaUpdateUser(record, { partners });
+        const meta = metaUpdateUser(record);
         return (
           <Space size="small">
             <BaseModal
@@ -140,10 +132,6 @@ function TableViewUser() {
     },
   ];
 
-  useEffect(() => {
-    handleGetListPartner();
-  }, []);
-
   return (
     <>
       {loading && <Loading />}
@@ -154,7 +142,7 @@ function TableViewUser() {
       />
       <Card>
         <TableToolbar
-          title={`Tìm thấy ${formatNumber(list.items?.length || 0)} user`}
+          title={`Tìm thấy ${formatNumber(list.items?.length || 0)} người dùng`}
         >
           <Button
             type="primary"
@@ -165,7 +153,7 @@ function TableViewUser() {
           >
             Sync Moodle
           </Button>
-          <Button
+          {/* <Button
             type="primary"
             className="mr-4"
             icon={<UploadOutlined />}
@@ -173,19 +161,20 @@ function TableViewUser() {
             onClick={handleImportExcel}
           >
             Import Excel
-          </Button>
+          </Button> */}
           <BaseModal
             onOkFn={handleCreateOrUpdate}
             itemTitle=""
             id={0}
             mode={ButtonType.CREATE}
+            meta={metaCreateUser()}
             loading={list.isLoading}
-            meta={metaCreateUser({ partners })}
+            formProps={{ layout: 'vertical' }}
           />
         </TableToolbar>
         <BaseTable
           idKey="user_id"
-          columns={columnTableProps({ partners })}
+          columns={columnTableProps()}
           data={list}
           paginationProps={{
             showSizeChanger: true,

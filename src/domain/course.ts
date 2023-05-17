@@ -1,5 +1,3 @@
-import { StateStatus } from '../constant/enum';
-
 export interface Course {
   id: string;
   name: string;
@@ -15,8 +13,6 @@ export interface Course {
   attachmentFileLink?: string;
   config: string;
 
-  status: StateStatus;
-  createdAt?: number;
-  updatedAt?: number;
-  deletedAt?: number;
+  createdAt: number;
+  updatedAt: number;
 }

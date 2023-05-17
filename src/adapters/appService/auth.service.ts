@@ -6,19 +6,43 @@ import { getWithPath, postWithPath } from '~/adapters/api.http';
 import { setUserInfo } from '~/adapters/redux/actions/auth';
 import { ResponseData } from '~/constant';
 import API from '~/constant/api';
+import { ApiStatus } from '~/constant/enum';
 import ROUTE from '~/constant/routes';
 import { Auth } from '~/domain/auth';
+import LocalStorage from '~/libs/LocalStorage';
 import { mockAuth } from '~/mock/auth.mock';
 
 export function useAuth() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   return {
+    async login(body: {
+      username: string;
+      password: string;
+    }): Promise<ResponseData<Auth>> {
+      try {
+        const resp = await postWithPath(`${API.AUTH.GET.LOGIN}`, {}, body);
+        if (resp.status === ApiStatus.SUCCESS) {
+          const { accessToken, user } = resp.data;
+          LocalStorage.set({
+            accessToken,
+          });
+          dispatch(setUserInfo(user));
+        } else {
+          throw new Error(JSON.stringify(resp));
+        }
+        return resp;
+      } catch (e) {
+        message.error('Đăng nhập thất bại!');
+        throw e;
+      }
+    },
+
     async loginMicrosoft(): Promise<ResponseData<string>> {
       try {
         // const resp = await getWithPath(`${API.AUTH.GET.LOGIN_MICROSOFT}`);
         const resp = await mockAuth().loginMicrosoft();
-        if (resp.success) {
+        if (resp.status === ApiStatus.SUCCESS) {
           const { data: callbackUrl } = resp;
           window.location.href = callbackUrl;
         } else {
@@ -30,14 +54,10 @@ export function useAuth() {
         throw e;
       }
     },
-    async checkSession(): Promise<ResponseData<Auth>> {
-      // const resp = await getWithPath(`${API.AUTH.GET.CHECK_SESSION}`);
-      const resp = await mockAuth().checkSession();
-      if (resp.success) {
+    async checkProfile(): Promise<ResponseData<Auth>> {
+      const resp = await getWithPath(`${API.AUTH.GET.CHECK_PROFILE}`);
+      if (resp.status === ApiStatus.SUCCESS) {
         const auth = resp.data;
-        if (auth.roles) {
-          auth.roles = JSON.parse(auth.roles);
-        }
         dispatch(setUserInfo(auth));
       } else {
         throw new Error(JSON.stringify(resp));
@@ -47,7 +67,8 @@ export function useAuth() {
     async logout(): Promise<ResponseData<any>> {
       // const resp = await getWithPath(`${API.AUTH.GET.LOGOUT}`);
       const resp = await mockAuth().logout();
-      if (resp.success) {
+      LocalStorage.remove(['accessToken']);
+      if (resp.status === ApiStatus.SUCCESS) {
         dispatch(
           setUserInfo({
             name: '',

@@ -4,6 +4,9 @@ import dayjs, { Dayjs } from 'dayjs';
 
 import Is from './is';
 
+import { Role } from '~/constant/enum';
+import { List } from '~/constant/type';
+
 export const buildParams = (data?: any) => {
   if (data) {
     const dataEdited = {
@@ -228,8 +231,13 @@ export function capitalizeFirstLetter(string: string) {
 }
 
 export const getMappingLabelByValue = (map: any, value: any) => {
-  const result = map.find((item) => item[0] === value);
-  return result ? result[1] : '';
+  const result = map.find((item) => item.value === value);
+  return result ? result.label : '';
+};
+
+export const getListLabelByValue = (list: List, value: any) => {
+  const result = list.find((item) => item.value === value);
+  return result ? result.label : '';
 };
 
 export const generateMappingList = (
@@ -237,7 +245,12 @@ export const generateMappingList = (
   keyField: any,
   valueField: any
 ) => {
-  return list.map((item) => [item[keyField], item[valueField]]);
+  const result: List = list.map((item) => ({
+    label: item[valueField],
+    value: item[keyField],
+    disabled: item?.disabled || false,
+  }));
+  return result;
 };
 
 export const addDays = (date: Date, days: number): Date => {
@@ -245,6 +258,28 @@ export const addDays = (date: Date, days: number): Date => {
   result.setDate(result.getDate() + parseInt(days));
   return result;
 };
+
+export const convertToList = (data, valueField, labelField): List => {
+  return data.map((item) => ({
+    value: item[valueField],
+    label: item[labelField],
+  }));
+};
+
+export function mergeDeep(target, source) {
+  let output = Object.assign({}, target);
+  if (Is.object(target) && Is.object(source)) {
+    Object.keys(source).forEach((key) => {
+      if (Is.object(source[key])) {
+        if (!(key in target)) Object.assign(output, { [key]: source[key] });
+        else output[key] = mergeDeep(target[key], source[key]);
+      } else {
+        Object.assign(output, { [key]: source[key] });
+      }
+    });
+  }
+  return output;
+}
 
 export const convertNlocToScale = (val: string) => {
   if (val === 'NO_DATA') {
@@ -311,4 +346,16 @@ export const renderColorRatting = (val: number, className: string) => {
       E
     </span>
   );
+};
+
+export const filterRole = (roles?: Role[], userRoles?: Role[]) => {
+  // return true;
+  if (
+    userRoles &&
+    roles &&
+    !userRoles.some((userRole) => roles?.includes(userRole))
+  ) {
+    return false;
+  }
+  return true;
 };

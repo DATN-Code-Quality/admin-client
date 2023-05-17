@@ -1,4 +1,4 @@
-import { StateStatus } from '../constant/enum';
+import { UserStatus } from '../constant/enum';
 
 import { User } from '~/domain/user';
 
@@ -9,24 +9,22 @@ export interface UserDTO {
   email: string;
   userId: string;
   moodleId: string;
-  status: StateStatus;
+  status: UserStatus;
   createdAt?: Date;
   updatedAt?: Date;
-  deletedAt?: Date;
 }
 
 export const userFromDTO = (userDTO: UserDTO): User => {
   return {
     id: userDTO.id,
     name: userDTO.name,
-    roles: [userDTO.role],
+    role: userDTO.role,
     email: userDTO.email,
     userId: userDTO.userId,
     moodleId: userDTO.moodleId,
     status: userDTO.status,
-    createdAt: userDTO.createdAt && new Date(userDTO.createdAt).getTime(),
-    updatedAt: userDTO.updatedAt && new Date(userDTO.updatedAt).getTime(),
-    deletedAt: userDTO.deletedAt && new Date(userDTO.deletedAt).getTime(),
+    createdAt: new Date(userDTO.createdAt || new Date()).getTime(),
+    updatedAt: new Date(userDTO.updatedAt || new Date()).getTime(),
   };
 };
 
@@ -34,13 +32,12 @@ export const userToDTO = (user: User): UserDTO => {
   return {
     id: user.id,
     name: user.name,
-    role: user.roles[0],
+    role: user.role,
     email: user.email,
     userId: user.userId,
     moodleId: user.moodleId,
     status: user.status,
     createdAt: new Date(user.createdAt),
     updatedAt: new Date(user.updatedAt),
-    deletedAt: new Date(user.deletedAt),
   };
 };

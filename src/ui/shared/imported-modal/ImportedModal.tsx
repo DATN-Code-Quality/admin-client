@@ -66,15 +66,18 @@ const ImportedModal: React.FC<ImportedModalProps> = ({
       width="1000px"
     >
       <div className="import-modal-container">
-        <div className="import-modal-title">
-          {/* <div className="import-modal-title__id">Id</div> */}
-          <div className="import-modal-title__name">Name</div>
-          {type === 'user' && (
-            <div className="import-modal-title__email">Email</div>
-          )}
-          <div className="import-modal-title__created">Created At</div>
-          <div className="import-modal-title__updated">Updated At</div>
-          <div className="import-modal-title__actions">Import</div>
+        <div className="import-modal-title-container">
+          <div className="import-modal-title-container__info">
+            <div className="import-modal-title__name">Name</div>
+            {type === 'user' && (
+              <div className="import-modal-title__email">Email</div>
+            )}
+            <div className="import-modal-title__created">Created At</div>
+            <div className="import-modal-title__updated">Updated At</div>
+          </div>
+          <div className="import-modal-title-container__actions">
+            <div className="import-modal-title__actions">Import</div>
+          </div>
         </div>
       </div>
       <div className="import-modal-item-container">
@@ -89,7 +92,11 @@ const ImportedModal: React.FC<ImportedModalProps> = ({
                 )}
                 <div className="import-modal-item__created">
                   {item.createdAt &&
-                    formatDate(item.createdAt, 'vi-VN', 'DD/MM/YYYY')}
+                    formatDate(
+                      item.createdAt || Date.now(),
+                      'vi-VN',
+                      'DD/MM/YYYY'
+                    )}
                 </div>
                 <div className="import-modal-item__updated">
                   {item.updatedAt &&

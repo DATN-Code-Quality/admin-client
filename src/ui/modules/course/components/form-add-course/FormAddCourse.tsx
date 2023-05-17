@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { metaFormAddCourse } from './props';
 
 import { useCourse } from '~/adapters/appService/course.service';
-import { MAP_STATE_STATUS } from '~/constant';
+import { MAP_USER_STATUS } from '~/constant';
 import ROUTE from '~/constant/routes';
 import FormBuilder from '~/ui/shared/forms';
 import Loading from '~/ui/shared/loading';
@@ -68,7 +68,6 @@ const FormAddCourse = ({ course, id, initialViewMode = false }) => {
   };
 
   useEffect(() => {
-    console.log(course);
     if (course) {
       form.setFieldsValue(course);
       setFormValues(course);
@@ -93,7 +92,7 @@ const FormAddCourse = ({ course, id, initialViewMode = false }) => {
           <div className="group_field">
             <label>Status: </label>
             <div className="field_value">
-              {getMappingLabelByValue(MAP_STATE_STATUS, formValues?.status)}
+              {getMappingLabelByValue(MAP_USER_STATUS, formValues?.status)}
             </div>
           </div>
           <Form.Item>

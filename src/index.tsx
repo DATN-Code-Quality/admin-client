@@ -12,10 +12,10 @@ import { BrowserRouter } from 'react-router-dom';
 import Store from './adapters/redux/store';
 import App from './App';
 import 'dayjs/locale/vi';
-import 'antd-button-color/dist/css/style.less';
 import './ui/css/style.less';
-import './theme.less';
 import 'antd/dist/antd.css';
+import 'antd-button-color/dist/css/style.less';
+import './theme.less';
 
 dayjs.extend(weekday);
 dayjs.extend(localeData);

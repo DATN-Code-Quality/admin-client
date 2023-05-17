@@ -1,4 +1,4 @@
-import { StateStatus } from '../constant/enum';
+import { UserStatus } from '../constant/enum';
 
 import { BaseDTO } from './baseDTO';
 
@@ -20,8 +20,8 @@ export const courseFromDTO = (courseDTO: CourseDTO): Course => {
     id: courseDTO.id,
     name: courseDTO.name,
     moodleCourseId: courseDTO.courseMoodleId,
-    startAt: new Date(parseInt(courseDTO.startAt, 10) * 1000).getTime(),
-    endAt: new Date(parseInt(courseDTO.endAt, 10) * 1000).getTime(),
+    startAt: new Date(courseDTO.startAt).getTime(),
+    endAt: new Date(courseDTO.endAt).getTime(),
     detail: courseDTO.detail,
     summary: courseDTO.summary,
     categoryId: courseDTO.categoryId,
@@ -31,10 +31,8 @@ export const courseFromDTO = (courseDTO: CourseDTO): Course => {
     attachmentFileLink: '',
     config: '',
 
-    status: StateStatus.ACTIVE,
-    createdAt: courseDTO.createdAt && new Date(courseDTO.createdAt).getTime(),
-    updatedAt: courseDTO.updatedAt && new Date(courseDTO.updatedAt).getTime(),
-    deletedAt: courseDTO.deletedAt && new Date(courseDTO.deletedAt).getTime(),
+    createdAt: new Date(courseDTO.createdAt || new Date()).getTime(),
+    updatedAt: new Date(courseDTO.updatedAt || new Date()).getTime(),
   };
 };
 
@@ -48,7 +46,7 @@ export const courseToDTO = (course: Course): CourseDTO => {
     endAt: new Date(course.endAt),
     detail: course.detail,
     summary: course.summary,
-    categoryId: course.categoryId || '1',
+    categoryId: course.categoryId,
 
     // dueDate: 0,
     // description: '',
@@ -58,6 +56,5 @@ export const courseToDTO = (course: Course): CourseDTO => {
     // status: StateStatus.ACTIVE,
     createdAt: new Date(course.createdAt),
     updatedAt: new Date(course.updatedAt),
-    deletedAt: new Date(course.deletedAt),
   };
 };

@@ -5,7 +5,7 @@ import { ColumnType } from 'antd/lib/table';
 import dayjs from 'dayjs';
 import { Link } from 'react-router-dom';
 
-import { MAP_STATE_STATUS } from '~/constant';
+import { MAP_USER_STATUS } from '~/constant';
 import ROUTE from '~/constant/routes';
 import { IMetaFormBuilder } from '~/ui/shared/forms/FormBuilder/FormBuilder';
 import { getMappingLabelByValue } from '~/utils';
@@ -57,7 +57,7 @@ export const columnTableAssignment = (setAssignment): ColumnType<any>[] => [
     dataIndex: 'status',
     width: 100,
     render: (value) => {
-      return <p>{getMappingLabelByValue(MAP_STATE_STATUS, value)}</p>;
+      return <p>{getMappingLabelByValue(MAP_USER_STATUS, value)}</p>;
     },
   },
 ];

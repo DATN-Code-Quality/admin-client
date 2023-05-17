@@ -1,22 +1,18 @@
-import { message } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
 import {
-  postWithPath,
-  putWithPath,
   formatResponse,
   getWithPath,
+  postWithPath,
+  putWithPath,
 } from '../api.http';
 
 import { ResponseData } from '~/constant';
 import API from '~/constant/api';
-import ROUTE from '~/constant/routes';
-import { Assignment } from '~/domain/assignment';
 import { Course } from '~/domain/course';
 import { User } from '~/domain/user';
 import { removeSubmitProps } from '~/dto/baseDTO';
 import { CourseDTO, courseFromDTO, courseToDTO } from '~/dto/course';
-import { mockCourse } from '~/mock/course.mock';
 import { UserDTO, userFromDTO } from '~/dto/user';
 
 export function useCourse() {
@@ -24,7 +20,6 @@ export function useCourse() {
 
   return {
     async getAllCourses(): Promise<ResponseData<Course[]>> {
-      // const data = await mockCourse().getAllCourses();
       const response = await getWithPath(API.COURSE.GET.COURSES);
       const validResponse = formatResponse<CourseDTO[]>(response);
       const convertedData = validResponse.data.map(courseFromDTO);
@@ -57,10 +52,13 @@ export function useCourse() {
       return covertedResponse;
     },
 
-    async getParticipantsByCourseId(id: string): Promise<ResponseData<User[]>> {
-      const response = await getWithPath(API.USER.GET.USERS_BY_COURSE_ID, {
-        userMoodleId: id,
-      });
+    async getParticipantsByCourseId(
+      courseId: string
+    ): Promise<ResponseData<User[]>> {
+      const response = await getWithPath(
+        // `${API.USER_COURSE.GET.USER_COURSE}/${courseId}/users`
+        `${API.USER_COURSE.GET.USER_COURSE}/${courseId}/users`
+      );
       const validResponse = formatResponse<UserDTO[]>(response);
       const convertedData = validResponse.data.map(userFromDTO);
       const covertedResponse = {
@@ -70,12 +68,22 @@ export function useCourse() {
       return covertedResponse;
     },
 
-    async getAssignmentsByCourseId(
-      id: string
-    ): Promise<ResponseData<Assignment[]>> {
-      // const data = await getWithPath(API.AGENCY.GET.AGENCYS);
-      const data = await mockCourse().getAssignmentsByCourseId(id);
-      return formatResponse(data);
+    async getMoodleParticipantsByCourseId(
+      courseId: string,
+      params: { courseMoodleId: string }
+    ): Promise<ResponseData<User[]>> {
+      const response = await getWithPath(
+        // `${API.USER_COURSE.GET.USER_COURSE}/${courseId}/users`
+        `${API.USER_COURSE.GET.MOODLE_USERS_COURSE}`,
+        params
+      );
+      const validResponse = formatResponse<UserDTO[]>(response);
+      const convertedData = validResponse.data.map(userFromDTO);
+      const covertedResponse = {
+        ...validResponse,
+        data: convertedData,
+      };
+      return covertedResponse;
     },
 
     async createCourse(body): Promise<ResponseData<Course[]>> {
@@ -92,39 +100,42 @@ export function useCourse() {
     },
 
     async updateCourse(body): Promise<ResponseData<Course>> {
-      const data = await putWithPath(
+      const response = await putWithPath(
         `${API.PARTNER.PUT.UPDATE_PARTNER}/${body?.id}`,
         {},
         body
       );
-      if (data.success) {
-        navigate(ROUTE.PARTNER.LIST);
-      }
-      return formatResponse(data);
+      return formatResponse(response);
     },
 
     async blockCourse(body): Promise<ResponseData<Course>> {
-      const data = await putWithPath(
+      const response = await putWithPath(
         `${API.PARTNER.PUT.UPDATE_PARTNER}/${body?.id}`,
         {},
         body
       );
-      if (data.success) {
-        navigate(ROUTE.PARTNER.LIST);
-      }
-      return formatResponse(data);
+      return formatResponse(response);
     },
 
     async unblockCourse(body): Promise<ResponseData<Course>> {
-      const data = await putWithPath(
+      const response = await putWithPath(
         `${API.PARTNER.PUT.UPDATE_PARTNER}/${body?.id}`,
         {},
         body
       );
-      if (data.success) {
-        navigate(ROUTE.PARTNER.LIST);
-      }
-      return formatResponse(data);
+      return formatResponse(response);
+    },
+
+    async createParticipant(
+      courseId: string,
+      body
+    ): Promise<ResponseData<User[]>> {
+      const response = await postWithPath(
+        `${API.USER_COURSE.POST.USER_COURSE}/${courseId}`,
+        {},
+        body
+      );
+      return formatResponse(response);
     },
   };
 }

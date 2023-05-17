@@ -9,17 +9,10 @@ export enum ApiStatus {
   UNAUTHORIZED = 403,
 }
 
-export enum Role {
-  GUEST = 1,
-  ROOT_ADMIN = 2,
-  ADMIN = 3,
-  TEACHER = 4,
-  STUDENT = 5,
-}
-
-export enum StateStatus {
+export enum UserStatus {
   INACTIVE = 0,
   ACTIVE = 1,
+  BLOCK = 2,
 }
 
 export enum ServiceType {
@@ -35,6 +28,18 @@ export enum ServiceType {
 export enum PartnerType {
   PARTNER = 1,
   AGENCY = 2,
+}
+
+export enum Role {
+  USER = 'user',
+  ADMIN = 'admin',
+  SUPERADMIN = 'superadmin',
+}
+
+export enum SubRole {
+  ADMIN = 'admin',
+  TEACHER = 'teacher',
+  STUDENT = 'student',
 }
 
 export enum ChartType {

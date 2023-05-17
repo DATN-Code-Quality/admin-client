@@ -1,7 +1,6 @@
 import { ColumnType } from 'antd/lib/table';
 
-import { MAP_ROLES } from '~/constant';
-import { StateStatus } from '~/constant/enum';
+import { UserStatus } from '~/constant/enum';
 import { IMetaFormBuilder } from '~/ui/shared/forms/FormBuilder/FormBuilder';
 import { generateMappingList, getMappingLabelByValue } from '~/utils';
 
@@ -18,9 +17,9 @@ export const metaFilterUser = () => {
   } as IMetaFormBuilder;
 };
 
-export const columnTableUser = ({ partners }): ColumnType<any>[] => [
+export const columnTableUser = (): ColumnType<any>[] => [
   {
-    title: 'Name',
+    title: 'Họ tên',
     dataIndex: 'name',
     width: 200,
     ellipsis: true,
@@ -38,37 +37,31 @@ export const columnTableUser = ({ partners }): ColumnType<any>[] => [
     },
   },
   {
-    title: 'Roles',
-    dataIndex: 'roles',
+    title: 'Vai trò',
+    dataIndex: 'role',
     width: 100,
     ellipsis: true,
     sorter: (a, b) => {
-      const aRole = getMappingLabelByValue(MAP_ROLES, a.roles[0]);
-      const bRole = getMappingLabelByValue(MAP_ROLES, b.roles[0]);
-      return aRole.localeCompare(bRole);
-    },
-    render: (value) => {
-      return <p>{getMappingLabelByValue(MAP_ROLES, value[0])}</p>;
+      return a.role.localeCompare(b.role);
     },
   },
   {
-    title: 'Status',
+    title: 'Trạng thái',
     dataIndex: 'status',
     width: 100,
     render: (value) => {
-      return <p>{value === StateStatus.INACTIVE ? 'Active' : 'Inactive'}</p>;
+      return <p>{value === UserStatus.INACTIVE ? 'Active' : 'Inactive'}</p>;
     },
   },
 ];
 
-export const metaCreateUser = ({ partners }) => {
-  const mappingPartnerList = generateMappingList(partners, 'id', 'name');
+export const metaCreateUser = () => {
   return {
     formItemLayout: [6, 20],
     fields: [
       {
         key: 'name',
-        label: 'Name:',
+        label: 'Họ tên:',
         required: true,
         widgetProps: {
           placeholder: 'Input Name',
@@ -83,27 +76,17 @@ export const metaCreateUser = ({ partners }) => {
           type: 'email',
         },
       },
-      {
-        key: 'phone_number',
-        label: 'Phone Number:',
-        required: true,
-        widgetProps: {
-          placeholder: 'Input Phone Number',
-          inputMode: 'numeric',
-        },
-      },
     ],
   };
 };
 
-export const metaUpdateUser = (record, { partners }) => {
-  const mappingPartnerList = generateMappingList(partners, 'id', 'name');
+export const metaUpdateUser = (record) => {
   return {
     formItemLayout: [6, 20],
     fields: [
       {
         key: 'name',
-        label: 'Name:',
+        label: 'Họ tên:',
         required: true,
         initialValue: record.name,
         widgetProps: {
@@ -118,16 +101,6 @@ export const metaUpdateUser = (record, { partners }) => {
         widgetProps: {
           placeholder: 'Input Email',
           type: 'email',
-        },
-      },
-      {
-        key: 'phone_number',
-        label: 'Phone Number:',
-        required: true,
-        initialValue: record.phone_number,
-        widgetProps: {
-          placeholder: 'Input Phone Number',
-          inputMode: 'numeric',
         },
       },
     ],

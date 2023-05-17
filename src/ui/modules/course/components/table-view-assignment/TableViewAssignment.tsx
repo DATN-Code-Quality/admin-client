@@ -36,7 +36,7 @@ function TableViewAssignment({ course }) {
   const navigate = useNavigate();
   const {
     getAllAssignments,
-    getAssignmentByCourseId,
+    getMoodleAssignments,
     createAssignment,
     updateAssignment,
     blockAssignment,
@@ -52,17 +52,22 @@ function TableViewAssignment({ course }) {
   const [isSyncMoodle, setIsSyncMoodle] = useState<boolean>(false);
   const [importedModalVisible, importedModalActions] = useDialog();
 
+  const getAssignmen = async (args?) => {
+    return getAllAssignments(course.id);
+  };
+
   const [list, { onPageChange, onAddItem, onEditItem, onFilterChange }] =
     useList({
-      fetchFn: (args) => getAllAssignments(args),
+      fetchFn: (args) => getAssignmen(args),
     });
 
   const handleSyncMoodle = async () => {
     try {
       setLoading(true);
       setIsSyncMoodle(true);
-      const res = await getAssignmentByCourseId(course.moodleCourseId);
-      console.log(res);
+      const res = await getMoodleAssignments(course.id, {
+        courseMoodleId: course.moodleCourseId,
+      });
       setImportedAssignments(res.data);
       importedModalActions.handleOpen();
     } finally {
@@ -73,7 +78,7 @@ function TableViewAssignment({ course }) {
   const handleImportExcel = async () => {
     try {
       setLoading(true);
-      const res = await getAllAssignments();
+      const res = await getAssignmen();
       setImportedAssignments([...res.data, ...res.data, ...res.data]);
       importedModalActions.handleOpen();
     } finally {
@@ -84,8 +89,8 @@ function TableViewAssignment({ course }) {
   const handleImportModalOk = async (values) => {
     if (isSyncMoodle) {
       const dataSubmit = values.data;
-      console.log(dataSubmit);
-      createAssignment(dataSubmit);
+      const response = await createAssignment(course.id, dataSubmit);
+      response.data.map(onAddItem);
     }
     importedModalActions.handleClose();
     return values;
@@ -105,18 +110,11 @@ function TableViewAssignment({ course }) {
     });
   };
 
-  useEffect(() => {
-    setAssignmentSelected({
-      id: 'd84d3115-500a-46d4-af75-7cbfbca29055',
-      courseId: 'f7690d16-1217-453c-868e-c6fbb5d27ce6',
-    });
-  }, []);
-
   const columnTableProps = () => [
     ...columnTableAssignment(setAssignmentSelected),
     {
       dataIndex: 'action',
-      title: 'Action',
+      title: 'Thao tác',
       width: 100,
       render: (_, record, index) => {
         return (
@@ -155,7 +153,7 @@ function TableViewAssignment({ course }) {
             <TableToolbar
               title={`Tìm thấy ${formatNumber(
                 list.items?.length || 0
-              )} assignment`}
+              )} bài tập`}
             >
               <Button
                 type="primary"

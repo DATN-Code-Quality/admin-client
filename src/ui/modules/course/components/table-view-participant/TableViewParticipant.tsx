@@ -1,21 +1,15 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
-import { SyncOutlined, UploadOutlined } from '@ant-design/icons';
+import { SyncOutlined } from '@ant-design/icons';
 import { Space } from 'antd';
 import Button from 'antd-button-color';
 import { useNavigate } from 'react-router-dom';
 
-import {
-  columnTableUser,
-  metaCreateUser,
-  metaFilterUser,
-  metaUpdateUser,
-} from './props';
+import { columnTableUser, metaFilterUser, metaUpdateUser } from './props';
 
-import { usePartner } from '~/adapters/appService/partner.service';
+import { useCourse } from '~/adapters/appService/course.service';
 import { useUser } from '~/adapters/appService/user.service';
 import { PAGE_SIZE_OPTIONS } from '~/constant';
-import { Partner } from '~/domain/partner';
 import { User } from '~/domain/user';
 import useDialog from '~/hooks/useDialog';
 import useList from '~/hooks/useList';
@@ -28,45 +22,38 @@ import { ButtonType } from '~/ui/shared/modal/props';
 import BaseTable from '~/ui/shared/tables';
 import TableToolbar from '~/ui/shared/toolbar';
 import { formatNumber } from '~/utils';
-import { useCourse } from '~/adapters/appService/course.service';
 
 function TableViewParticipant({ course }) {
   const navigate = useNavigate();
+  const { createUser, updateUser, blockUser } = useUser();
   const {
-    getAllUsers,
-    getAllMoodleUsers,
-    createUser,
-    updateUser,
-    blockUser,
-  } = useUser();
-  const { getParticipantsByCourseId } = useCourse();
-  const { getAllPartners } = usePartner();
+    getParticipantsByCourseId,
+    getMoodleParticipantsByCourseId,
+    createParticipant,
+  } = useCourse();
 
-  const [partners, setPartners] = useState<Partner[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   const [importedUsers, setImportedUsers] = useState<User[]>([]);
   const [isSyncMoodle, setIsSyncMoodle] = useState<boolean>(false);
   const [importedModalVisible, importedModalActions] = useDialog();
 
-  useEffect(() => {
-    getParticipantsByCourseId(course.moodleCourseId);
-  }, [course]);
+  const handleGetParticipants = async () => {
+    return getParticipantsByCourseId(course.id);
+  };
 
   const [list, { onPageChange, onAddItem, onEditItem, onFilterChange }] =
     useList({
-      fetchFn: (args) => getAllUsers(args),
+      fetchFn: (args) => handleGetParticipants(args),
     });
-
-  const handleGetListPartner = () => {
-    getAllPartners().then((res) => setPartners(res.data));
-  };
 
   const handleSyncMoodle = async () => {
     try {
       setLoading(true);
       setIsSyncMoodle(true);
-      const res = await getAllMoodleUsers();
+      const res = await getMoodleParticipantsByCourseId(course.id, {
+        courseMoodleId: course.moodleCourseId,
+      });
       setImportedUsers(res.data);
       importedModalActions.handleOpen();
     } finally {
@@ -78,8 +65,10 @@ function TableViewParticipant({ course }) {
     try {
       setLoading(true);
       setIsSyncMoodle(false);
-      const res = await getAllUsers();
-      setImportedUsers([...res.data, ...res.data, ...res.data]);
+      const res = await getMoodleParticipantsByCourseId(course.id, {
+        courseMoodleId: course.moodleCourseId,
+      });
+      setImportedUsers(res.data);
       importedModalActions.handleOpen();
     } finally {
       setLoading(false);
@@ -88,8 +77,8 @@ function TableViewParticipant({ course }) {
   const handleImportModalOk = async (values) => {
     if (isSyncMoodle) {
       const dataSubmit = values.data;
-      console.log(dataSubmit);
-      createUser(dataSubmit);
+      const response = await createParticipant(course.id, dataSubmit);
+      response.data.map(onAddItem);
     }
     importedModalActions.handleClose();
     return values;
@@ -121,14 +110,14 @@ function TableViewParticipant({ course }) {
     });
   };
 
-  const columnTableProps = ({ partners }) => [
-    ...columnTableUser({ partners }),
+  const columnTableProps = () => [
+    ...columnTableUser(),
     {
       dataIndex: 'action',
-      title: 'Action',
+      title: 'Thao tác',
       width: 100,
       render: (_, record, index) => {
-        const meta = metaUpdateUser(record, { partners });
+        const meta = metaUpdateUser(record);
         return (
           <Space size="small">
             <BaseModal
@@ -151,10 +140,6 @@ function TableViewParticipant({ course }) {
     },
   ];
 
-  useEffect(() => {
-    handleGetListPartner();
-  }, []);
-
   return (
     <>
       {loading && <Loading />}
@@ -165,7 +150,7 @@ function TableViewParticipant({ course }) {
       />
       <Card>
         <TableToolbar
-          title={`Tìm thấy ${formatNumber(list.items?.length || 0)} user`}
+          title={`Tìm thấy ${formatNumber(list.items?.length || 0)} người dùng`}
         >
           <Button
             type="primary"
@@ -176,7 +161,7 @@ function TableViewParticipant({ course }) {
           >
             Sync Moodle
           </Button>
-          <Button
+          {/* <Button
             type="primary"
             className="mr-4"
             icon={<UploadOutlined />}
@@ -191,12 +176,12 @@ function TableViewParticipant({ course }) {
             id={0}
             mode={ButtonType.CREATE}
             loading={list.isLoading}
-            meta={metaCreateUser({ partners })}
-          />
+            meta={metaCreateUser()}
+          /> */}
         </TableToolbar>
         <BaseTable
           idKey="user_id"
-          columns={columnTableProps({ partners })}
+          columns={columnTableProps()}
           data={list}
           paginationProps={{
             showSizeChanger: true,

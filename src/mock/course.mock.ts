@@ -1,4 +1,4 @@
-import { Role, StateStatus } from '../constant/enum';
+import { Role, UserStatus } from '../constant/enum';
 
 import { mockApi } from './mock.helper';
 import { mockUser } from './user.mock';
@@ -20,7 +20,7 @@ export function mockCourse() {
           moodleCourseId: '1',
           description: 'Course 1',
           config: '',
-          status: StateStatus.ACTIVE,
+          status: UserStatus.ACTIVE,
           created_at: 1676347525000,
           updated_at: 1677467490000,
         },
@@ -31,7 +31,7 @@ export function mockCourse() {
           moodleCourseId: '2',
           description: 'Course 2',
           config: '',
-          status: StateStatus.ACTIVE,
+          status: UserStatus.ACTIVE,
           created_at: 1676347525000,
           updated_at: 1677467490000,
         },
@@ -42,7 +42,7 @@ export function mockCourse() {
           moodleCourseId: '3',
           description: 'Course 3',
           config: '',
-          status: StateStatus.ACTIVE,
+          status: UserStatus.ACTIVE,
           created_at: 1676347525000,
           updated_at: 1677467490000,
         },
@@ -53,7 +53,7 @@ export function mockCourse() {
           moodleCourseId: '4',
           description: 'Course 4',
           config: '',
-          status: StateStatus.ACTIVE,
+          status: UserStatus.ACTIVE,
           created_at: 1676347525000,
           updated_at: 1677467490000,
         },
@@ -64,7 +64,7 @@ export function mockCourse() {
           moodleCourseId: '5',
           description: 'Course 5',
           config: '',
-          status: StateStatus.ACTIVE,
+          status: UserStatus.ACTIVE,
           created_at: 1676347525000,
           updated_at: 1677467490000,
         },
@@ -75,7 +75,7 @@ export function mockCourse() {
           moodleCourseId: '6',
           description: 'Course 6',
           config: '',
-          status: StateStatus.ACTIVE,
+          status: UserStatus.ACTIVE,
           created_at: 1676347525000,
           updated_at: 1677467490000,
         },
@@ -86,7 +86,7 @@ export function mockCourse() {
           moodleCourseId: '7',
           description: 'Course 7',
           config: '',
-          status: StateStatus.ACTIVE,
+          status: UserStatus.ACTIVE,
           created_at: 1676347525000,
           updated_at: 1677467490000,
         },
@@ -100,7 +100,7 @@ export function mockCourse() {
         moodleCourseId: '1',
         description: 'Course 1',
         config: '',
-        status: StateStatus.ACTIVE,
+        status: UserStatus.ACTIVE,
         created_at: 1676347525000,
         updated_at: 1677467490000,
       });

@@ -13,9 +13,6 @@ const ROUTE = {
     CREATE_ASSIGNMENT: '/course/create-assignment',
     EDIT_ASSIGNMENT: '/course/edit-assignment',
   },
-  PARTNER: {
-    LIST: '/partner/list',
-  },
   LOGIN: '/login',
   SONARQUBE: {
     LIST: '/sonarqube/list',

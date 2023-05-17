@@ -56,7 +56,6 @@ function TableViewCourse() {
       setLoading(true);
       setIsSyncMoodle(true);
       const res = await getAllMoodleCourses();
-      console.log(res);
       setImportedCourses(res.data);
       importedModalActions.handleOpen();
     } finally {
@@ -78,8 +77,8 @@ function TableViewCourse() {
   const handleImportModalOk = async (values) => {
     if (isSyncMoodle) {
       const dataSubmit = values.data;
-      console.log(dataSubmit);
-      createCourse(dataSubmit);
+      const response = await createCourse(dataSubmit);
+      response.data.map(onAddItem);
     }
     importedModalActions.handleClose();
     return values;
@@ -103,7 +102,7 @@ function TableViewCourse() {
     ...columnTableCourse(),
     {
       dataIndex: 'action',
-      title: 'Action',
+      title: 'Thao tác',
       width: 100,
       render: (_, record, index) => {
         return (
@@ -138,7 +137,7 @@ function TableViewCourse() {
       />
       <Card>
         <TableToolbar
-          title={`Tìm thấy ${formatNumber(list.items?.length || 0)} course`}
+          title={`Tìm thấy ${formatNumber(list.items?.length || 0)} khoá học`}
         >
           <Button
             type="primary"
@@ -149,7 +148,7 @@ function TableViewCourse() {
           >
             Sync Moodle
           </Button>
-          <Button
+          {/* <Button
             type="primary"
             className="mr-4"
             icon={<UploadOutlined />}
@@ -165,7 +164,7 @@ function TableViewCourse() {
             onClick={handleCreateCourse}
           >
             Tạo mới
-          </Button>
+          </Button> */}
         </TableToolbar>
         <BaseTable
           idKey="id"

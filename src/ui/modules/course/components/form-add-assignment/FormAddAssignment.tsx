@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { metaFormAddAssignment } from './props';
 
 import { useAssignment } from '~/adapters/appService/assignment.service';
-import { MAP_STATE_STATUS } from '~/constant';
+import { MAP_USER_STATUS } from '~/constant';
 import ROUTE from '~/constant/routes';
 import FormBuilder from '~/ui/shared/forms';
 import Loading from '~/ui/shared/loading';
@@ -79,7 +79,6 @@ const FormAddAssignment = ({ courseId, id, initialViewMode = false }) => {
     if (id) {
       setLoading(true);
       getDetailAssignment(id).then((res) => {
-        console.log(res);
         res.data.dueDate = dayjs(res.data.dueDate);
         form.setFieldsValue(res.data);
         setFormValues(res.data);
@@ -106,7 +105,7 @@ const FormAddAssignment = ({ courseId, id, initialViewMode = false }) => {
           <div className="group_field">
             <label>Status: </label>
             <div className="field_value">
-              {getMappingLabelByValue(MAP_STATE_STATUS, formValues?.status)}
+              {getMappingLabelByValue(MAP_USER_STATUS, formValues?.status)}
             </div>
           </div>
           <Form.Item>
