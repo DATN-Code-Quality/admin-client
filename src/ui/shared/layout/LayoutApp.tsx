@@ -64,12 +64,12 @@ const generateMenus = (data, appType?) => {
 
 function LayoutApp() {
   const navigate = useNavigate();
-  const { roles, name } = useSelector(authSelector);
+  const { role, name } = useSelector(authSelector);
   const [collapsed, setCollapsed] = useState<boolean>(false);
   const query = useQuery();
   const { checkProfile, logout } = useAuth();
 
-  const filteredMenus = menus.filter(filterRole(roles));
+  const filteredMenus = menus.filter(filterRole([role]));
 
   // Generating tree-structured data for menu content.
   const menuTree = arrayToTree(filteredMenus, 'id', 'menuParentId');
@@ -144,7 +144,7 @@ function LayoutApp() {
           </div>
         </Header>
         <Content className="site-layout-background">
-          {renderRoutes(MAIN_ROUTES, roles)}
+          {renderRoutes(MAIN_ROUTES, [role])}
         </Content>
       </Layout>
     </Layout>

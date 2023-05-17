@@ -1,13 +1,12 @@
 import React from 'react';
 
-import { Link } from 'react-router-dom';
 import { Button, Input, Tag } from 'antd';
 import { ColumnType } from 'antd/lib/table';
+import dayjs from 'dayjs';
+import { Link } from 'react-router-dom';
 
-import { MAP_STATE_STATUS } from '~/constant';
 import ROUTE from '~/constant/routes';
 import { IMetaFormBuilder } from '~/ui/shared/forms/FormBuilder/FormBuilder';
-import { getMappingLabelByValue } from '~/utils';
 
 export const metaFilterCourse = () => {
   return {
@@ -24,7 +23,7 @@ export const metaFilterCourse = () => {
 
 export const columnTableCourse = (): ColumnType<any>[] => [
   {
-    title: 'Name',
+    title: 'Tên khoá học',
     dataIndex: 'name',
     width: 200,
     ellipsis: true,
@@ -40,11 +39,19 @@ export const columnTableCourse = (): ColumnType<any>[] => [
     },
   },
   {
-    title: 'Status',
-    dataIndex: 'status',
-    width: 100,
+    title: 'Thời gian tạo',
+    dataIndex: 'createdAt',
+    width: 160,
     render: (value) => {
-      return <p>{getMappingLabelByValue(MAP_STATE_STATUS, value)}</p>;
+      return <p>{dayjs(+value).format('DD-MM-YYYY hh:mm:ss')}</p>;
+    },
+  },
+  {
+    title: 'Thời gian cập nhật',
+    dataIndex: 'updatedAt',
+    width: 160,
+    render: (value) => {
+      return <p>{dayjs(+value).format('DD-MM-YYYY hh:mm:ss')}</p>;
     },
   },
 ];

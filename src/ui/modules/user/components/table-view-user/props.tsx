@@ -25,7 +25,7 @@ export const columnTableUser = (): ColumnType<any>[] => [
   //   width: 70,
   // },
   {
-    title: 'Name',
+    title: 'Họ tên',
     dataIndex: 'name',
     width: 200,
     ellipsis: true,
@@ -43,19 +43,16 @@ export const columnTableUser = (): ColumnType<any>[] => [
     },
   },
   {
-    title: 'Roles',
-    dataIndex: 'roles',
+    title: 'Vai trò',
+    dataIndex: 'role',
     width: 100,
     ellipsis: true,
     sorter: (a, b) => {
-      return a.roles?.[0].localeCompare(b.roles?.[0]);
-    },
-    render: (value) => {
-      return <p>{value?.[0]}</p>;
+      return a.role.localeCompare(b.role);
     },
   },
   {
-    title: 'Status',
+    title: 'Trạng thái',
     dataIndex: 'status',
     width: 100,
     render: (value) => {
@@ -70,7 +67,7 @@ export const metaCreateUser = () => {
     fields: [
       {
         key: 'name',
-        label: 'Name:',
+        label: 'Họ tên:',
         required: true,
         widgetProps: {
           placeholder: 'Input Name',
@@ -83,15 +80,6 @@ export const metaCreateUser = () => {
         widgetProps: {
           placeholder: 'Input Email',
           type: 'email',
-        },
-      },
-      {
-        key: 'phone_number',
-        label: 'Phone Number:',
-        required: true,
-        widgetProps: {
-          placeholder: 'Input Phone Number',
-          inputMode: 'numeric',
         },
       },
     ],
@@ -104,31 +92,11 @@ export const metaUpdateUser = (record) => {
     fields: [
       {
         key: 'name',
-        label: 'Name:',
+        label: 'Họ tên:',
         required: true,
         initialValue: record.name,
         widgetProps: {
           placeholder: 'Input Name',
-        },
-      },
-      {
-        key: 'email',
-        label: 'Email:',
-        required: true,
-        initialValue: record.email,
-        widgetProps: {
-          placeholder: 'Input Email',
-          type: 'email',
-        },
-      },
-      {
-        key: 'phone_number',
-        label: 'Phone Number:',
-        required: true,
-        initialValue: record.phone_number,
-        widgetProps: {
-          placeholder: 'Input Phone Number',
-          inputMode: 'numeric',
         },
       },
     ],

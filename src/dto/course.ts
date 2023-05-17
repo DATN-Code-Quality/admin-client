@@ -47,7 +47,7 @@ export const courseToDTO = (course: Course): CourseDTO => {
     endAt: new Date(course.endAt),
     detail: course.detail,
     summary: course.summary,
-    categoryId: course.categoryId || '1',
+    categoryId: course.categoryId,
 
     // dueDate: 0,
     // description: '',

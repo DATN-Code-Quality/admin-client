@@ -137,7 +137,7 @@ function TableViewCourse() {
       />
       <Card>
         <TableToolbar
-          title={`Tìm thấy ${formatNumber(list.items?.length || 0)} course`}
+          title={`Tìm thấy ${formatNumber(list.items?.length || 0)} khoá học`}
         >
           <Button
             type="primary"

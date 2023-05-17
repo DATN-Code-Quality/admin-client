@@ -27,11 +27,6 @@ export function useAuth() {
           LocalStorage.set({
             accessToken,
           });
-          if (user.roles) {
-            user.roles = JSON.parse(user.roles);
-          } else if (user.role) {
-            user.roles = [user.role];
-          }
           dispatch(setUserInfo(user));
         } else {
           throw new Error(JSON.stringify(resp));
@@ -63,11 +58,6 @@ export function useAuth() {
       const resp = await getWithPath(`${API.AUTH.GET.CHECK_PROFILE}`);
       if (resp.status === ApiStatus.SUCCESS) {
         const auth = resp.data;
-        if (auth.roles) {
-          auth.roles = JSON.parse(auth.roles);
-        } else if (auth.role) {
-          auth.roles = [auth.role];
-        }
         dispatch(setUserInfo(auth));
       } else {
         throw new Error(JSON.stringify(resp));

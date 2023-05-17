@@ -2,7 +2,6 @@ import { StateStatus } from '../constant/enum';
 
 export interface User {
   id: string;
-  deletedAt: unknown;
   name: string;
   role: string;
   email: string;

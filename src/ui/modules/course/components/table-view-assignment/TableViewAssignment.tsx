@@ -153,7 +153,7 @@ function TableViewAssignment({ course }) {
             <TableToolbar
               title={`Tìm thấy ${formatNumber(
                 list.items?.length || 0
-              )} assignment`}
+              )} bài tập`}
             >
               <Button
                 type="primary"

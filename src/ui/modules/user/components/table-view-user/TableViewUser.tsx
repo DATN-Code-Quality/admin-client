@@ -137,7 +137,7 @@ function TableViewUser() {
       />
       <Card>
         <TableToolbar
-          title={`Tìm thấy ${formatNumber(list.items?.length || 0)} user`}
+          title={`Tìm thấy ${formatNumber(list.items?.length || 0)} người dùng`}
         >
           <Button
             type="primary"
