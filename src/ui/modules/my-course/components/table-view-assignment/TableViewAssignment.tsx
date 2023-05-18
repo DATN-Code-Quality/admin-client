@@ -88,11 +88,11 @@ function TableViewAssignment({ course }) {
   };
 
   const handleCreateAssignment = async () => {
-    navigate(ROUTE.COURSE.CREATE_ASSIGNMENT);
+    navigate(ROUTE.MY_COURSE.CREATE_ASSIGNMENT);
   };
 
   const handleUpdateAssignment = async (id) => {
-    navigate(`${ROUTE.COURSE.EDIT_ASSIGNMENT}?id=${id}`);
+    navigate(`${ROUTE.MY_COURSE.EDIT_ASSIGNMENT}?id=${id}`);
   };
 
   const handleBlockAssignment = (id) => {

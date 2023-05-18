@@ -73,11 +73,11 @@ function TableViewCourse() {
   };
 
   const handleCreateCourse = async () => {
-    navigate(ROUTE.COURSE.CREATE);
+    navigate(ROUTE.MY_COURSE.CREATE);
   };
 
   const handleUpdateCourse = async (id) => {
-    navigate(`${ROUTE.COURSE.EDIT}?id=${id}`);
+    navigate(`${ROUTE.MY_COURSE.EDIT}?id=${id}`);
   };
 
   const columnTableProps = () => [...columnTableCourse()];

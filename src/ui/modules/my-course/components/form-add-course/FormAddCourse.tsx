@@ -29,7 +29,7 @@ const FormAddCourse = ({ course, id, initialViewMode = false }) => {
 
   const handleSubmitSuccess = (successMsg) => () => {
     message.success(successMsg);
-    // navigate(ROUTE.COURSE.LIST);
+    // navigate(ROUTE.MY_COURSE.LIST);
     setLoading(false);
     setViewMode(true);
   };
@@ -38,7 +38,7 @@ const FormAddCourse = ({ course, id, initialViewMode = false }) => {
     message.success('Cập nhật thành công!');
     // TODO: remove hardcode
     if (!initialViewMode) {
-      navigate(ROUTE.COURSE.LIST);
+      navigate(ROUTE.MY_COURSE.LIST);
       return;
     }
     setViewMode(true);
