@@ -10,6 +10,7 @@ import {
 
 import { ResponseData } from '~/constant';
 import API from '~/constant/api';
+import { SubRole } from '~/constant/enum';
 import ROUTE from '~/constant/routes';
 import { Assignment } from '~/domain/assignment';
 import { User } from '~/domain/user';
@@ -27,15 +28,19 @@ export function useAssignment() {
   return {
     async getAllAssignments(
       courseId: string
-    ): Promise<ResponseData<Assignment[]>> {
+    ): Promise<ResponseData<{ role: SubRole; assignments: Assignment[] }>> {
       const response = await getWithPath(
         `${API.ASSIGNMENT.GET.ASSIGNMENTS}/${courseId}`
       );
-      const validResponse = formatResponse<AssignmentDTO[]>(response);
-      const convertedData = validResponse.data.map(assignmentFromDTO);
+      const validResponse = formatResponse<{
+        role: SubRole;
+        assignments: AssignmentDTO[];
+      }>(response);
+      const convertedData =
+        validResponse.data.assignments.map(assignmentFromDTO);
       const covertedResponse = {
         ...validResponse,
-        data: convertedData,
+        data: { ...validResponse.data, assignments: convertedData },
       };
       return covertedResponse;
     },
@@ -43,16 +48,20 @@ export function useAssignment() {
     async getMoodleAssignments(
       courseId: string,
       params: { courseMoodleId: string }
-    ): Promise<ResponseData<Assignment[]>> {
+    ): Promise<ResponseData<{ role: SubRole; assignments: Assignment[] }>> {
       const response = await getWithPath(
         `${API.ASSIGNMENT.GET.ASSIGNMENTS}/${courseId}/sync-assignments-by-course-id`,
         params
       );
-      const validResponse = formatResponse<AssignmentDTO[]>(response);
-      const convertedData = validResponse.data.map(assignmentFromDTO);
+      const validResponse = formatResponse<{
+        role: SubRole;
+        assignments: AssignmentDTO[];
+      }>(response);
+      const convertedData =
+        validResponse.data.assignments.map(assignmentFromDTO);
       const covertedResponse = {
         ...validResponse,
-        data: convertedData,
+        data: { ...validResponse.data, assignments: convertedData },
       };
       return covertedResponse;
     },

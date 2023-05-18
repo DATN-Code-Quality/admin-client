@@ -54,13 +54,22 @@ function TableViewAssignment({ course }) {
   const [syncMoodleModalVisible, syncMoodleModalActions] = useDialog();
 
   const handleGetAssignments = async (args?) => {
-    return getAllAssignments(course.id);
+    const res = await getAllAssignments(course.id);
+    console.log(res);
+    return {
+      ...res,
+      data: res.data.assignments,
+    };
   };
 
   const handleGetMoodleAssignments = async (args?) => {
-    return getMoodleAssignments(course.id, {
+    const res = await getMoodleAssignments(course.id, {
       courseMoodleId: course.courseMoodleId,
     });
+    return {
+      ...res,
+      data: res.data.assignments,
+    };
   };
 
   const [
@@ -77,7 +86,13 @@ function TableViewAssignment({ course }) {
 
   const handleImportModalOk = async (values) => {
     try {
-      await createAssignment(course.id, values);
+      const newValues = values.map((item) => {
+        return {
+          ...item,
+          configObject: {},
+        };
+      });
+      await createAssignment(course.id, newValues);
       handleUpdateList();
       message.success(MESSAGE.SUCCESS);
     } catch (error) {
@@ -88,11 +103,11 @@ function TableViewAssignment({ course }) {
   };
 
   const handleCreateAssignment = async () => {
-    navigate(ROUTE.COURSE.CREATE_ASSIGNMENT);
+    navigate(ROUTE.MY_COURSE.CREATE_ASSIGNMENT);
   };
 
   const handleUpdateAssignment = async (id) => {
-    navigate(`${ROUTE.COURSE.EDIT_ASSIGNMENT}?id=${id}`);
+    navigate(`${ROUTE.MY_COURSE.EDIT_ASSIGNMENT}?id=${id}`);
   };
 
   const handleBlockAssignment = (id) => {
@@ -178,7 +193,7 @@ function TableViewAssignment({ course }) {
           {syncMoodleModalVisible && (
             <>
               <ImportedModal
-                idKey="moodleId"
+                idKey="assignmentMoodleId"
                 baseFilterMeta={metaFilterSyncAssignment()}
                 columns={columnTableSyncAssignment()}
                 fetchFn={(args) => handleGetMoodleAssignments(args)}

@@ -48,10 +48,9 @@ function TableViewCourse() {
     const { startAt, endAt } = args;
     const convertedArgs = {
       ...args,
-      startAt: startAt ? new Date(new Date(startAt).getTime()) : null,
-      endAt: endAt ? new Date(endAt).getTime() : null,
+      startAt: startAt ? new Date(startAt).toISOString() : null,
+      endAt: endAt ? new Date(endAt).toISOString() : null,
     };
-    console.log(convertedArgs);
     const res = await getAllCourses(convertedArgs);
     return res;
   };
