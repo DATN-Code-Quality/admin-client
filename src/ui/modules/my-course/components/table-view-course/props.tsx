@@ -63,7 +63,7 @@ export const columnTableCourse = (): ColumnType<any>[] => [
     },
     render: (value, record, index) => {
       return (
-        <Link to={`${ROUTE.COURSE.DETAIL}?id=${record.id}`}>
+        <Link to={`${ROUTE.MY_COURSE.DETAIL}?id=${record.id}`}>
           <Button type="link">{value}</Button>
         </Link>
       );

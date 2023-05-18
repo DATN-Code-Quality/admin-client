@@ -38,26 +38,21 @@ import './TableViewCourse.less';
 
 function TableViewCourse() {
   const navigate = useNavigate();
-  const { getAllCourses, getAllMoodleCourses, importCourses } = useCourse();
+  const { getAllCourses, getAllMoodleCourses, getAllMyCourses, importCourses } =
+    useCourse();
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  const [syncMoodleModalVisible, syncMoodleModalActions] = useDialog();
-
-  const handleGetCourses = async (args) => {
-    const { startAt, endAt } = args;
-    const convertedArgs = {
-      ...args,
-      startAt: startAt ? new Date(new Date(startAt).getTime()) : null,
-      endAt: endAt ? new Date(endAt).getTime() : null,
-    };
-    console.log(convertedArgs);
-    const res = await getAllCourses(convertedArgs);
+  const handleGetMyCourses = async () => {
+    const res = await getAllMyCourses();
+    console.log(res);
     return res;
   };
 
+  const [syncMoodleModalVisible, syncMoodleModalActions] = useDialog();
+
   const [list, { onPageChange, onFilterChange, onUpdateList }] = useList({
-    fetchFn: (args) => handleGetCourses(args),
+    fetchFn: (args) => handleGetMyCourses(args),
   });
 
   const handleUpdateList = async () => {
