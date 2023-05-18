@@ -34,6 +34,22 @@ export function useCourse() {
       return covertedResponse;
     },
 
+    async getAllMyCourses(
+      filter?: CourseFilter
+    ): Promise<ResponseData<Course[]>> {
+      const response = await getWithPath(
+        API.USER_COURSE.GET.COURSES_OF_USER,
+        filter
+      );
+      const validResponse = formatResponse<CourseDTO[]>(response);
+      const convertedData = validResponse.data.map(courseFromDTO);
+      const covertedResponse = {
+        ...validResponse,
+        data: convertedData,
+      };
+      return covertedResponse;
+    },
+
     async getAllMoodleCourses(
       filter?: CourseFilter
     ): Promise<ResponseData<Course[]>> {

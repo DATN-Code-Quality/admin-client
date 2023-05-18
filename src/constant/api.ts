@@ -40,6 +40,7 @@ export const COURSE = {
 export const USER_COURSE = {
   GET: {
     USER_COURSE: '/user-course',
+    COURSES_OF_USER: '/user-course/courses-of-user',
     MOODLE_USERS_COURSE: '/user-course/sync-users',
   },
   POST: {

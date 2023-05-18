@@ -2,9 +2,10 @@ import React, { useEffect } from 'react';
 
 import { Tabs } from 'antd';
 
+import { TableViewAssignment } from '../components/table-view-assignment';
 import { TableViewParticipant } from '../components/table-view-participant';
 
-import ViewOrCreateCourse from './ViewOrCreateCourse';
+import ViewCourse from './ViewCourse';
 
 import { useCourse } from '~/adapters/appService/course.service';
 import useQuery from '~/hooks/useQuery';
@@ -28,12 +29,17 @@ function ViewCourseDetailContainer() {
     {
       label: 'Thông tin khoá học',
       key: 'overview',
-      children: <ViewOrCreateCourse course={course} initialViewMode />,
+      children: <ViewCourse course={course} initialViewMode />,
     },
     {
       label: 'Thành viên khoá học',
       key: 'participant',
       children: <TableViewParticipant course={course} />,
+    },
+    {
+      label: 'Bài tập',
+      key: 'assignment',
+      children: <TableViewAssignment course={course} />,
     },
   ];
 

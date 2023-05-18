@@ -25,8 +25,16 @@ const ViewCourseDetail = lazy(
   () => import('../ui/modules/course/containers/ViewCourseDetail')
 );
 
+const ViewMyCourseList = lazy(
+  () => import('../ui/modules/my-course/containers/ViewCourseList')
+);
+
+const ViewMyCourseDetail = lazy(
+  () => import('../ui/modules/my-course/containers/ViewCourseDetail')
+);
+
 const CreateOrViewAssignment = lazy(
-  () => import('../ui/modules/course/containers/ViewOrCreateAssignment')
+  () => import('../ui/modules/my-course/containers/ViewOrCreateAssignment')
 );
 
 const Sonarqube = lazy(
@@ -49,49 +57,61 @@ export const MAIN_ROUTES = [
     path: ROUTE.DASHBOARD,
     name: 'dashboard',
     element: Dashboard,
-    roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],
+    roles: [Role.ADMIN, Role.SUPERADMIN],
   },
   {
     path: ROUTE.USER.LIST,
     name: 'users',
     element: ViewUser,
-    roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],
+    roles: [Role.ADMIN, Role.SUPERADMIN],
   },
   {
     path: ROUTE.COURSE.LIST,
     name: 'courseList',
     element: ViewCourseList,
-    roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],
+    roles: [Role.ADMIN, Role.SUPERADMIN],
   },
   {
     path: ROUTE.COURSE.CREATE,
     name: 'createCourse',
     element: CreateOrViewCourse,
-    roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],
+    roles: [Role.ADMIN, Role.SUPERADMIN],
   },
   {
     path: ROUTE.COURSE.EDIT,
     name: 'updateCourse',
     element: CreateOrViewCourse,
-    roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],
+    roles: [Role.ADMIN, Role.SUPERADMIN],
   },
   {
     path: ROUTE.COURSE.DETAIL,
     name: 'courseDetail',
     element: ViewCourseDetail,
-    roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],
+    roles: [Role.ADMIN, Role.SUPERADMIN],
   },
   {
-    path: ROUTE.COURSE.CREATE_ASSIGNMENT,
+    path: ROUTE.MY_COURSE.LIST,
+    name: 'courseList',
+    element: ViewMyCourseList,
+    roles: [Role.USER],
+  },
+  {
+    path: ROUTE.MY_COURSE.DETAIL,
+    name: 'courseDetail',
+    element: ViewMyCourseDetail,
+    roles: [Role.USER],
+  },
+  {
+    path: ROUTE.MY_COURSE.CREATE_ASSIGNMENT,
     name: 'createCourseAssignment',
     element: CreateOrViewAssignment,
-    roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],
+    roles: [Role.USER],
   },
   {
-    path: ROUTE.COURSE.EDIT_ASSIGNMENT,
+    path: ROUTE.MY_COURSE.EDIT_ASSIGNMENT,
     name: 'updateCourseAssignment',
     element: CreateOrViewAssignment,
-    roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],
+    roles: [Role.USER],
   },
   {
     path: ROUTE.SONARQUBE.LIST,
@@ -114,28 +134,35 @@ export const menus = [
     name: 'Dashboard',
     // icon: DownloadOutlined,
     route: ROUTE.DASHBOARD,
-    roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],
+    roles: [Role.ADMIN, Role.SUPERADMIN],
   },
   {
     id: 'user',
     name: 'Quản lý người dùng',
     // icon: DownloadOutlined,
     route: ROUTE.USER.LIST,
-    roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],
+    roles: [Role.ADMIN, Role.SUPERADMIN],
   },
   {
     id: 'course',
     name: 'Quản lý khoá học',
     // icon: DownloadOutlined,
     route: ROUTE.COURSE.LIST,
-    roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],
+    roles: [Role.ADMIN, Role.SUPERADMIN],
+  },
+  {
+    id: 'myCourse',
+    name: 'Khoá học của tôi',
+    // icon: DownloadOutlined,
+    route: ROUTE.MY_COURSE.LIST,
+    roles: [Role.USER],
   },
   {
     id: 'history',
-    name: 'Lịch sử',
+    name: 'Lịch sử quét code',
     // icon: DownloadOutlined,
     route: ROUTE.HISTORY,
-    roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],
+    roles: [Role.USER],
   },
   // {
   //   id: 'sonarqube',

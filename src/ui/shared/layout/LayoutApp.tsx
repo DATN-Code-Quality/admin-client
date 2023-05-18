@@ -20,19 +20,11 @@ import { authSelector } from '~/adapters/redux/selectors/auth';
 import { MAIN_ROUTES, menus } from '~/constant/menu';
 import ROUTE from '~/constant/routes';
 import useQuery from '~/hooks/useQuery';
-import { capitalizeFirstLetter } from '~/utils';
+import { capitalizeFirstLetter, filterRole } from '~/utils';
 import { arrayToTree, queryAncestors } from '~/utils/menu';
 import { renderRoutes } from '~/utils/route';
 
 const { Header, Sider, Content } = Layout;
-
-const filterRole = (roles) => (menu) => {
-  return menu.role
-    ? roles.some((role) => {
-        return menu.role.includes(role);
-      })
-    : true;
-};
 
 const generateMenus = (data, appType?) => {
   return data.map((item) => {
@@ -61,7 +53,6 @@ const generateMenus = (data, appType?) => {
     );
   });
 };
-
 function LayoutApp() {
   const navigate = useNavigate();
   const { role, name } = useSelector(authSelector);
@@ -69,7 +60,7 @@ function LayoutApp() {
   const query = useQuery();
   const { checkProfile, logout } = useAuth();
 
-  const filteredMenus = menus.filter(filterRole([role]));
+  const filteredMenus = menus.filter((item) => filterRole(item.roles, [role]));
 
   // Generating tree-structured data for menu content.
   const menuTree = arrayToTree(filteredMenus, 'id', 'menuParentId');

@@ -1,27 +1,23 @@
 import React, { useCallback, useState } from 'react';
 
-import {
-  EditOutlined,
-  PlusCircleOutlined,
-  SyncOutlined,
-  UploadOutlined,
-} from '@ant-design/icons';
-import { message, Modal, Space } from 'antd';
+import { SyncOutlined } from '@ant-design/icons';
+import { message, Space } from 'antd';
 import Button from 'antd-button-color';
 import { useNavigate } from 'react-router-dom';
 
 import {
-  columnTableCourse,
-  columnTableSyncCourse,
-  metaFilterCourse,
-  metaFilterSyncCourse,
+  columnTableParticipant,
+  columnTableSyncParticipant,
+  metaFilterParticipant,
+  metaFilterSyncParticipant,
 } from './props';
 
 import { useCourse } from '~/adapters/appService/course.service';
+import { useUser } from '~/adapters/appService/user.service';
 import { PAGE_SIZE_OPTIONS } from '~/constant';
+import { SubRole } from '~/constant/enum';
 import { MESSAGE } from '~/constant/message';
-import ROUTE from '~/constant/routes';
-import { Course } from '~/domain/course';
+import { User } from '~/domain/user';
 import useDialog from '~/hooks/useDialog';
 import useList from '~/hooks/useList';
 import Card from '~/ui/shared/card';
@@ -34,40 +30,50 @@ import BaseTable from '~/ui/shared/tables';
 import TableToolbar from '~/ui/shared/toolbar';
 import { formatNumber } from '~/utils';
 
-import './TableViewCourse.less';
-
-function TableViewCourse() {
+function TableViewParticipant({ course }) {
   const navigate = useNavigate();
-  const { getAllCourses, getAllMoodleCourses, importCourses } = useCourse();
+  const {
+    getParticipantsByCourseId,
+    getMoodleParticipantsByCourseId,
+    importParticipants,
+  } = useCourse();
 
   const [loading, setLoading] = useState<boolean>(false);
 
   const [syncMoodleModalVisible, syncMoodleModalActions] = useDialog();
+  const [currentRole, setCurrentRole] = useState<SubRole>(SubRole.STUDENT);
 
-  const handleGetCourses = async (args) => {
-    const { startAt, endAt } = args;
-    const convertedArgs = {
-      ...args,
-      startAt: startAt ? new Date(new Date(startAt).getTime()) : null,
-      endAt: endAt ? new Date(endAt).getTime() : null,
+  const handleGetParticipants = async () => {
+    const res = await getParticipantsByCourseId(course.id);
+    setCurrentRole(res.data.role);
+    return {
+      ...res,
+      data: res.data.users,
     };
-    console.log(convertedArgs);
-    const res = await getAllCourses(convertedArgs);
+  };
+
+  const handleGetMoodleParticipants = async (args?) => {
+    const res = await getMoodleParticipantsByCourseId(course.id, {
+      courseMoodleId: course.courseMoodleId,
+    });
     return res;
   };
 
-  const [list, { onPageChange, onFilterChange, onUpdateList }] = useList({
-    fetchFn: (args) => handleGetCourses(args),
+  const [
+    list,
+    { onPageChange, onAddItem, onEditItem, onFilterChange, onUpdateList },
+  ] = useList({
+    fetchFn: (args) => handleGetParticipants(args),
   });
 
   const handleUpdateList = async () => {
-    const response = await getAllCourses();
+    const response = await handleGetParticipants();
     onUpdateList(response.data);
   };
 
   const handleImportModalOk = async (values) => {
     try {
-      await importCourses(values);
+      await importParticipants(course.id, values);
       handleUpdateList();
       message.success(MESSAGE.SUCCESS);
     } catch (error) {
@@ -77,27 +83,19 @@ function TableViewCourse() {
     }
   };
 
-  const handleCreateCourse = async () => {
-    navigate(ROUTE.COURSE.CREATE);
-  };
-
-  const handleUpdateCourse = async (id) => {
-    navigate(`${ROUTE.COURSE.EDIT}?id=${id}`);
-  };
-
-  const columnTableProps = () => [...columnTableCourse()];
+  const columnTableProps = () => [...columnTableParticipant()];
 
   return (
     <>
       {loading && <Loading />}
       <BaseFilter
         loading={list.isLoading}
-        meta={metaFilterCourse()}
+        meta={metaFilterParticipant()}
         onFilter={onFilterChange}
       />
       <Card>
         <TableToolbar
-          title={`Tìm thấy ${formatNumber(list.items?.length || 0)} khoá học`}
+          title={`Tìm thấy ${formatNumber(list.items?.length || 0)} người dùng`}
         >
           <Button
             type="primary"
@@ -117,14 +115,14 @@ function TableViewCourse() {
           >
             Import Excel
           </Button>
-          <Button
-            type="primary"
-            icon={<PlusCircleOutlined />}
+          <BaseModal
+            onOkFn={handleCreateOrUpdate}
+            itemTitle=""
+            id={0}
+            mode={ButtonType.CREATE}
             loading={list.isLoading}
-            onClick={handleCreateCourse}
-          >
-            Tạo mới
-          </Button> */}
+            meta={metaCreateUser()}
+          /> */}
         </TableToolbar>
         <BaseTable
           idKey="id"
@@ -140,10 +138,10 @@ function TableViewCourse() {
       {syncMoodleModalVisible && (
         <>
           <ImportedModal
-            idKey="courseMoodleId"
-            baseFilterMeta={metaFilterSyncCourse()}
-            columns={columnTableSyncCourse()}
-            fetchFn={(args) => getAllMoodleCourses(args)}
+            idKey="moodleId"
+            baseFilterMeta={metaFilterSyncParticipant()}
+            columns={columnTableSyncParticipant()}
+            fetchFn={(args) => handleGetMoodleParticipants(args)}
             onOk={handleImportModalOk}
             onCancel={syncMoodleModalActions.handleClose}
           />
@@ -153,4 +151,4 @@ function TableViewCourse() {
   );
 }
 
-export default TableViewCourse;
+export default TableViewParticipant;
