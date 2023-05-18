@@ -7,6 +7,7 @@ import Is from './is';
 import { Role } from '~/constant/enum';
 import { MESSAGE } from '~/constant/message';
 import { List } from '~/constant/type';
+import ROUTE from '~/constant/routes';
 
 export const buildParams = (data?: any) => {
   if (data) {
@@ -349,4 +350,11 @@ export const filterRole = (roles?: Role[], userRoles?: Role[]) => {
     return false;
   }
   return true;
+};
+
+export const getDefaultRoute = (roles: Role[]) => {
+  if (roles.includes(Role.ADMIN) || roles.includes(Role.SUPERADMIN)) {
+    return ROUTE.DASHBOARD;
+  }
+  return ROUTE.MY_COURSE.LIST;
 };

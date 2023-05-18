@@ -5,11 +5,9 @@ import { Button, Form, Input, Layout } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
 import { useAuth } from '~/adapters/appService/auth.service';
-import ROUTE from '~/constant/routes';
 import Logo from '~/ui/assets/images/logo.png';
 import Card from '~/ui/shared/card';
-// import ZaloLogo from '~/ui/assets/images/zalo-logo.svg';
-
+import { getDefaultRoute } from '~/utils';
 import './Login.less';
 
 function Login() {
@@ -17,7 +15,7 @@ function Login() {
   const navigate = useNavigate();
   const onFinish = async (values: any) => {
     await login(values);
-    navigate(ROUTE.DASHBOARD);
+    navigate('/', { replace: true });
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -25,8 +23,9 @@ function Login() {
   };
 
   useEffect(() => {
-    checkProfile().then((data) => {
-      navigate(ROUTE.DASHBOARD, { replace: true });
+    checkProfile().then((res) => {
+      const defaultRoute = getDefaultRoute([res?.data?.role]);
+      navigate(defaultRoute, { replace: true });
     });
   }, []);
 
