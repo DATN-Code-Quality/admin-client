@@ -7,7 +7,7 @@ export interface Assignment {
   assignmentMoodleId: string;
   description: string | null;
   attachmentFileLink: string | null;
-  config: string;
+  configObject: string;
 
   createdAt: number;
   updatedAt: number;

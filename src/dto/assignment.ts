@@ -10,7 +10,7 @@ export interface AssignmentDTO extends BaseDTO {
   assignmentMoodleId: string;
   description: string | null;
   attachmentFileLink: string | null;
-  config: string;
+  configObject: string;
 }
 
 export const assignmentFromDTO = (assignmentDTO: AssignmentDTO): Assignment => {
@@ -23,7 +23,7 @@ export const assignmentFromDTO = (assignmentDTO: AssignmentDTO): Assignment => {
     assignmentMoodleId: assignmentDTO.assignmentMoodleId,
     description: assignmentDTO.description,
     attachmentFileLink: assignmentDTO.attachmentFileLink,
-    config: assignmentDTO.config,
+    configObject: assignmentDTO.configObject,
     createdAt: new Date(assignmentDTO.createdAt || new Date()).getTime(),
     updatedAt: new Date(assignmentDTO.updatedAt || new Date()).getTime(),
   };
@@ -39,7 +39,7 @@ export const assignmentToDTO = (assignment: Assignment): AssignmentDTO => {
     assignmentMoodleId: assignment.assignmentMoodleId,
     description: assignment.description,
     attachmentFileLink: assignment.attachmentFileLink,
-    config: assignment.config,
+    configObject: assignment.configObject,
     createdAt: new Date(assignment.createdAt),
     updatedAt: new Date(assignment.updatedAt),
   };
