@@ -1,4 +1,15 @@
-import { columnTableCourse } from './props';
+import {
+  columnTableCourse,
+  columnTableSyncCourse,
+  metaFilterCourse,
+  metaFilterSyncCourse,
+} from './props';
 import TableViewCourse from './TableViewCourse';
 
-export { TableViewCourse, columnTableCourse };
+export {
+  TableViewCourse,
+  columnTableCourse,
+  columnTableSyncCourse,
+  metaFilterCourse,
+  metaFilterSyncCourse,
+};

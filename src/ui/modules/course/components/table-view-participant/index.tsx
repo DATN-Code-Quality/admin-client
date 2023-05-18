@@ -1,4 +1,19 @@
-import { columnTableUser } from './props';
+import {
+  columnTableParticipant,
+  columnTableSyncParticipant,
+  metaCreateParticipant,
+  metaFilterParticipant,
+  metaFilterSyncParticipant,
+  metaUpdateParticipant,
+} from './props';
 import TableViewParticipant from './TableViewParticipant';
 
-export { TableViewParticipant, columnTableUser };
+export {
+  TableViewParticipant,
+  columnTableParticipant,
+  columnTableSyncParticipant,
+  metaCreateParticipant,
+  metaFilterParticipant,
+  metaFilterSyncParticipant,
+  metaUpdateParticipant,
+};

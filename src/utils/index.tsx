@@ -5,6 +5,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import Is from './is';
 
 import { Role } from '~/constant/enum';
+import { MESSAGE } from '~/constant/message';
 import { List } from '~/constant/type';
 
 export const buildParams = (data?: any) => {
@@ -84,29 +85,19 @@ export function asyncAction(title = '', actionFn) {
     .then(() => actionFn())
     .then((data) => {
       if (data && data.status !== 0) {
-        message.error(
-          `${title} thất bại! [${
-            data.status ? `status: ${data.status} | ` : ''
-          }message: ${data.msg}]`
-        );
+        message.error(MESSAGE.ERROR);
         return undefined;
       }
       if (title) {
-        message.success(`${title} thành công!`);
+        message.success(MESSAGE.SUCCESS);
       }
       return data;
     })
     .catch((data) => {
       if (title && data && data.status) {
-        message.error(
-          `${title} thất bại! [${
-            data.status ? `status: ${data.status} | ` : ''
-          }message: ${data.msg}]`
-        );
+        message.error(MESSAGE.ERROR);
       } else {
-        message.error(
-          `${title} thất bại!${data?.msg ? ` | ${data?.msg}` : ''}`
-        );
+        message.error(MESSAGE.ERROR);
       }
       return Promise.reject(data);
     });

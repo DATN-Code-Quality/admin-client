@@ -1,4 +1,11 @@
-import { ChartType, PartnerType, Role, ServiceType, UserStatus } from './enum';
+import {
+  ChartType,
+  PartnerType,
+  Role,
+  ServiceType,
+  SubRole,
+  UserStatus,
+} from './enum';
 
 export const IS_DEVELOPMENT =
   document.location.href.indexOf('localhost') > -1 ||
@@ -39,6 +46,11 @@ export const MAP_CHART_TYPE = [
 export const MAP_ROLES = [
   { value: Role.ADMIN, label: 'Admin' },
   { value: Role.USER, label: 'User' },
+];
+
+export const MAP_SUB_ROLES = [
+  { value: SubRole.TEACHER, label: 'Giáo viên' },
+  { value: SubRole.STUDENT, label: 'Học sinh' },
 ];
 
 export const LINE_EMPTY_CODE = '';

@@ -19,7 +19,7 @@ export const courseFromDTO = (courseDTO: CourseDTO): Course => {
   return {
     id: courseDTO.id,
     name: courseDTO.name,
-    moodleCourseId: courseDTO.courseMoodleId,
+    courseMoodleId: courseDTO.courseMoodleId,
     startAt: new Date(courseDTO.startAt).getTime(),
     endAt: new Date(courseDTO.endAt).getTime(),
     detail: courseDTO.detail,
@@ -40,8 +40,8 @@ export const courseToDTO = (course: Course): CourseDTO => {
   return {
     id: course.id,
     name: course.name,
-    moodleId: course.moodleCourseId,
-    courseMoodleId: course.moodleCourseId,
+    moodleId: course.courseMoodleId,
+    courseMoodleId: course.courseMoodleId,
     startAt: new Date(course.startAt),
     endAt: new Date(course.endAt),
     detail: course.detail,
@@ -54,7 +54,5 @@ export const courseToDTO = (course: Course): CourseDTO => {
     // config: '',
 
     // status: StateStatus.ACTIVE,
-    createdAt: new Date(course.createdAt),
-    updatedAt: new Date(course.updatedAt),
   };
 };

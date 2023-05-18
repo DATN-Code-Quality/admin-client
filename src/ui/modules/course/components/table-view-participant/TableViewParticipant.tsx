@@ -1,15 +1,22 @@
 import React, { useCallback, useState } from 'react';
 
 import { SyncOutlined } from '@ant-design/icons';
-import { Space } from 'antd';
+import { message, Space } from 'antd';
 import Button from 'antd-button-color';
 import { useNavigate } from 'react-router-dom';
 
-import { columnTableUser, metaFilterUser, metaUpdateUser } from './props';
+import {
+  columnTableParticipant,
+  columnTableSyncParticipant,
+  metaFilterParticipant,
+  metaFilterSyncParticipant,
+} from './props';
 
 import { useCourse } from '~/adapters/appService/course.service';
 import { useUser } from '~/adapters/appService/user.service';
 import { PAGE_SIZE_OPTIONS } from '~/constant';
+import { SubRole } from '~/constant/enum';
+import { MESSAGE } from '~/constant/message';
 import { User } from '~/domain/user';
 import useDialog from '~/hooks/useDialog';
 import useList from '~/hooks/useList';
@@ -25,127 +32,65 @@ import { formatNumber } from '~/utils';
 
 function TableViewParticipant({ course }) {
   const navigate = useNavigate();
-  const { createUser, updateUser, blockUser } = useUser();
   const {
     getParticipantsByCourseId,
     getMoodleParticipantsByCourseId,
-    createParticipant,
+    importParticipants,
   } = useCourse();
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  const [importedUsers, setImportedUsers] = useState<User[]>([]);
-  const [isSyncMoodle, setIsSyncMoodle] = useState<boolean>(false);
-  const [importedModalVisible, importedModalActions] = useDialog();
+  const [syncMoodleModalVisible, syncMoodleModalActions] = useDialog();
+  const [currentRole, setCurrentRole] = useState<SubRole>(SubRole.STUDENT);
 
   const handleGetParticipants = async () => {
-    return getParticipantsByCourseId(course.id);
-  };
-
-  const [list, { onPageChange, onAddItem, onEditItem, onFilterChange }] =
-    useList({
-      fetchFn: (args) => handleGetParticipants(args),
-    });
-
-  const handleSyncMoodle = async () => {
-    try {
-      setLoading(true);
-      setIsSyncMoodle(true);
-      const res = await getMoodleParticipantsByCourseId(course.id, {
-        courseMoodleId: course.moodleCourseId,
-      });
-      setImportedUsers(res.data);
-      importedModalActions.handleOpen();
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleImportExcel = async () => {
-    try {
-      setLoading(true);
-      setIsSyncMoodle(false);
-      const res = await getMoodleParticipantsByCourseId(course.id, {
-        courseMoodleId: course.moodleCourseId,
-      });
-      setImportedUsers(res.data);
-      importedModalActions.handleOpen();
-    } finally {
-      setLoading(false);
-    }
-  };
-  const handleImportModalOk = async (values) => {
-    if (isSyncMoodle) {
-      const dataSubmit = values.data;
-      const response = await createParticipant(course.id, dataSubmit);
-      response.data.map(onAddItem);
-    }
-    importedModalActions.handleClose();
-    return values;
-  };
-
-  const handleCreateOrUpdate = useCallback((value, id) => {
-    const dataSubmit = {
-      name: value.name,
-      engName: value.engName,
-      groupId: value.groupId,
-      status: value.status,
-      user_id: id,
-      priority: value.priority,
+    const res = await getParticipantsByCourseId(course.id);
+    setCurrentRole(res.data.role);
+    return {
+      ...res,
+      data: res.data.users,
     };
-    if (!id) {
-      delete dataSubmit.user_id;
-      return createUser(dataSubmit).then((data) => {
-        onAddItem(data);
-      });
-    }
-    return updateUser(dataSubmit).then((data) => {
-      onEditItem(data, 'user_id');
-    });
-  }, []);
-
-  const handleBlockUser = (id) => {
-    return blockUser(id).then((data) => {
-      onEditItem(data, 'user_id');
-    });
   };
 
-  const columnTableProps = () => [
-    ...columnTableUser(),
-    {
-      dataIndex: 'action',
-      title: 'Thao tác',
-      width: 100,
-      render: (_, record, index) => {
-        const meta = metaUpdateUser(record);
-        return (
-          <Space size="small">
-            <BaseModal
-              onOkFn={handleCreateOrUpdate}
-              itemTitle=""
-              id={record.user_id}
-              mode={ButtonType.EDIT}
-              meta={meta}
-            />
-            <BaseModal
-              onOkFn={handleBlockUser}
-              itemTitle="Bạn có muốn chặn user"
-              id={record.user_id}
-              mode={ButtonType.UNBLOCK}
-              isDelete
-            />
-          </Space>
-        );
-      },
-    },
-  ];
+  const handleGetMoodleParticipants = async (args?) => {
+    const res = await getMoodleParticipantsByCourseId(course.id, {
+      courseMoodleId: course.courseMoodleId,
+    });
+    return res;
+  };
+
+  const [
+    list,
+    { onPageChange, onAddItem, onEditItem, onFilterChange, onUpdateList },
+  ] = useList({
+    fetchFn: (args) => handleGetParticipants(args),
+  });
+
+  const handleUpdateList = async () => {
+    const response = await handleGetParticipants();
+    onUpdateList(response.data);
+  };
+
+  const handleImportModalOk = async (values) => {
+    try {
+      await importParticipants(course.id, values);
+      handleUpdateList();
+      message.success(MESSAGE.SUCCESS);
+    } catch (error) {
+      message.error(MESSAGE.ERROR);
+    } finally {
+      syncMoodleModalActions.handleClose();
+    }
+  };
+
+  const columnTableProps = () => [...columnTableParticipant()];
 
   return (
     <>
       {loading && <Loading />}
       <BaseFilter
         loading={list.isLoading}
-        meta={metaFilterUser()}
+        meta={metaFilterParticipant()}
         onFilter={onFilterChange}
       />
       <Card>
@@ -157,7 +102,7 @@ function TableViewParticipant({ course }) {
             className="mr-4"
             icon={<SyncOutlined />}
             loading={list.isLoading}
-            onClick={handleSyncMoodle}
+            onClick={syncMoodleModalActions.handleOpen}
           >
             Sync Moodle
           </Button>
@@ -180,7 +125,7 @@ function TableViewParticipant({ course }) {
           /> */}
         </TableToolbar>
         <BaseTable
-          idKey="user_id"
+          idKey="id"
           columns={columnTableProps()}
           data={list}
           paginationProps={{
@@ -190,15 +135,15 @@ function TableViewParticipant({ course }) {
           onChange={onPageChange}
         />
       </Card>
-      {importedUsers.length > 0 && (
+      {syncMoodleModalVisible && (
         <>
           <ImportedModal
-            visible={importedModalVisible}
-            type="user"
-            id="email"
-            data={importedUsers}
+            idKey="moodleId"
+            baseFilterMeta={metaFilterSyncParticipant()}
+            columns={columnTableSyncParticipant()}
+            fetchFn={(args) => handleGetMoodleParticipants(args)}
             onOk={handleImportModalOk}
-            onCancel={importedModalActions.handleClose}
+            onCancel={syncMoodleModalActions.handleClose}
           />
         </>
       )}
