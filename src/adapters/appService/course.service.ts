@@ -90,7 +90,7 @@ export function useCourse() {
         ...validResponse,
         data: { ...validResponse.data, users: convertedData },
       };
-      return covertedResponse;
+      return covertedResponse
     },
 
     async getMoodleParticipantsByCourseId(
