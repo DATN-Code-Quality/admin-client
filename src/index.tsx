@@ -1,4 +1,5 @@
 import React from 'react';
+import { GlobalDebug } from './utils/removeConsole';
 
 import { ConfigProvider } from 'antd';
 import locale from 'antd/es/locale/vi_VN';

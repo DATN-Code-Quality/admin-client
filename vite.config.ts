@@ -15,7 +15,6 @@ export default ({ mode }) => {
   const themeVariables = lessToJS(
     fs.readFileSync(path.resolve(__dirname, './src/theme.less'), 'utf8')
   );
-  console.log(themeVariables)
   return defineConfig({
     base: process.env.VITE_ASSET_PATH,
     plugins: [
