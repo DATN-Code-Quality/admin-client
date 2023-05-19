@@ -20,7 +20,7 @@ import { authSelector } from '~/adapters/redux/selectors/auth';
 import { MAIN_ROUTES, menus } from '~/constant/menu';
 import ROUTE from '~/constant/routes';
 import useQuery from '~/hooks/useQuery';
-import { capitalizeFirstLetter, filterRole } from '~/utils';
+import { capitalizeFirstLetter, filterRole, getDefaultRoute } from '~/utils';
 import { arrayToTree, queryAncestors } from '~/utils/menu';
 import { renderRoutes } from '~/utils/route';
 
@@ -84,9 +84,10 @@ function LayoutApp() {
 
   useEffect(() => {
     checkProfile()
-      .then((data) => {
+      .then((res) => {
         if ([ROUTE.LOGIN, ROUTE.INDEX].includes(location.pathname)) {
-          navigate(ROUTE.DASHBOARD, { replace: true });
+          const defaultRoute = getDefaultRoute([res?.data?.role]);
+          navigate(defaultRoute, { replace: true });
         }
       })
       .catch((err) => {
