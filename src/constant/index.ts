@@ -53,6 +53,20 @@ export const MAP_SUB_ROLES = [
   { value: SubRole.STUDENT, label: 'Học sinh' },
 ];
 
+export const MAP_CONFIG_OBJECT = [
+  { value: 'code_smells', label: 'Code Smells' },
+  { value: 'bugs', label: 'Bugs' },
+  { value: 'vulnerabilities', label: 'Vulnerabilities' },
+  { value: 'violations', label: 'Violations' },
+  { value: 'blocker_violations', label: 'Blocker Violations' },
+  { value: 'critical_violations', label: 'Critical Violations' },
+  { value: 'major_violations', label: 'Major Violations' },
+  { value: 'minor_violations', label: 'Minor Violations' },
+  { value: 'info_violations', label: 'Info Violations' },
+  { value: 'duplicated_lines_density', label: 'Duplicated Lines Density' },
+  { value: 'coverage', label: 'Coverage' },
+];
+
 export const LINE_EMPTY_CODE = '';
 
 export const DEFAULT_PAGE_SIZE = 10;
