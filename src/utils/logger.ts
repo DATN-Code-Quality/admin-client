@@ -14,7 +14,7 @@ const logger = {
   },
 
   warn: (...params) => {
-    Log.warn(...params);
+    Log.warn(...params)
   },
 };
 
