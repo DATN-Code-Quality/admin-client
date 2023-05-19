@@ -49,7 +49,7 @@ function ViewCourseDetailContainer() {
 
   return (
     <>
-      <Tabs defaultActiveKey={type} items={items} />
+      <Tabs destroyInactiveTabPane defaultActiveKey={type} items={items} />
     </>
   );
 }
