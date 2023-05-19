@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "host": "vite --host",
     "build:stg": "vite build --mode staging",
     "preview": "vite preview",
     "prepare": "husky install",
