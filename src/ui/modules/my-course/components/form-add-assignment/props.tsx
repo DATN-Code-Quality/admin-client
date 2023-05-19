@@ -1,11 +1,14 @@
+import React from 'react';
+
 import { UploadOutlined } from '@ant-design/icons';
-import { Upload } from 'antd';
+import { Checkbox, Input, Upload } from 'antd';
 import Button from 'antd-button-color';
 import dayjs from 'dayjs';
 
-import { MAP_USER_STATUS } from '~/constant';
+import { MAP_CONFIG_OBJECT, MAP_USER_STATUS } from '~/constant';
 import Editor from '~/ui/shared/editor';
 import UploadButton from '~/ui/shared/upload';
+import { enableAllowedOptions } from '~/utils';
 
 const UploadFile = () => {
   return (
@@ -20,7 +23,6 @@ export const metaFormAddAssignment = ({
   handleChangeSubmissionType,
 }) => {
   const meta: any = {
-    // formItemLayout: [6, 20],
     columns: 6,
     formItemLayout: null,
     colon: true,
@@ -124,5 +126,46 @@ export const metaFormAddAssignment = ({
   //   },
   // });
 
+  return meta;
+};
+
+export const metaFormAddCondition = ({ conditions }) => {
+  const selectedValues = conditions.map((item) => item.key);
+  const allValues = MAP_CONFIG_OBJECT.map((item) => item.value);
+  const allowedValues = allValues.filter(
+    (item) => !selectedValues.includes(item)
+  );
+  const allowedConditions = enableAllowedOptions(
+    MAP_CONFIG_OBJECT,
+    allowedValues
+  );
+  const meta: any = {
+    columns: 6,
+    formItemLayout: null,
+    colon: true,
+    fields: [
+      {
+        colSpan: 6,
+        key: 'key',
+        options: allowedConditions,
+        widget: 'select',
+        label: 'Điều kiện quét code:',
+        required: true,
+        widgetProps: {
+          maxTagCount: 'responsive',
+          placeholder: 'Chọn tiêu chí',
+        },
+      },
+      {
+        colSpan: 6,
+        key: 'value',
+        label: 'Giá trị:',
+        required: true,
+        widgetProps: {
+          placeholder: `Nhập giá trị điều kiện`,
+        },
+      },
+    ],
+  };
   return meta;
 };

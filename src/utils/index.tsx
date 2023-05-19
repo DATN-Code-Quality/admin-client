@@ -363,3 +363,16 @@ export const generateUrl = (url, params = {}) => {
   const urlParams = new URLSearchParams(params);
   return `${url}?${urlParams.toString()}`;
 };
+
+export const enableAllowedOptions = (options, allowedValues: any[]) => {
+  return options.map((item) => {
+    return { ...item, disabled: !allowedValues?.includes(item.value) };
+  });
+};
+
+export const filterAllowedOptions = (options, allowedValues: any[]) => {
+  return options.filter((item) => {
+    const isAllowed = allowedValues?.includes(item.value);
+    return isAllowed;
+  });
+};
