@@ -107,7 +107,10 @@ function LayoutApp() {
     <Layout className="cms-layout-app">
       <Layout className="site-layout">
         <Header className="site-layout-background-header">
-          <div className="logo" onClick={() => navigate(ROUTE.DASHBOARD)} />
+          <div
+            className="logo"
+            onClick={() => navigate(getDefaultRoute([role]))}
+          />
           {/* <div className="logo" /> */}
           <Menu
             className="menu-header"

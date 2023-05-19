@@ -358,3 +358,8 @@ export const getDefaultRoute = (roles: Role[]) => {
   }
   return ROUTE.MY_COURSE.LIST;
 };
+
+export const generateUrl = (url, params = {}) => {
+  const urlParams = new URLSearchParams(params);
+  return `${url}?${urlParams.toString()}`;
+};

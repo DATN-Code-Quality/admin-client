@@ -14,15 +14,19 @@ import Card from '~/ui/shared/card';
 function ViewCourseDetailContainer() {
   const query = useQuery();
   const { getDetailCourse } = useCourse();
-  const type: any = query.get('type');
-  const id = query.get('id');
+  const type: any = query.get('type') || 'overview';
+  const courseId = query.get('course_id');
 
   const [course, setCourse] = React.useState<any>(null);
 
   useEffect(() => {
-    getDetailCourse(id).then((res) => {
-      setCourse(res.data.course);
-    });
+    getDetailCourse(courseId)
+      .then((res) => {
+        setCourse(res.data.course);
+      })
+      .catch((err) => {
+        // TODO: handle error
+      });
   }, []);
 
   const items = [
@@ -45,7 +49,7 @@ function ViewCourseDetailContainer() {
 
   return (
     <>
-      <Tabs defaultActiveKey={type || 'overview'} items={items} />
+      <Tabs defaultActiveKey={type} items={items} />
     </>
   );
 }
