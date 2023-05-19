@@ -20,14 +20,14 @@ const ViewOrCreateAssignment = ({ initialViewMode = false }) => {
     if (assignmentId && !initialViewMode) {
       preTitle = 'Cập nhật ';
     }
-    return `${preTitle}Assignment`;
+    return `${preTitle}bài tập`;
   };
   return (
     <Card className="card-edit-view">
       <PageHeader className="site-page-header" title={renderTitle()} ghost />
       <FormAddAssignment
         courseId={courseId}
-        id={assignmentId}
+        assignmentId={assignmentId}
         initialViewMode={initialViewMode}
       />
     </Card>

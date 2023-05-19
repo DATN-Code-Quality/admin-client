@@ -43,8 +43,8 @@ function TableViewParticipant({ course }) {
   const [syncMoodleModalVisible, syncMoodleModalActions] = useDialog();
   const [currentRole, setCurrentRole] = useState<SubRole>(SubRole.STUDENT);
 
-  const handleGetParticipants = async () => {
-    const res = await getParticipantsByCourseId(course.id);
+  const handleGetParticipants = async (args) => {
+    const res = await getParticipantsByCourseId(course.id, args);
     setCurrentRole(res.data.role);
     return {
       ...res,

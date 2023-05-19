@@ -3,9 +3,10 @@ import { ColumnType } from 'antd/lib/table';
 import dayjs from 'dayjs';
 import { Link } from 'react-router-dom';
 
+import { MAP_SUB_ROLES } from '~/constant';
 import ROUTE from '~/constant/routes';
 import { IMetaFormBuilder } from '~/ui/shared/forms/FormBuilder/FormBuilder';
-import { formatDate } from '~/utils';
+import { formatDate, generateUrl } from '~/utils';
 
 export const metaFilterCourse = () => {
   return {
@@ -14,6 +15,20 @@ export const metaFilterCourse = () => {
         key: 'search',
         widgetProps: {
           placeholder: 'Nhập từ khoá cần tìm',
+        },
+      },
+      {
+        key: 'role',
+        options: MAP_SUB_ROLES,
+        widget: 'select',
+        widgetProps: {
+          maxTagCount: 'responsive',
+          style: {
+            minWidth: '12rem',
+            maxWidth: '12rem',
+          },
+          placeholder: 'Vai trò của tôi',
+          allowClear: true,
         },
       },
       {
@@ -62,8 +77,9 @@ export const columnTableCourse = (): ColumnType<any>[] => [
       return a.name.localeCompare(b.name);
     },
     render: (value, record, index) => {
+      const url = generateUrl(ROUTE.MY_COURSE.DETAIL, { course_id: record.id });
       return (
-        <Link to={`${ROUTE.MY_COURSE.DETAIL}?id=${record.id}`}>
+        <Link to={url}>
           <Button type="link">{value}</Button>
         </Link>
       );
