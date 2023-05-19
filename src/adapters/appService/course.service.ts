@@ -1,11 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
-import {
-  formatResponse,
-  getWithPath,
-  postWithPath,
-  putWithPath,
-} from '../api.http';
+import { formatResponse, getWithPath, postWithPath } from '../api.http';
 
 import { ResponseData } from '~/constant';
 import API from '~/constant/api';
