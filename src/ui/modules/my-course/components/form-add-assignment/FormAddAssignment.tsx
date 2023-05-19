@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { Button, Form, Input, message, Space } from 'antd';
+import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 
 import { metaFormAddAssignment } from './props';
@@ -10,10 +11,13 @@ import { MAP_USER_STATUS } from '~/constant';
 import ROUTE from '~/constant/routes';
 import FormBuilder from '~/ui/shared/forms';
 import Loading from '~/ui/shared/loading';
-import { getMappingLabelByValue } from '~/utils';
-import dayjs from 'dayjs';
+import { generateUrl, getMappingLabelByValue } from '~/utils';
 
-const FormAddAssignment = ({ courseId, id, initialViewMode = false }) => {
+const FormAddAssignment = ({
+  courseId,
+  assignmentId,
+  initialViewMode = false,
+}) => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const { getDetailAssignment, createAssignment, updateAssignment } =
@@ -27,44 +31,39 @@ const FormAddAssignment = ({ courseId, id, initialViewMode = false }) => {
     console.log('err submit', err);
     message.error(errMsg);
     setLoading(false);
-    setViewMode(true);
+    // setViewMode(true);
   };
 
   const handleSubmitSuccess = (successMsg) => () => {
     message.success(successMsg);
-    // navigate(ROUTE.MY_COURSE.LIST);
+    const url = generateUrl(ROUTE.MY_COURSE.DETAIL, {
+      course_id: courseId,
+    });
+    navigate(url);
     setLoading(false);
-    setViewMode(true);
+    // setViewMode(true);
   };
 
-  const handleSubmit = useCallback((values) => {
-    message.success('Cập nhật thành công!');
-    // TODO: remove hardcode
-    if (!initialViewMode) {
-      navigate(`${ROUTE.MY_COURSE.DETAIL}?id=${courseId}`);
-      return;
-    }
-    setViewMode(true);
-    return;
-
+  const handleSubmit = (values) => {
     // TODO: handle submit
     setLoading(true);
     const dataSubmit = {
       ...values,
+      configObject: {},
     };
-    if (id) {
-      dataSubmit.id = id;
-      updateAssignment(dataSubmit)
-        .then(handleSubmitSuccess('Cập nhật Ngành nghề thành công!'))
-        .catch(handleSubmitFail('Cập nhật Ngành nghề thất bại!'))
+    if (assignmentId) {
+      dataSubmit.id = assignmentId;
+      updateAssignment(courseId, dataSubmit)
+        .then(handleSubmitSuccess('Cập nhật Bài tập thành công!'))
+        .catch(handleSubmitFail('Cập nhật Bài tập thất bại!'))
         .finally(() => setLoading(false));
     } else {
-      createAssignment(dataSubmit)
-        .then(handleSubmitSuccess('Cập nhật Ngành nghề thành công!'))
-        .catch(handleSubmitFail('Cập nhật Ngành nghề thất bại!'))
+      createAssignment(courseId, dataSubmit)
+        .then(handleSubmitSuccess('Tạo mới Bài tập thành công!'))
+        .catch(handleSubmitFail('Tạo mới Bài tập thất bại!'))
         .finally(() => setLoading(false));
     }
-  }, []);
+  };
 
   const handleEditAssignment = () => {
     setViewMode(false);
@@ -76,18 +75,21 @@ const FormAddAssignment = ({ courseId, id, initialViewMode = false }) => {
   };
 
   useEffect(() => {
-    if (id) {
-      setLoading(true);
-      getDetailAssignment(id).then((res) => {
-        res.data.dueDate = dayjs(res.data.dueDate);
-        form.setFieldsValue(res.data);
-        setFormValues(res.data);
-        setLoading(false);
-      });
-    } else {
-      setLoading(false);
+    if (!courseId || !assignmentId) {
+      // TODO: handle no data
+      return;
     }
-  }, [id]);
+    setLoading(true);
+    getDetailAssignment({ courseId, assignmentId }).then((res) => {
+      const data = res.data.assignment;
+      data.dueDate = dayjs(data.dueDate);
+      console.log(data);
+
+      form.setFieldsValue(res.data.assignment);
+      setFormValues(res.data.assignment);
+      setLoading(false);
+    });
+  }, [courseId, assignmentId]);
 
   return (
     <>

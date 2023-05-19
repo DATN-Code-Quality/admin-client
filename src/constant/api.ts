@@ -61,7 +61,7 @@ export const ASSIGNMENT = {
     CREATE_ASSIGNMENT: '/assignment',
   },
   PUT: {
-    UPDATE_ASSIGNMENT: '/assignment/update-assignment',
+    UPDATE_ASSIGNMENT: '/assignment',
   },
 };
 

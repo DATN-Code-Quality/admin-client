@@ -43,8 +43,8 @@ function TableViewCourse() {
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  const handleGetMyCourses = async () => {
-    const res = await getAllMyCourses();
+  const handleGetMyCourses = async (args) => {
+    const res = await getAllMyCourses(args);
     console.log(res);
     return res;
   };
@@ -72,13 +72,13 @@ function TableViewCourse() {
     }
   };
 
-  const handleCreateCourse = async () => {
-    navigate(ROUTE.MY_COURSE.CREATE);
-  };
+  // const handleCreateCourse = async () => {
+  //   navigate(ROUTE.MY_COURSE.CREATE);
+  // };
 
-  const handleUpdateCourse = async (id) => {
-    navigate(`${ROUTE.MY_COURSE.EDIT}?id=${id}`);
-  };
+  // const handleUpdateCourse = async (id) => {
+  //   navigate(`${ROUTE.MY_COURSE.EDIT}?id=${id}`);
+  // };
 
   const columnTableProps = () => [...columnTableCourse()];
 
