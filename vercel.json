@@ -1,6 +1,10 @@
 {
   "rewrites": [
     {
+      "source": "/api/(.*)",
+      "destination": "http://14.225.211.60:5000/api/$1"
+    },
+    {
       "source": "/(.*)",
       "headers": [
         {
