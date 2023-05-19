@@ -75,6 +75,12 @@ function TableViewAssignment({ course }) {
     };
   };
 
+  useEffect(() => {
+    return () => {
+      setAssignmentSelected(null);
+    };
+  }, []);
+
   const [
     list,
     { onPageChange, onAddItem, onEditItem, onFilterChange, onUpdateList },
