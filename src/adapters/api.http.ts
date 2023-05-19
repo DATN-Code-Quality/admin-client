@@ -48,12 +48,7 @@ export const getWithLocalPath = (
   options?: {},
   timeOut?: 10
 ) => {
-  return getWithUrl(
-    `http://localhost:3000/api${path}`,
-    params,
-    options,
-    timeOut
-  );
+  return getWithUrl(`/api${path}`, params, options, timeOut);
 };
 
 export const getWithUrl = (

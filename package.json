@@ -31,6 +31,7 @@
     "highcharts": "^10.3.3",
     "highcharts-react-official": "^3.2.0",
     "html-react-parser": "^3.0.15",
+    "http-proxy-middleware": "^2.0.6",
     "lodash.clonedeep": "^4.5.0",
     "path-to-regexp": "^6.2.1",
     "react": "^18.2.0",
