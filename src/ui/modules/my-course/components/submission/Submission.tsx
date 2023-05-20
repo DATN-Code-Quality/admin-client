@@ -156,7 +156,7 @@ const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
 
     setSubmissionList(submissions);
     setSubmission(submissions[0]);
-  }, [assignment.courseId, assignment.id, getSubmissionByAssignmentId]);
+  }, [assignment.courseId, assignment.id]);
 
   useEffect(() => {
     fetchSubmission();

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { formatResponse, getWithPath, postWithPath } from '../api.http';
 
-import { ResponseData } from '~/constant';
+import { DOMAIN_API_URL, ResponseData } from '~/constant';
 import API from '~/constant/api';
 import { SubRole } from '~/constant/enum';
 import { Assignment } from '~/domain/assignment';
@@ -73,8 +73,9 @@ export function useSubmission() {
       }
       const accessToken = (await LocalStorage.get(['accessToken'])).accessToken
         .token;
+        console.log("domain api: "+DOMAIN_API_URL)
       const respond = await axios({
-        url: `http://localhost:5000/api/submission/${assignment.courseId}/${assignment.id}`,
+        url: `${DOMAIN_API_URL}/submission/${assignment.courseId}/${assignment.id}`,
         data: submitForm,
         method: 'post',
         headers: {
