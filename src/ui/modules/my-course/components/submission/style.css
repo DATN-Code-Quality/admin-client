@@ -9,16 +9,14 @@ p {
 }
 
 .submission-container {
-  border: 1px solid #ccc;
   border-radius: 8px;
   padding: 16px;
   min-height: 200px;
   margin-top: 16px;
-  background: '#ccc';
 }
 
 .submission-container .title {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 700;
 }
 
@@ -60,33 +58,38 @@ p {
 }
 
 .submission-list {
-  height: 600px;
+  max-height: 600px;
   overflow: auto;
 }
 
-.submission-field{
+.submission-field {
   width: 100px;
 }
-.submission-title{
+.submission-title {
   font-size: 18px;
   font-weight: 600;
 }
-.submission-row{
+.submission-row {
   border: 1px solid #ebeced;
 }
-.submission-field-td{
+.submission-field-td {
   background-color: #f8f8f8;
   width: 200px;
   font-size: 14px;
   font-weight: 700;
   padding: 8px;
 }
-.submission-content-td{
+.submission-content-td {
   background-color: 'white';
   padding: 8px;
   font-size: 14px;
 }
 
-.add-submission-container{
+.add-submission-container {
   margin-top: 16px;
+}
+
+.submission-tab-active {
+  color: #1890ff;
+  position: relative;
 }
