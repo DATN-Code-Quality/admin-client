@@ -24,7 +24,6 @@ import './index.less';
 import { BugType, SeverityType } from '~/constant/enum';
 import { Issue } from '~/domain/submission';
 import DetailRule from './DetailRule';
-// import { formattedCodeSmell } from '~/utils';
 
 const Submission = () => {
   const dispatch = useDispatch();
