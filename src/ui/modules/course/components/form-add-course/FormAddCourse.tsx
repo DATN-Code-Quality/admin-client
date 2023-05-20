@@ -6,19 +6,19 @@ import { useNavigate } from 'react-router-dom';
 import { metaFormAddCourse } from './props';
 
 import { useCourse } from '~/adapters/appService/course.service';
-import { MAP_STATE_STATUS } from '~/constant';
+import { MAP_USER_STATUS } from '~/constant';
 import ROUTE from '~/constant/routes';
 import FormBuilder from '~/ui/shared/forms';
 import Loading from '~/ui/shared/loading';
-import { getMappingLabelByValue } from '~/utils';
+import { formatDate, getMappingLabelByValue } from '~/utils';
 
 const FormAddCourse = ({ course, id, initialViewMode = false }) => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  const { getDetailCourse, createCourse, updateCourse } = useCourse();
+  const { getDetailCourse, importCourses: createCourse, updateCourse } = useCourse();
   const [loading, setLoading] = useState<boolean>(false);
   const [viewMode, setViewMode] = useState<boolean>(initialViewMode);
-  const [formValues, setFormValues] = useState({});
+  const [formValues, setFormValues] = useState<any>({});
 
   const handleSubmitFail = (errMsg) => (err) => {
     console.log('err submit', err);
@@ -68,7 +68,6 @@ const FormAddCourse = ({ course, id, initialViewMode = false }) => {
   };
 
   useEffect(() => {
-    console.log(course);
     if (course) {
       form.setFieldsValue(course);
       setFormValues(course);
@@ -83,26 +82,37 @@ const FormAddCourse = ({ course, id, initialViewMode = false }) => {
       {viewMode && (
         <Form form={form} className="form-edit-view view-mode">
           <div className="group_field">
-            <label>Course Name: </label>
+            <label>Tên khoá học: </label>
             <div className="field_value">{formValues?.name}</div>
           </div>
           <div className="group_field">
-            <label>Description: </label>
-            <div className="field_value">{formValues?.description}</div>
+            <label>Mô tả: </label>
+            <div
+              className="field_value"
+              dangerouslySetInnerHTML={{
+                __html: formValues?.summary || 'Chưa cập nhật',
+              }}
+            />
           </div>
           <div className="group_field">
-            <label>Status: </label>
+            <label>Ngày bắt đầu: </label>
             <div className="field_value">
-              {getMappingLabelByValue(MAP_STATE_STATUS, formValues?.status)}
+              {formatDate(formValues?.startAt, 'vi-VN', 'DD/MM/YYYY')}
             </div>
           </div>
-          <Form.Item>
+          <div className="group_field">
+            <label>Ngày kết thúc: </label>
+            <div className="field_value">
+              {formatDate(formValues?.endAt, 'vi-VN', 'DD/MM/YYYY')}
+            </div>
+          </div>
+          {/* <Form.Item>
             <Space>
               <Button type="primary" size="large" onClick={handleEditCourse}>
                 Edit thông tin
               </Button>
             </Space>
-          </Form.Item>
+          </Form.Item> */}
         </Form>
       )}
       {!viewMode && (

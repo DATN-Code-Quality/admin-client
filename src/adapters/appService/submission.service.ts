@@ -4,6 +4,7 @@ import { formatResponse, getWithPath } from '../api.http';
 
 import { ResponseData } from '~/constant';
 import API from '~/constant/api';
+import { SubRole } from '~/constant/enum';
 import { Assignment } from '~/domain/assignment';
 import { Submission } from '~/domain/submission';
 import { SubmissionDTO, submissionFromDTO } from '~/dto/submission';
@@ -14,19 +15,14 @@ export function useSubmission() {
 
   return {
     async getSubmissionByAssignmentId(
-      id: string
-    ): Promise<ResponseData<Submission[]>> {
+      courseId: string,
+      assignmentId: string
+    ): Promise<ResponseData<{ role: SubRole; submissions: Submission[] }>> {
       const response = await getWithPath(
-        API.SUBMISSION.GET.SUBMISSIONS_BY_ASSIGNMENT_ID,
-        { assignmentId: id }
+        `${API.SUBMISSION.GET.SUBMISSIONS_BY_ASSIGNMENT_ID}/${courseId}/${assignmentId}`
       );
-      const validResponse = formatResponse<SubmissionDTO[]>(response);
-      const convertedData = validResponse.data.map(submissionFromDTO);
-      const covertedResponse = {
-        ...validResponse,
-        data: convertedData,
-      };
-      return covertedResponse;
+
+      return response;
     },
 
     async getMoodleSubmissionByAssignmentId(

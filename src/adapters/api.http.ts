@@ -2,6 +2,7 @@
 
 import { DOMAIN_API_URL, ResponseData } from '~/constant';
 import { ApiStatus } from '~/constant/enum';
+import LocalStorage from '~/libs/LocalStorage';
 import { buildURLWithParam, extend } from '~/utils';
 
 export function fetch(
@@ -13,10 +14,18 @@ export function fetch(
   const defaultHeaders = {
     'Content-Type': 'application/json',
   };
+  const accessTokenPersist: any = localStorage.getItem('accessToken');
+  let accessToken: any = {};
+  if (accessTokenPersist) {
+    accessToken = JSON.parse(accessTokenPersist);
+  }
   const exOptions = extend(
     {
       credentials: 'include',
-      headers: defaultHeaders,
+      headers: {
+        ...defaultHeaders,
+        Authorization: `Bearer ${accessToken?.token}`,
+      },
     },
     options
   );

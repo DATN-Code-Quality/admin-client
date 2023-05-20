@@ -10,11 +10,12 @@ const ROUTE = {
     DETAIL: '/course/detail',
     CREATE: '/course/create',
     EDIT: '/course/edit',
-    CREATE_ASSIGNMENT: '/course/create-assignment',
-    EDIT_ASSIGNMENT: '/course/edit-assignment',
   },
-  PARTNER: {
-    LIST: '/partner/list',
+  MY_COURSE: {
+    LIST: '/my-course/list',
+    DETAIL: '/my-course/detail',
+    CREATE_ASSIGNMENT: '/my-course/create-assignment',
+    EDIT_ASSIGNMENT: '/my-course/edit-assignment',
   },
   LOGIN: '/login',
   SONARQUBE: {

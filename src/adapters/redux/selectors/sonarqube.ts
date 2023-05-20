@@ -1,21 +1,11 @@
 /* eslint-disable no-prototype-builtins */
 import { StoreState } from '../types';
 
-import { Filter } from '~/domain/sonarqube';
-
 export const sonarqubeSelector = (state: StoreState) => state.sonarqube;
 
 export default class SonarqubeSelector {
-  static getFiterSonarqube = (state: StoreState): Filter => {
-    return state.sonarqube?.filterSetting;
-  };
-
-  static getDataReponseSonarqube = (state: StoreState) => {
-    return state.sonarqube?.dataResponse;
-  };
-
-  static getAssignmentSelected = (state: StoreState) => {
-    return state.sonarqube.assignmentSelected;
+  static getSubmissionSelected = (state: StoreState) => {
+    return state.sonarqube.submissionSelected;
   };
 
   static getSubmissionIssues = (state: StoreState) => {

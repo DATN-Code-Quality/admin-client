@@ -6,14 +6,20 @@ import {
   SyncOutlined,
   UploadOutlined,
 } from '@ant-design/icons';
-import { Modal, Space } from 'antd';
+import { message, Modal, Space } from 'antd';
 import Button from 'antd-button-color';
 import { useNavigate } from 'react-router-dom';
 
-import { columnTableCourse, metaFilterCourse } from './props';
+import {
+  columnTableCourse,
+  columnTableSyncCourse,
+  metaFilterCourse,
+  metaFilterSyncCourse,
+} from './props';
 
 import { useCourse } from '~/adapters/appService/course.service';
 import { PAGE_SIZE_OPTIONS } from '~/constant';
+import { MESSAGE } from '~/constant/message';
 import ROUTE from '~/constant/routes';
 import { Course } from '~/domain/course';
 import useDialog from '~/hooks/useDialog';
@@ -32,57 +38,42 @@ import './TableViewCourse.less';
 
 function TableViewCourse() {
   const navigate = useNavigate();
-  const {
-    getAllCourses,
-    getAllMoodleCourses,
-    createCourse,
-    updateCourse,
-    blockCourse,
-  } = useCourse();
+  const { getAllCourses, getAllMoodleCourses, importCourses } = useCourse();
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  const [importedCourses, setImportedCourses] = useState<Course[]>([]);
-  const [isSyncMoodle, setIsSyncMoodle] = useState<boolean>(false);
-  const [importedModalVisible, importedModalActions] = useDialog();
+  const [syncMoodleModalVisible, syncMoodleModalActions] = useDialog();
 
-  const [list, { onPageChange, onAddItem, onEditItem, onFilterChange }] =
-    useList({
-      fetchFn: (args) => getAllCourses(args),
-    });
-
-  const handleSyncMoodle = async () => {
-    try {
-      setLoading(true);
-      setIsSyncMoodle(true);
-      const res = await getAllMoodleCourses();
-      console.log(res);
-      setImportedCourses(res.data);
-      importedModalActions.handleOpen();
-    } finally {
-      setLoading(false);
-    }
+  const handleGetCourses = async (args) => {
+    const { startAt, endAt } = args;
+    const convertedArgs = {
+      ...args,
+      startAt: startAt ? new Date(startAt).toISOString() : null,
+      endAt: endAt ? new Date(endAt).toISOString() : null,
+    };
+    const res = await getAllCourses(convertedArgs);
+    return res;
   };
 
-  const handleImportExcel = async () => {
-    try {
-      setLoading(true);
-      const res = await getAllCourses();
-      setImportedCourses([...res.data, ...res.data, ...res.data]);
-      importedModalActions.handleOpen();
-    } finally {
-      setLoading(false);
-    }
+  const [list, { onPageChange, onFilterChange, onUpdateList }] = useList({
+    fetchFn: (args) => handleGetCourses(args),
+  });
+
+  const handleUpdateList = async () => {
+    const response = await getAllCourses();
+    onUpdateList(response.data);
   };
 
   const handleImportModalOk = async (values) => {
-    if (isSyncMoodle) {
-      const dataSubmit = values.data;
-      const response = await createCourse(dataSubmit);
-      response.data.map(onAddItem);
+    try {
+      await importCourses(values);
+      handleUpdateList();
+      message.success(MESSAGE.SUCCESS);
+    } catch (error) {
+      message.error(MESSAGE.ERROR);
+    } finally {
+      syncMoodleModalActions.handleClose();
     }
-    importedModalActions.handleClose();
-    return values;
   };
 
   const handleCreateCourse = async () => {
@@ -93,40 +84,7 @@ function TableViewCourse() {
     navigate(`${ROUTE.COURSE.EDIT}?id=${id}`);
   };
 
-  const handleBlockCourse = (id) => {
-    return blockCourse(id).then((data) => {
-      onEditItem(data, 'id');
-    });
-  };
-
-  const columnTableProps = () => [
-    ...columnTableCourse(),
-    {
-      dataIndex: 'action',
-      title: 'Action',
-      width: 100,
-      render: (_, record, index) => {
-        return (
-          <Space size="small">
-            <Button
-              type="primary"
-              size="small"
-              ghost
-              icon={<EditOutlined />}
-              onClick={() => handleUpdateCourse(record.id)}
-            />
-            <BaseModal
-              onOkFn={handleBlockCourse}
-              itemTitle="Bạn có muốn chặn course"
-              id={record.id}
-              mode={ButtonType.BLOCK}
-              isDelete
-            />
-          </Space>
-        );
-      },
-    },
-  ];
+  const columnTableProps = () => [...columnTableCourse()];
 
   return (
     <>
@@ -138,18 +96,18 @@ function TableViewCourse() {
       />
       <Card>
         <TableToolbar
-          title={`Tìm thấy ${formatNumber(list.items?.length || 0)} course`}
+          title={`Tìm thấy ${formatNumber(list.items?.length || 0)} khoá học`}
         >
           <Button
             type="primary"
             className="mr-4"
             icon={<SyncOutlined />}
             loading={list.isLoading}
-            onClick={handleSyncMoodle}
+            onClick={syncMoodleModalActions.handleOpen}
           >
             Sync Moodle
           </Button>
-          <Button
+          {/* <Button
             type="primary"
             className="mr-4"
             icon={<UploadOutlined />}
@@ -165,7 +123,7 @@ function TableViewCourse() {
             onClick={handleCreateCourse}
           >
             Tạo mới
-          </Button>
+          </Button> */}
         </TableToolbar>
         <BaseTable
           idKey="id"
@@ -178,15 +136,15 @@ function TableViewCourse() {
           onChange={onPageChange}
         />
       </Card>
-      {importedCourses.length > 0 && (
+      {syncMoodleModalVisible && (
         <>
           <ImportedModal
-            visible={importedModalVisible}
-            type="course"
-            id="moodleCourseId"
-            data={importedCourses}
+            idKey="courseMoodleId"
+            baseFilterMeta={metaFilterSyncCourse()}
+            columns={columnTableSyncCourse()}
+            fetchFn={(args) => getAllMoodleCourses(args)}
             onOk={handleImportModalOk}
-            onCancel={importedModalActions.handleClose}
+            onCancel={syncMoodleModalActions.handleClose}
           />
         </>
       )}

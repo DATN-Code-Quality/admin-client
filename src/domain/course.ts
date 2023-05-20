@@ -1,9 +1,7 @@
-import { StateStatus } from '../constant/enum';
-
 export interface Course {
   id: string;
   name: string;
-  moodleCourseId: string;
+  courseMoodleId: string;
   startAt: number;
   endAt: number;
   detail: string | null;
@@ -15,7 +13,6 @@ export interface Course {
   attachmentFileLink?: string;
   config: string;
 
-  status: StateStatus;
   createdAt: number;
   updatedAt: number;
 }

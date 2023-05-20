@@ -1,28 +1,21 @@
 import React, { useEffect } from 'react';
 
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Form, Layout, message, Tabs, Input } from 'antd';
-import { useSelector } from 'react-redux';
+import { Button, Form, Input, Layout } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
 import { useAuth } from '~/adapters/appService/auth.service';
-import { authSelector } from '~/adapters/redux/selectors/auth';
-import ROUTE from '~/constant/routes';
-import ZaloLogo from '~/ui/assets/images/icon-zalo.png';
 import Logo from '~/ui/assets/images/logo.png';
-import { metaFormLogin } from '~/ui/modules/login/containers/props';
 import Card from '~/ui/shared/card';
-import FormBuilder from '~/ui/shared/forms/FormBuilder';
-// import ZaloLogo from '~/ui/assets/images/zalo-logo.svg';
-
+import { getDefaultRoute } from '~/utils';
 import './Login.less';
 
 function Login() {
-  const { login, loginMicrosoft } = useAuth();
+  const { checkProfile, login, loginMicrosoft } = useAuth();
   const navigate = useNavigate();
-  const { roles, name } = useSelector(authSelector);
-  const onFinish = (values: any) => {
-    login(values);
+  const onFinish = async (values: any) => {
+    await login(values);
+    navigate('/', { replace: true });
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -30,9 +23,10 @@ function Login() {
   };
 
   useEffect(() => {
-    if (roles && name) {
-      navigate(ROUTE.DASHBOARD);
-    }
+    checkProfile().then((res) => {
+      const defaultRoute = getDefaultRoute([res?.data?.role]);
+      navigate(defaultRoute, { replace: true });
+    });
   }, []);
 
   return (

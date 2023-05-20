@@ -1,7 +1,7 @@
 import { ColumnType } from 'antd/lib/table';
 
-import { MAP_ROLES } from '~/constant';
-import { StateStatus } from '~/constant/enum';
+import { MAP_ROLES, MAP_USER_STATUS } from '~/constant';
+import { UserStatus } from '~/constant/enum';
 import { IMetaFormBuilder } from '~/ui/shared/forms/FormBuilder/FormBuilder';
 import { generateMappingList, getMappingLabelByValue } from '~/utils';
 
@@ -9,23 +9,49 @@ export const metaFilterUser = () => {
   return {
     fields: [
       {
-        key: 'name',
+        key: 'search',
         widgetProps: {
-          placeholder: 'Nhập từ khoá cần tìm',
+          placeholder: 'Tìm kiếm theo Họ tên hoặc Email',
+          style: {
+            minWidth: '250px',
+          },
+        },
+      },
+      {
+        key: 'role',
+        options: MAP_ROLES,
+        widget: 'select',
+        widgetProps: {
+          maxTagCount: 'responsive',
+          style: {
+            minWidth: '12rem',
+            maxWidth: '12rem',
+          },
+          placeholder: 'Vai trò',
+          allowClear: true,
+        },
+      },
+      {
+        key: 'status',
+        options: MAP_USER_STATUS,
+        widget: 'select',
+        widgetProps: {
+          maxTagCount: 'responsive',
+          style: {
+            minWidth: '12rem',
+            maxWidth: '12rem',
+          },
+          placeholder: 'Trạng thái',
+          allowClear: true,
         },
       },
     ],
   } as IMetaFormBuilder;
 };
 
-export const columnTableUser = ({ partners }): ColumnType<any>[] => [
-  // {
-  //   title: 'ID',
-  //   dataIndex: 'id',
-  //   width: 70,
-  // },
+export const columnTableUser = (): ColumnType<any>[] => [
   {
-    title: 'Name',
+    title: 'Họ tên',
     dataIndex: 'name',
     width: 200,
     ellipsis: true,
@@ -43,96 +69,130 @@ export const columnTableUser = ({ partners }): ColumnType<any>[] => [
     },
   },
   {
-    title: 'Roles',
-    dataIndex: 'roles',
+    title: 'Vai trò',
+    dataIndex: 'role',
     width: 100,
     ellipsis: true,
     sorter: (a, b) => {
-      return a.roles?.[0].localeCompare(b.roles?.[0]);
+      return a.role.localeCompare(b.role);
     },
     render: (value) => {
-      return <p>{value?.[0]}</p>;
-    },
-  },
-  {
-    title: 'Status',
-    dataIndex: 'status',
-    width: 100,
-    render: (value) => {
-      return <p>{value === StateStatus.INACTIVE ? 'Active' : 'Inactive'}</p>;
+      return <p>{getMappingLabelByValue(MAP_ROLES, value)}</p>;
     },
   },
 ];
 
-export const metaCreateUser = ({ partners }) => {
-  const mappingPartnerList = generateMappingList(partners, 'id', 'name');
+export const metaCreateUser = () => {
   return {
-    formItemLayout: [6, 20],
+    formItemLayout: [24, 24],
     fields: [
       {
-        key: 'name',
-        label: 'Name:',
+        key: 'userId',
+        label: 'Tên đăng nhập:',
         required: true,
+        message: 'Vui lòng không bỏ trống',
         widgetProps: {
-          placeholder: 'Input Name',
+          placeholder: 'Nhập username',
+        },
+      },
+      {
+        key: 'name',
+        label: 'Họ tên:',
+        required: true,
+        message: 'Vui lòng không bỏ trống',
+        widgetProps: {
+          placeholder: 'Nhập Họ tên',
         },
       },
       {
         key: 'email',
         label: 'Email:',
         required: true,
+        message: 'Vui lòng không bỏ trống',
         widgetProps: {
-          placeholder: 'Input Email',
+          placeholder: 'Nhập Email',
           type: 'email',
-        },
-      },
-      {
-        key: 'phone_number',
-        label: 'Phone Number:',
-        required: true,
-        widgetProps: {
-          placeholder: 'Input Phone Number',
-          inputMode: 'numeric',
         },
       },
     ],
   };
 };
 
-export const metaUpdateUser = (record, { partners }) => {
-  const mappingPartnerList = generateMappingList(partners, 'id', 'name');
+export const metaUpdateUser = (record) => {
   return {
-    formItemLayout: [6, 20],
+    formItemLayout: [24, 24],
     fields: [
       {
-        key: 'name',
-        label: 'Name:',
+        key: 'userId',
+        label: 'Tên đăng nhập:',
         required: true,
+        initialValue: record.userId,
+        message: 'Vui lòng không bỏ trống',
+        formItemProps: {
+          style: { display: 'none' },
+        },
+        widgetProps: {
+          placeholder: 'Nhập username',
+        },
+      },
+      {
+        key: 'name',
+        label: 'Họ tên:',
+        required: true,
+        message: 'Vui lòng không bỏ trống',
         initialValue: record.name,
         widgetProps: {
-          placeholder: 'Input Name',
+          placeholder: 'Nhập Họ tên',
         },
       },
       {
         key: 'email',
         label: 'Email:',
         required: true,
+        message: 'Vui lòng không bỏ trống',
         initialValue: record.email,
         widgetProps: {
-          placeholder: 'Input Email',
+          placeholder: 'Nhập Email',
           type: 'email',
-        },
-      },
-      {
-        key: 'phone_number',
-        label: 'Phone Number:',
-        required: true,
-        initialValue: record.phone_number,
-        widgetProps: {
-          placeholder: 'Input Phone Number',
-          inputMode: 'numeric',
         },
       },
     ],
   };
 };
+
+export const metaFilterSyncUser = () => {
+  return {
+    fields: [
+      {
+        key: 'search',
+        widgetProps: {
+          placeholder: 'Tìm kiếm theo Họ tên hoặc Email',
+          style: {
+            minWidth: '250px',
+          },
+        },
+      },
+    ],
+  } as IMetaFormBuilder;
+};
+
+export const columnTableSyncUser = (): ColumnType<any>[] => [
+  {
+    title: 'Họ tên',
+    dataIndex: 'name',
+    width: 200,
+    ellipsis: true,
+    sorter: (a, b) => {
+      return a.name.localeCompare(b.name);
+    },
+  },
+  {
+    title: 'Email',
+    dataIndex: 'email',
+    width: 200,
+    ellipsis: true,
+    sorter: (a, b) => {
+      return a.email.localeCompare(b.email);
+    },
+  },
+];

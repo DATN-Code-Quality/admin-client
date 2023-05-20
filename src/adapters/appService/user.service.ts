@@ -9,19 +9,20 @@ import {
 } from '../api.http';
 
 import { ResponseData } from '~/constant';
-import API from '~/constant/api';
+import API, { USER } from '~/constant/api';
+import { UserStatus } from '~/constant/enum';
 import ROUTE from '~/constant/routes';
+import { UserFilter } from '~/constant/type';
 import { User } from '~/domain/user';
 import { removeSubmitProps } from '~/dto/baseDTO';
 import { UserDTO, userFromDTO, userToDTO } from '~/dto/user';
-import { mockUser } from '~/mock/user.mock';
 
 export function useUser() {
   const navigate = useNavigate();
 
   return {
-    async getAllUsers(): Promise<ResponseData<User[]>> {
-      const response = await getWithPath(API.USER.GET.USERS);
+    async getAllUsers(filter?: UserFilter): Promise<ResponseData<User[]>> {
+      const response = await getWithPath(API.USER.GET.USERS, filter);
       const validResponse = formatResponse<UserDTO[]>(response);
       const convertedData = validResponse.data.map(userFromDTO);
       const covertedResponse = {
@@ -31,8 +32,10 @@ export function useUser() {
       return covertedResponse;
     },
 
-    async getAllMoodleUsers(): Promise<ResponseData<User[]>> {
-      const response = await getWithPath(API.USER.GET.MOODLE_USERS);
+    async getAllMoodleUsers(
+      filter?: UserFilter
+    ): Promise<ResponseData<User[]>> {
+      const response = await getWithPath(API.USER.GET.MOODLE_USERS, filter);
       const validResponse = formatResponse<UserDTO[]>(response);
       const convertedData = validResponse.data.map(userFromDTO);
       const covertedResponse = {
@@ -42,17 +45,38 @@ export function useUser() {
       return covertedResponse;
     },
 
-    async createUser(body): Promise<ResponseData<User[]>> {
+    async importUsers(body): Promise<ResponseData<User[]>> {
       const submitData = body.map((user) => {
         return removeSubmitProps(userToDTO(user));
       });
+      const response = await postWithPath(
+        `${API.USER.POST.IMPORT_USER}`,
+        {},
+        submitData
+      );
+      const validResponse = formatResponse<UserDTO[]>(response);
+      const convertedData = validResponse.data.map(userFromDTO);
+      const covertedResponse = {
+        ...validResponse,
+        data: convertedData,
+      };
+      return covertedResponse;
+    },
+
+    async createUser(body): Promise<ResponseData<User>> {
+      const submitData = userToDTO(body);
       const response = await postWithPath(
         `${API.USER.POST.CREATE_USER}`,
         {},
         submitData
       );
-      const validResponse = formatResponse<User[]>(response);
-      return validResponse;
+      const validResponse = formatResponse<UserDTO>(response);
+      const convertedData = userFromDTO(validResponse.data);
+      const covertedResponse = {
+        ...validResponse,
+        data: convertedData,
+      };
+      return covertedResponse;
     },
 
     async getDetailUser(id: number): Promise<ResponseData<User>> {
@@ -61,28 +85,34 @@ export function useUser() {
     },
 
     async updateUser(body): Promise<ResponseData<User>> {
-      const data = await putWithPath(
+      const response = await putWithPath(
         `${API.USER.PUT.UPDATE_USER}/${body?.id}`,
         {},
         body
       );
-      return formatResponse(data);
+      const validResponse = formatResponse<UserDTO>(response);
+      const convertedData = userFromDTO(validResponse.data);
+      const covertedResponse = {
+        ...validResponse,
+        data: convertedData,
+      };
+      return covertedResponse;
     },
 
-    async blockUser(body): Promise<ResponseData<User>> {
+    async blockUser(id): Promise<ResponseData<User>> {
       const data = await putWithPath(
-        `${API.USER.PUT.UPDATE_USER}/${body?.id}`,
+        `${API.USER.PUT.UPDATE_USER}/change-status`,
         {},
-        body
+        { ids: [id], status: UserStatus.BLOCK }
       );
       return formatResponse(data);
     },
 
-    async unblockUser(body): Promise<ResponseData<User>> {
+    async unblockUser(id): Promise<ResponseData<User>> {
       const data = await putWithPath(
-        `${API.USER.PUT.UPDATE_USER}/${body?.id}`,
+        `${API.USER.PUT.UPDATE_USER}/change-status`,
         {},
-        body
+        { ids: [id], status: UserStatus.ACTIVE }
       );
       return formatResponse(data);
     },

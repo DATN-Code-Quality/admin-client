@@ -1,9 +1,7 @@
 import {
-  SET_ASSIGNMENT_SELECTED,
-  SET_DATA_FILTER,
-  SET_FILTER,
   SET_ISSUE_SELECTED,
   SET_SUBMISSION_ISSUES,
+  SET_SUBMISSION_SELECTED,
 } from '../actions/sonarqube';
 
 const defaultState = {
@@ -27,17 +25,6 @@ const defaultState = {
 const sonarqubeReducer = (state = defaultState, action) => {
   const { type, payload } = action;
   switch (type) {
-    case SET_FILTER:
-      // return {
-      //   ...state,
-      //   filter: { ...state?.filter, ...payload },
-      // };
-      break;
-    case SET_DATA_FILTER:
-      return {
-        ...state,
-        dataResponse: { ...payload },
-      };
     case SET_SUBMISSION_ISSUES:
       return {
         ...state,
@@ -45,8 +32,8 @@ const sonarqubeReducer = (state = defaultState, action) => {
       };
     case SET_ISSUE_SELECTED:
       return { ...state, issueSelected: payload };
-    case SET_ASSIGNMENT_SELECTED:
-      return { ...state, assignmentSelected: payload };
+    case SET_SUBMISSION_SELECTED:
+      return { ...state, submissionSelected: payload };
     default:
       return state;
   }

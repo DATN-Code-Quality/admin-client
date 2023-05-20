@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 
 import { Tabs } from 'antd';
 
-import { TableViewAssignment } from '../components/table-view-assignment';
 import { TableViewParticipant } from '../components/table-view-participant';
 
 import ViewOrCreateCourse from './ViewOrCreateCourse';
@@ -21,25 +20,20 @@ function ViewCourseDetailContainer() {
 
   useEffect(() => {
     getDetailCourse(id).then((res) => {
-      setCourse(res.data);
+      setCourse(res.data.course);
     });
   }, []);
 
   const items = [
     {
-      label: 'Overview',
+      label: 'Thông tin khoá học',
       key: 'overview',
       children: <ViewOrCreateCourse course={course} initialViewMode />,
     },
     {
-      label: 'Participant',
+      label: 'Thành viên khoá học',
       key: 'participant',
       children: <TableViewParticipant course={course} />,
-    },
-    {
-      label: 'Assignment',
-      key: 'assignment',
-      children: <TableViewAssignment course={course} />,
     },
   ];
 

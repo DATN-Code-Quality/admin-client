@@ -9,17 +9,10 @@ export enum ApiStatus {
   UNAUTHORIZED = 403,
 }
 
-export enum Role {
-  GUEST = 1,
-  ROOT_ADMIN = 2,
-  ADMIN = 3,
-  TEACHER = 4,
-  STUDENT = 5,
-}
-
-export enum StateStatus {
+export enum UserStatus {
   INACTIVE = 0,
   ACTIVE = 1,
+  BLOCK = 2,
 }
 
 export enum ServiceType {
@@ -37,8 +30,64 @@ export enum PartnerType {
   AGENCY = 2,
 }
 
+export enum Role {
+  USER = 'user',
+  ADMIN = 'admin',
+  SUPERADMIN = 'superadmin',
+}
+
+export enum SubRole {
+  ADMIN = 'admin',
+  TEACHER = 'teacher',
+  STUDENT = 'student',
+}
+
 export enum ChartType {
   DAY = 1,
   WEEK = 2,
   MONTH = 3,
+}
+
+export enum BugType {
+  CODE_SMELL = 'CODE_SMELL',
+  VULNERABILITY = 'VULNERABILITY',
+  BUG = 'BUG',
+}
+
+export enum BugTypeConstant {
+  CODE_SMELL = 'Code Smell',
+  VULNERABILITY = 'Vulnerability',
+  BUG = 'Bug',
+}
+
+export enum SeverityType {
+  MAJOR = 'MAJOR',
+  CRITICAL = 'CRITICAL',
+  BLOCKER = 'BLOCKER',
+  MINOR = 'MINOR',
+  INFO = 'INFO',
+}
+
+export enum SeverityTypeConstant {
+  MAJOR = 'Major',
+  CRITICAL = 'Critical',
+  BLOCKER = 'Blocker',
+  MINOR = 'Minor',
+  INFO = 'Info',
+}
+
+export enum SubmissionType {
+  SUBMITTED = 0,
+  SCANNING = 1,
+  SCANNED_FAIL = 2,
+  PASS = 3,
+  FAIL = 4,
+}
+
+export enum SubmissionTypeConstant {
+  SUBMITTED = 'Submitted',
+  SCANNING = 'Scanning',
+  SCANNED_FAIL = 'Scanned fail',
+  PASS = 'Pass',
+  FAIL = 'Fail',
 }

@@ -20,19 +20,11 @@ import { authSelector } from '~/adapters/redux/selectors/auth';
 import { MAIN_ROUTES, menus } from '~/constant/menu';
 import ROUTE from '~/constant/routes';
 import useQuery from '~/hooks/useQuery';
-import { capitalizeFirstLetter } from '~/utils';
+import { capitalizeFirstLetter, filterRole, getDefaultRoute } from '~/utils';
 import { arrayToTree, queryAncestors } from '~/utils/menu';
 import { renderRoutes } from '~/utils/route';
 
 const { Header, Sider, Content } = Layout;
-
-const filterRole = (roles) => (menu) => {
-  return menu.role
-    ? roles.some((role) => {
-        return menu.role.includes(role);
-      })
-    : true;
-};
 
 const generateMenus = (data, appType?) => {
   return data.map((item) => {
@@ -61,15 +53,14 @@ const generateMenus = (data, appType?) => {
     );
   });
 };
-
 function LayoutApp() {
   const navigate = useNavigate();
-  const { roles, name } = useSelector(authSelector);
+  const { role, name } = useSelector(authSelector);
   const [collapsed, setCollapsed] = useState<boolean>(false);
   const query = useQuery();
-  const { checkSession, logout } = useAuth();
+  const { checkProfile, logout } = useAuth();
 
-  const filteredMenus = menus.filter(filterRole(roles));
+  const filteredMenus = menus.filter((item) => filterRole(item.roles, [role]));
 
   // Generating tree-structured data for menu content.
   const menuTree = arrayToTree(filteredMenus, 'id', 'menuParentId');
@@ -92,10 +83,11 @@ function LayoutApp() {
     : [];
 
   useEffect(() => {
-    checkSession()
-      .then((data) => {
+    checkProfile()
+      .then((res) => {
         if ([ROUTE.LOGIN, ROUTE.INDEX].includes(location.pathname)) {
-          navigate(ROUTE.DASHBOARD, { replace: true });
+          const defaultRoute = getDefaultRoute([res?.data?.role]);
+          navigate(defaultRoute, { replace: true });
         }
       })
       .catch((err) => {
@@ -115,7 +107,10 @@ function LayoutApp() {
     <Layout className="cms-layout-app">
       <Layout className="site-layout">
         <Header className="site-layout-background-header">
-          <div className="logo" onClick={() => navigate(ROUTE.DASHBOARD)} />
+          <div
+            className="logo"
+            onClick={() => navigate(getDefaultRoute([role]))}
+          />
           {/* <div className="logo" /> */}
           <Menu
             className="menu-header"
@@ -144,7 +139,7 @@ function LayoutApp() {
           </div>
         </Header>
         <Content className="site-layout-background">
-          {renderRoutes(MAIN_ROUTES)}
+          {renderRoutes(MAIN_ROUTES, [role])}
         </Content>
       </Layout>
     </Layout>

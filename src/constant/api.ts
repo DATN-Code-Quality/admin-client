@@ -16,6 +16,7 @@ export const USER = {
   },
   POST: {
     CREATE_USER: '/user',
+    IMPORT_USER: '/user/import-sync-users',
   },
   PUT: {
     UPDATE_USER: '/user',
@@ -36,6 +37,20 @@ export const COURSE = {
   },
 };
 
+export const USER_COURSE = {
+  GET: {
+    USER_COURSE: '/user-course',
+    COURSES_OF_USER: '/user-course/courses-of-user',
+    MOODLE_USERS_COURSE: '/user-course/sync-users',
+  },
+  POST: {
+    USER_COURSE: '/user-course',
+  },
+  PUT: {
+    USER_COURSE: '/user-course',
+  },
+};
+
 export const ASSIGNMENT = {
   GET: {
     ASSIGNMENTS: '/assignment',
@@ -46,7 +61,7 @@ export const ASSIGNMENT = {
     CREATE_ASSIGNMENT: '/assignment',
   },
   PUT: {
-    UPDATE_ASSIGNMENT: '/assignment/update-assignment',
+    UPDATE_ASSIGNMENT: '/assignment',
   },
 };
 
@@ -54,7 +69,7 @@ export const SUBMISSION = {
   GET: {
     SUBMISSIONS: '/submission/get-all-submission',
     SUBMISSION: '/submission/get-submission',
-    SUBMISSIONS_BY_ASSIGNMENT_ID: '/submission/get-submissions',
+    SUBMISSIONS_BY_ASSIGNMENT_ID: '/submission',
     MOODLE_SUBMISSIONS_BY_ASSIGNMENT_ID:
       '/submission-moodle/get-submissions-by-assignment-id',
   },
@@ -66,35 +81,11 @@ export const SUBMISSION = {
   },
 };
 
-export const PARTNER = {
-  GET: {
-    PARTNERS: '/partner',
-  },
-  POST: {
-    CREATE_PARTNER: '/partner',
-  },
-  PUT: {
-    UPDATE_PARTNER: '/partner',
-  },
-};
-
-export const AGENCY = {
-  GET: {
-    AGENCIES: '/agencies',
-  },
-  POST: {
-    CREATE_AGENCY: '/agencies',
-  },
-  PUT: {
-    UPDATE_AGENCY: '/agencies',
-  },
-};
-
 export const AUTH = {
   GET: {
     LOGIN: '/auth/login',
-    LOGIN_ZALO: '/auth/login-via-zalo',
-    CHECK_SESSION: '/auth/session',
+    LOGIN_MICROSOFT: '/auth/login/outlook',
+    CHECK_PROFILE: '/auth/profile',
     LOGOUT: '/auth/logout',
   },
 };
@@ -109,10 +100,9 @@ const API = {
   AUTH,
   USER,
   COURSE,
+  USER_COURSE,
   ASSIGNMENT,
   SUBMISSION,
-  PARTNER,
-  AGENCY,
 };
 
 export default API;

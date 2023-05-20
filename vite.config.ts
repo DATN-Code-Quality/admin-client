@@ -46,7 +46,7 @@ export default ({ mode }) => {
           // 支持内联 JavaScript
           javascriptEnabled: true,
           // 重写 less 变量，定制样式
-          // modifyVars: themeVariables,
+          modifyVars: themeVariables,
         },
       },
     },
@@ -56,7 +56,7 @@ export default ({ mode }) => {
     },
     resolve: {
       alias: {
-        '~': path.resolve(__dirname, './src/'),
+        '~': path.resolve(__dirname, './src'),
       },
     },
     build: {

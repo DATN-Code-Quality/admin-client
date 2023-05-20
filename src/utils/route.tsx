@@ -2,6 +2,9 @@ import React, { Suspense } from 'react';
 
 import { Route, Routes } from 'react-router-dom';
 
+import { filterRole } from '.';
+
+import { Role } from '~/constant/enum';
 import Loading from '~/ui/shared/loading';
 
 export interface IRouteBase {
@@ -15,30 +18,41 @@ export interface IRouteBase {
   featureId?: number;
   hideLink?: boolean;
   type?: string;
-  // roles?: ACCOUNT_ROLE[];
+  roles?: Role[];
 }
 
 export interface IRoute extends IRouteBase {
   children?: IRoute[];
 }
 
-export function renderRoute(route: IRoute, role?: number[]) {
+export function renderRoute(route: IRoute, roles?: Role[]) {
+  if (filterRole(route.roles, roles)) {
+    return (
+      <Route
+        key={route.path}
+        // exact={route.path !== "*"}
+        path={route.path}
+        element={<route.element />}
+      />
+    );
+  }
+
   return (
     <Route
       key={route.path}
       // exact={route.path !== "*"}
       path={route.path}
-      element={<route.element />}
+      element={<p>Sorry, you are not allowed to access this page</p>}
     />
   );
 }
 
-export function renderRoutes(routes: IRoute[], role?: number[]) {
+export function renderRoutes(routes: IRoute[], roles?: Role[]) {
   return (
     <Suspense fallback={<Loading />}>
       <Routes>
         {routes.map((route) => {
-          return renderRoute(route, role);
+          return renderRoute(route, roles);
         })}
       </Routes>
     </Suspense>

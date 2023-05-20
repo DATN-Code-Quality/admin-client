@@ -1,4 +1,11 @@
-import { ChartType, PartnerType, Role, ServiceType, StateStatus } from './enum';
+import {
+  ChartType,
+  PartnerType,
+  Role,
+  ServiceType,
+  SubRole,
+  UserStatus,
+} from './enum';
 
 export const IS_DEVELOPMENT =
   document.location.href.indexOf('localhost') > -1 ||
@@ -14,14 +21,10 @@ export interface ResponseData<T> {
   error?: any;
 }
 
-export const MAP_STATE_STATUS = [
-  [StateStatus.INACTIVE, 'Active'],
-  [StateStatus.INACTIVE, 'Inactive'],
-];
-
-export const MAP_PARTNER_TYPE = [
-  [PartnerType.PARTNER, 'Partner'],
-  [PartnerType.AGENCY, 'Agency'],
+export const MAP_USER_STATUS = [
+  { value: UserStatus.ACTIVE, label: 'Đã kích hoạt' },
+  { value: UserStatus.INACTIVE, label: 'Chưa kích hoạt' },
+  { value: UserStatus.BLOCK, label: 'Đã khóa' },
 ];
 
 export const MAP_SERVICE_TYPE = [
@@ -41,15 +44,31 @@ export const MAP_CHART_TYPE = [
 ];
 
 export const MAP_ROLES = [
-  [Role.GUEST, 'Guest'],
-  [Role.ROOT_ADMIN, 'Root Admin'],
-  [Role.ADMIN, 'Admin'],
-  [Role.TEACHER, 'Teacher'],
-  [Role.STUDENT, 'Student'],
+  { value: Role.ADMIN, label: 'Admin' },
+  { value: Role.USER, label: 'User' },
+];
+
+export const MAP_SUB_ROLES = [
+  { value: SubRole.TEACHER, label: 'Giáo viên' },
+  { value: SubRole.STUDENT, label: 'Học sinh' },
+];
+
+export const MAP_CONFIG_OBJECT = [
+  { value: 'code_smells', label: 'Code Smells' },
+  { value: 'bugs', label: 'Bugs' },
+  { value: 'vulnerabilities', label: 'Vulnerabilities' },
+  { value: 'violations', label: 'Violations' },
+  { value: 'blocker_violations', label: 'Blocker Violations' },
+  { value: 'critical_violations', label: 'Critical Violations' },
+  { value: 'major_violations', label: 'Major Violations' },
+  { value: 'minor_violations', label: 'Minor Violations' },
+  { value: 'info_violations', label: 'Info Violations' },
+  { value: 'duplicated_lines_density', label: 'Duplicated Lines Density' },
+  { value: 'coverage', label: 'Coverage' },
 ];
 
 export const LINE_EMPTY_CODE = '';
 
-export const DEFAULT_PAGE_SIZE = 5;
+export const DEFAULT_PAGE_SIZE = 10;
 
 export const PAGE_SIZE_OPTIONS = [5, 10, 20, 50];

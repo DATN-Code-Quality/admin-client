@@ -7,10 +7,6 @@ import ROUTE from './routes';
 
 const ViewUser = lazy(() => import('../ui/modules/user/containers/ViewUser'));
 
-const ViewPartner = lazy(
-  () => import('../ui/modules/partner/containers/ViewPartner')
-);
-
 const Login = lazy(() => import('../ui/modules/login/containers/Login'));
 
 const Dashboard = lazy(
@@ -29,8 +25,16 @@ const ViewCourseDetail = lazy(
   () => import('../ui/modules/course/containers/ViewCourseDetail')
 );
 
+const ViewMyCourseList = lazy(
+  () => import('../ui/modules/my-course/containers/ViewCourseList')
+);
+
+const ViewMyCourseDetail = lazy(
+  () => import('../ui/modules/my-course/containers/ViewCourseDetail')
+);
+
 const CreateOrViewAssignment = lazy(
-  () => import('../ui/modules/course/containers/ViewOrCreateAssignment')
+  () => import('../ui/modules/my-course/containers/ViewOrCreateAssignment')
 );
 
 const Sonarqube = lazy(
@@ -40,6 +44,8 @@ const Sonarqube = lazy(
 const SonarqubeSubmission = lazy(
   () => import('../ui/modules/sonarqube/containers/Submission')
 );
+
+// TODO: update allow route for each role
 
 export const MAIN_ROUTES = [
   {
@@ -51,57 +57,74 @@ export const MAIN_ROUTES = [
     path: ROUTE.DASHBOARD,
     name: 'dashboard',
     element: Dashboard,
+    roles: [Role.ADMIN, Role.SUPERADMIN],
   },
   {
     path: ROUTE.USER.LIST,
     name: 'users',
     element: ViewUser,
-  },
-  {
-    path: ROUTE.PARTNER.LIST,
-    name: 'Partners',
-    element: ViewPartner,
+    roles: [Role.ADMIN, Role.SUPERADMIN],
   },
   {
     path: ROUTE.COURSE.LIST,
     name: 'courseList',
     element: ViewCourseList,
+    roles: [Role.ADMIN, Role.SUPERADMIN],
   },
   {
     path: ROUTE.COURSE.CREATE,
     name: 'createCourse',
     element: CreateOrViewCourse,
+    roles: [Role.ADMIN, Role.SUPERADMIN],
   },
   {
     path: ROUTE.COURSE.EDIT,
     name: 'updateCourse',
     element: CreateOrViewCourse,
+    roles: [Role.ADMIN, Role.SUPERADMIN],
   },
   {
     path: ROUTE.COURSE.DETAIL,
     name: 'courseDetail',
     element: ViewCourseDetail,
+    roles: [Role.ADMIN, Role.SUPERADMIN],
   },
   {
-    path: ROUTE.COURSE.CREATE_ASSIGNMENT,
+    path: ROUTE.MY_COURSE.LIST,
+    name: 'courseList',
+    element: ViewMyCourseList,
+    roles: [Role.USER],
+  },
+  {
+    path: ROUTE.MY_COURSE.DETAIL,
+    name: 'courseDetail',
+    element: ViewMyCourseDetail,
+    roles: [Role.USER],
+  },
+  {
+    path: ROUTE.MY_COURSE.CREATE_ASSIGNMENT,
     name: 'createCourseAssignment',
     element: CreateOrViewAssignment,
+    roles: [Role.USER],
   },
   {
-    path: ROUTE.COURSE.EDIT_ASSIGNMENT,
+    path: ROUTE.MY_COURSE.EDIT_ASSIGNMENT,
     name: 'updateCourseAssignment',
     element: CreateOrViewAssignment,
+    roles: [Role.USER],
   },
   {
     path: ROUTE.SONARQUBE.LIST,
     name: 'Sonarqube',
     element: Sonarqube,
+    roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],
   },
 
   {
     path: ROUTE.SONARQUBE.SUBMISSION,
     name: 'Submission',
     element: SonarqubeSubmission,
+    roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],
   },
 ];
 
@@ -111,29 +134,35 @@ export const menus = [
     name: 'Dashboard',
     // icon: DownloadOutlined,
     route: ROUTE.DASHBOARD,
-    role: [Role.ROOT_ADMIN, Role.TEACHER, Role.STUDENT],
+    roles: [Role.ADMIN, Role.SUPERADMIN],
   },
   {
     id: 'user',
-    name: 'Users',
+    name: 'Quản lý người dùng',
     // icon: DownloadOutlined,
     route: ROUTE.USER.LIST,
-    role: [Role.ROOT_ADMIN, Role.TEACHER, Role.STUDENT],
+    roles: [Role.ADMIN, Role.SUPERADMIN],
   },
-
   {
     id: 'course',
-    name: 'Courses',
+    name: 'Quản lý khoá học',
     // icon: DownloadOutlined,
     route: ROUTE.COURSE.LIST,
-    role: [Role.ROOT_ADMIN, Role.TEACHER, Role.STUDENT],
+    roles: [Role.ADMIN, Role.SUPERADMIN],
+  },
+  {
+    id: 'myCourse',
+    name: 'Khoá học của tôi',
+    // icon: DownloadOutlined,
+    route: ROUTE.MY_COURSE.LIST,
+    roles: [Role.USER],
   },
   {
     id: 'history',
-    name: 'History',
+    name: 'Lịch sử quét code',
     // icon: DownloadOutlined,
     route: ROUTE.HISTORY,
-    role: [Role.ROOT_ADMIN, Role.TEACHER, Role.STUDENT],
+    roles: [Role.USER],
   },
   // {
   //   id: 'sonarqube',
