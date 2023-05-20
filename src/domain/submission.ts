@@ -45,3 +45,16 @@ export interface IssueWithSource {
   line: number;
   code: string;
 }
+
+export interface ReportAssignment {
+  total: number;
+  submission: {
+    waitToScan?: number;
+    scanning?: number;
+    scanSuccess?: {
+      pass: number;
+      fail: number;
+    };
+    scanFail?: number;
+  };
+}

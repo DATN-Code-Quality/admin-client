@@ -6,7 +6,7 @@ import { ResponseData } from '~/constant';
 import API from '~/constant/api';
 import { SubRole } from '~/constant/enum';
 import { Assignment } from '~/domain/assignment';
-import { Submission } from '~/domain/submission';
+import { ReportAssignment, Submission } from '~/domain/submission';
 import { SubmissionDTO, submissionFromDTO } from '~/dto/submission';
 import { mockAssignment } from '~/mock/assignment.mock';
 
@@ -25,6 +25,16 @@ export function useSubmission() {
       return response;
     },
 
+    async getReportAssignment(
+      courseId: string,
+      assignmentId: string
+    ): Promise<ResponseData<{ role: SubRole; report: ReportAssignment }>> {
+      const response = await getWithPath(
+        `${API.ASSIGNMENT.GET.ASSIGNMENT}/${courseId}/${assignmentId}/report`
+      );
+
+      return response;
+    },
     async getMoodleSubmissionByAssignmentId(
       id: string
     ): Promise<ResponseData<Submission[]>> {

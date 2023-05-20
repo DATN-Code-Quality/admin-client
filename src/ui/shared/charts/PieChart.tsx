@@ -1,24 +1,52 @@
 /* eslint-disable import/no-extraneous-dependencies */
+import { Spin } from 'antd';
 import React, { useMemo } from 'react';
 
-import ApexChart from 'react-apexcharts';
+import ReactApexChart from 'react-apexcharts';
 
-const PieChart = () => {
+const PieChart: React.FC<{
+  series: number[] | string[];
+  labels: string[];
+  color: string[];
+  loading: boolean;
+}> = ({ series, labels, color, loading }) => {
   const chartOptions = useMemo(
     () => ({
-      labels: ['Red', 'Blue', 'Green', 'Yellow'],
-      series: [44, 55, 13, 33],
-      colors: ['#FF4560', '#008FFB', '#00E396', '#FEB019'],
-      legend: {
-        position: 'bottom',
+      chart: {
+        width: 500,
+        type: 'pie',
       },
+      labels,
+      colors: color,
+      responsive: [
+        {
+          breakpoint: 480,
+          options: {
+            chart: {
+              width: 200,
+            },
+            legend: {
+              position: 'bottom',
+            },
+          },
+        },
+      ],
     }),
-    []
+    [labels, color]
   );
 
   return (
-    <div>
-      <ApexChart options={chartOptions} type="pie" width="380" />
+    <div
+      style={{ height: '318px', width: '100%' }}
+      className="flex items-center justify-center"
+    >
+      <ReactApexChart
+        options={chartOptions}
+        type="pie"
+        width="500"
+        series={series}
+      />
+      {loading && <Spin />}
     </div>
   );
 };

@@ -10,6 +10,7 @@ import ViewCourse from './ViewCourse';
 import { useCourse } from '~/adapters/appService/course.service';
 import useQuery from '~/hooks/useQuery';
 import Card from '~/ui/shared/card';
+import CourseStatistic from '../components/course-statistic';
 
 function ViewCourseDetailContainer() {
   const query = useQuery();
@@ -27,7 +28,7 @@ function ViewCourseDetailContainer() {
       .catch((err) => {
         // TODO: handle error
       });
-  }, []);
+  }, [courseId]);
 
   const items = [
     {
@@ -44,6 +45,11 @@ function ViewCourseDetailContainer() {
       label: 'Bài tập',
       key: 'assignment',
       children: <TableViewAssignment course={course} />,
+    },
+    {
+      label: 'Thống kê',
+      key: 'course-report',
+      children: <CourseStatistic courseId={course?.id} />,
     },
   ];
 
