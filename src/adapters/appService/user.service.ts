@@ -16,6 +16,24 @@ import { UserFilter } from '~/constant/type';
 import { User } from '~/domain/user';
 import { removeSubmitProps } from '~/dto/baseDTO';
 import { UserDTO, userFromDTO, userToDTO } from '~/dto/user';
+import Is from '~/utils/is';
+
+const handleFilterMoodleUser = (data: User[], filter?: UserFilter) => {
+  const { search: searchField } = filter || {};
+  const conditions = [
+    searchField
+      ? (user: User) => {
+          return (
+            Is.match(user.name, searchField) ||
+            Is.match(user.email, searchField)
+          );
+        }
+      : () => true,
+  ];
+  return data.filter((course) =>
+    conditions.every((condition) => condition(course))
+  );
+};
 
 export function useUser() {
   const navigate = useNavigate();
@@ -38,9 +56,10 @@ export function useUser() {
       const response = await getWithPath(API.USER.GET.MOODLE_USERS, filter);
       const validResponse = formatResponse<UserDTO[]>(response);
       const convertedData = validResponse.data.map(userFromDTO);
+      const filteredData = handleFilterMoodleUser(convertedData, filter);
       const covertedResponse = {
         ...validResponse,
-        data: convertedData,
+        data: filteredData,
       };
       return covertedResponse;
     },
