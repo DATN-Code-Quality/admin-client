@@ -15,7 +15,7 @@ import { Course } from '~/domain/course';
 import { User } from '~/domain/user';
 import { removeSubmitProps } from '~/dto/baseDTO';
 import { CourseDTO, courseFromDTO, courseToDTO } from '~/dto/course';
-import { UserDTO, userFromDTO } from '~/dto/user';
+import { UserDTO, userFromDTO, userToDTO } from '~/dto/user';
 
 export function useCourse() {
   const navigate = useNavigate();
@@ -139,12 +139,21 @@ export function useCourse() {
       courseId: string,
       body
     ): Promise<ResponseData<User[]>> {
+      const submitData = body.map((user) => {
+        return removeSubmitProps(userToDTO(user));
+      });
       const response = await postWithPath(
         `${API.USER_COURSE.POST.USER_COURSE}/${courseId}/moodle`,
         {},
-        body
+        submitData
       );
-      return formatResponse(response);
+      const validResponse = formatResponse<UserDTO[]>(response);
+      const convertedData = validResponse.data.map(userFromDTO);
+      const covertedResponse = {
+        ...validResponse,
+        data: convertedData,
+      };
+      return covertedResponse;
     },
   };
 }
