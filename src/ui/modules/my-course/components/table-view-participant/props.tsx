@@ -80,14 +80,6 @@ export const columnTableParticipant = (): ColumnType<any>[] => [
       return <p>{getMappingLabelByValue(MAP_SUB_ROLES, value)}</p>;
     },
   },
-  {
-    title: 'Trạng thái',
-    dataIndex: 'status',
-    width: 100,
-    render: (value) => {
-      return <p>{getMappingLabelByValue(MAP_USER_STATUS, value)}</p>;
-    },
-  },
 ];
 
 export const metaCreateParticipant = () => {

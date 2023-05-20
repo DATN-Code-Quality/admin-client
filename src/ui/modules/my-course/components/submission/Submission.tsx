@@ -25,9 +25,14 @@ const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
       assignment.id
     );
     if (response.status !== 0) return;
+
     const { submissions, role } = response.data;
-    if (submissions?.length === 0) return;
-    setRole(role as SubRole);
+    // ???
+    // if (submissions?.length === 0) return;
+
+
+    setRole(role);
+
     setSubmissionList(submissions);
     setSubmission(submissions[0]);
   }, [assignment.courseId, assignment.id]);
@@ -42,7 +47,7 @@ const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
         <div className="grid grid-col-2 bg-white p-4 rounded-2 gap-4">
           <div>
             <p className="assignment-name">{assignment?.name}</p>
-            <p>{assignment?.description}</p>
+            <p>{assignment?.description ?? ' '}</p>
             <div className="submission-container ">
               <p className="title">Bài nộp</p>
 
@@ -64,17 +69,16 @@ const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
       {submissionList?.length === 0 && (
         <div className=" bg-white p-4 rounded-2 gap-4">
           <div className="submission-container ">
-            {subRole === SubRole.ADMIN ||
-              (SubRole.TEACHER && (
-                <div>
-                  <p className="title">Bài nộp</p>
-                  <Empty description="Không tồn tại bài nôp" />
-                </div>
-              ))}
+            {subRole === SubRole.ADMIN && SubRole.TEACHER && (
+              <div>
+                <p className="title">Bài nộp</p>
+                <Empty description="Không tồn tại bài nôp" />
+              </div>
+            )}
 
             {subRole === SubRole.STUDENT && (
               <div>
-                <AddSubmission />
+                <AddSubmission assignment={assignment} />
                 <Overview submission={submission} assignment={assignment} />
               </div>
             )}

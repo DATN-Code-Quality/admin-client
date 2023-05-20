@@ -97,7 +97,7 @@ function TableViewParticipant({ course }) {
         <TableToolbar
           title={`Tìm thấy ${formatNumber(list.items?.length || 0)} người dùng`}
         >
-          <Button
+          {/* <Button
             type="primary"
             className="mr-4"
             icon={<SyncOutlined />}
@@ -105,7 +105,7 @@ function TableViewParticipant({ course }) {
             onClick={syncMoodleModalActions.handleOpen}
           >
             Sync Moodle
-          </Button>
+          </Button> */}
           {/* <Button
             type="primary"
             className="mr-4"
