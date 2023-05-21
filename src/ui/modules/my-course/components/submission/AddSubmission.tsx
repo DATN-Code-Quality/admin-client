@@ -29,8 +29,8 @@ const AddSubmission: React.FC<AddSubmissionProps> = (props) => {
   return (
     <div>
       <div className="gap-4">
-        <p className="submission-title">{assignment.name}</p>
-        <p>{assignment.description}</p>
+        <p className="submission-title">{assignment?.name}</p>
+        <p>{assignment?.description}</p>
       </div>
 
       {isAddSubmission === false ? (
@@ -162,10 +162,7 @@ const AddSubmissionSection = (props: {
       setSubmittedFile(file);
       return false;
     },
-
   };
-
-
 
   return (
     <div className="add-submission-container">
