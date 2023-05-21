@@ -18,24 +18,7 @@ const Statistic: React.FC<{ courseId: string; assignmentId: string }> = ({
   const { getReportAssignment } = useSubmission();
   const fetchReport = useCallback(async () => {
     setLoading(true);
-    // const response = await getReportAssignment(courseId, assignmentId);
-    const response = {
-      status: 0,
-      data: {
-        report: {
-          total: 7,
-          submission: {
-            // waitToScan: 2,
-            scanning: 1,
-            scanSuccess: {
-              pass: 1,
-              fail: 1,
-            },
-            scanFail: 1,
-          },
-        },
-      },
-    };
+    const response = await getReportAssignment(courseId, assignmentId);
     if (response?.status !== 0) return;
     const reportData = response.data.report;
     const { total, submission } = reportData;
@@ -67,8 +50,6 @@ const Statistic: React.FC<{ courseId: string; assignmentId: string }> = ({
   useEffect(() => {
     fetchReport();
   }, [fetchReport]);
-
-  console.log(report);
 
   return (
     <div>
