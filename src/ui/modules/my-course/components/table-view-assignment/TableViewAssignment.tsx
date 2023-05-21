@@ -182,7 +182,7 @@ function TableViewAssignment({ course }) {
                 list.items?.length || 0
               )} bài tập`}
             >
-              {(userRole === SubRole.ADMIN || userRole === SubRole.TEACHER) && (
+              {isTeacher && (
                 <>
                   <Button
                     type="primary"
