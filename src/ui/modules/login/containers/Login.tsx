@@ -80,14 +80,14 @@ function Login() {
               </Button>
             </Form.Item>
           </Form>
-          <Button
+          {/* <Button
             type="primary"
             ghost
             onClick={loginMicrosoft}
             className="login-button login-button-microsoft"
           >
             Đăng nhập bằng Microsoft 365
-          </Button>
+          </Button> */}
         </div>
         {/* <Button type="primary" onClick={loginZalo} className="login-button">
           Login with Microsoft 365
