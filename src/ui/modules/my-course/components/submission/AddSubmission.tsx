@@ -20,11 +20,12 @@ export enum SubmissionSource {
 
 type AddSubmissionProps = {
   assignment: Assignment;
+  onSubmitted?: () => void;
 };
 
 const AddSubmission: React.FC<AddSubmissionProps> = (props) => {
   const [isAddSubmission, setIsAddSubmission] = useState<boolean>(false);
-  const { assignment } = props;
+  const { assignment, onSubmitted } = props;
   const navigate = useNavigate();
   return (
     <div>
@@ -55,8 +56,12 @@ const AddSubmission: React.FC<AddSubmissionProps> = (props) => {
           assignment={assignment}
           onSubmitted={() => {
             setIsAddSubmission(false);
+
+            onSubmitted?.();
+
+
             // location.reload();
-            navigate(0);
+            // navigate(0);
           }}
         />
       )}
