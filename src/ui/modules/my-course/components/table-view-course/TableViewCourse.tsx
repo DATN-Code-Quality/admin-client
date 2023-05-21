@@ -44,8 +44,13 @@ function TableViewCourse() {
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleGetMyCourses = async (args) => {
-    const res = await getAllMyCourses(args);
-    console.log(res);
+    const { startAt, endAt } = args;
+    const convertedArgs = {
+      ...args,
+      startAt: startAt ? new Date(startAt).toISOString() : null,
+      endAt: endAt ? new Date(endAt).toISOString() : null,
+    };
+    const res = await getAllMyCourses(convertedArgs);
     return res;
   };
 
@@ -94,7 +99,7 @@ function TableViewCourse() {
         <TableToolbar
           title={`Tìm thấy ${formatNumber(list.items?.length || 0)} khoá học`}
         >
-          <Button
+          {/* <Button
             type="primary"
             className="mr-4"
             icon={<SyncOutlined />}
@@ -102,7 +107,7 @@ function TableViewCourse() {
             onClick={syncMoodleModalActions.handleOpen}
           >
             Sync Moodle
-          </Button>
+          </Button> */}
           {/* <Button
             type="primary"
             className="mr-4"

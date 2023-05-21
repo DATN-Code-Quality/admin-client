@@ -70,6 +70,14 @@ const isJsonString = (str) => {
   return true;
 };
 
+const isMatch = (target: string, value: string) => {
+  if (isString(value)) {
+    return target.toLowerCase().includes(value.toLowerCase());
+  }
+
+  return false;
+};
+
 export default {
   nullOrUndefined: isNullOrUndefined,
   object: isObject,
@@ -88,4 +96,5 @@ export default {
   url: isUrl,
   empty: isEmpty,
   jsonString: isJsonString,
+  match: isMatch,
 };

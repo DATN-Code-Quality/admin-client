@@ -52,6 +52,8 @@ function TableViewAssignment({ course }) {
   const [assignmentSelected, setAssignmentSelected] =
     useState<Assignment | null>(null);
 
+  const [userRole, setUserRole] = useState<SubRole | undefined>(undefined);
+
   const [syncMoodleModalVisible, syncMoodleModalActions] = useDialog();
   const [currentRole, setCurrentRole] = useState<SubRole>(SubRole.STUDENT);
   const isTeacher = currentRole === SubRole.TEACHER;
@@ -180,23 +182,27 @@ function TableViewAssignment({ course }) {
                 list.items?.length || 0
               )} bài tập`}
             >
-              <Button
-                type="primary"
-                className="mr-4"
-                icon={<SyncOutlined />}
-                loading={list.isLoading}
-                onClick={syncMoodleModalActions.handleOpen}
-              >
-                Sync Moodle
-              </Button>
-              <Button
-                type="primary"
-                icon={<PlusCircleOutlined />}
-                loading={list.isLoading}
-                onClick={handleCreateAssignment}
-              >
-                Tạo mới
-              </Button>
+              {isTeacher && (
+                <>
+                  <Button
+                    type="primary"
+                    className="mr-4"
+                    icon={<SyncOutlined />}
+                    loading={list.isLoading}
+                    onClick={syncMoodleModalActions.handleOpen}
+                  >
+                    Sync Moodle
+                  </Button>
+                  <Button
+                    type="primary"
+                    icon={<PlusCircleOutlined />}
+                    loading={list.isLoading}
+                    onClick={handleCreateAssignment}
+                  >
+                    Tạo mới
+                  </Button>
+                </>
+              )}
             </TableToolbar>
             <BaseTable
               idKey="id"
