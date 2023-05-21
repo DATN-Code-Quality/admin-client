@@ -35,6 +35,18 @@ export function useSubmission() {
 
       return response;
     },
+
+    async getDataExportAssignment(
+      courseId: string,
+      assignmentId: string
+    ): Promise<ResponseData<{ role: SubRole; report: ReportAssignment }>> {
+      const response = await getWithPath(
+        `${API.ASSIGNMENT.GET.ASSIGNMENT}/${courseId}/${assignmentId}/export`
+      );
+
+      return response;
+    },
+
     async getMoodleSubmissionByAssignmentId(
       id: string
     ): Promise<ResponseData<Submission[]>> {

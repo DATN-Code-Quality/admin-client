@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
+import DataTable from './DataTable';
+
 import { useSubmission } from '~/adapters/appService/submission.service';
 import PieChart from '~/ui/shared/charts/PieChart';
 
@@ -83,6 +85,7 @@ const Statistic: React.FC<{ courseId: string; assignmentId: string }> = ({
         ]}
         loading={loading}
       />
+      <DataTable courseId={courseId} assignmentId={assignmentId} />
     </div>
   );
 };

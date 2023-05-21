@@ -147,12 +147,11 @@ const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
     };
     if (response.status !== 0) return;
     const { submissions, role } = response.data;
-    if (submissions?.length === 0) return;
     setRole(role as SubRole);
     setSubmissionList(submissions);
     setSubmission(submissions[0]);
   }, [assignment.courseId, assignment.id]);
-
+  console.log(subRole);
   useEffect(() => {
     fetchSubmission();
   }, [fetchSubmission]);
@@ -160,8 +159,14 @@ const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
   return (
     <div className="bg-white p-4 rounded-2 gap-4">
       {submissionList?.length > 0 && (
-        <div className="grid grid-col-2 bg-white p-4 rounded-2 gap-4">
-          <div>
+        <div
+          className="grid bg-white p-4 rounded-2 gap-4"
+          style={{
+            gridTemplateColumns:
+              tab === SubmisisonTab.SUBMISSION ? '1fr 1fr' : '1fr',
+          }}
+        >
+          <div style={{ width: '100%', overflow: 'hidden' }}>
             <p className="assignment-name">{assignment?.name}</p>
             <p>{assignment?.description}</p>
             <div className="submission-container">
@@ -223,13 +228,12 @@ const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
           {submissionList?.length === 0 && (
             <div className=" bg-white p-4 rounded-2 gap-4">
               <div className="submission-container ">
-                {subRole === SubRole.ADMIN ||
-                  (SubRole.TEACHER && (
-                    <div>
-                      <p className="title">Bài nộp</p>
-                      <Empty description="Không tồn tại bài nôp" />
-                    </div>
-                  ))}
+                {(subRole === SubRole.ADMIN || subRole === SubRole.TEACHER) && (
+                  <div>
+                    <p className="title">Bài nộp</p>
+                    <Empty description="Không tồn tại bài nôp" />
+                  </div>
+                )}
 
                 {subRole === SubRole.STUDENT && (
                   <div>
