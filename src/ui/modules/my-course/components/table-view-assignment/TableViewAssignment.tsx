@@ -21,6 +21,7 @@ import {
 
 import { useAssignment } from '~/adapters/appService/assignment.service';
 import { PAGE_SIZE_OPTIONS } from '~/constant';
+import { SubRole } from '~/constant/enum';
 import { MESSAGE } from '~/constant/message';
 import ROUTE from '~/constant/routes';
 import { Assignment } from '~/domain/assignment';
@@ -51,11 +52,14 @@ function TableViewAssignment({ course }) {
   const [assignmentSelected, setAssignmentSelected] =
     useState<Assignment | null>(null);
 
+  const [userRole, setUserRole] = useState<SubRole | undefined>(undefined);
+
   const [syncMoodleModalVisible, syncMoodleModalActions] = useDialog();
 
   const handleGetAssignments = async (args?) => {
     const res = await getAllAssignments(course.id);
     console.log(res);
+    setUserRole(res.data.role);
     return {
       ...res,
       data: res.data.assignments,
@@ -161,23 +165,27 @@ function TableViewAssignment({ course }) {
                 list.items?.length || 0
               )} bài tập`}
             >
-              <Button
-                type="primary"
-                className="mr-4"
-                icon={<SyncOutlined />}
-                loading={list.isLoading}
-                onClick={syncMoodleModalActions.handleOpen}
-              >
-                Sync Moodle
-              </Button>
-              <Button
-                type="primary"
-                icon={<PlusCircleOutlined />}
-                loading={list.isLoading}
-                onClick={handleCreateAssignment}
-              >
-                Tạo mới
-              </Button>
+              {(userRole === SubRole.ADMIN || userRole === SubRole.TEACHER) && (
+                <>
+                  <Button
+                    type="primary"
+                    className="mr-4"
+                    icon={<SyncOutlined />}
+                    loading={list.isLoading}
+                    onClick={syncMoodleModalActions.handleOpen}
+                  >
+                    Sync Moodle
+                  </Button>
+                  <Button
+                    type="primary"
+                    icon={<PlusCircleOutlined />}
+                    loading={list.isLoading}
+                    onClick={handleCreateAssignment}
+                  >
+                    Tạo mới
+                  </Button>
+                </>
+              )}
             </TableToolbar>
             <BaseTable
               idKey="id"
