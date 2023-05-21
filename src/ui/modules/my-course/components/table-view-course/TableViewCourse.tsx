@@ -43,9 +43,14 @@ function TableViewCourse() {
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  const handleGetMyCourses = async () => {
-    const res = await getAllMyCourses();
-    console.log(res);
+  const handleGetMyCourses = async (args) => {
+    const { startAt, endAt } = args;
+    const convertedArgs = {
+      ...args,
+      startAt: startAt ? new Date(startAt).toISOString() : null,
+      endAt: endAt ? new Date(endAt).toISOString() : null,
+    };
+    const res = await getAllMyCourses(convertedArgs);
     return res;
   };
 
@@ -72,13 +77,13 @@ function TableViewCourse() {
     }
   };
 
-  const handleCreateCourse = async () => {
-    navigate(ROUTE.MY_COURSE.CREATE);
-  };
+  // const handleCreateCourse = async () => {
+  //   navigate(ROUTE.MY_COURSE.CREATE);
+  // };
 
-  const handleUpdateCourse = async (id) => {
-    navigate(`${ROUTE.MY_COURSE.EDIT}?id=${id}`);
-  };
+  // const handleUpdateCourse = async (id) => {
+  //   navigate(`${ROUTE.MY_COURSE.EDIT}?id=${id}`);
+  // };
 
   const columnTableProps = () => [...columnTableCourse()];
 
@@ -94,7 +99,7 @@ function TableViewCourse() {
         <TableToolbar
           title={`Tìm thấy ${formatNumber(list.items?.length || 0)} khoá học`}
         >
-          <Button
+          {/* <Button
             type="primary"
             className="mr-4"
             icon={<SyncOutlined />}
@@ -102,7 +107,7 @@ function TableViewCourse() {
             onClick={syncMoodleModalActions.handleOpen}
           >
             Sync Moodle
-          </Button>
+          </Button> */}
           {/* <Button
             type="primary"
             className="mr-4"

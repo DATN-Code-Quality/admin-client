@@ -35,7 +35,7 @@ import BaseModal from '~/ui/shared/modal';
 import { ButtonType } from '~/ui/shared/modal/props';
 import BaseTable from '~/ui/shared/tables';
 import TableToolbar from '~/ui/shared/toolbar';
-import { formatNumber } from '~/utils';
+import { formatNumber, generateUrl } from '~/utils';
 
 import './TableViewAssignment.less';
 
@@ -44,7 +44,7 @@ function TableViewAssignment({ course }) {
   const {
     getAllAssignments,
     getMoodleAssignments,
-    createAssignment,
+    importAssignments,
     blockAssignment,
   } = useAssignment();
 
@@ -55,11 +55,12 @@ function TableViewAssignment({ course }) {
   const [userRole, setUserRole] = useState<SubRole | undefined>(undefined);
 
   const [syncMoodleModalVisible, syncMoodleModalActions] = useDialog();
+  const [currentRole, setCurrentRole] = useState<SubRole>(SubRole.STUDENT);
+  const isTeacher = currentRole === SubRole.TEACHER;
 
   const handleGetAssignments = async (args?) => {
     const res = await getAllAssignments(course.id);
-    console.log(res);
-    setUserRole(res.data.role);
+    setCurrentRole(res.data.role);
     return {
       ...res,
       data: res.data.assignments,
@@ -75,6 +76,12 @@ function TableViewAssignment({ course }) {
       data: res.data.assignments,
     };
   };
+
+  useEffect(() => {
+    return () => {
+      setAssignmentSelected(null);
+    };
+  }, []);
 
   const [
     list,
@@ -96,7 +103,7 @@ function TableViewAssignment({ course }) {
           configObject: {},
         };
       });
-      await createAssignment(course.id, newValues);
+      await importAssignments(course.id, newValues);
       handleUpdateList();
       message.success(MESSAGE.SUCCESS);
     } catch (error) {
@@ -107,11 +114,18 @@ function TableViewAssignment({ course }) {
   };
 
   const handleCreateAssignment = async () => {
-    navigate(ROUTE.MY_COURSE.CREATE_ASSIGNMENT);
+    const url = generateUrl(ROUTE.MY_COURSE.CREATE_ASSIGNMENT, {
+      course_id: course.id,
+    });
+    navigate(url);
   };
 
   const handleUpdateAssignment = async (id) => {
-    navigate(`${ROUTE.MY_COURSE.EDIT_ASSIGNMENT}?id=${id}`);
+    const url = generateUrl(ROUTE.MY_COURSE.EDIT_ASSIGNMENT, {
+      course_id: course.id,
+      assignment_id: id,
+    });
+    navigate(url);
   };
 
   const handleBlockAssignment = (id) => {
@@ -120,34 +134,37 @@ function TableViewAssignment({ course }) {
     });
   };
 
-  const columnTableProps = () => [
-    ...columnTableAssignment(setAssignmentSelected),
-    {
-      dataIndex: 'action',
-      title: 'Thao tác',
-      width: 100,
-      render: (_, record, index) => {
-        return (
-          <Space size="small">
-            <Button
-              type="primary"
-              size="small"
-              ghost
-              icon={<EditOutlined />}
-              onClick={() => handleUpdateAssignment(record.id)}
-            />
-            <BaseModal
-              onOkFn={handleBlockAssignment}
-              itemTitle="Bạn có muốn chặn assignment"
-              id={record.id}
-              mode={ButtonType.BLOCK}
-              isDelete
-            />
-          </Space>
-        );
-      },
-    },
-  ];
+  const columnTableProps = () => {
+    const columns = [...columnTableAssignment(setAssignmentSelected)];
+    if (isTeacher) {
+      columns.push({
+        dataIndex: 'action',
+        title: 'Thao tác',
+        width: 100,
+        render: (_, record, index) => {
+          return (
+            <Space size="small">
+              <Button
+                type="primary"
+                size="small"
+                ghost
+                icon={<EditOutlined />}
+                onClick={() => handleUpdateAssignment(record.id)}
+              />
+              <BaseModal
+                onOkFn={handleBlockAssignment}
+                itemTitle="Bạn có muốn chặn assignment"
+                id={record.id}
+                mode={ButtonType.BLOCK}
+                isDelete
+              />
+            </Space>
+          );
+        },
+      });
+    }
+    return columns;
+  };
 
   return (
     <>

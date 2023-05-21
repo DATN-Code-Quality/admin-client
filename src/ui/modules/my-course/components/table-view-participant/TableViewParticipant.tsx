@@ -43,8 +43,8 @@ function TableViewParticipant({ course }) {
   const [syncMoodleModalVisible, syncMoodleModalActions] = useDialog();
   const [currentRole, setCurrentRole] = useState<SubRole>(SubRole.STUDENT);
 
-  const handleGetParticipants = async () => {
-    const res = await getParticipantsByCourseId(course.id);
+  const handleGetParticipants = async (args) => {
+    const res = await getParticipantsByCourseId(course.id, args);
     setCurrentRole(res.data.role);
     return {
       ...res,
@@ -97,7 +97,7 @@ function TableViewParticipant({ course }) {
         <TableToolbar
           title={`Tìm thấy ${formatNumber(list.items?.length || 0)} người dùng`}
         >
-          <Button
+          {/* <Button
             type="primary"
             className="mr-4"
             icon={<SyncOutlined />}
@@ -105,7 +105,7 @@ function TableViewParticipant({ course }) {
             onClick={syncMoodleModalActions.handleOpen}
           >
             Sync Moodle
-          </Button>
+          </Button> */}
           {/* <Button
             type="primary"
             className="mr-4"

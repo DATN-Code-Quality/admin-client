@@ -15,7 +15,54 @@ import { Course } from '~/domain/course';
 import { User } from '~/domain/user';
 import { removeSubmitProps } from '~/dto/baseDTO';
 import { CourseDTO, courseFromDTO, courseToDTO } from '~/dto/course';
-import { UserDTO, userFromDTO } from '~/dto/user';
+import { UserDTO, userFromDTO, userToDTO } from '~/dto/user';
+import Is from '~/utils/is';
+
+const handleFilterMoodleCourse = (data: Course[], filter?: CourseFilter) => {
+  const { search: searchField, startAt, endAt } = filter || {};
+  const startAtTime = startAt ? new Date(startAt).getTime() : null;
+  const endAtTime = endAt ? new Date(endAt).getTime() : null;
+  const conditions = [
+    searchField
+      ? (course: Course) => Is.match(course.name, searchField)
+      : () => true,
+    startAtTime
+      ? (course: Course) => new Date(course.startAt).getTime() >= startAtTime
+      : () => true,
+    endAtTime
+      ? (course: Course) => new Date(course.endAt).getTime() <= endAtTime
+      : () => true,
+    startAtTime && endAtTime
+      ? (course: Course) =>
+          new Date(course.startAt).getTime() >= startAtTime &&
+          new Date(course.endAt).getTime() <= endAtTime
+      : () => true,
+  ];
+  return data.filter((course) =>
+    conditions.every((condition) => condition(course))
+  );
+};
+
+const handleFilterMoodleParitipant = (
+  data: User[],
+  filter?: ParticipantFilter
+) => {
+  const { search: searchField, role } = filter || {};
+  const conditions = [
+    searchField
+      ? (user: User) => {
+          return (
+            Is.match(user.name, searchField) ||
+            Is.match(user.email, searchField)
+          );
+        }
+      : () => true,
+    role ? (user: User) => user.role === role : () => true,
+  ];
+  return data.filter((course) =>
+    conditions.every((condition) => condition(course))
+  );
+};
 
 export function useCourse() {
   const navigate = useNavigate();
@@ -56,9 +103,10 @@ export function useCourse() {
       const response = await getWithPath(API.COURSE.GET.MOODLE_COURSES, filter);
       const validResponse = formatResponse<CourseDTO[]>(response);
       const convertedData = validResponse.data.map(courseFromDTO);
+      const filteredData = handleFilterMoodleCourse(convertedData, filter);
       const covertedResponse = {
         ...validResponse,
-        data: convertedData,
+        data: filteredData,
       };
       return covertedResponse;
     },
@@ -110,9 +158,10 @@ export function useCourse() {
       );
       const validResponse = formatResponse<UserDTO[]>(response);
       const convertedData = validResponse.data.map(userFromDTO);
+      const filteredData = handleFilterMoodleParitipant(convertedData, filter);
       const covertedResponse = {
         ...validResponse,
-        data: convertedData,
+        data: filteredData,
       };
       return covertedResponse;
     },
@@ -139,12 +188,21 @@ export function useCourse() {
       courseId: string,
       body
     ): Promise<ResponseData<User[]>> {
+      const submitData = body.map((user) => {
+        return removeSubmitProps(userToDTO(user));
+      });
       const response = await postWithPath(
         `${API.USER_COURSE.POST.USER_COURSE}/${courseId}/moodle`,
         {},
-        body
+        submitData
       );
-      return formatResponse(response);
+      const validResponse = formatResponse<UserDTO[]>(response);
+      const convertedData = validResponse.data.map(userFromDTO);
+      const covertedResponse = {
+        ...validResponse,
+        data: convertedData,
+      };
+      return covertedResponse;
     },
   };
 }
