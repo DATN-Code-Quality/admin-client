@@ -7,7 +7,7 @@ import { DOMAIN_API_URL, ResponseData } from '~/constant';
 import API from '~/constant/api';
 import { SubRole } from '~/constant/enum';
 import { Assignment } from '~/domain/assignment';
-import { Submission } from '~/domain/submission';
+import { ReportAssignment, Submission } from '~/domain/submission';
 import { SubmissionDTO, submissionFromDTO } from '~/dto/submission';
 import LocalStorage from '~/libs/LocalStorage/LocalStorage';
 import { mockAssignment } from '~/mock/assignment.mock';
@@ -24,6 +24,28 @@ export function useSubmission() {
     ): Promise<ResponseData<{ role: SubRole; submissions: Submission[] }>> {
       const response = await getWithPath(
         `${API.SUBMISSION.GET.SUBMISSIONS_BY_ASSIGNMENT_ID}/${courseId}/${assignmentId}`
+      );
+
+      return response;
+    },
+
+    async getReportAssignment(
+      courseId: string,
+      assignmentId: string
+    ): Promise<ResponseData<{ role: SubRole; report: ReportAssignment }>> {
+      const response = await getWithPath(
+        `${API.ASSIGNMENT.GET.ASSIGNMENT}/${courseId}/${assignmentId}/report`
+      );
+
+      return response;
+    },
+
+    async getDataExportAssignment(
+      courseId: string,
+      assignmentId: string
+    ): Promise<ResponseData<{ role: SubRole; report: ReportAssignment }>> {
+      const response = await getWithPath(
+        `${API.ASSIGNMENT.GET.ASSIGNMENT}/${courseId}/${assignmentId}/export`
       );
 
       return response;

@@ -6,7 +6,7 @@ import { ResponseData } from '~/constant';
 import API from '~/constant/api';
 import { SubRole } from '~/constant/enum';
 import { CourseFilter, ParticipantFilter } from '~/constant/type';
-import { Course } from '~/domain/course';
+import { Course, ReportCourse } from '~/domain/course';
 import { User } from '~/domain/user';
 import { removeSubmitProps } from '~/dto/baseDTO';
 import { CourseDTO, courseFromDTO, courseToDTO } from '~/dto/course';
@@ -74,6 +74,19 @@ export function useCourse() {
         data: convertedData,
       };
       return covertedResponse;
+    },
+
+    async getReportCourse(courseId: string): Promise<
+      ResponseData<{
+        role: SubRole;
+        report: { total: number; assignment: ReportCourse[] };
+      }>
+    > {
+      const response = await getWithPath(
+        `${API.COURSE.GET.COURSE}/${courseId}/report`
+      );
+
+      return response;
     },
 
     async getAllMyCourses(
