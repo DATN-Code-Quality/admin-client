@@ -57,21 +57,19 @@ const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
                 (subRole === SubRole.TEACHER && (
                   <div className="flex items-center">
                     <p
-                      className={`title cursor-pointer ${
-                        tab === SubmisisonTab.SUBMISSION
-                          ? 'submission-tab-active'
-                          : ''
-                      }`}
+                      className={`title cursor-pointer ${tab === SubmisisonTab.SUBMISSION
+                        ? 'submission-tab-active'
+                        : ''
+                        }`}
                       onClick={() => setTab(SubmisisonTab.SUBMISSION)}
                     >
                       Bài nộp
                     </p>
                     <p
-                      className={`title cursor-pointer  ml-4 ${
-                        tab === SubmisisonTab.STATISTIC
-                          ? 'submission-tab-active'
-                          : ''
-                      }`}
+                      className={`title cursor-pointer  ml-4 ${tab === SubmisisonTab.STATISTIC
+                        ? 'submission-tab-active'
+                        : ''
+                        }`}
                       onClick={() => setTab(SubmisisonTab.STATISTIC)}
                     >
                       Thống kê
@@ -120,7 +118,10 @@ const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
 
                 {subRole === SubRole.STUDENT && (
                   <div>
-                    <AddSubmission />
+                    <AddSubmission
+                      assignment={assignment}
+                      onSubmitted={() => fetchSubmission()}
+                    />
                     <Overview submission={submission} assignment={assignment} />
                   </div>
                 )}
