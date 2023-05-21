@@ -56,7 +56,7 @@ const Overview: React.FC<{
     }, initMap);
     setData(dataRes);
     setLoading(false);
-  }, [assignment?.courseId, assignment?.id, getOverViewSubmission, submission]);
+  }, [assignment?.courseId, assignment?.id, submission]);
 
   useEffect(() => {
     fetchOverview();
