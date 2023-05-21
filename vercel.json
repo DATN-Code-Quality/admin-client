@@ -1,5 +1,19 @@
 {
   "rewrites":  [
-    {"source": "(.*)", "destination": "/index.html"}
+      { "source": "/dashboard", "destination": "/index.html" },
+    { "source": "/history", "destination": "/index.html" },
+    { "source": "/user/list", "destination": "/index.html" },
+    { "source": "/course/list", "destination": "/index.html" },
+    { "source": "/course/detail", "destination": "/index.html" },
+    { "source": "/course/create", "destination": "/index.html" },
+    { "source": "/course/edit", "destination": "/index.html" },
+    { "source": "/my-course/list", "destination": "/index.html" },
+    { "source": "/my-course/detail", "destination": "/index.html" },
+    { "source": "/my-course/create-assignment", "destination": "/index.html" },
+    { "source": "/my-course/edit-assignment", "destination": "/index.html" },
+    { "source": "/login", "destination": "/index.html" },
+    { "source": "/sonarqube/list", "destination": "/index.html" },
+    { "source": "/sonarqube/submission", "destination": "/index.html" },
+    {"source": "/(.*)", "destination": "/index.html"}
   ]
 }
