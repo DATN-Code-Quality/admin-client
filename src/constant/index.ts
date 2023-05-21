@@ -67,6 +67,25 @@ export const MAP_CONFIG_OBJECT = [
   { value: 'coverage', label: 'Coverage' },
 ];
 
+export const CONDITION_OPERATOR = {
+  coverage: 'LT',
+  duplicated_lines_density: 'GT',
+  blocker_violations: 'GT',
+  critical_violations: 'GT',
+  major_violations: 'GT',
+  minor_violations: 'GT',
+  info_violations: 'GT',
+  violations: 'GT',
+  code_smells: 'GT',
+  bugs: 'GT',
+  vulnerabilities: 'GT',
+};
+
+export const MAP_CONDITION_OPERATOR = [
+  { value: 'LT', label: 'Less than' },
+  { value: 'GT', label: 'Greater than' },
+];
+
 export const LINE_EMPTY_CODE = '';
 
 export const DEFAULT_PAGE_SIZE = 10;

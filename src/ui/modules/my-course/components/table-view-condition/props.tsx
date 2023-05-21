@@ -1,7 +1,12 @@
 import { ColumnType } from 'antd/lib/table';
 
-import { MAP_CONFIG_OBJECT } from '~/constant';
+import {
+  CONDITION_OPERATOR,
+  MAP_CONDITION_OPERATOR,
+  MAP_CONFIG_OBJECT,
+} from '~/constant';
 import { getMappingLabelByValue } from '~/utils';
+import Is from '~/utils/is';
 
 export const columnTableCondition = (): ColumnType<any>[] => [
   {
@@ -9,11 +14,17 @@ export const columnTableCondition = (): ColumnType<any>[] => [
     dataIndex: 'key',
     width: 200,
     ellipsis: true,
-    sorter: (a, b) => {
-      return a.name.localeCompare(b.name);
-    },
     render: (value, record, index) => {
       return <p>{getMappingLabelByValue(MAP_CONFIG_OBJECT, value)}</p>;
+    },
+  },
+  {
+    title: 'Operator',
+    width: 200,
+    ellipsis: true,
+    render: (value, record, index) => {
+      const operator: any = CONDITION_OPERATOR[record.key];
+      return <p>{getMappingLabelByValue(MAP_CONDITION_OPERATOR, operator)}</p>;
     },
   },
   {
@@ -58,6 +69,26 @@ export const metaFormUpdateCondition = (record) => {
         widgetProps: {
           placeholder: `Nhập giá trị điều kiện`,
         },
+        rules: [
+          {
+            validator: (rule, value, callback) => {
+              return new Promise((resolve, reject) => {
+                const numberValue = parseInt(value, 10);
+                if (
+                  Is.number(numberValue) &&
+                  numberValue >= 0 &&
+                  numberValue <= 100
+                ) {
+                  resolve();
+                } else {
+                  reject(
+                    new Error('Giá trị phải là số và nằm trong khoảng 0-100')
+                  );
+                }
+              });
+            },
+          },
+        ],
       },
     ],
   };

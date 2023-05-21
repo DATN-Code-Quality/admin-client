@@ -9,6 +9,7 @@ import { MAP_CONFIG_OBJECT, MAP_USER_STATUS } from '~/constant';
 import Editor from '~/ui/shared/editor';
 import UploadButton from '~/ui/shared/upload';
 import { enableAllowedOptions } from '~/utils';
+import Is from '~/utils/is';
 
 const UploadFile = () => {
   return (
@@ -164,6 +165,26 @@ export const metaFormAddCondition = ({ conditions }) => {
         widgetProps: {
           placeholder: `Nhập giá trị điều kiện`,
         },
+        rules: [
+          {
+            validator: (rule, value, callback) => {
+              return new Promise((resolve, reject) => {
+                const numberValue = parseInt(value, 10);
+                if (
+                  Is.number(numberValue) &&
+                  numberValue >= 0 &&
+                  numberValue <= 100
+                ) {
+                  resolve();
+                } else {
+                  reject(
+                    new Error('Giá trị phải là số và nằm trong khoảng 0-100')
+                  );
+                }
+              });
+            },
+          },
+        ],
       },
     ],
   };
