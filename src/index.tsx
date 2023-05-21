@@ -9,11 +9,11 @@ import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 
+import 'antd/dist/antd.css';
 import Store from './adapters/redux/store';
 import App from './App';
 import 'dayjs/locale/vi';
 import './ui/css/style.less';
-import 'antd/dist/antd.css';
 import 'antd-button-color/dist/css/style.less';
 import './theme.less';
 

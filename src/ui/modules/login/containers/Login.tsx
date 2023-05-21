@@ -48,14 +48,14 @@ function Login() {
               rules={[
                 {
                   required: true,
-                  message: 'Please input your Username!',
+                  message: 'Vui lòng không bỏ trống tài khoản!',
                 },
               ]}
             >
               <Input
                 size="large"
                 prefix={<UserOutlined className="site-form-item-icon" />}
-                placeholder="Username"
+                placeholder="Tài khoản"
               />
             </Form.Item>
             <Form.Item
@@ -63,7 +63,7 @@ function Login() {
               rules={[
                 {
                   required: true,
-                  message: 'Please input your Password!',
+                  message: 'Vui lòng không bỏ trống mật khẩu!',
                 },
               ]}
             >
@@ -71,12 +71,12 @@ function Login() {
                 size="large"
                 prefix={<LockOutlined className="site-form-item-icon" />}
                 type="password"
-                placeholder="Password"
+                placeholder="Mật khẩu"
               />
             </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit" className="login-button">
-                Login
+                Đăng nhập
               </Button>
             </Form.Item>
           </Form>
@@ -86,7 +86,7 @@ function Login() {
             onClick={loginMicrosoft}
             className="login-button login-button-microsoft"
           >
-            Login with Microsoft 365
+            Đăng nhập bằng Microsoft 365
           </Button>
         </div>
         {/* <Button type="primary" onClick={loginZalo} className="login-button">
