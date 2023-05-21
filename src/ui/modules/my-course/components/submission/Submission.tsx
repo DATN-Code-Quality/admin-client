@@ -1,14 +1,18 @@
+/* eslint-disable import/order */
 import React, { useCallback, useEffect, useState } from 'react';
 
 import Overview from './Overview';
 
 import { useSubmission } from '~/adapters/appService/submission.service';
 import './style.css';
+import { SubRole, SubmisisonTab, SubmissionType } from '~/constant/enum';
 import { Assignment } from '~/domain/assignment';
 import { ReportAssignment, Submission } from '~/domain/submission';
+
 import AddSubmission from './AddSubmission';
+
 import { Empty } from 'antd';
-import { SubRole, SubmisisonTab, SubmissionType } from '~/constant/enum';
+
 import Statistic from './Statistic';
 
 const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
@@ -343,9 +347,7 @@ const SubmissionItem: React.FC<{
       onClick={() => setSubmission(submission)}
     >
       <div className="flex items-center justify-between">
-        <a className="flex-1" href={submission.link}>
-          {submission.link}
-        </a>
+        <p className="flex-1">{submission.link}</p>
         <span>{renderStatus(submission?.status as SubmissionType)}</span>
       </div>
       <div className="flex items-center justify-between">
