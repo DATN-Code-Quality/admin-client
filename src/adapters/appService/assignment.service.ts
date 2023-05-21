@@ -116,10 +116,11 @@ export function useAssignment() {
       body
     ): Promise<ResponseData<Assignment>> {
       const submitData = removeSubmitProps(assignmentToDTO(body));
+      const { id, ...rest } = submitData;
       const response = await putWithPath(
         `${API.ASSIGNMENT.PUT.UPDATE_ASSIGNMENT}/${courseId}/${body.id}`,
         {},
-        submitData
+        rest
       );
       const validResponse = formatResponse<AssignmentDTO>(response);
       const convertedData = assignmentFromDTO(validResponse.data);

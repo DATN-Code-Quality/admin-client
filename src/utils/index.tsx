@@ -191,7 +191,7 @@ export const formatNumber = (number, locale = 'vi-VN') => {
 
 // function to format date to locale
 export const formatDate = (date, locale?: 'vi-VN', format?: string) => {
-  return date && dayjs(Number(date)).format(format || 'DD/MM/YYYY HH:mm:ss');
+  return date && dayjs(Number(date)).format(format || 'DD-MM-YYYY HH:mm:ss');
 };
 
 export function debounce(func, timeout = 300) {

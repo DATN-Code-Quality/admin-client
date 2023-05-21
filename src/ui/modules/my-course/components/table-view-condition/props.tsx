@@ -1,7 +1,12 @@
 import { ColumnType } from 'antd/lib/table';
 
-import { MAP_CONFIG_OBJECT } from '~/constant';
+import {
+  CONDITION_OPERATOR,
+  MAP_CONDITION_OPERATOR,
+  MAP_CONFIG_OBJECT,
+} from '~/constant';
 import { getMappingLabelByValue } from '~/utils';
+import Is from '~/utils/is';
 
 export const columnTableCondition = (): ColumnType<any>[] => [
   {
@@ -9,11 +14,17 @@ export const columnTableCondition = (): ColumnType<any>[] => [
     dataIndex: 'key',
     width: 200,
     ellipsis: true,
-    sorter: (a, b) => {
-      return a.name.localeCompare(b.name);
-    },
     render: (value, record, index) => {
       return <p>{getMappingLabelByValue(MAP_CONFIG_OBJECT, value)}</p>;
+    },
+  },
+  {
+    title: 'Operator',
+    width: 200,
+    ellipsis: true,
+    render: (value, record, index) => {
+      const operator: any = CONDITION_OPERATOR[record.key];
+      return <p>{getMappingLabelByValue(MAP_CONDITION_OPERATOR, operator)}</p>;
     },
   },
   {
@@ -54,10 +65,31 @@ export const metaFormUpdateCondition = (record) => {
         key: 'value',
         initialValue: record.value,
         label: 'Giá trị:',
-        required: true,
         widgetProps: {
           placeholder: `Nhập giá trị điều kiện`,
         },
+        rules: [
+          {
+            validator: (rule, value, callback) => {
+              const maxValue =
+                record.key === 'coverage' ? 100 : Number.MAX_SAFE_INTEGER;
+              return new Promise((resolve, reject) => {
+                const numberValue = parseInt(value, 10);
+                if (!value) {
+                  reject(new Error(`Vui lòng không bỏ trống`));
+                } else if (!Is.number(numberValue)) {
+                  reject(new Error(`Giá trị phải là một số nguyên`));
+                } else if (numberValue < 0 || numberValue > maxValue) {
+                  reject(
+                    new Error(`Giá trị phải nằm trong khoảng 0-${maxValue}`)
+                  );
+                } else {
+                  resolve();
+                }
+              });
+            },
+          },
+        ],
       },
     ],
   };
