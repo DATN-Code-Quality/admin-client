@@ -65,25 +65,26 @@ export const metaFormUpdateCondition = (record) => {
         key: 'value',
         initialValue: record.value,
         label: 'Giá trị:',
-        required: true,
         widgetProps: {
           placeholder: `Nhập giá trị điều kiện`,
         },
         rules: [
           {
             validator: (rule, value, callback) => {
+              const maxValue =
+                record.key === 'coverage' ? 100 : Number.MAX_SAFE_INTEGER;
               return new Promise((resolve, reject) => {
                 const numberValue = parseInt(value, 10);
-                if (
-                  Is.number(numberValue) &&
-                  numberValue >= 0 &&
-                  numberValue <= 100
-                ) {
-                  resolve();
-                } else {
+                if (!value) {
+                  reject(new Error(`Vui lòng không bỏ trống`));
+                } else if (!Is.number(numberValue)) {
+                  reject(new Error(`Giá trị phải là một số nguyên`));
+                } else if (numberValue < 0 || numberValue > maxValue) {
                   reject(
-                    new Error('Giá trị phải là số và nằm trong khoảng 0-100')
+                    new Error(`Giá trị phải nằm trong khoảng 0-${maxValue}`)
                   );
+                } else {
+                  resolve();
                 }
               });
             },
