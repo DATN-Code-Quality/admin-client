@@ -13,7 +13,7 @@ export default ({ mode }) => {
     fs.readFileSync(path.resolve(__dirname, './src/theme.less'), 'utf8')
   );
   return defineConfig({
-    base: '',
+    base: 'https://admin-client-one.vercel.app/',
     plugins: [
       reactRefresh(),
       // createStyleImportPlugin({
