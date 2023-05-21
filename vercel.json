@@ -13,7 +13,6 @@
     { "source": "/my-course/edit-assignment", "destination": "/index.html" },
     { "source": "/login", "destination": "/index.html" },
     { "source": "/sonarqube/list", "destination": "/index.html" },
-    { "source": "/sonarqube/submission", "destination": "/index.html" },
     {"source": "/(.*)", "destination": "/index.html"}
   ]
 }
