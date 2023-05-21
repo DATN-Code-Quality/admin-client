@@ -53,6 +53,7 @@ const FormAddAssignment = ({
   const [submissionType, setSubmissionType] = useState<any>(null);
   const [formValues, setFormValues] = useState({});
   const [conditions, setConditions] = useState<any>([]);
+  const [currentCondition, setCurrentCondition] = useState<any>(null);
 
   const handleSubmitFail = (errMsg) => (err) => {
     message.error(errMsg);
@@ -97,6 +98,10 @@ const FormAddAssignment = ({
 
   const handleChangeSubmissionType = (e) => {
     setSubmissionType(e.target.value);
+  };
+
+  const handleSelectCondition = (value) => {
+    setCurrentCondition(value);
   };
 
   const handleAddCondition = async (values) => {
@@ -195,6 +200,8 @@ const FormAddAssignment = ({
                 mode={ButtonType.CREATE}
                 meta={metaFormAddCondition({
                   conditions,
+                  currentCondition,
+                  handleSelectCondition,
                 })}
                 formProps={{ layout: 'vertical' }}
               />
