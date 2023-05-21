@@ -9,6 +9,7 @@ import { InboxOutlined } from '@ant-design/icons';
 import { Assignment } from '~/domain/assignment';
 import { RcFile } from 'antd/lib/upload';
 import { useSubmission } from '~/adapters/appService/submission.service';
+import { useNavigate, useNavigation } from 'react-router-dom';
 
 export enum SubmissionSource {
   GIT = 'Git',
@@ -24,6 +25,7 @@ type AddSubmissionProps = {
 const AddSubmission: React.FC<AddSubmissionProps> = (props) => {
   const [isAddSubmission, setIsAddSubmission] = useState<boolean>(false);
   const { assignment } = props;
+  const navigate = useNavigate();
   return (
     <div>
       <div className="gap-4">
@@ -53,7 +55,8 @@ const AddSubmission: React.FC<AddSubmissionProps> = (props) => {
           assignment={assignment}
           onSubmitted={() => {
             setIsAddSubmission(false);
-            location.reload();
+            // location.reload();
+            navigate(0);
           }}
         />
       )}
