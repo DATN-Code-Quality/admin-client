@@ -14,6 +14,7 @@ import AddSubmission from './AddSubmission';
 import { Empty } from 'antd';
 
 import Statistic from './Statistic';
+import { formatDate } from '~/utils';
 
 const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
   assignment,
@@ -57,19 +58,21 @@ const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
                 (subRole === SubRole.TEACHER && (
                   <div className="flex items-center">
                     <p
-                      className={`title cursor-pointer ${tab === SubmisisonTab.SUBMISSION
-                        ? 'submission-tab-active'
-                        : ''
-                        }`}
+                      className={`title cursor-pointer ${
+                        tab === SubmisisonTab.SUBMISSION
+                          ? 'submission-tab-active'
+                          : ''
+                      }`}
                       onClick={() => setTab(SubmisisonTab.SUBMISSION)}
                     >
                       Bài nộp
                     </p>
                     <p
-                      className={`title cursor-pointer  ml-4 ${tab === SubmisisonTab.STATISTIC
-                        ? 'submission-tab-active'
-                        : ''
-                        }`}
+                      className={`title cursor-pointer  ml-4 ${
+                        tab === SubmisisonTab.STATISTIC
+                          ? 'submission-tab-active'
+                          : ''
+                      }`}
                       onClick={() => setTab(SubmisisonTab.STATISTIC)}
                     >
                       Thống kê
@@ -144,12 +147,12 @@ const SubmissionItem: React.FC<{
       case SubmissionType.SUBMITTED:
         return (
           <div
-            className="px-2 py-1 rounded-2"
+            className="px-4 py-2 rounded-2"
             style={{
               background: '#7e7676',
               color: 'white',
               fontWeight: 600,
-              minWidth: '60px',
+              minWidth: '80px',
               textAlign: 'center',
             }}
           >
@@ -159,12 +162,12 @@ const SubmissionItem: React.FC<{
       case SubmissionType.SCANNING:
         return (
           <div
-            className="px-2 py-1 rounded-2"
+            className="px-4 py-3 rounded-2"
             style={{
               background: 'blue',
               color: 'white',
               fontWeight: 600,
-              minWidth: '60px',
+              minWidth: '80px',
               textAlign: 'center',
             }}
           >
@@ -174,12 +177,12 @@ const SubmissionItem: React.FC<{
       case SubmissionType.PASS:
         return (
           <div
-            className="px-2 py-1 rounded-2"
+            className="px-4 py-2 rounded-2"
             style={{
               background: 'green',
               color: 'white',
               fontWeight: 600,
-              minWidth: '60px',
+              minWidth: '80px',
               textAlign: 'center',
             }}
           >
@@ -189,12 +192,12 @@ const SubmissionItem: React.FC<{
       case SubmissionType.FAIL:
         return (
           <div
-            className="px-2 py-1 rounded-2"
+            className="px-4 py-2 rounded-2"
             style={{
               background: 'red',
               color: 'white',
               fontWeight: 600,
-              minWidth: '60px',
+              minWidth: '80px',
               textAlign: 'center',
             }}
           >
@@ -204,12 +207,12 @@ const SubmissionItem: React.FC<{
       case SubmissionType.SCANNED_FAIL:
         return (
           <div
-            className="px-2 py-1 rounded-2"
+            className="px-4 py-2 rounded-2"
             style={{
               background: 'green',
               color: 'white',
               fontWeight: 600,
-              minWidth: '60px',
+              minWidth: '80px',
               textAlign: 'center',
             }}
           >
@@ -227,17 +230,41 @@ const SubmissionItem: React.FC<{
       onClick={() => setSubmission(submission)}
     >
       <div className="flex items-center justify-between">
-        <p className="flex-1">{submission.link}</p>
-        <span>{renderStatus(submission?.status as SubmissionType)}</span>
-      </div>
-      <div className="flex items-center justify-between">
-        <p>
-          Name : <span className="font-semibold">{submission?.user?.name}</span>
-        </p>
-        <p>
-          Time submit :{' '}
-          <span className="font-semibold">{submission?.updatedAt} </span>{' '}
-        </p>
+        {/* <p className="flex-1">{submission.link}</p> */}
+        <div>
+          <div>
+            <span className="font-semibold">Name: </span>
+            {submission?.user?.name}
+          </div>
+          <div>
+            <span className="font-semibold">Time submit: </span>
+            {formatDate(
+              new Date(submission.createdAt ?? ''),
+              'vi-VN',
+              'YYYY-MM-DD hh:mm:ss'
+            )}
+            {/* {submission?.updatedAt} */}
+          </div>
+          <div>
+            <span className="font-semibold">Submitted file: </span>
+            <a href={submission.link}>link</a>
+          </div>
+        </div>
+        <div
+          style={{
+            flexDirection: 'column',
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            display: 'flex',
+            borderLeftStyle: 'solid',
+            borderLeftWidth: 1,
+            borderLeftColor: 'black',
+            padding: 4,
+          }}
+        >
+          <h3 style={{ fontWeight: 700 }}>STATUS</h3>
+          <span>{renderStatus(submission?.status as SubmissionType)}</span>
+        </div>
       </div>
     </div>
   );
