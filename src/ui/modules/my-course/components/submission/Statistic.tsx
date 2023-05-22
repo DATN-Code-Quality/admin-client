@@ -18,32 +18,40 @@ const Statistic: React.FC<{ courseId: string; assignmentId: string }> = ({
   const { getReportAssignment } = useSubmission();
   const fetchReport = useCallback(async () => {
     setLoading(true);
-    const response = await getReportAssignment(courseId, assignmentId);
-    if (response?.status !== 0) return;
-    const reportData = response.data.report;
-    const { total, submission } = reportData;
-    const labels = [
-      'Wait to scan',
-      'Scanning',
-      'Submission Pass',
-      'Submission Fail',
-      'Submission Error',
-      'Not submit',
-    ];
-    const waitToScan = submission?.waitToScan || 0;
-    const scanning = submission?.scanning || 0;
-    const fail = submission?.scanSuccess.fail || 0;
-    const pass = submission?.scanSuccess.pass || 0;
-    const scanFail = submission?.scanFail || 0;
-    const data = [
-      waitToScan,
-      scanning,
-      fail,
-      pass,
-      scanFail,
-      total - waitToScan - scanning - fail - pass - scanFail,
-    ];
-    setReport({ labels, data });
+    try {
+      const response = await getReportAssignment(courseId, assignmentId);
+      if (response?.status !== 0) {
+        console.log(213546);
+        setLoading(false);
+        return;
+      }
+      const reportData = response.data.report;
+      const { total, submission } = reportData;
+      const labels = [
+        'Wait to scan',
+        'Scanning',
+        'Submission Pass',
+        'Submission Fail',
+        'Scan Error',
+        'Not submit',
+      ];
+      const waitToScan = submission?.waitToScan || 0;
+      const scanning = submission?.scanning || 0;
+      const fail = submission?.scanSuccess.fail || 0;
+      const pass = submission?.scanSuccess.pass || 0;
+      const scanFail = submission?.scanFail || 0;
+      const data = [
+        waitToScan,
+        scanning,
+        fail,
+        pass,
+        scanFail,
+        total - waitToScan - scanning - fail - pass - scanFail,
+      ];
+      setReport({ labels, data });
+    } catch (err) {
+      console.log(err);
+    }
     setLoading(false);
   }, [assignmentId, courseId]);
 

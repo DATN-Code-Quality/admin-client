@@ -23,8 +23,6 @@ import { removeSubmitProps } from '~/dto/baseDTO';
 import { mockAssignment } from '~/mock/assignment.mock';
 
 export function useAssignment() {
-  const navigate = useNavigate();
-
   return {
     async getAllAssignments(
       courseId: string

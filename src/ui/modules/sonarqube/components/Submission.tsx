@@ -119,7 +119,7 @@ const Submission = () => {
       {!loading && issueSelected && <DetailSubmission />}
 
       {!issueSelected && (
-        <div>
+        <div className="h-full overflow-hidden ">
           <p
             className="font-semibold cursor-pointer"
             onClick={() =>
@@ -177,6 +177,7 @@ const Submission = () => {
                       marginTop: '16px',
                       display: 'flex',
                       justifyContent: 'center',
+                      paddingBottom: '32px',
                     }}
                     defaultCurrent={pagination.page}
                     total={pagination.total}
