@@ -247,7 +247,9 @@ const SubmissionItem: React.FC<{
           </div>
           <div>
             <span className="font-semibold">Submitted file: </span>
-            <a href={submission.link}>link</a>
+            <a href={submission.link} target="_blank" rel="noopener noreferrer">
+              link
+            </a>
           </div>
         </div>
         <div
