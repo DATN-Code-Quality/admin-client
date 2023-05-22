@@ -82,7 +82,7 @@ const Overview: React.FC<{
             <p className="flex items-center">
               <span className="mr-2">Reliability</span>
               {renderColorRatting(
-                data.get('reliability_rating') || 0,
+                +(data.get('reliability_rating') || 0),
                 'rating'
               )}
             </p>
@@ -102,7 +102,10 @@ const Overview: React.FC<{
             </p>
             <p className="flex items-center">
               <span className="mr-2">Reliability</span>
-              {renderColorRatting(data.get('security_rating') || 0, 'rating')}
+              {renderColorRatting(
+                +(data.get('security_rating') || 0),
+                'rating'
+              )}
             </p>
           </div>
 
@@ -120,7 +123,7 @@ const Overview: React.FC<{
             </p>
             <p className="flex items-center">
               <span className="mr-2">Sqale</span>
-              {renderColorRatting(data.get('sqale_rating') || 0, 'rating')}
+              {renderColorRatting(+(data.get('sqale_rating') || 0), 'rating')}
             </p>
           </div>
 

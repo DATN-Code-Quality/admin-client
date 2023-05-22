@@ -119,12 +119,13 @@ const Submission = () => {
       {!loading && issueSelected && <DetailSubmission />}
 
       {!issueSelected && (
-        <div
-          onClick={() =>
-            navigate(`/course/detail?id=${dataSelected?.courseId}`)
-          }
-        >
-          <p className="font-semibold cursor-pointer">
+        <div className="h-full overflow-hidden ">
+          <p
+            className="font-semibold cursor-pointer"
+            onClick={() =>
+              navigate(`/course/detail?id=${dataSelected?.courseId}`)
+            }
+          >
             <ArrowLeftOutlined size={32} className=" mr-2" />
             <span>Back</span>
           </p>
@@ -176,6 +177,7 @@ const Submission = () => {
                       marginTop: '16px',
                       display: 'flex',
                       justifyContent: 'center',
+                      paddingBottom: '32px',
                     }}
                     defaultCurrent={pagination.page}
                     total={pagination.total}

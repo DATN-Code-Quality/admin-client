@@ -12,7 +12,12 @@ const DataTable: React.FC<{ courseReport: ReportCourse[]; total: number }> = ({
 }) => {
   const exportToExcel = () => {
     const workbook = XLSX.utils.book_new();
-    const worksheet = XLSX.utils.json_to_sheet(dataSource);
+    const modifiedDataSource = dataSource.map((item) => {
+      const { key, ...rest } = item;
+      return rest;
+    });
+
+    const worksheet = XLSX.utils.json_to_sheet(modifiedDataSource);
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Table Data');
     XLSX.writeFile(workbook, 'table_data.xlsx');
   };

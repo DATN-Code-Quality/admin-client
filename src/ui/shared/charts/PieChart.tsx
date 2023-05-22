@@ -34,18 +34,17 @@ const PieChart: React.FC<{
     }),
     [labels, color]
   );
-
+  console.log(series);
   return (
-    <div
-      style={{ height: '318px', width: '100%' }}
-      className="flex items-center justify-center"
-    >
-      <ReactApexChart
-        options={chartOptions}
-        type="pie"
-        width="500"
-        series={series}
-      />
+    <div style={{ width: '100%' }} className="flex items-center justify-center">
+      {!loading && series?.length > 0 && (
+        <ReactApexChart
+          options={chartOptions}
+          type="pie"
+          width="500"
+          series={series}
+        />
+      )}
       {loading && <Spin />}
     </div>
   );

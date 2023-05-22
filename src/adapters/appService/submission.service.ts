@@ -95,7 +95,7 @@ export function useSubmission() {
       }
       const accessToken = (await LocalStorage.get(['accessToken'])).accessToken
         .token;
-        console.log("domain api: "+DOMAIN_API_URL)
+      console.log('domain api: ' + DOMAIN_API_URL);
       const respond = await axios({
         url: `${DOMAIN_API_URL}/submission/${assignment.courseId}/${assignment.id}`,
         data: submitForm,

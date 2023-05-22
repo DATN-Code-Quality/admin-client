@@ -5,7 +5,7 @@ import ReactApexChart from 'react-apexcharts';
 
 const ColumnChart: React.FC<{
   series: { name: string; data: number[] }[];
-  labels: string[];
+  labels: string[] | string[][];
   loading: boolean;
 }> = ({ series, labels, loading }) => {
   // Chart options

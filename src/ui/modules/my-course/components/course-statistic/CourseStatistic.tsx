@@ -7,6 +7,7 @@ import DataTable from './DataTable';
 import { useCourse } from '~/adapters/appService/course.service';
 import { ReportCourse } from '~/domain/course';
 import ColumnChart from '~/ui/shared/charts/ColumnChart';
+import { splitStr } from '~/utils';
 
 const CourseStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
   const [report, setReport] = useState<{
@@ -18,7 +19,7 @@ const CourseStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
   });
   const [loading, setLoading] = useState(false);
   const [dataChart, setDataChart] = useState<{
-    labels: string[];
+    labels: string[][];
     data: { name: string; data: number[] }[];
   }>({
     labels: [],
@@ -31,12 +32,13 @@ const CourseStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
       const series: { name: string; data: number[] }[] = [
         { name: 'Submission Pass', data: [] },
         { name: 'Submission Fail', data: [] },
-        { name: 'Submission Error', data: [] },
+        { name: 'Scan Error', data: [] },
         { name: 'Not Submit', data: [] },
       ];
-      const labels: string[] = [];
+      const labels: string[][] = [];
       assignment?.forEach((assignmentItem: ReportCourse) => {
-        labels.push(assignmentItem.assignment.name);
+        labels.push(splitStr(assignmentItem.assignment.name || '', 2));
+
         const { submission } = assignmentItem;
         const waitToScan = submission?.waitToScan || 0;
         const scanning = submission?.scanning || 0;
@@ -65,7 +67,7 @@ const CourseStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
     setReport({ total, assignment });
     setDataChart(formatDataChart(total, assignment));
     setLoading(false);
-  }, [formatDataChart]);
+  }, [courseId, formatDataChart]);
 
   useEffect(() => {
     fetchReport();
