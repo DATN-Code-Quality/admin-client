@@ -21,7 +21,6 @@ const Statistic: React.FC<{ courseId: string; assignmentId: string }> = ({
     try {
       const response = await getReportAssignment(courseId, assignmentId);
       if (response?.status !== 0) {
-        console.log(213546);
         setLoading(false);
         return;
       }
@@ -43,8 +42,8 @@ const Statistic: React.FC<{ courseId: string; assignmentId: string }> = ({
       const data = [
         waitToScan,
         scanning,
-        fail,
         pass,
+        fail,
         scanFail,
         total - waitToScan - scanning - fail - pass - scanFail,
       ];

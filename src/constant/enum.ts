@@ -84,14 +84,6 @@ export enum SubmissionType {
   FAIL = 4,
 }
 
-export enum SubmissionTypeConstant {
-  SUBMITTED = 'Submitted',
-  SCANNING = 'Scanning',
-  SCANNED_FAIL = 'Scanned fail',
-  PASS = 'Pass',
-  FAIL = 'Fail',
-}
-
 export enum SubmisisonTab {
   SUBMISSION = 'SUBMISSION',
   STATISTIC = 'STATISTIC',

@@ -34,7 +34,7 @@ export function useSubmission() {
       assignmentId: string
     ): Promise<ResponseData<{ role: SubRole; report: ReportAssignment }>> {
       const response = await getWithPath(
-        `${API.ASSIGNMENT.GET.ASSIGNMENT}/${courseId}/${assignmentId}/report`
+        `${API.ASSIGNMENT.GET.ASSIGNMENTS}/${courseId}/${assignmentId}/report`
       );
 
       return response;
@@ -45,7 +45,7 @@ export function useSubmission() {
       assignmentId: string
     ): Promise<ResponseData<{ role: SubRole; report: ReportAssignment }>> {
       const response = await getWithPath(
-        `${API.ASSIGNMENT.GET.ASSIGNMENT}/${courseId}/${assignmentId}/export`
+        `${API.ASSIGNMENT.GET.ASSIGNMENTS}/${courseId}/${assignmentId}/export`
       );
 
       return response;

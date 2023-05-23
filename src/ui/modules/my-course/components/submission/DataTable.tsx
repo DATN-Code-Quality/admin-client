@@ -5,6 +5,15 @@ import { Table, Button, Empty } from 'antd';
 import * as XLSX from 'xlsx';
 
 import { useSubmission } from '~/adapters/appService/submission.service';
+import { SubmissionType } from '../../../../../constant/enum';
+
+const SubmissionTypeConstant: Record<SubmissionType, string> = {
+  [SubmissionType.SUBMITTED]: 'Submitted',
+  [SubmissionType.SCANNING]: 'Scanning',
+  [SubmissionType.SCANNED_FAIL]: 'Scanned fail',
+  [SubmissionType.PASS]: 'Pass',
+  [SubmissionType.FAIL]: 'Fail',
+};
 
 const DataTable: React.FC<{ courseId: string; assignmentId: string }> = ({
   courseId,
@@ -22,8 +31,9 @@ const DataTable: React.FC<{ courseId: string; assignmentId: string }> = ({
 
       const dataSource = response.data.results.map((item, index) => ({
         key: index + 1,
-        userName: item.submission.userNane,
-        userMoodleId: item.submission.userMoodleId,
+        userName: item?.submission?.userName,
+        userMoodleId: item?.submission?.userMoodleId,
+        status: item?.submission?.status,
         ...item.result,
       }));
 
@@ -49,9 +59,18 @@ const DataTable: React.FC<{ courseId: string; assignmentId: string }> = ({
     },
     {
       title: 'Username',
-      dataIndex: 'userNane',
+      dataIndex: 'userName',
       key: 'userNane',
       fixed: 'left',
+    },
+    {
+      title: 'Result',
+      dataIndex: 'status',
+      key: 'status',
+      fixed: 'left',
+      render: (value) => {
+        return <span>{SubmissionTypeConstant[value]}</span>;
+      },
     },
     {
       title: 'Bugs',
@@ -153,19 +172,15 @@ const DataTable: React.FC<{ courseId: string; assignmentId: string }> = ({
         margin: '0 auto',
       }}
     >
-      {!loading && !data && <Empty />}
-      {!loading && data && (
-        <>
-          <Table dataSource={data} columns={columns} scroll={{ x: 1300 }} />
-          <Button
-            type="primary"
-            icon={<ExportOutlined />}
-            onClick={exportToExcel}
-          >
-            Export to Excel
-          </Button>
-        </>
-      )}
+      <Table
+        dataSource={data}
+        columns={columns}
+        scroll={{ x: 1300 }}
+        loading={loading}
+      />
+      <Button type="primary" icon={<ExportOutlined />} onClick={exportToExcel}>
+        Export to Excel
+      </Button>
     </div>
   );
 };
