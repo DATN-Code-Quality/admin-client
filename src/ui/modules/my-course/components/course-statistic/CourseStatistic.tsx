@@ -45,8 +45,8 @@ const CourseStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
         const fail = submission?.scanSuccess?.fail || 0;
         const pass = submission?.scanSuccess?.pass || 0;
         const scanFail = submission?.scanFail || 0;
-        series[0].data.push(fail);
-        series[1].data.push(pass);
+        series[0].data.push(pass);
+        series[1].data.push(fail);
         series[2].data.push(scanFail);
         series[3].data.push(
           (total || 0) - waitToScan - scanning - fail - pass - scanFail
