@@ -5,7 +5,7 @@ import Overview from './Overview';
 
 import { useSubmission } from '~/adapters/appService/submission.service';
 import './style.css';
-import { SubRole, SubmisisonTab, SubmissionType } from '~/constant/enum';
+import { SubRole, SubmisisonTab } from '~/constant/enum';
 import { Assignment } from '~/domain/assignment';
 import { ReportAssignment, Submission } from '~/domain/submission';
 
@@ -15,6 +15,7 @@ import { Empty } from 'antd';
 
 import Statistic from './Statistic';
 import { formatDate } from '~/utils';
+import { SubmissionType } from '../../../../../constant/enum';
 
 const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
   assignment,
