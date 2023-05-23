@@ -10,6 +10,7 @@ const DataTable: React.FC<{ courseReport: ReportCourse[]; total: number }> = ({
   courseReport,
   total,
 }) => {
+  console.log(courseReport, total);
   const exportToExcel = () => {
     const workbook = XLSX.utils.book_new();
     const modifiedDataSource = dataSource.map((item) => {
@@ -25,16 +26,17 @@ const DataTable: React.FC<{ courseReport: ReportCourse[]; total: number }> = ({
   const dataSource = courseReport.map((item) => {
     const { submission } = item;
     const waitToScan = submission.waitToScan || 0;
-    const scanSuccess = submission.scanSuccess || {};
+    const { pass, fail } = { pass: 0, fail: 0, ...submission.scanSuccess };
+
     const scanFail = submission.scanFail || 0;
-    const notSubmit =
-      total - waitToScan - scanFail - Object.keys(scanSuccess).length;
+    const notSubmit = total - waitToScan - scanFail - pass - fail;
 
     return {
       key: item.assignment.id,
       name: item.assignment.name,
       waitToScan,
-      scanSuccess: Object.keys(scanSuccess).length,
+      submissionPass: pass,
+      submissionFail: fail,
       scanFail,
       notSubmit,
     };
@@ -53,9 +55,15 @@ const DataTable: React.FC<{ courseReport: ReportCourse[]; total: number }> = ({
       align: 'center',
     },
     {
-      title: 'Scan Success',
-      dataIndex: 'scanSuccess',
-      key: 'scanSuccess',
+      title: 'Submisison Pass',
+      dataIndex: 'submissionPass',
+      key: 'submissionPass',
+      align: 'center',
+    },
+    {
+      title: 'Submisison Fail',
+      dataIndex: 'submissionFail',
+      key: 'submissionFail',
       align: 'center',
     },
     {
