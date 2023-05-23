@@ -104,7 +104,6 @@ const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
               )}
             </div>
           </div>
-          <Overview submission={submission} assignment={assignment} />
         </div>
       )}
       {tab === SubmisisonTab.SUBMISSION && (
@@ -209,7 +208,7 @@ const SubmissionItem: React.FC<{
           <div
             className="px-4 py-2 rounded-2"
             style={{
-              background: 'green',
+              background: 'red',
               color: 'white',
               fontWeight: 600,
               minWidth: '80px',
