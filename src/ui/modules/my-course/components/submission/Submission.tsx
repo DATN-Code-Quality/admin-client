@@ -104,13 +104,13 @@ const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
               )}
             </div>
           </div>
+          {tab === SubmisisonTab.SUBMISSION && (
+            <Overview submission={submission} assignment={assignment} />
+          )}
         </div>
       )}
       {tab === SubmisisonTab.SUBMISSION && (
         <>
-          {submissionList?.length !== 0 && (
-            <Overview submission={submission} assignment={assignment} />
-          )}
           {submissionList?.length === 0 && (
             <div className=" bg-white p-4 rounded-2 gap-4">
               <div className="submission-container ">

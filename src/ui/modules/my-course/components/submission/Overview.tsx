@@ -66,7 +66,7 @@ const Overview: React.FC<{
   return (
     <div>
       {!loading && (
-        <div className="p-4">
+        <div className="p-4" style={{ marginTop: '50px' }}>
           <div
             className="flex items-center justify-between"
             style={{ borderBottom: '1px solid #ccc' }}
