@@ -108,6 +108,9 @@ const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
       )}
       {tab === SubmisisonTab.SUBMISSION && (
         <>
+          {submissionList?.length !== 0 && (
+            <Overview submission={submission} assignment={assignment} />
+          )}
           {submissionList?.length === 0 && (
             <div className=" bg-white p-4 rounded-2 gap-4">
               <div className="submission-container ">
@@ -124,7 +127,6 @@ const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
                       assignment={assignment}
                       onSubmitted={() => fetchSubmission()}
                     />
-                    <Overview submission={submission} assignment={assignment} />
                   </div>
                 )}
               </div>
@@ -208,7 +210,7 @@ const SubmissionItem: React.FC<{
           <div
             className="px-4 py-2 rounded-2"
             style={{
-              background: 'red',
+              background: 'green',
               color: 'white',
               fontWeight: 600,
               minWidth: '80px',
