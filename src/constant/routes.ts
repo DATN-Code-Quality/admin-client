@@ -2,6 +2,10 @@ const ROUTE = {
   INDEX: '/',
   DASHBOARD: '/dashboard',
   HISTORY: '/history',
+  PROFILE: {
+    DETAIL: '/profile',
+    CHANGE_PASSWORD: '/profile/change-password',
+  },
   USER: {
     LIST: '/user/list',
   },

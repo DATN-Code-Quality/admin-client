@@ -9,6 +9,10 @@ const ViewUser = lazy(() => import('../ui/modules/user/containers/ViewUser'));
 
 const Login = lazy(() => import('../ui/modules/login/containers/Login'));
 
+const ChangePassword = lazy(
+  () => import('../ui/modules/profile/containers/ChangePassword')
+);
+
 const Dashboard = lazy(
   () => import('../ui/modules/dashboard/containers/Dashboard')
 );
@@ -52,6 +56,12 @@ export const MAIN_ROUTES = [
     path: ROUTE.LOGIN,
     name: 'login',
     element: Login,
+  },
+  {
+    path: ROUTE.PROFILE.CHANGE_PASSWORD,
+    name: 'changePassword',
+    element: ChangePassword,
+    roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],
   },
   {
     path: ROUTE.DASHBOARD,
