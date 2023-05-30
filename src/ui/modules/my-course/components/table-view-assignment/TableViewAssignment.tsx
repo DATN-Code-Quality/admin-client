@@ -59,7 +59,7 @@ function TableViewAssignment({ course }) {
   const isTeacher = currentRole === SubRole.TEACHER;
 
   const handleGetAssignments = async (args?) => {
-    const res = await getAllAssignments(course.id);
+    const res = await getAllAssignments(course.id, args);
     setCurrentRole(res.data.role);
     return {
       ...res,
