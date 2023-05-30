@@ -35,7 +35,7 @@ const FormAddCourse = ({ course, id, initialViewMode = false }) => {
   };
 
   const handleSubmit = useCallback((values) => {
-    message.success('Cập nhật thành công!');
+    message.success('Edit successfully!');
     // TODO: remove hardcode
     if (!initialViewMode) {
       navigate(ROUTE.MY_COURSE.LIST);
@@ -52,13 +52,13 @@ const FormAddCourse = ({ course, id, initialViewMode = false }) => {
     if (id) {
       dataSubmit.id = id;
       updateCourse(dataSubmit)
-        .then(handleSubmitSuccess('Cập nhật Ngành nghề thành công!'))
-        .catch(handleSubmitFail('Cập nhật Ngành nghề thất bại!'))
+        .then(handleSubmitSuccess('Edit Ngành nghề successfully!'))
+        .catch(handleSubmitFail('Edit Ngành nghề failed!'))
         .finally(() => setLoading(false));
     } else {
       createCourse(dataSubmit)
-        .then(handleSubmitSuccess('Cập nhật Ngành nghề thành công!'))
-        .catch(handleSubmitFail('Cập nhật Ngành nghề thất bại!'))
+        .then(handleSubmitSuccess('Edit Ngành nghề successfully!'))
+        .catch(handleSubmitFail('Edit Ngành nghề failed!'))
         .finally(() => setLoading(false));
     }
   }, []);
@@ -82,26 +82,26 @@ const FormAddCourse = ({ course, id, initialViewMode = false }) => {
       {viewMode && (
         <Form form={form} className="form-edit-view view-mode">
           <div className="group_field">
-            <label>Tên khoá học: </label>
+            <label>Course Name: </label>
             <div className="field_value">{formValues?.name}</div>
           </div>
           <div className="group_field">
-            <label>Mô tả: </label>
+            <label>Description </label>
             <div
               className="field_value"
               dangerouslySetInnerHTML={{
-                __html: formValues?.summary || 'Chưa cập nhật',
+                __html: formValues?.summary || 'N/A',
               }}
             />
           </div>
           <div className="group_field">
-            <label>Ngày bắt đầu: </label>
+            <label>Start Date: </label>
             <div className="field_value">
               {formatDate(formValues?.startAt, 'vi-VN', 'DD/MM/YYYY')}
             </div>
           </div>
           <div className="group_field">
-            <label>Ngày kết thúc: </label>
+            <label>End Date: </label>
             <div className="field_value">
               {formatDate(formValues?.endAt, 'vi-VN', 'DD/MM/YYYY')}
             </div>
@@ -126,7 +126,7 @@ const FormAddCourse = ({ course, id, initialViewMode = false }) => {
           <Form.Item>
             <Space>
               <Button type="primary" htmlType="submit" size="large">
-                Lưu thông tin
+                Save Changes
               </Button>
             </Space>
           </Form.Item>

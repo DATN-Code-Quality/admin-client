@@ -9,7 +9,7 @@ export const metaFilterAssignment = () => {
       {
         key: 'search',
         widgetProps: {
-          placeholder: 'Nhập từ khoá cần tìm',
+          placeholder: 'Enter keyword',
         },
       },
     ],
@@ -18,7 +18,7 @@ export const metaFilterAssignment = () => {
 
 export const columnTableAssignment = (setAssignment): ColumnType<any>[] => [
   {
-    title: 'Tên bài tập',
+    title: 'Assignment Title',
     dataIndex: 'name',
     width: 200,
     ellipsis: true,
@@ -34,7 +34,7 @@ export const columnTableAssignment = (setAssignment): ColumnType<any>[] => [
     },
   },
   {
-    title: 'Hạn nộp',
+    title: 'Due Date',
     dataIndex: 'dueDate',
     width: 200,
     ellipsis: true,
@@ -42,7 +42,7 @@ export const columnTableAssignment = (setAssignment): ColumnType<any>[] => [
       return (a, b) => a.dueDate - b.dueDate;
     },
     render: (value, record, index) => {
-      return <p>{formatDate(value) || 'Chưa cập nhật'}</p>;
+      return <p>{formatDate(value) || 'N/A'}</p>;
     },
   },
 ];
@@ -53,7 +53,7 @@ export const metaFilterSyncAssignment = () => {
       {
         key: 'search',
         widgetProps: {
-          placeholder: 'Nhập từ khoá cần tìm',
+          placeholder: 'Enter keyword',
         },
       },
     ],
@@ -62,7 +62,7 @@ export const metaFilterSyncAssignment = () => {
 
 export const columnTableSyncAssignment = (): ColumnType<any>[] => [
   {
-    title: 'Tên bài tập',
+    title: 'Assignment Title',
     dataIndex: 'name',
     width: 200,
     ellipsis: true,
@@ -71,7 +71,7 @@ export const columnTableSyncAssignment = (): ColumnType<any>[] => [
     },
   },
   {
-    title: 'Hạn nộp',
+    title: 'Due Date',
     dataIndex: 'dueDate',
     width: 200,
     ellipsis: true,
@@ -79,7 +79,7 @@ export const columnTableSyncAssignment = (): ColumnType<any>[] => [
       return (a, b) => a.dueDate - b.dueDate;
     },
     render: (value, record, index) => {
-      return <p>{formatDate(value) || 'Chưa cập nhật'}</p>;
+      return <p>{formatDate(value) || 'N/A'}</p>;
     },
   },
 ];

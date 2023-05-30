@@ -43,9 +43,9 @@ const BaseModal: React.FC<BaseModalProps> = (props) => {
     onOkFn,
     onOpenFn,
     initializeFn,
-    cancelText = 'Huỷ',
+    cancelText = 'Cancel',
     closeIcon = <></>,
-    okText = 'Xác nhận',
+    okText = 'Ok',
     isDelete = false,
     formProps,
     ...rest
