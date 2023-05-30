@@ -228,5 +228,24 @@ export function useCourse() {
       };
       return covertedResponse;
     },
+
+    async addParticipants(
+      courseId: string,
+      body: { teacherRoleIds: string[]; studentRoleIds: string[] }
+    ): Promise<ResponseData<User[]>> {
+      const submitData = body;
+      const response = await postWithPath(
+        `${API.USER_COURSE.POST.USER_COURSE}/${courseId}/system`,
+        {},
+        submitData
+      );
+      const validResponse = formatResponse<UserDTO[]>(response);
+      const convertedData = validResponse.data.map(userFromDTO);
+      const covertedResponse = {
+        ...validResponse,
+        data: convertedData,
+      };
+      return covertedResponse;
+    },
   };
 }
