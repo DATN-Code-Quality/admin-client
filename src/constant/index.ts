@@ -23,9 +23,9 @@ export interface ResponseData<T> {
 }
 
 export const MAP_USER_STATUS = [
-  { value: UserStatus.ACTIVE, label: 'Đã kích hoạt' },
-  { value: UserStatus.INACTIVE, label: 'Chưa kích hoạt' },
-  { value: UserStatus.BLOCK, label: 'Đã khóa' },
+  { value: UserStatus.ACTIVE, label: 'Active' },
+  { value: UserStatus.INACTIVE, label: 'Inactive' },
+  { value: UserStatus.BLOCK, label: 'Blocked' },
 ];
 
 export const MAP_SERVICE_TYPE = [
@@ -50,8 +50,8 @@ export const MAP_ROLES = [
 ];
 
 export const MAP_SUB_ROLES = [
-  { value: SubRole.TEACHER, label: 'Giáo viên' },
-  { value: SubRole.STUDENT, label: 'Học sinh' },
+  { value: SubRole.TEACHER, label: 'Teacher' },
+  { value: SubRole.STUDENT, label: 'Student' },
 ];
 
 export const MAP_CONFIG_OBJECT = [

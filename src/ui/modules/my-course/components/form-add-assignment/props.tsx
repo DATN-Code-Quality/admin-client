@@ -31,20 +31,20 @@ export const metaFormAddAssignment = ({
       {
         colSpan: 6,
         key: 'name',
-        label: 'Tên bài tập:',
+        label: 'Assignment Title',
         required: true,
       },
       {
         colSpan: 6,
         key: 'description',
-        label: 'Mô tả:',
+        label: 'Description',
         required: true,
         widget: Editor,
       },
       {
         colSpan: 6,
         key: 'dueDate',
-        label: 'Thời gian hết hạn:',
+        label: 'Due Date',
         widget: 'date-picker',
         widgetProps: {
           autoSize: { maxRows: 20, minRows: 3 },
@@ -52,7 +52,7 @@ export const metaFormAddAssignment = ({
           showTime: true,
           showToday: true,
           maxLength: 300,
-          placeholder: 'Chọn thời gian hết hạn',
+          placeholder: 'Choose Date',
           disabledDate: (current) => {
             return current && current.valueOf() < Date.now();
           },
@@ -154,21 +154,19 @@ export const metaFormAddCondition = ({
         key: 'key',
         options: allowedConditions,
         widget: 'select',
-        label: 'Điều kiện quét code:',
+        label: 'Condition',
         required: true,
-        message: 'Vui lòng không bỏ trống',
         widgetProps: {
           maxTagCount: 'responsive',
-          placeholder: 'Chọn tiêu chí',
         },
         onChange: handleSelectCondition,
       },
       {
         colSpan: 6,
         key: 'value',
-        label: 'Giá trị:',
+        label: 'Value',
         widgetProps: {
-          placeholder: `Nhập giá trị điều kiện`,
+          placeholder: `Enter value`,
         },
         rules: [
           {
@@ -178,13 +176,11 @@ export const metaFormAddCondition = ({
               return new Promise((resolve, reject) => {
                 const numberValue = parseInt(value, 10);
                 if (!value) {
-                  reject(new Error(`Vui lòng không bỏ trống`));
+                  reject(new Error(`Please Enter Value`));
                 } else if (!Is.number(numberValue)) {
-                  reject(new Error(`Giá trị phải là một số nguyên`));
+                  reject(new Error(`Value must be a number`));
                 } else if (numberValue < 0 || numberValue > maxValue) {
-                  reject(
-                    new Error(`Giá trị phải nằm trong khoảng 0-${maxValue}`)
-                  );
+                  reject(new Error(`Value must be between 0 and ${maxValue}`));
                 } else {
                   resolve();
                 }
