@@ -19,6 +19,7 @@ export interface ResponseData<T> {
   data: T;
   message?: string;
   error?: any;
+  total?: number;
 }
 
 export const MAP_USER_STATUS = [
