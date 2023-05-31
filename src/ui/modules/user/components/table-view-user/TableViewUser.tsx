@@ -99,7 +99,7 @@ function TableViewUser() {
     ...columnTableUser(),
     {
       dataIndex: 'action',
-      title: 'Thao tác',
+      title: 'Action',
       width: 100,
       render: (_, record, index) => {
         const meta = metaUpdateUser(record);
@@ -145,7 +145,7 @@ function TableViewUser() {
       />
       <Card>
         <TableToolbar
-          title={`Tìm thấy ${formatNumber(list.items?.length || 0)} người dùng`}
+          title={`Found ${formatNumber(list.items?.length || 0)} user`}
         >
           <Button
             type="primary"

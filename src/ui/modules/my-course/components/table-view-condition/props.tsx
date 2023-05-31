@@ -10,7 +10,7 @@ import Is from '~/utils/is';
 
 export const columnTableCondition = (): ColumnType<any>[] => [
   {
-    title: 'Tên điều kiện',
+    title: 'Condition',
     dataIndex: 'key',
     width: 200,
     ellipsis: true,
@@ -28,7 +28,7 @@ export const columnTableCondition = (): ColumnType<any>[] => [
     },
   },
   {
-    title: 'Giá trị',
+    title: 'Value',
     dataIndex: 'value',
     width: 200,
     ellipsis: true,
@@ -50,23 +50,22 @@ export const metaFormUpdateCondition = (record) => {
         options: MAP_CONFIG_OBJECT,
         widget: 'select',
         initialValue: record.key,
-        label: 'Điều kiện quét code:',
+        label: 'Condition',
         formItemProps: {
           style: { display: 'none' },
         },
         required: true,
         widgetProps: {
           maxTagCount: 'responsive',
-          placeholder: 'Chọn tiêu chí',
         },
       },
       {
         colSpan: 6,
         key: 'value',
         initialValue: record.value,
-        label: 'Giá trị:',
+        label: 'Value',
         widgetProps: {
-          placeholder: `Nhập giá trị điều kiện`,
+          placeholder: `Enter value`,
         },
         rules: [
           {
@@ -76,13 +75,11 @@ export const metaFormUpdateCondition = (record) => {
               return new Promise((resolve, reject) => {
                 const numberValue = parseInt(value, 10);
                 if (!value) {
-                  reject(new Error(`Vui lòng không bỏ trống`));
+                  reject(new Error(`Please Enter Value`));
                 } else if (!Is.number(numberValue)) {
-                  reject(new Error(`Giá trị phải là một số nguyên`));
+                  reject(new Error(`Value must be a number`));
                 } else if (numberValue < 0 || numberValue > maxValue) {
-                  reject(
-                    new Error(`Giá trị phải nằm trong khoảng 0-${maxValue}`)
-                  );
+                  reject(new Error(`Value must be between 0 and ${maxValue}`));
                 } else {
                   resolve();
                 }

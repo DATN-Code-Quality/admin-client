@@ -38,17 +38,17 @@ function ViewCourseDetailContainer() {
 
   const items = [
     {
-      label: 'Thông tin khoá học',
+      label: 'Course Detail',
       key: 'overview',
       children: <ViewCourse course={course} initialViewMode />,
     },
     {
-      label: 'Thành viên khoá học',
+      label: 'Participant',
       key: 'participant',
       children: <TableViewParticipant course={course} />,
     },
     {
-      label: 'Bài tập',
+      label: 'Assignment',
       key: 'assignment',
       children: <TableViewAssignment course={course} />,
     },
@@ -57,7 +57,7 @@ function ViewCourseDetailContainer() {
   const extraTab = useMemo(
     () => [
       {
-        label: 'Thống kê',
+        label: 'Statistics',
         key: 'course-report',
         children: <CourseStatistic courseId={course?.id} />,
         hidden: true,

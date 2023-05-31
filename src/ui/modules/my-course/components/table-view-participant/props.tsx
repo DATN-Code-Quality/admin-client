@@ -11,7 +11,7 @@ export const metaFilterParticipant = () => {
       {
         key: 'search',
         widgetProps: {
-          placeholder: 'Tìm kiếm theo Họ tên hoặc Email',
+          placeholder: 'Search by Name or Email',
           style: {
             minWidth: '250px',
           },
@@ -27,7 +27,7 @@ export const metaFilterParticipant = () => {
             minWidth: '12rem',
             maxWidth: '12rem',
           },
-          placeholder: 'Vai trò',
+          placeholder: 'Role',
           allowClear: true,
         },
       },
@@ -41,7 +41,7 @@ export const metaFilterParticipant = () => {
             minWidth: '12rem',
             maxWidth: '12rem',
           },
-          placeholder: 'Trạng thái',
+          placeholder: 'Status',
           allowClear: true,
         },
       },
@@ -51,7 +51,7 @@ export const metaFilterParticipant = () => {
 
 export const columnTableParticipant = (): ColumnType<any>[] => [
   {
-    title: 'Họ tên',
+    title: 'Name',
     dataIndex: 'name',
     width: 200,
     ellipsis: true,
@@ -69,7 +69,7 @@ export const columnTableParticipant = (): ColumnType<any>[] => [
     },
   },
   {
-    title: 'Vai trò',
+    title: 'Role',
     dataIndex: 'role',
     width: 100,
     ellipsis: true,
@@ -88,7 +88,7 @@ export const metaCreateParticipant = () => {
     fields: [
       {
         key: 'name',
-        label: 'Họ tên:',
+        label: 'Name',
         required: true,
         widgetProps: {
           placeholder: 'Input Name',
@@ -96,7 +96,7 @@ export const metaCreateParticipant = () => {
       },
       {
         key: 'email',
-        label: 'Email:',
+        label: 'Email',
         required: true,
         widgetProps: {
           placeholder: 'Input Email',
@@ -113,7 +113,7 @@ export const metaUpdateParticipant = (record) => {
     fields: [
       {
         key: 'name',
-        label: 'Họ tên:',
+        label: 'Name',
         required: true,
         initialValue: record.name,
         widgetProps: {
@@ -122,7 +122,7 @@ export const metaUpdateParticipant = (record) => {
       },
       {
         key: 'email',
-        label: 'Email:',
+        label: 'Email',
         required: true,
         initialValue: record.email,
         widgetProps: {
@@ -140,7 +140,7 @@ export const metaFilterSyncParticipant = () => {
       {
         key: 'search',
         widgetProps: {
-          placeholder: 'Tìm kiếm theo Họ tên hoặc Email',
+          placeholder: 'Search by Name or Email',
           style: {
             minWidth: '250px',
           },
@@ -156,7 +156,7 @@ export const metaFilterSyncParticipant = () => {
             minWidth: '12rem',
             maxWidth: '12rem',
           },
-          placeholder: 'Vai trò',
+          placeholder: 'Role',
           allowClear: true,
         },
       },
@@ -170,7 +170,7 @@ export const metaFilterSyncParticipant = () => {
             minWidth: '12rem',
             maxWidth: '12rem',
           },
-          placeholder: 'Trạng thái',
+          placeholder: 'Status',
           allowClear: true,
         },
       },
@@ -180,7 +180,7 @@ export const metaFilterSyncParticipant = () => {
 
 export const columnTableSyncParticipant = (): ColumnType<any>[] => [
   {
-    title: 'Họ tên',
+    title: 'Name',
     dataIndex: 'name',
     width: 200,
     ellipsis: true,
@@ -198,7 +198,7 @@ export const columnTableSyncParticipant = (): ColumnType<any>[] => [
     },
   },
   {
-    title: 'Vai trò',
+    title: 'Role',
     dataIndex: 'role',
     width: 100,
     ellipsis: true,
@@ -210,7 +210,7 @@ export const columnTableSyncParticipant = (): ColumnType<any>[] => [
     },
   },
   {
-    title: 'Trạng thái',
+    title: 'Status',
     dataIndex: 'status',
     width: 100,
     render: (value) => {

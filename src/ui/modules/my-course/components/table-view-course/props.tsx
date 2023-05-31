@@ -14,7 +14,7 @@ export const metaFilterCourse = () => {
       {
         key: 'search',
         widgetProps: {
-          placeholder: 'Nhập từ khoá cần tìm',
+          placeholder: 'Enter keyword',
         },
       },
       {
@@ -27,7 +27,7 @@ export const metaFilterCourse = () => {
             minWidth: '12rem',
             maxWidth: '12rem',
           },
-          placeholder: 'Vai trò của tôi',
+          placeholder: 'My Role',
           allowClear: true,
         },
       },
@@ -37,7 +37,7 @@ export const metaFilterCourse = () => {
         widgetProps: {
           autoSize: { maxRows: 20, minRows: 3 },
           showCount: true,
-          placeholder: 'Thời gian bắt đầu',
+          placeholder: 'Start Date',
         },
       },
       {
@@ -46,7 +46,7 @@ export const metaFilterCourse = () => {
         widgetProps: {
           autoSize: { maxRows: 20, minRows: 3 },
           showCount: true,
-          placeholder: 'Thời gian kết thúc',
+          placeholder: 'End Date',
         },
       },
       // {
@@ -69,7 +69,7 @@ export const metaFilterCourse = () => {
 
 export const columnTableCourse = (): ColumnType<any>[] => [
   {
-    title: 'Tên khoá học',
+    title: 'Course Name',
     dataIndex: 'name',
     width: 200,
     ellipsis: true,
@@ -86,25 +86,25 @@ export const columnTableCourse = (): ColumnType<any>[] => [
     },
   },
   {
-    title: 'Thời gian bắt đầu',
+    title: 'Start Date',
     dataIndex: 'startAt',
     width: 240,
     sorter: (a, b) => {
       return new Date(a.startAt).getTime() - new Date(b.startAt).getTime();
     },
     render: (value) => {
-      return <p>{formatDate(value) || 'Chưa cập nhật'}</p>;
+      return <p>{formatDate(value) || 'N/A'}</p>;
     },
   },
   {
-    title: 'Thời gian kết thúc',
+    title: 'End Date',
     dataIndex: 'endAt',
     width: 240,
     sorter: (a, b) => {
       return new Date(a.endAt).getTime() - new Date(b.endAt).getTime();
     },
     render: (value) => {
-      return <p>{formatDate(value) || 'Chưa cập nhật'}</p>;
+      return <p>{formatDate(value) || 'N/A'}</p>;
     },
   },
 ];
@@ -115,7 +115,7 @@ export const metaFilterSyncCourse = () => {
       {
         key: 'search',
         widgetProps: {
-          placeholder: 'Nhập từ khoá cần tìm',
+          placeholder: 'Enter keyword',
         },
       },
       {
@@ -124,7 +124,7 @@ export const metaFilterSyncCourse = () => {
         widgetProps: {
           autoSize: { maxRows: 20, minRows: 3 },
           showCount: true,
-          placeholder: 'Thời gian bắt đầu',
+          placeholder: 'Start Date',
         },
       },
       {
@@ -133,7 +133,7 @@ export const metaFilterSyncCourse = () => {
         widgetProps: {
           autoSize: { maxRows: 20, minRows: 3 },
           showCount: true,
-          placeholder: 'Thời gian kết thúc',
+          placeholder: 'End Date',
         },
       },
       // {
@@ -156,7 +156,7 @@ export const metaFilterSyncCourse = () => {
 
 export const columnTableSyncCourse = (): ColumnType<any>[] => [
   {
-    title: 'Tên khoá học',
+    title: 'Course Name',
     dataIndex: 'name',
     width: 200,
     ellipsis: true,
@@ -165,25 +165,25 @@ export const columnTableSyncCourse = (): ColumnType<any>[] => [
     },
   },
   {
-    title: 'Thời gian bắt đầu',
+    title: 'Start Date',
     dataIndex: 'startAt',
     width: 240,
     sorter: (a, b) => {
       return new Date(a.startAt).getTime() - new Date(b.startAt).getTime();
     },
     render: (value) => {
-      return <p>{formatDate(value) || 'Chưa cập nhật'}</p>;
+      return <p>{formatDate(value) || 'N/A'}</p>;
     },
   },
   {
-    title: 'Thời gian kết thúc',
+    title: 'End Date',
     dataIndex: 'endAt',
     width: 240,
     sorter: (a, b) => {
       return new Date(a.endAt).getTime() - new Date(b.endAt).getTime();
     },
     render: (value) => {
-      return <p>{formatDate(value) || 'Chưa cập nhật'}</p>;
+      return <p>{formatDate(value) || 'N/A'}</p>;
     },
   },
 ];

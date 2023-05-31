@@ -41,10 +41,13 @@ export function useUser() {
   return {
     async getAllUsers(filter?: UserFilter): Promise<ResponseData<User[]>> {
       const response = await getWithPath(API.USER.GET.USERS, filter);
-      const validResponse = formatResponse<UserDTO[]>(response);
-      const convertedData = validResponse.data.map(userFromDTO);
+      const validResponse = formatResponse<{ total: number; users: UserDTO[] }>(
+        response
+      );
+      const convertedData = validResponse.data.users.map(userFromDTO);
       const covertedResponse = {
         ...validResponse,
+        total: validResponse.data.total,
         data: convertedData,
       };
       return covertedResponse;
