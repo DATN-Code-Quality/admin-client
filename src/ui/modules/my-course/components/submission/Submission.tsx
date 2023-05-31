@@ -16,6 +16,8 @@ import { Empty } from 'antd';
 import Statistic from './Statistic';
 import { formatDate } from '~/utils';
 import { SubmissionType } from '../../../../../constant/enum';
+import useQuery from '~/hooks/useQuery';
+import { useNavigate, useNavigation } from 'react-router-dom';
 
 const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
   assignment,
@@ -25,8 +27,8 @@ const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
   const [subRole, setRole] = useState<SubRole | null>(null);
   const [tab, setTab] = useState<SubmisisonTab>(SubmisisonTab.SUBMISSION);
   const { getSubmissionByAssignmentId } = useSubmission();
-
-  const fetchSubmission = useCallback(async () => {
+  
+  const fetchSubmission = useCallback(async () => {   
     const response = await getSubmissionByAssignmentId(
       assignment.courseId,
       assignment.id
@@ -40,7 +42,7 @@ const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
   useEffect(() => {
     fetchSubmission();
   }, [fetchSubmission]);
-
+  const query = useQuery();
   return (
     <div className="bg-white p-4 rounded-2 gap-4">
       {submissionList?.length > 0 && (
@@ -59,21 +61,19 @@ const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
                 (subRole === SubRole.TEACHER && (
                   <div className="flex items-center">
                     <p
-                      className={`title cursor-pointer ${
-                        tab === SubmisisonTab.SUBMISSION
+                      className={`title cursor-pointer ${tab === SubmisisonTab.SUBMISSION
                           ? 'submission-tab-active'
                           : ''
-                      }`}
+                        }`}
                       onClick={() => setTab(SubmisisonTab.SUBMISSION)}
                     >
                       Bài nộp
                     </p>
                     <p
-                      className={`title cursor-pointer  ml-4 ${
-                        tab === SubmisisonTab.STATISTIC
+                      className={`title cursor-pointer  ml-4 ${tab === SubmisisonTab.STATISTIC
                           ? 'submission-tab-active'
                           : ''
-                      }`}
+                        }`}
                       onClick={() => setTab(SubmisisonTab.STATISTIC)}
                     >
                       Thống kê

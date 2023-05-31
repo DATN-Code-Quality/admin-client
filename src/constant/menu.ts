@@ -44,6 +44,9 @@ const Sonarqube = lazy(
 const SonarqubeSubmission = lazy(
   () => import('../ui/modules/sonarqube/containers/Submission')
 );
+const ViewAssignment=lazy(
+  () => import('../ui/modules/my-course/containers/ViewAssignment')
+);
 
 // TODO: update allow route for each role
 
@@ -100,6 +103,12 @@ export const MAIN_ROUTES = [
     name: 'courseDetail',
     element: ViewMyCourseDetail,
     roles: [Role.USER],
+  },
+  {
+    path: ROUTE.MY_COURSE.ASSIGN,
+    name: 'assignment',
+    element: ViewAssignment,
+    roles: [Role.USER, Role.ADMIN],
   },
   {
     path: ROUTE.MY_COURSE.CREATE_ASSIGNMENT,

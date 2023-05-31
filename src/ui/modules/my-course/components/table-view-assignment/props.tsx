@@ -1,7 +1,9 @@
 import { ColumnType } from 'antd/lib/table';
+import ROUTE from '~/constant/routes';
+import { Assignment } from '~/domain/assignment';
 
 import { IMetaFormBuilder } from '~/ui/shared/forms/FormBuilder/FormBuilder';
-import { formatDate } from '~/utils';
+import { formatDate, generateUrl } from '~/utils';
 
 export const metaFilterAssignment = () => {
   return {
@@ -26,10 +28,15 @@ export const columnTableAssignment = (setAssignment): ColumnType<any>[] => [
       return a.name.localeCompare(b.name);
     },
     render: (value, record, index) => {
+      const assignment=record as Assignment;
+      const assignmentUrl = generateUrl(ROUTE.MY_COURSE.ASSIGN, {
+        id: assignment.id,
+        course_id: assignment.courseId,
+      });
+      console.log("Navigate url: "+assignmentUrl);
+      // TODO: handle link later
       return (
-        <p style={{ cursor: 'pointer' }} onClick={() => setAssignment(record)}>
-          {value}
-        </p>
+          <a href={assignmentUrl}>{value}</a>
       );
     },
   },
