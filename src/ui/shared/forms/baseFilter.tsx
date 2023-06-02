@@ -62,7 +62,7 @@ const BaseFilter: React.FC<BaseFilterProps> = (props) => {
             icon={<SearchOutlined />}
             loading={loading}
           >
-            Tìm kiếm
+            Search
           </Button>
         </Form.Item>
       )}

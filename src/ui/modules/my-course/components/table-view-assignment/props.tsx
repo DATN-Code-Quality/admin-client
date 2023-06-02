@@ -1,7 +1,9 @@
 import { ColumnType } from 'antd/lib/table';
+import ROUTE from '~/constant/routes';
+import { Assignment } from '~/domain/assignment';
 
 import { IMetaFormBuilder } from '~/ui/shared/forms/FormBuilder/FormBuilder';
-import { formatDate } from '~/utils';
+import { formatDate, generateUrl } from '~/utils';
 
 export const metaFilterAssignment = () => {
   return {
@@ -9,7 +11,7 @@ export const metaFilterAssignment = () => {
       {
         key: 'search',
         widgetProps: {
-          placeholder: 'Nhập từ khoá cần tìm',
+          placeholder: 'Enter keyword',
         },
       },
     ],
@@ -18,7 +20,7 @@ export const metaFilterAssignment = () => {
 
 export const columnTableAssignment = (setAssignment): ColumnType<any>[] => [
   {
-    title: 'Tên bài tập',
+    title: 'Assignment Title',
     dataIndex: 'name',
     width: 200,
     ellipsis: true,
@@ -26,15 +28,20 @@ export const columnTableAssignment = (setAssignment): ColumnType<any>[] => [
       return a.name.localeCompare(b.name);
     },
     render: (value, record, index) => {
+      const assignment=record as Assignment;
+      const assignmentUrl = generateUrl(ROUTE.MY_COURSE.ASSIGN, {
+        id: assignment.id,
+        course_id: assignment.courseId,
+      });
+      console.log("Navigate url: "+assignmentUrl);
+      // TODO: handle link later
       return (
-        <p style={{ cursor: 'pointer' }} onClick={() => setAssignment(record)}>
-          {value}
-        </p>
+          <a href={assignmentUrl}>{value}</a>
       );
     },
   },
   {
-    title: 'Hạn nộp',
+    title: 'Due Date',
     dataIndex: 'dueDate',
     width: 200,
     ellipsis: true,
@@ -42,7 +49,7 @@ export const columnTableAssignment = (setAssignment): ColumnType<any>[] => [
       return (a, b) => a.dueDate - b.dueDate;
     },
     render: (value, record, index) => {
-      return <p>{formatDate(value) || 'Chưa cập nhật'}</p>;
+      return <p>{formatDate(value) || 'N/A'}</p>;
     },
   },
 ];
@@ -53,7 +60,7 @@ export const metaFilterSyncAssignment = () => {
       {
         key: 'search',
         widgetProps: {
-          placeholder: 'Nhập từ khoá cần tìm',
+          placeholder: 'Enter keyword',
         },
       },
     ],
@@ -62,7 +69,7 @@ export const metaFilterSyncAssignment = () => {
 
 export const columnTableSyncAssignment = (): ColumnType<any>[] => [
   {
-    title: 'Tên bài tập',
+    title: 'Assignment Title',
     dataIndex: 'name',
     width: 200,
     ellipsis: true,
@@ -71,7 +78,7 @@ export const columnTableSyncAssignment = (): ColumnType<any>[] => [
     },
   },
   {
-    title: 'Hạn nộp',
+    title: 'Due Date',
     dataIndex: 'dueDate',
     width: 200,
     ellipsis: true,
@@ -79,7 +86,7 @@ export const columnTableSyncAssignment = (): ColumnType<any>[] => [
       return (a, b) => a.dueDate - b.dueDate;
     },
     render: (value, record, index) => {
-      return <p>{formatDate(value) || 'Chưa cập nhật'}</p>;
+      return <p>{formatDate(value) || 'N/A'}</p>;
     },
   },
 ];
