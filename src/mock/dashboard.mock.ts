@@ -95,13 +95,13 @@ export function mockDashboard() {
 
       return mockApi({
         api_overview_list: [
-          {
-            key: 'total',
-            name: 'Total Submission',
-            color: '#429EFF',
-            data: randomTotalData,
-            total: getTotalRequest(randomTotalData),
-          },
+          // {
+          //   key: 'total',
+          //   name: 'Total Submission',
+          //   color: '#429EFF',
+          //   data: randomTotalData,
+          //   total: getTotalRequest(randomTotalData),
+          // },
           {
             key: 'success',
             name: 'Pass',

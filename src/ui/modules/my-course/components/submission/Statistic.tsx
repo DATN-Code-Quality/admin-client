@@ -15,7 +15,7 @@ const Statistic: React.FC<{ courseId: string; assignmentId: string }> = ({
   });
   const [loading, setLoading] = useState(false);
 
-  const { getReportAssignment } = useSubmission();
+  const { getReportAssignment, formatReportData } = useSubmission();
   const fetchReport = useCallback(async () => {
     setLoading(true);
     try {
@@ -47,6 +47,7 @@ const Statistic: React.FC<{ courseId: string; assignmentId: string }> = ({
         scanFail,
         total - waitToScan - scanning - fail - pass - scanFail,
       ];
+      console.info("Data: "+JSON.stringify(data));
       setReport({ labels, data });
     } catch (err) {
       console.log(err);
@@ -57,7 +58,7 @@ const Statistic: React.FC<{ courseId: string; assignmentId: string }> = ({
   useEffect(() => {
     fetchReport();
   }, [fetchReport]);
-
+    console.log("DATA: "+JSON.stringify(report))
   return (
     <div>
       <PieChart

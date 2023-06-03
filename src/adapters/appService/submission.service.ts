@@ -67,6 +67,16 @@ export function useSubmission() {
       return covertedResponse;
     },
 
+    formatReportData(rpData:ReportAssignment){
+      const labels = [
+        { label: 'Submission Pass', color: '#00c869' },
+        { label: 'Submission Fail', color: '#ff4032' },
+        {label:'Scan Error',color:'#ffee00'},
+        {label:'Not submit',color:'#cbcbcb'},
+      ];
+      
+    },
+
     async getDetailAssignment(id: string): Promise<ResponseData<Assignment>> {
       // const data = await getWithPath(`${API.PARTNER.GET.PARTNERS}/${id}`, {});
       const data = await mockAssignment().getAssignmentById(id);

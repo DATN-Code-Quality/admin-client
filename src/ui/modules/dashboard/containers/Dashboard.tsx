@@ -85,6 +85,12 @@ function Dashboard() {
         </div>
         {series?.length > 0 && (
           <div className="overall-container">
+            <div className="overall-item" key="Total">
+              <p className="overall-item__label">Total</p>
+              <p className="overall-item__value" style={{ color: '#429EFF' }}>
+                {series.reduce((prev, current) => prev + current.total, 0)}
+              </p>
+            </div>
             {series?.map((item) => {
               return (
                 <div className="overall-item" key={item.name}>
@@ -120,6 +126,12 @@ function Dashboard() {
           >
             Download Report
           </Button>
+        </div>
+        <div className="overall-item" key="Total">
+          <p className="overall-item__label">Total</p>
+          <p className="overall-item__value" style={{ color: '#429EFF' }}>
+            {series.reduce((prev, current) => prev + current.total, 0)}
+          </p>
         </div>
         {series?.length > 0 && (
           <div className="overall-container">
