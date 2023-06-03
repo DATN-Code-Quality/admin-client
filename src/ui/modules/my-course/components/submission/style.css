@@ -12,7 +12,6 @@ p {
   border-radius: 8px;
   /* padding: 16px; */
   min-height: 200px;
-  margin-top: 16px;
 }
 
 .submission-container .title {
@@ -31,6 +30,10 @@ p {
   font-weight: 600;
   color: white;
   cursor: pointer;
+}
+
+.assignment-information .ant-tabs-nav{
+  margin: 0px;
 }
 
 .issues-amount {
@@ -60,6 +63,8 @@ p {
 .submission-list {
   max-height: 600px;
   overflow: auto;
+  padding-right: 8px;
+  border-right: 1px solid gainsboro;
 }
 
 .submission-field {

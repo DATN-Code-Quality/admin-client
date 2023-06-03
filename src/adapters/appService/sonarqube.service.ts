@@ -40,7 +40,6 @@ export function useSonarqube() {
       const response = await getWithPath(
         `/sonarqube/result/${courseId}/${assignmentId}/${submissionId}`
       );
-      console.info("respond from api overview "+JSON.stringify(response))
 
       return response;
     },
