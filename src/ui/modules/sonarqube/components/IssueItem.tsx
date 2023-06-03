@@ -12,6 +12,7 @@ const IssueItem: React.FC<{
   handleSetIssue?: (val: Issue) => void;
   setRuleSelected: (val: string) => void;
 }> = ({ issue, handleSetIssue, setRuleSelected }) => {
+  
   const renderBugError = useCallback(
     (
       type: string,

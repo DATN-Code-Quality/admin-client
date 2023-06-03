@@ -11,7 +11,7 @@ import { ReportAssignment, Submission } from '~/domain/submission';
 
 import AddSubmission from './AddSubmission';
 
-import { Empty } from 'antd';
+import { Empty, Tabs } from 'antd';
 
 import Statistic from './Statistic';
 import { formatDate } from '~/utils';
@@ -25,10 +25,10 @@ const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
   const [submissionList, setSubmissionList] = useState<Submission[]>([]);
   const [submission, setSubmission] = useState<Submission>();
   const [subRole, setRole] = useState<SubRole | null>(null);
-  const [tab, setTab] = useState<SubmisisonTab>(SubmisisonTab.SUBMISSION);
+  const [tab, setTab] = useState<SubmisisonTab>(SubmisisonTab.STATISTIC);
   const { getSubmissionByAssignmentId } = useSubmission();
-  
-  const fetchSubmission = useCallback(async () => {   
+
+  const fetchSubmission = useCallback(async () => {
     const response = await getSubmissionByAssignmentId(
       assignment.courseId,
       assignment.id
@@ -36,9 +36,16 @@ const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
     if (response.status !== 0) return;
     const { submissions, role } = response.data;
     setRole(role as SubRole);
+    if (role === SubRole.STUDENT) {
+      setTab(SubmisisonTab.SUBMISSION);
+    } else {
+      setTab(SubmisisonTab.STATISTIC);
+    }
     setSubmissionList(submissions);
     setSubmission(submissions[0]);
   }, [assignment.courseId, assignment.id]);
+
+  console.info("Current tab: " + tab);
   useEffect(() => {
     fetchSubmission();
   }, [fetchSubmission]);
@@ -47,53 +54,71 @@ const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
     <div className="bg-white p-4 rounded-2 gap-4">
       {submissionList?.length > 0 && (
         <div
-          className="grid bg-white p-4 rounded-2 gap-4"
+          className="grid bg-white p-4 rounded-2"
           style={{
             gridTemplateColumns:
               tab === SubmisisonTab.SUBMISSION ? '1fr 1fr' : '1fr',
           }}
         >
-          <div style={{ width: '100%', overflow: 'hidden' }}>
-            <p className="assignment-name">{assignment?.name}</p>
+          <div className='assignment-information'>
+            <p
+              className="assignment-name"
+              style={{ marginTop: 8, marginBottom: 8 }}
+            >
+              {assignment?.name}
+            </p>
             <p>{assignment?.description}</p>
-            <div className="submission-container">
-              {subRole === SubRole.ADMIN ||
-                (subRole === SubRole.TEACHER && (
-                  <div className="flex items-center">
-                    <p
-                      className={`title cursor-pointer ${tab === SubmisisonTab.SUBMISSION
-                          ? 'submission-tab-active'
-                          : ''
-                        }`}
-                      onClick={() => setTab(SubmisisonTab.SUBMISSION)}
-                    >
-                      Bài nộp
-                    </p>
-                    <p
-                      className={`title cursor-pointer  ml-4 ${tab === SubmisisonTab.STATISTIC
-                          ? 'submission-tab-active'
-                          : ''
-                        }`}
-                      onClick={() => setTab(SubmisisonTab.STATISTIC)}
-                    >
-                      Thống kê
-                    </p>
-                  </div>
-                ))}
+            {subRole === SubRole.ADMIN ||
+              (subRole === SubRole.TEACHER && (
+                <div className="flex items-center">
+                  <Tabs
+                    defaultActiveKey={tab}
+                    size="middle"
+                    type="card"
+                    onChange={(selectedTab) => {
+                      setTab(selectedTab)
+                    }}
+                    style={{ marginBottom: 8, marginTop: 8 }}
+                    hidden={false}
+                    items={Object.keys(SubmisisonTab).map((tab) => {
+                      const tabName =
+                        tab.charAt(0).toUpperCase() +
+                        tab.substring(1).toLowerCase();
+                      return {
+                        label: tabName,
+                        key: tab,
+                      };
+                    })}
+                  />
+                </div>
+              ))}
+          </div>
+          <div />
 
-              {subRole === SubRole.STUDENT && <p className="title">Bài nộp</p>}
+          <div style={{ width: '100%', overflow: 'hidden' }}>
+
+            <div className="submission-container">
+              {/* {subRole === SubRole.STUDENT && (
+                <p className="title">Submission</p>
+              )} */}
 
               {tab === SubmisisonTab.SUBMISSION && (
-                <div className="submission-list">
-                  {submissionList?.map((submissionItem) => (
-                    <SubmissionItem
-                      active={submission?.id === submissionItem.id}
-                      key={submissionItem.id}
-                      submission={submissionItem}
-                      setSubmission={setSubmission}
-                    />
-                  ))}
-                </div>
+                <>
+                  {subRole !== SubRole.STUDENT && (
+                    <h3>Student submissions list</h3>
+                  )}
+                  <div className="submission-list">
+                    {submissionList?.map((submissionItem) => (
+                      <SubmissionItem
+                        active={submission?.id === submissionItem.id}
+                        key={submissionItem.id}
+                        submission={submissionItem}
+                        setSubmission={setSubmission}
+                      />
+                    ))}
+                  </div>
+                </>
+
               )}
               {tab === SubmisisonTab.STATISTIC && (
                 <div className="mt-4">
