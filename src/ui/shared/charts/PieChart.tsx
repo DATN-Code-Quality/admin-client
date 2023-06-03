@@ -23,7 +23,7 @@ const PieChart: React.FC<{
           breakpoint: 480,
           options: {
             chart: {
-              width: 200,
+              width: 350,
             },
             legend: {
               position: 'bottom',
@@ -36,7 +36,7 @@ const PieChart: React.FC<{
   );
   console.log(series);
   return (
-    <div style={{ width: '100%' }} className="flex items-center justify-center">
+    <div className="flex items-center justify-center">
       {!loading && series?.length > 0 && (
         <ReactApexChart
           options={chartOptions}

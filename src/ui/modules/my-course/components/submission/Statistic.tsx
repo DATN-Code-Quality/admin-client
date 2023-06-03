@@ -60,21 +60,36 @@ const Statistic: React.FC<{ courseId: string; assignmentId: string }> = ({
   }, [fetchReport]);
     console.log("DATA: "+JSON.stringify(report))
   return (
-    <div>
-      <PieChart
-        series={report.data}
-        labels={report.labels}
-        color={[
-          '#FF6384',
-          '#36A2EB',
-          '#FFCE56',
-          '#4BC0C0',
-          '#9966FF',
-          '#FF9F40',
-        ]}
-        loading={loading}
-      />
-      <DataTable courseId={courseId} assignmentId={assignmentId} />
+    <div
+      className="bg-white  rounded-2 gap-4 justify-between"
+      style={{
+        maxHeight: '700px',
+        minHeight: '450px',
+        overflow: 'auto',
+        padding: '32px',
+      }}
+    >
+      <div>
+        <p className="font-semibold mb-2" style={{ fontSize: '16px' }}>
+          Chart
+        </p>
+        <PieChart
+          series={report.data}
+          labels={report.labels}
+          color={[
+            '#FF6384',
+            '#36A2EB',
+            '#FFCE56',
+            '#4BC0C0',
+            '#9966FF',
+            '#FF9F40',
+          ]}
+          loading={loading}
+        />
+      </div>
+      <div className="flex-1 overflow-hidden">
+        <DataTable courseId={courseId} assignmentId={assignmentId} />
+      </div>
     </div>
   );
 };
