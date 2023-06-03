@@ -85,6 +85,6 @@ export enum SubmissionType {
 }
 
 export enum SubmisisonTab {
-  SUBMISSION = 'SUBMISSION',
   STATISTIC = 'STATISTIC',
+  SUBMISSION = 'SUBMISSION',
 }

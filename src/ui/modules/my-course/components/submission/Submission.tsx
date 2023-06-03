@@ -25,10 +25,10 @@ const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
   const [submissionList, setSubmissionList] = useState<Submission[]>([]);
   const [submission, setSubmission] = useState<Submission>();
   const [subRole, setRole] = useState<SubRole | null>(null);
-  const [tab, setTab] = useState<SubmisisonTab>(SubmisisonTab.SUBMISSION);
+  const [tab, setTab] = useState<SubmisisonTab>(SubmisisonTab.STATISTIC);
   const { getSubmissionByAssignmentId } = useSubmission();
-  
-  const fetchSubmission = useCallback(async () => {   
+
+  const fetchSubmission = useCallback(async () => {
     const response = await getSubmissionByAssignmentId(
       assignment.courseId,
       assignment.id
@@ -36,9 +36,16 @@ const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
     if (response.status !== 0) return;
     const { submissions, role } = response.data;
     setRole(role as SubRole);
+    if (role === SubRole.STUDENT) {
+      setTab(SubmisisonTab.SUBMISSION);
+    } else {
+      setTab(SubmisisonTab.STATISTIC);
+    }
     setSubmissionList(submissions);
     setSubmission(submissions[0]);
   }, [assignment.courseId, assignment.id]);
+
+  console.info("Current tab: "+tab);
   useEffect(() => {
     fetchSubmission();
   }, [fetchSubmission]);
@@ -61,22 +68,24 @@ const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
                 (subRole === SubRole.TEACHER && (
                   <div className="flex items-center">
                     <p
-                      className={`title cursor-pointer ${tab === SubmisisonTab.SUBMISSION
+                      className={`title cursor-pointer ${
+                        tab === SubmisisonTab.STATISTIC
                           ? 'submission-tab-active'
                           : ''
-                        }`}
-                      onClick={() => setTab(SubmisisonTab.SUBMISSION)}
-                    >
-                      Bài nộp
-                    </p>
-                    <p
-                      className={`title cursor-pointer  ml-4 ${tab === SubmisisonTab.STATISTIC
-                          ? 'submission-tab-active'
-                          : ''
-                        }`}
+                      }`}
                       onClick={() => setTab(SubmisisonTab.STATISTIC)}
                     >
                       Thống kê
+                    </p>
+                    <p
+                      className={`title cursor-pointer ml-4 ${
+                        tab === SubmisisonTab.SUBMISSION
+                          ? 'submission-tab-active'
+                          : ''
+                      }`}
+                      onClick={() => setTab(SubmisisonTab.SUBMISSION)}
+                    >
+                      Bài nộp
                     </p>
                   </div>
                 ))}
