@@ -38,12 +38,8 @@ const Submission = () => {
   const navigate = useNavigate();
   const [width, setWidth] = useState(window.innerWidth);
 
-<<<<<<< HEAD
   const [components, setComponents] = useState();
   const { getIssuesSubmission } = useSonarqube();
-=======
-  const { getIssuesSubmission, getOverViewSubmission } = useSonarqube();
->>>>>>> 374acc94c13d2deff761c3a464b19f7ba5286c25
 
   const issueSelected = useSelector(SonarqubeSelector.getIssueSelected);
   const data = useSelector(SonarqubeSelector.getSubmissionIssues);
@@ -152,11 +148,10 @@ const Submission = () => {
     issues.forEach((issue) => {
       if (result[issue.type]) {
         result[issue.type] += 1;
-      }
-      else {
+      } else {
         result[issue.type] = 1;
       }
-    })
+    });
 
     return result;
   }, [data, filters]);
@@ -187,12 +182,12 @@ const Submission = () => {
             )}
           </div>
           <div className="flex gap-4 h-full ">
-<<<<<<< HEAD
             {width >= 1024 ? (
               <SubmissionFilter
                 filters={filters}
                 setFilters={setFilters}
                 components={components}
+                values={bugTypeMap}
               />
             ) : (
               <SubmissionFilterMobile
@@ -201,15 +196,9 @@ const Submission = () => {
                 open={open}
                 setOpen={setOpen}
                 components={components}
+                values={bugTypeMap}
               />
             )}
-=======
-            <SubmissionFilter
-              filters={filters}
-              setFilters={setFilters}
-              values={bugTypeMap}
-            />
->>>>>>> 374acc94c13d2deff761c3a464b19f7ba5286c25
 
             <div className="submission-issues-container ">
               {loading && (

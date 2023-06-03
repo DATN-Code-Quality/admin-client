@@ -30,7 +30,8 @@ const SubmissionFilter: React.FC<{
   filters: { type: BugType | ''; file: string; severity: SeverityType | '' };
   setFilters: (val: string) => void;
   components: any;
-}> = ({ filters, setFilters, components }) => {
+  values?: Map<BugType, number>;
+}> = ({ filters, setFilters, components, values }) => {
   const issuesOfComponents = useSelector(SonarqubeSelector.getSubmissionIssues);
   const bugTypeMap = values ?? ({} as Map<BugType, number>);
 
@@ -140,7 +141,7 @@ const SubmissionFilter: React.FC<{
           return (
             <div
               key={bug.label}
-              className={`bug-label cursor-pointer pl-4 ${
+              className={`bug-label flex items-center justify-between cursor-pointer pl-4 ${
                 filters.type === bug.value ? 'filter-active' : ''
               }`}
               onClick={() => {
@@ -151,7 +152,9 @@ const SubmissionFilter: React.FC<{
                 {bug.icon}
                 <span className="ml-2">{bug.label}</span>
               </span>
-              <span>{bugTypeMap[bug.value] ?? 0}</span>
+              <span className="font-semibold">
+                {bugTypeMap[bug.value] ?? 0}
+              </span>
             </div>
           );
         })}
@@ -192,7 +195,6 @@ const SubmissionFilter: React.FC<{
           if (componentList.length > 0) {
             fileuuid = componentList[0]?.uuid || '';
           }
-          console.log('Components', components);
           return (
             <div
               key={issueKey}
@@ -260,7 +262,8 @@ const SubmissionFilterMobile: React.FC<{
   open: boolean;
   setOpen: (val: boolean) => void;
   components: any;
-}> = ({ filters, setFilters, open, setOpen, components }) => {
+  values: any;
+}> = ({ filters, setFilters, open, setOpen, components, values }) => {
   const [placement, setPlacement] = useState<DrawerProps['placement']>('left');
 
   const onClose = () => {
@@ -285,6 +288,7 @@ const SubmissionFilterMobile: React.FC<{
           filters={filters}
           setFilters={setFilters}
           components={components}
+          values={values}
         />
       </Drawer>
     </div>
