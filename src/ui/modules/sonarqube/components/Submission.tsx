@@ -28,6 +28,9 @@ import './index.less';
 import { BugType, SeverityType } from '~/constant/enum';
 import { Issue } from '~/domain/submission';
 import DetailRule from './DetailRule';
+import { keys } from 'highcharts';
+
+const PAGE_SIZE = 100;
 
 const Submission = () => {
   const dispatch = useDispatch();
@@ -35,8 +38,12 @@ const Submission = () => {
   const navigate = useNavigate();
   const [width, setWidth] = useState(window.innerWidth);
 
+<<<<<<< HEAD
   const [components, setComponents] = useState();
   const { getIssuesSubmission } = useSonarqube();
+=======
+  const { getIssuesSubmission, getOverViewSubmission } = useSonarqube();
+>>>>>>> 374acc94c13d2deff761c3a464b19f7ba5286c25
 
   const issueSelected = useSelector(SonarqubeSelector.getIssueSelected);
   const data = useSelector(SonarqubeSelector.getSubmissionIssues);
@@ -76,7 +83,7 @@ const Submission = () => {
           Object.entries(filters).filter(([_, v]) => v !== '')
         ),
         page: pagination.page,
-        pageSize: 7,
+        pageSize: PAGE_SIZE,
       }
     );
     if (response?.status !== 0) return;
@@ -95,8 +102,10 @@ const Submission = () => {
       } else {
         objectResult[issue.component] = [issue];
       }
+
       return objectResult;
     }, issuesOfComponents);
+
     dispatch(setSubmissionIssues(issuesOfComponents));
     setComponents(components);
     setLoading(false);
@@ -134,7 +143,24 @@ const Submission = () => {
     }
     dispatch(setSubmissionSelected({ courseId, assignmentId, submissionId }));
   }, [dispatch, location.search, navigate]);
+  const issueMapByBugType = useCallback(() => {
+    const result = new Map<BugType, number>();
+    let issues: any[] = [];
+    Object.keys(data).forEach((key) => {
+      issues = [...issues, ...data[key]];
+    });
+    issues.forEach((issue) => {
+      if (result[issue.type]) {
+        result[issue.type] += 1;
+      }
+      else {
+        result[issue.type] = 1;
+      }
+    })
 
+    return result;
+  }, [data, filters]);
+  const bugTypeMap = issueMapByBugType();
   return (
     <>
       {!loading && issueSelected && <DetailSubmission />}
@@ -161,6 +187,7 @@ const Submission = () => {
             )}
           </div>
           <div className="flex gap-4 h-full ">
+<<<<<<< HEAD
             {width >= 1024 ? (
               <SubmissionFilter
                 filters={filters}
@@ -176,6 +203,13 @@ const Submission = () => {
                 components={components}
               />
             )}
+=======
+            <SubmissionFilter
+              filters={filters}
+              setFilters={setFilters}
+              values={bugTypeMap}
+            />
+>>>>>>> 374acc94c13d2deff761c3a464b19f7ba5286c25
 
             <div className="submission-issues-container ">
               {loading && (
@@ -204,9 +238,9 @@ const Submission = () => {
                             <FileTextOutlined />
                             <span className="ml-2">{fileNameShort}</span>
                           </p>
-                          {data[key].map((issue) => (
+                          {data[key].map((issue, index) => (
                             <IssueItem
-                              key={issue}
+                              key={index}
                               issue={issue}
                               handleSetIssue={handleSetIssue}
                               setRuleSelected={setRuleSelected}
@@ -227,7 +261,7 @@ const Submission = () => {
                     }}
                     defaultCurrent={pagination.page}
                     total={pagination.total}
-                    pageSize={6}
+                    pageSize={PAGE_SIZE}
                     onChange={(val) =>
                       setPagination((prev) => ({ ...prev, page: val }))
                     }

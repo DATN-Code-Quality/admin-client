@@ -37,113 +37,12 @@ const Overview: React.FC<{
     }
     setLoading(true);
     if (!assignment?.id || !assignment?.courseId) return;
-    // const response = await getOverViewSubmission(
-    //   assignment?.courseId,
-    //   assignment?.id,
-    //   submission?.id
-    // );
-    const response = {
-      status: 0,
-      data: {
-        paging: {
-          pageIndex: 1,
-          pageSize: 100,
-          total: 1,
-        },
-        measures: [
-          {
-            metric: 'bugs',
-            history: [
-              {
-                date: '2023-05-23T19:42:15+0700',
-                value: '1',
-              },
-            ],
-          },
-          {
-            metric: 'code_smells',
-            history: [
-              {
-                date: '2023-05-23T19:42:15+0700',
-                value: '11',
-              },
-            ],
-          },
-          {
-            metric: 'coverage',
-            history: [
-              {
-                date: '2023-05-23T19:42:15+0700',
-                value: '0.0',
-              },
-            ],
-          },
-          {
-            metric: 'duplicated_lines_density',
-            history: [
-              {
-                date: '2023-05-23T19:42:15+0700',
-                value: '0.0',
-              },
-            ],
-          },
-          {
-            metric: 'ncloc',
-            history: [
-              {
-                date: '2023-05-23T19:42:15+0700',
-                value: '156',
-              },
-            ],
-          },
-          {
-            metric: 'reliability_rating',
-            history: [
-              {
-                date: '2023-05-23T19:42:15+0700',
-                value: '3.0',
-              },
-            ],
-          },
-          {
-            metric: 'security_rating',
-            history: [
-              {
-                date: '2023-05-23T19:42:15+0700',
-                value: '1.0',
-              },
-            ],
-          },
-          {
-            metric: 'sqale_index',
-            history: [
-              {
-                date: '2023-05-23T19:42:15+0700',
-                value: '43',
-              },
-            ],
-          },
-          {
-            metric: 'sqale_rating',
-            history: [
-              {
-                date: '2023-05-23T19:42:15+0700',
-                value: '1.0',
-              },
-            ],
-          },
-          {
-            metric: 'vulnerabilities',
-            history: [
-              {
-                date: '2023-05-23T19:42:15+0700',
-                value: '0',
-              },
-            ],
-          },
-        ],
-      },
-    };
+    const response = await getOverViewSubmission(
+      assignment?.courseId,
+      assignment?.id,
+      submission?.id
+    );
+
     if (response.status !== 0) {
       setData(initMap);
       return;

@@ -32,6 +32,7 @@ const SubmissionFilter: React.FC<{
   components: any;
 }> = ({ filters, setFilters, components }) => {
   const issuesOfComponents = useSelector(SonarqubeSelector.getSubmissionIssues);
+  const bugTypeMap = values ?? ({} as Map<BugType, number>);
 
   const bugTypes = useMemo(
     () => [
@@ -146,8 +147,11 @@ const SubmissionFilter: React.FC<{
                 handleSetFilter('type', bug.value);
               }}
             >
-              {bug.icon}
-              <span className="ml-2">{bug.label}</span>
+              <span>
+                {bug.icon}
+                <span className="ml-2">{bug.label}</span>
+              </span>
+              <span>{bugTypeMap[bug.value] ?? 0}</span>
             </div>
           );
         })}

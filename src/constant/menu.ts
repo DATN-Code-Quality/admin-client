@@ -166,13 +166,13 @@ export const menus = [
     route: ROUTE.MY_COURSE.LIST,
     roles: [Role.USER],
   },
-  {
-    id: 'history',
-    name: 'History',
-    // icon: DownloadOutlined,
-    route: ROUTE.HISTORY,
-    roles: [Role.USER],
-  },
+  // {
+  //   id: 'history',
+  //   name: 'History',
+  //   // icon: DownloadOutlined,
+  //   route: ROUTE.HISTORY,
+  //   roles: [Role.USER],
+  // },
   // {
   //   id: 'sonarqube',
   //   name: 'Sonarqube',
