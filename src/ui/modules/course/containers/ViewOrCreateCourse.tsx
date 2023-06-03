@@ -9,14 +9,14 @@ const ViewOrCreateCourse = ({ course, initialViewMode = false }) => {
   const query = useQuery();
   const id: any = query.get('id');
   const renderTitle = () => {
-    let preTitle = 'Tạo mới ';
+    let preTitle = 'Create ';
     if (id && initialViewMode) {
-      preTitle = 'Thông tin ';
+      preTitle = 'Detail ';
     }
     if (id && !initialViewMode) {
-      preTitle = 'Cập nhật ';
+      preTitle = 'Edit ';
     }
-    return `${preTitle}khoá học`;
+    return `${preTitle}course`;
   };
   return (
     <Card className="card-edit-view">

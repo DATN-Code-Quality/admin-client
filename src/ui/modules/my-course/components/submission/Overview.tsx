@@ -42,6 +42,7 @@ const Overview: React.FC<{
       assignment?.id,
       submission?.id
     );
+
     if (response.status !== 0) {
       setData(initMap);
       return;
@@ -66,7 +67,7 @@ const Overview: React.FC<{
   return (
     <div>
       {!loading && (
-        <div className="p-4" style={{ marginTop: '50px' }}>
+        <div className="p-4" style={{ marginTop: '16px' }}>
           <div
             className="flex items-center justify-between"
             style={{ borderBottom: '1px solid #ccc' }}

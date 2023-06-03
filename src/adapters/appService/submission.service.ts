@@ -25,7 +25,7 @@ export function useSubmission() {
       const response = await getWithPath(
         `${API.SUBMISSION.GET.SUBMISSIONS_BY_ASSIGNMENT_ID}/${courseId}/${assignmentId}`
       );
-
+      response.total = response.data.total;
       return response;
     },
 

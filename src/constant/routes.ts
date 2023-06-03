@@ -14,6 +14,7 @@ const ROUTE = {
   MY_COURSE: {
     LIST: '/my-course/list',
     DETAIL: '/my-course/detail',
+    ASSIGN: '/my-course/assign',
     CREATE_ASSIGNMENT: '/my-course/create-assignment',
     EDIT_ASSIGNMENT: '/my-course/edit-assignment',
   },
