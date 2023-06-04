@@ -21,9 +21,8 @@ export function formatTooltip(this: any, chartRef) {
         (point) =>
           ` <div class="tooltip-items">
                 <span class="left color-n4 ">
-                     <span style="background-color: ${
-                       point.color
-                     }" class="symbol has-square"></span>
+                     <span style="background-color: ${point.color
+          }" class="symbol has-square"></span>
                 ${point.series.userOptions.name}:
                 </span> 
                 <span class="ml-8 right color-n2 ">
@@ -37,19 +36,16 @@ export function formatTooltip(this: any, chartRef) {
     return `
         <div class="tooltip-items">
         <span class="left">
-            <span style="background-color: ${
-              this.series.color
-            }" class="symbol ${
-      this.series.type === 'line' ? 'has-line' : 'has-square'
-    }"> </span>
+            <span style="background-color: ${this.series.color
+      }" class="symbol ${this.series.type === 'line' ? 'has-line' : 'has-square'
+      }"> </span>
             ${this.series.name}:
         </span>
         <span class="ml-8 right color-n2 ">
-            ${
-              this.percentage
-                ? `${this.percentage.toFixed(2)}%`
-                : formatNumber(this.y)
-            }${this.series.tooltipOptions.valueSuffix || ''}
+            ${this.percentage
+        ? `${this.percentage.toFixed(2)}%`
+        : formatNumber(this.y)
+      }${this.series.tooltipOptions.valueSuffix || ''}
         </span>
         </div>`;
   }
@@ -65,9 +61,9 @@ export function formatTooltip(this: any, chartRef) {
                     ${formatNumber(sum)}&nbsp;đ
                 </span>
             </div>${this.points
-              .map(
-                (point) =>
-                  ` <div class="tooltip-items">
+      .map(
+        (point) =>
+          ` <div class="tooltip-items">
                 <span class="left color-n4 ">
                 ${point.series.userOptions.name}:
                 </span> 
@@ -75,8 +71,8 @@ export function formatTooltip(this: any, chartRef) {
                     ${formatNumber(point.y)}&nbsp;đ
                 </span>
             </div>`
-              )
-              .join('')}`
+      )
+      .join('')}`
   );
 }
 
@@ -100,12 +96,10 @@ export function formatContentTooltipLine(this) {
     )}</span><br/>` +
     `<div class="tooltip-items">
                         <span class="left">
-                            <span style="background-color: ${
-                              this.point.color
-                            }" class="symbol ${
-      this.point.series.userOptions.type === 'column'
-        ? 'has-square'
-        : 'has-line'
+                            <span style="background-color: ${this.point.color
+    }" class="symbol ${this.point.series.userOptions.type === 'column'
+      ? 'has-square'
+      : 'has-line'
     }"> </span>
                             ${this.point.series.userOptions.name}:
                         </span>
@@ -188,11 +182,12 @@ export interface ILineChartData {
 type LineChartProps = {
   colors?: string[];
   series: ILineChartData[];
+  xAxisType?: 'datetime' | 'string';
 };
 
 const LineChart: React.FC<LineChartProps> = (props) => {
   const { series, colors } = props;
-
+  const xAxisType = props.xAxisType ?? 'datetime';
   const chartOptions = {
     chart: {
       plotBackgroundColor: null,
@@ -208,10 +203,15 @@ const LineChart: React.FC<LineChartProps> = (props) => {
       text: '',
     },
     xAxis: {
-      type: 'datetime',
+      type: xAxisType,
       labels: {
-        formatter() {
-          return dayjs(this.value).format('DD/MM');
+        format: () => {
+          console.log("value from x axis: " + JSON.stringify(this.value));
+          if (xAxisType === 'datetime') {
+
+            return dayjs(this.value).format('DD/MM');
+          }
+          return this.value;
         },
       },
     },
