@@ -29,8 +29,6 @@ const Overview: React.FC<{
     );
   }, [assignment?.courseId, assignment?.id, navigate, submission?.id]);
 
-  console.info("Submission: " + JSON.stringify(submission))
-  console.info("Assignment: " + JSON.stringify(assignment))
   const fetchOverview = useCallback(async () => {
     const initMap = new Map();
     if (!submission) {

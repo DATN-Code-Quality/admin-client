@@ -45,7 +45,7 @@ const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
     setSubmission(submissions[0]);
   }, [assignment.courseId, assignment.id]);
 
-  console.info("Current tab: " + tab);
+  
   useEffect(() => {
     fetchSubmission();
   }, [fetchSubmission]);

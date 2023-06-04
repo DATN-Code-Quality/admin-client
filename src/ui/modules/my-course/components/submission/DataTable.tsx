@@ -44,8 +44,6 @@ const DataTable: React.FC<{ courseId: string; assignmentId: string }> = ({
     setLoading(false);
   }, [assignmentId, courseId]);
 
-  console.log(data);
-
   useEffect(() => {
     fetchReport();
   }, [fetchReport]);
@@ -251,8 +249,6 @@ const DataTable: React.FC<{ courseId: string; assignmentId: string }> = ({
       window.URL.revokeObjectURL(url);
     }
   };
-
-  console.log(JSON.stringify(data));
 
   return (
     <div

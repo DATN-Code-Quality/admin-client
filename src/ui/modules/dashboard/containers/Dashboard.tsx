@@ -57,6 +57,8 @@ function Dashboard() {
     handleGetListCourse();
   }, []);
 
+  console.log("Series:"+JSON.stringify(series))
+
   return (
     <>
       <BaseFilter
@@ -88,7 +90,8 @@ function Dashboard() {
             <div className="overall-item" key="Total">
               <p className="overall-item__label">Total</p>
               <p className="overall-item__value" style={{ color: '#429EFF' }}>
-                {series.reduce((prev, current) => prev + current.total, 0)}
+                {series &&
+                  series.reduce((prev, current) => prev + current.total, 0)}
               </p>
             </div>
             {series?.map((item) => {
@@ -110,7 +113,7 @@ function Dashboard() {
           {series && <LineChart series={series} colors={[]} />}
         </div>
       </Card>
-      <Card className="dashboard-card" title="Submission">
+      {/* <Card className="dashboard-card" title="Submission">
         <div className="action-container">
           <BaseFilter
             loading={loading}
@@ -130,7 +133,7 @@ function Dashboard() {
         <div className="overall-item" key="Total">
           <p className="overall-item__label">Total</p>
           <p className="overall-item__value" style={{ color: '#429EFF' }}>
-            {series.reduce((prev, current) => prev + current.total, 0)}
+            {series && series.reduce((prev, current) => prev + current.total, 0)}
           </p>
         </div>
         {series?.length > 0 && (
@@ -154,7 +157,7 @@ function Dashboard() {
         <div className="chart-container">
           {series && <LineChart series={series} colors={[]} />}
         </div>
-      </Card>
+      </Card> */}
       <>{loading && <Loading />}</>
     </>
   );

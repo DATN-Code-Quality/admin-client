@@ -135,7 +135,7 @@ const AddSubmissionSection = (props: {
     }
     // check type file
     const fileType = file.name.split('.').reverse()[0];
-    console.log(fileType);
+
     if (fileType !== 'zip') {
       message.error('Not support for other type except .zip file');
       return false;
@@ -161,11 +161,9 @@ const AddSubmissionSection = (props: {
       }
     },
     onDrop(e) {
-      console.log('Dropped files', e.dataTransfer.files.item(0));
       setSubmittedFile(undefined);
     },
     beforeUpload: (file) => {
-      console.info(`File before upload: ${JSON.stringify(file)}`);
       const validateRes = validateFilePick(file);
       if (!validateRes) {
         return Upload.LIST_IGNORE;
