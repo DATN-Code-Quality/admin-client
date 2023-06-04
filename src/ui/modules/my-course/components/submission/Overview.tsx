@@ -29,6 +29,8 @@ const Overview: React.FC<{
     );
   }, [assignment?.courseId, assignment?.id, navigate, submission?.id]);
 
+  console.info("Submission: " + JSON.stringify(submission))
+  console.info("Assignment: " + JSON.stringify(assignment))
   const fetchOverview = useCallback(async () => {
     const initMap = new Map();
     if (!submission) {
@@ -42,7 +44,6 @@ const Overview: React.FC<{
       assignment?.id,
       submission?.id
     );
-
     if (response.status !== 0) {
       setData(initMap);
       return;
@@ -67,7 +68,15 @@ const Overview: React.FC<{
   return (
     <div>
       {!loading && (
-        <div className="p-4" style={{ marginTop: '16px' }}>
+        <div
+          style={{
+            marginLeft: 16,
+            marginTop: 32,
+            padding: 16,
+            border: '1px solid ',
+            borderRadius: 16,
+          }}
+        >
           <div
             className="flex items-center justify-between"
             style={{ borderBottom: '1px solid #ccc' }}

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import {
   BugOutlined,
@@ -7,13 +7,12 @@ import {
   ExclamationCircleFilled,
   FileTextOutlined,
   InfoCircleFilled,
-  SettingOutlined,
   UnlockOutlined,
   UpCircleFilled,
   WarningFilled,
   WarningOutlined,
 } from '@ant-design/icons';
-import { Collapse, Drawer, DrawerProps } from 'antd';
+import { Collapse } from 'antd';
 import { useSelector } from 'react-redux';
 
 import SonarqubeSelector from '~/adapters/redux/selectors/sonarqube';
@@ -29,9 +28,8 @@ const { Panel } = Collapse;
 const SubmissionFilter: React.FC<{
   filters: { type: BugType | ''; file: string; severity: SeverityType | '' };
   setFilters: (val: string) => void;
-  components: any;
   values?: Map<BugType, number>;
-}> = ({ filters, setFilters, components, values }) => {
+}> = ({ filters, setFilters, values }) => {
   const issuesOfComponents = useSelector(SonarqubeSelector.getSubmissionIssues);
   const bugTypeMap = values ?? ({} as Map<BugType, number>);
 
@@ -141,20 +139,18 @@ const SubmissionFilter: React.FC<{
           return (
             <div
               key={bug.label}
-              className={`bug-label flex items-center justify-between cursor-pointer pl-4 ${
+              className={`bug-label cursor-pointer pl-4 ${
                 filters.type === bug.value ? 'filter-active' : ''
               }`}
-              onClick={() => {
-                handleSetFilter('type', bug.value);
-              }}
+              onClick={() => handleSetFilter('type', bug.value)}
+              style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}
             >
               <span>
-                {bug.icon}
-                <span className="ml-2">{bug.label}</span>
+              {bug.icon}
+              <span className="ml-2">{bug.label}</span>
               </span>
-              <span className="font-semibold">
-                {bugTypeMap[bug.value] ?? 0}
-              </span>
+              <span>{bugTypeMap[bug.value]??0}</span>
+              
             </div>
           );
         })}
@@ -187,24 +183,14 @@ const SubmissionFilter: React.FC<{
         {Object.keys(issuesOfComponents || {})?.map((issueKey) => {
           const value = issueKey.split(':');
           const fileNameShort = value[value.length - 1];
-          const component = value[0];
-          let fileuuid = '';
-          const componentList = components.filter(
-            (item) => item.key === component
-          );
-          if (componentList.length > 0) {
-            fileuuid = componentList[0]?.uuid || '';
-          }
+
           return (
             <div
               key={issueKey}
               className={`bug-label mt-2 cursor-pointer pl-4 ${
                 filters.file === fileNameShort ? 'active' : ''
               }`}
-              onClick={() => {
-                handleSetFilter('file', fileNameShort);
-                handleSetFilter('fileuuid', fileuuid);
-              }}
+              onClick={() => handleSetFilter('file', fileNameShort)}
             >
               <FileTextOutlined style={{ color: 'blue' }} />
               <span className="ml-2">{fileNameShort}</span>
@@ -256,43 +242,4 @@ const SubmissionFilter: React.FC<{
   );
 };
 
-const SubmissionFilterMobile: React.FC<{
-  filters: { type: BugType | ''; file: string; severity: SeverityType | '' };
-  setFilters: (val: string) => void;
-  open: boolean;
-  setOpen: (val: boolean) => void;
-  components: any;
-  values: any;
-}> = ({ filters, setFilters, open, setOpen, components, values }) => {
-  const [placement, setPlacement] = useState<DrawerProps['placement']>('left');
-
-  const onClose = () => {
-    setOpen(false);
-  };
-
-  return (
-    <div>
-      <Drawer
-        width={300}
-        placement={placement}
-        closable={false}
-        onClose={onClose}
-        open={open}
-        key={placement}
-      >
-        <div className="flex items-center mb-2" onClick={() => setOpen(true)}>
-          <SettingOutlined />
-          <p className="ml-2 font-semibold">Setting</p>
-        </div>
-        <SubmissionFilter
-          filters={filters}
-          setFilters={setFilters}
-          components={components}
-          values={values}
-        />
-      </Drawer>
-    </div>
-  );
-};
-
-export { SubmissionFilter, SubmissionFilterMobile };
+export default SubmissionFilter;
