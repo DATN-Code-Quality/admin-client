@@ -2,6 +2,7 @@ const ROUTE = {
   INDEX: '/',
   DASHBOARD: '/dashboard',
   HISTORY: '/history',
+  ACTIVE_ACCOUNT: '/active-account',
   PROFILE: {
     DETAIL: '/profile',
     CHANGE_PASSWORD: '/profile/change-password',

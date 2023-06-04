@@ -9,10 +9,14 @@ import Logo from '~/ui/assets/images/logo.png';
 import Card from '~/ui/shared/card';
 import { getDefaultRoute } from '~/utils';
 import './Login.less';
+import ForgotPassword from '../components/ForgotPassword';
 
 function Login() {
   const { checkProfile, login, loginMicrosoft } = useAuth();
   const navigate = useNavigate();
+
+  const [isForgotPassword, setIsForgotPassword] = React.useState(false);
+
   const onFinish = async (values: any) => {
     await login(values);
     navigate('/', { replace: true });
@@ -22,12 +26,20 @@ function Login() {
     console.log('Failed:', errorInfo);
   };
 
+  const handleForgotPassword = () => {
+    setIsForgotPassword(true);
+  };
+
   useEffect(() => {
     checkProfile().then((res) => {
       const defaultRoute = getDefaultRoute([res?.data?.role]);
       navigate(defaultRoute, { replace: true });
     });
   }, []);
+
+  if (isForgotPassword) {
+    return <ForgotPassword />;
+  }
 
   return (
     <Layout className="cms-layout-app cms-layout-app-login">
@@ -65,6 +77,20 @@ function Login() {
                   required: true,
                   message: 'Vui lòng không bỏ trống mật khẩu!',
                 },
+                {
+                  pattern:
+                    /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
+                  message: (
+                    <ul>
+                      Password must contain:
+                      <li>At least one upper case</li>
+                      <li>At least one lower case</li>
+                      <li>At least one digit</li>
+                      <li>At least one special character </li>
+                      <li>Minimum 8 in length</li>
+                    </ul>
+                  ),
+                },
               ]}
             >
               <Input
@@ -74,6 +100,15 @@ function Login() {
                 placeholder="Mật khẩu"
               />
             </Form.Item>
+
+            <Button
+              type="text"
+              style={{ width: '100%', marginBottom: 5 }}
+              onClick={handleForgotPassword}
+            >
+              Quên mật khẩu?
+            </Button>
+
             <Form.Item>
               <Button type="primary" htmlType="submit" className="login-button">
                 Đăng nhập

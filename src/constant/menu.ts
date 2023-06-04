@@ -48,8 +48,12 @@ const Sonarqube = lazy(
 const SonarqubeSubmission = lazy(
   () => import('../ui/modules/sonarqube/containers/Submission')
 );
-const ViewAssignment=lazy(
+const ViewAssignment = lazy(
   () => import('../ui/modules/my-course/containers/ViewAssignment')
+);
+
+const ActiveAccount = lazy(
+  () => import('../ui/modules/active-account/containers/ActiveAccount')
 );
 
 // TODO: update allow route for each role
@@ -59,6 +63,11 @@ export const MAIN_ROUTES = [
     path: ROUTE.LOGIN,
     name: 'login',
     element: Login,
+  },
+  {
+    path: ROUTE.ACTIVE_ACCOUNT,
+    name: 'activeAccount',
+    element: ActiveAccount,
   },
   {
     path: ROUTE.PROFILE.CHANGE_PASSWORD,

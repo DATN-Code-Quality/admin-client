@@ -92,6 +92,9 @@ export const AUTH = {
   },
   PUT: {
     CHANGE_PASSWORD: '/auth/change-password',
+    CHANGE_PASSWORD_V2: '/auth/change-password-without-old-password',
+    ACTIVE_ACCOUNT: '/auth/active-account',
+    FORGOT_PASSWORD: '/auth/forget-password',
   },
 };
 

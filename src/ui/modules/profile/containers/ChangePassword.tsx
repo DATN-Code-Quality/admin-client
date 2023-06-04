@@ -1,25 +1,33 @@
-import React, { useEffect } from 'react';
-
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Form, Input, Layout } from 'antd';
-import { useNavigate } from 'react-router-dom';
+import { LockOutlined } from '@ant-design/icons';
+import { Button, Form, Input, Layout, Typography } from 'antd';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { useAuth } from '~/adapters/appService/auth.service';
 import Logo from '~/ui/assets/images/logo.png';
 import Card from '~/ui/shared/card';
-import { getDefaultRoute } from '~/utils';
 import './ChangePassword.less';
+import { useState } from 'react';
 
 function ChangePassword() {
-  const { checkProfile, login, loginMicrosoft } = useAuth();
+  const { changePasswordV2 } = useAuth();
+
+  const [err, setErr] = useState('');
   const navigate = useNavigate();
+  const [params] = useSearchParams();
+
   const onFinish = async (values: any) => {
-    const { oldPassword, newPassword, confirmPassword } = values;
+    const { newPassword, confirmPassword } = values;
+
     if (newPassword !== confirmPassword) {
       return;
     }
-    await login(values);
-    navigate('/', { replace: true });
+
+    try {
+      await changePasswordV2(params.get('token') || '', { newPassword });
+      navigate('/', { replace: true });
+    } catch (error) {
+      setErr((error as any)?.message || 'Something went wrong!');
+    }
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -43,7 +51,7 @@ function ChangePassword() {
             onFinishFailed={onFinishFailed}
             autoComplete="off"
           >
-            <Form.Item
+            {/* <Form.Item
               name="oldPassword"
               rules={[
                 {
@@ -58,13 +66,27 @@ function ChangePassword() {
                 type="password"
                 placeholder="Mật khẩu cũ"
               />
-            </Form.Item>
+            </Form.Item> */}
             <Form.Item
               name="newPassword"
               rules={[
                 {
                   required: true,
                   message: 'Vui lòng không bỏ trống mật khẩu!',
+                },
+                {
+                  pattern:
+                    /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
+                  message: (
+                    <ul>
+                      Password must contain:
+                      <li>At least one upper case</li>
+                      <li>At least one lower case</li>
+                      <li>At least one digit</li>
+                      <li>At least one special character </li>
+                      <li>Minimum 8 in length</li>
+                    </ul>
+                  ),
                 },
               ]}
             >
@@ -91,6 +113,7 @@ function ChangePassword() {
                 placeholder="Nhập lại mật khẩu"
               />
             </Form.Item>
+            <Typography.Text type="danger">{err}</Typography.Text>
             <Form.Item>
               <Button
                 type="primary"
