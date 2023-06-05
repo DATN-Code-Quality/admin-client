@@ -77,20 +77,20 @@ function Login() {
                   required: true,
                   message: 'Vui lòng không bỏ trống mật khẩu!',
                 },
-                {
-                  pattern:
-                    /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
-                  message: (
-                    <ul>
-                      Password must contain:
-                      <li>At least one upper case</li>
-                      <li>At least one lower case</li>
-                      <li>At least one digit</li>
-                      <li>At least one special character </li>
-                      <li>Minimum 8 in length</li>
-                    </ul>
-                  ),
-                },
+                // {
+                //   pattern:
+                //     /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
+                //   message: (
+                //     <ul>
+                //       Password must contain:
+                //       <li>At least one upper case</li>
+                //       <li>At least one lower case</li>
+                //       <li>At least one digit</li>
+                //       <li>At least one special character </li>
+                //       <li>Minimum 8 in length</li>
+                //     </ul>
+                //   ),
+                // },
               ]}
             >
               <Input
