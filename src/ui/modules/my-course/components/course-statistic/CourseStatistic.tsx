@@ -2,13 +2,20 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import { Card } from 'antd';
 
+import CourseLineChart from './CourseLineChart';
 import DataTable from './DataTable';
 
 import { useCourse } from '~/adapters/appService/course.service';
 import { ReportCourse } from '~/domain/course';
 import ColumnChart from '~/ui/shared/charts/ColumnChart';
+import LineChart from '~/ui/shared/line-chart';
 import { splitStr } from '~/utils';
-import LineChart from '~/ui/shared/charts/LineChart';
+
+type CourseReportDataLineChart = {
+  name: string;
+  data: number[];
+  color: string;
+}[];
 
 const CourseStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
   const [report, setReport] = useState<{
@@ -18,6 +25,11 @@ const CourseStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
     total: 0,
     assignment: [],
   });
+
+  const [dataLineChart, setDataLineChart] = useState<CourseReportDataLineChart>(
+    []
+  );
+  const [labelsLineChart, setLabelsLineChart] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [dataChart, setDataChart] = useState<{
     labels: string[][];
@@ -28,18 +40,47 @@ const CourseStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
   });
   const { getReportCourse } = useCourse();
 
+  const formarDataLineChart = useCallback((assignment: ReportCourse[]) => {
+    const series: { name: string; data: any[]; color: string }[] = [
+      { name: 'Submission Pass', data: [], color: '#11bf31' },
+      { name: 'Submission Fail', data: [], color: '#de1f0d' },
+      { name: 'Scan Error', data: [], color: '#f7d62f' },
+      { name: 'Not Submit', data: [], color: '#82807f' },
+    ];
+    // setLabelsLineChart([...assignment.map((assign) => assign.assignment.name)]);
+    assignment
+      ?.sort((a, b) => {
+        const result = a.assignment.name.localeCompare(b.assignment.name);
+        console.log(`result compare: ${result}`);
+        return result;
+      })
+      .forEach((assignmentItem: ReportCourse) => {
+        const { submission } = assignmentItem;
+        const waitToScan = submission?.waitToScan || 0;
+        const scanning = submission?.scanning || 0;
+        const fail = submission?.scanSuccess?.fail || 0;
+        const pass = submission?.scanSuccess?.pass || 0;
+        const error = submission?.scanFail || 0;
+        const notSubmitted = 0;
+        // submission.
+        series[0].data.push([assignmentItem.assignment.name, pass]);
+        series[1].data.push([assignmentItem.assignment.name, fail]);
+        series[2].data.push([assignmentItem.assignment.name, error]);
+        series[3].data.push([assignmentItem.assignment.name, notSubmitted]);
+      });
+    return series;
+  }, []);
+
   const formatDataChart = useCallback(
     (total: number, assignment: ReportCourse[]) => {
-      const series: { name: string; data: number[] }[] = [
-        { name: 'Submission Pass', data: [] },
-        { name: 'Submission Fail', data: [] },
-        { name: 'Scan Error', data: [] },
-        { name: 'Not Submit', data: [] },
+      const series: { key: string; name: string; data: number[] }[] = [
+        { key: 'pass', name: 'Submission Pass', data: [] },
+        { key: 'fail', name: 'Submission Fail', data: [] },
+        { key: 'error', name: 'Scan Error', data: [] },
+        { key: 'notsubmit', name: 'Not Submit', data: [] },
       ];
       const labels: string[][] = [];
       assignment?.forEach((assignmentItem: ReportCourse) => {
-        labels.push(splitStr(assignmentItem.assignment.name || '', 2));
-
         const { submission } = assignmentItem;
         const waitToScan = submission?.waitToScan || 0;
         const scanning = submission?.scanning || 0;
@@ -60,73 +101,14 @@ const CourseStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
 
   const fetchReport = useCallback(async () => {
     setLoading(true);
-    // const response = await getReportCourse(courseId);
-    const response = {
-      status: 0,
-      data: {
-        report: {
-          total: 9,
-          assignment: [
-            {
-              assignment: {
-                id: '41633f7b-3dd2-46d1-bf6a-6ec2b36e0623',
-                name: 'Tuần 5',
-              },
-              submission: {
-                waitToScan: 7,
-                scanSuccess: {},
-              },
-            },
-            {
-              assignment: {
-                id: '52e85d3d-c5d3-4942-a014-0f0cfa709ac0',
-                name: 'Tuần 18',
-              },
-              submission: {
-                scanSuccess: {},
-              },
-            },
-            {
-              assignment: {
-                id: '7b134c9e-0090-4745-8a7b-4117704721e0',
-                name: 'Tuần 18',
-              },
-              submission: {
-                scanSuccess: {
-                  fail: 1,
-                },
-                scanFail: 1,
-              },
-            },
-            {
-              assignment: {
-                id: '91c1e7db-f11a-41b2-baf4-2cf79fd5cbdf',
-                name: 'Tuần 6',
-              },
-              submission: {
-                waitToScan: 6,
-                scanSuccess: {},
-              },
-            },
-            {
-              assignment: {
-                id: 'a963b7da-cad7-4254-bb2a-e963b7161a65',
-                name: 'Tuần 4',
-              },
-              submission: {
-                waitToScan: 7,
-                scanSuccess: {},
-              },
-            },
-          ],
-        },
-        role: 'teacher',
-      },
-    };
+    const response = await getReportCourse(courseId);
     if (response?.status !== 0) return;
     const reportData = response.data.report;
     const { total, assignment } = reportData;
 
+    // console.info("Report data: "+JSON.stringify(reportData))
+    // console.log("Series format: " + JSON.stringify(formarDataLineChart(assignment)));
+    setDataLineChart(formarDataLineChart(assignment));
     setReport({ total, assignment });
     setDataChart(formatDataChart(total, assignment));
     setLoading(false);
@@ -135,14 +117,17 @@ const CourseStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
   useEffect(() => {
     fetchReport();
   }, [fetchReport]);
+  console.log(`Data line chart:  ${JSON.stringify(dataLineChart)}`);
+  console.log(`labels${JSON.stringify(labelsLineChart)}`);
 
   return (
     <Card>
-      <LineChart
+      <CourseLineChart series={dataLineChart} />
+      {/* <ColumnChart
         series={dataChart.data}
         labels={dataChart.labels}
         loading={loading}
-      />
+      /> */}
       <DataTable courseReport={report.assignment} total={report.total} />
     </Card>
   );

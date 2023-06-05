@@ -9,7 +9,7 @@ import React, {
   useState,
 } from 'react';
 
-import { Spin, Drawer } from 'antd';
+import { Spin } from 'antd';
 import parse from 'html-react-parser';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -22,12 +22,7 @@ import './index.less';
 
 import { LINE_EMPTY_CODE } from '~/constant';
 import { Issue, IssueWithSource } from '~/domain/submission';
-import {
-  ArrowLeftOutlined,
-  BookOutlined,
-  CloseSquareOutlined,
-  OrderedListOutlined,
-} from '@ant-design/icons';
+import { ArrowLeftOutlined } from '@ant-design/icons';
 import { setIssueSelected } from '~/adapters/redux/actions/sonarqube';
 import DetailRule from './DetailRule';
 
@@ -42,8 +37,6 @@ const DetailSubmission = () => {
   const [selected, setSelected] = useState<Issue | null>(null);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<IssueWithSource[]>([]);
-  const [width, setWidth] = useState(window.innerWidth);
-  const [open, setOpen] = useState(false);
 
   const issueContainer = useRef(null);
 
@@ -82,15 +75,6 @@ const DetailSubmission = () => {
   useEffect(() => {
     handleGetDetail();
   }, [handleGetDetail]);
-
-  useEffect(() => {
-    window.addEventListener('resize', () => {
-      setWidth(window.innerWidth);
-    });
-    return () => {
-      window.removeEventListener('resize', () => {});
-    };
-  }, []);
 
   const handleSelect = useCallback(
     (item: Issue) => {
@@ -183,80 +167,38 @@ const DetailSubmission = () => {
     dispatch(setIssueSelected(null));
   }, [dispatch]);
 
-  const renderIssueListOptions = useMemo(() => {
-    if (width < 1024)
-      return (
-        <Drawer
-          placement="left"
-          closable={false}
-          onClose={() => setOpen(false)}
-          open={open}
-          title="Issues"
-          extra={<CloseSquareOutlined onClick={() => setOpen(false)} />}
-        >
-          <div
-            style={{
-              overflow: 'hidden',
-              height: '100%',
-              display: 'flex',
-              flexDirection: 'column',
-            }}
-          >
-            <div style={{ flex: 1, overflow: 'auto' }}>
-              {Object.keys(submissionIssues)?.map((file) => {
-                return (
-                  <Fragment key={file}>
-                    {renderListIssues(file, submissionIssues[file] || [])}
-                  </Fragment>
-                );
-              })}
-            </div>
-          </div>
-        </Drawer>
-      );
-    return (
-      <div
-        style={{
-          overflow: 'hidden',
-          height: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-        }}
-      >
-        <div
-          className="flex items-center justify-between"
-          style={{ height: '44px' }}
-        >
-          <ArrowLeftOutlined
-            size={32}
-            className="cursor-pointer"
-            onClick={setEmptyIssue}
-          />
-          <p>Issues</p>
-        </div>
-        <div style={{ flex: 1, overflow: 'auto' }}>
-          {Object.keys(submissionIssues)?.map((file) => {
-            return (
-              <Fragment key={file}>
-                {renderListIssues(file, submissionIssues[file] || [])}
-              </Fragment>
-            );
-          })}
-        </div>
-      </div>
-    );
-  }, [open, renderListIssues, setEmptyIssue, submissionIssues, width]);
-
-  const fileNameShort = useMemo(() => {
-    const value = componentIssue.split(':');
-    if (!value) return '';
-    return value[value.length - 1];
-  }, [componentIssue]);
-
   return (
     <>
       <div className="detail-submission ">
-        {renderIssueListOptions}
+        <div
+          style={{
+            overflow: 'hidden',
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
+          <div
+            className="flex items-center justify-between"
+            style={{ height: '44px' }}
+          >
+            <ArrowLeftOutlined
+              size={32}
+              className="cursor-pointer"
+              onClick={setEmptyIssue}
+            />
+            <p>Issues</p>
+          </div>
+          <div style={{ flex: 1, overflow: 'auto' }}>
+            {Object.keys(submissionIssues)?.map((file) => {
+              return (
+                <Fragment key={file}>
+                  {renderListIssues(file, submissionIssues[file] || [])}
+                </Fragment>
+              );
+            })}
+          </div>
+        </div>
         <div
           style={{
             height: '100%',
@@ -265,31 +207,9 @@ const DetailSubmission = () => {
             flexDirection: 'column',
           }}
         >
-          {width < 1024 && (
-            <p className="font-semibold cursor-pointer" onClick={setEmptyIssue}>
-              <ArrowLeftOutlined size={32} className=" mr-2" />
-              <span>Back</span>
-            </p>
-          )}
-          <div className="flex items-center justify-between mt-2">
-            {width < 1024 && (
-              <div className="flex items-center">
-                <div
-                  onClick={() => setOpen(true)}
-                  className="ml-2 flex items-center"
-                >
-                  <p className="ml-2 font-semibold">Issues</p>
-                  <BookOutlined />
-                </div>
-              </div>
-            )}
-            <p
-              className="mb-2 text-right"
-              style={{ height: width >= 1024 ? '44px' : 'unset' }}
-            >
-              {fileNameShort}
-            </p>
-          </div>
+          <p className="mb-2 text-right" style={{ height: '44px' }}>
+            {componentIssue}
+          </p>
           <div className="issues-container" ref={issueContainer}>
             {data?.map((item, index) => {
               const isExistIssues =

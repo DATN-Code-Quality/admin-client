@@ -9,6 +9,10 @@ const ViewUser = lazy(() => import('../ui/modules/user/containers/ViewUser'));
 
 const Login = lazy(() => import('../ui/modules/login/containers/Login'));
 
+const ChangePassword = lazy(
+  () => import('../ui/modules/profile/containers/ChangePassword')
+);
+
 const Dashboard = lazy(
   () => import('../ui/modules/dashboard/containers/Dashboard')
 );
@@ -44,8 +48,12 @@ const Sonarqube = lazy(
 const SonarqubeSubmission = lazy(
   () => import('../ui/modules/sonarqube/containers/Submission')
 );
-const ViewAssignment=lazy(
+const ViewAssignment = lazy(
   () => import('../ui/modules/my-course/containers/ViewAssignment')
+);
+
+const ActiveAccount = lazy(
+  () => import('../ui/modules/active-account/containers/ActiveAccount')
 );
 
 // TODO: update allow route for each role
@@ -55,6 +63,17 @@ export const MAIN_ROUTES = [
     path: ROUTE.LOGIN,
     name: 'login',
     element: Login,
+  },
+  {
+    path: ROUTE.ACTIVE_ACCOUNT,
+    name: 'activeAccount',
+    element: ActiveAccount,
+  },
+  {
+    path: ROUTE.PROFILE.CHANGE_PASSWORD,
+    name: 'changePassword',
+    element: ChangePassword,
+    roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],
   },
   {
     path: ROUTE.DASHBOARD,

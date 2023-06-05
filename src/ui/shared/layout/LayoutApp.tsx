@@ -97,8 +97,17 @@ function LayoutApp() {
 
   const itemsAvatar: MenuProps['items'] = [
     {
+      key: 'change-password',
+      label: (
+        <a onClick={() => navigate(ROUTE.PROFILE.CHANGE_PASSWORD)}>
+          Đổi mật khẩu
+        </a>
+      ),
+      icon: <LogoutOutlined />,
+    },
+    {
       key: 'logout',
-      label: <a onClick={() => logout()}>Log out</a>,
+      label: <a onClick={() => logout()}>Đăng xuất</a>,
       icon: <LogoutOutlined />,
     },
   ];

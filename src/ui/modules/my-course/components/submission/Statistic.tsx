@@ -15,7 +15,7 @@ const Statistic: React.FC<{ courseId: string; assignmentId: string }> = ({
   });
   const [loading, setLoading] = useState(false);
 
-  const { getReportAssignment } = useSubmission();
+  const { getReportAssignment, formatReportData } = useSubmission();
   const fetchReport = useCallback(async () => {
     setLoading(true);
     try {
@@ -47,6 +47,7 @@ const Statistic: React.FC<{ courseId: string; assignmentId: string }> = ({
         scanFail,
         total - waitToScan - scanning - fail - pass - scanFail,
       ];
+      
       setReport({ labels, data });
     } catch (err) {
       console.log(err);
@@ -59,36 +60,21 @@ const Statistic: React.FC<{ courseId: string; assignmentId: string }> = ({
   }, [fetchReport]);
 
   return (
-    <div
-      className="bg-white  rounded-2 gap-4 justify-between"
-      style={{
-        maxHeight: '700px',
-        minHeight: '450px',
-        overflow: 'auto',
-        padding: '32px',
-      }}
-    >
-      <div>
-        <p className="font-semibold mb-2" style={{ fontSize: '16px' }}>
-          Chart
-        </p>
-        <PieChart
-          series={report.data}
-          labels={report.labels}
-          color={[
-            '#FF6384',
-            '#36A2EB',
-            '#FFCE56',
-            '#4BC0C0',
-            '#9966FF',
-            '#FF9F40',
-          ]}
-          loading={loading}
-        />
-      </div>
-      <div className="flex-1 overflow-hidden">
-        <DataTable courseId={courseId} assignmentId={assignmentId} />
-      </div>
+    <div>
+      <PieChart
+        series={report.data}
+        labels={report.labels}
+        color={[
+          '#FF6384',
+          '#36A2EB',
+          '#FFCE56',
+          '#4BC0C0',
+          '#9966FF',
+          '#FF9F40',
+        ]}
+        loading={loading}
+      />
+      <DataTable courseId={courseId} assignmentId={assignmentId} />
     </div>
   );
 };

@@ -67,7 +67,7 @@ export function useSubmission() {
       return covertedResponse;
     },
 
-    async getDetailAssignment(id: string): Promise<ResponseData<Assignment>> {
+   async getDetailAssignment(id: string): Promise<ResponseData<Assignment>> {
       // const data = await getWithPath(`${API.PARTNER.GET.PARTNERS}/${id}`, {});
       const data = await mockAssignment().getAssignmentById(id);
       return formatResponse(data);
