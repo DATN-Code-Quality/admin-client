@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Form, Input, Layout } from 'antd';
+import { LockOutlined, UserOutlined, WindowsFilled } from '@ant-design/icons';
+import { Button, Form, Input, Layout, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
 import { useAuth } from '~/adapters/appService/auth.service';
@@ -10,6 +10,7 @@ import Card from '~/ui/shared/card';
 import { getDefaultRoute } from '~/utils';
 import './Login.less';
 import ForgotPassword from '../components/ForgotPassword';
+import MicrosoftLogin from 'react-microsoft-login';
 
 function Login() {
   const { checkProfile, login, loginMicrosoft } = useAuth();
@@ -115,14 +116,30 @@ function Login() {
               </Button>
             </Form.Item>
           </Form>
-          <Button
-            type="primary"
-            ghost
-            onClick={loginMicrosoft}
-            className="login-button login-button-microsoft"
+          <MicrosoftLogin
+            authCallback={async (err, data) => {
+              if (err) return;
+              try {
+                await loginMicrosoft({ token: data?.accessToken });
+                navigate('/', { replace: true });
+              } catch (error) {
+                message.error((error as any).message);
+              }
+            }}
+            clientId="cd6968a3-3b9b-4658-8e2d-ce846578e092"
+            debug
+            redirectUri="http://localhost:3000"
+            prompt="login"
           >
-            Đăng nhập bằng Microsoft 365
-          </Button>
+            <Button
+              type="primary"
+              ghost
+              className="login-button login-button-microsoft"
+              icon={<WindowsFilled />}
+            >
+              Log in with Microsoft
+            </Button>
+          </MicrosoftLogin>
         </div>
         {/* <Button type="primary" onClick={loginZalo} className="login-button">
           Login with Microsoft 365
