@@ -1,36 +1,39 @@
 /* eslint-disable react/destructuring-assignment */
 import React, { useCallback, useState } from 'react';
-import { Button, Select, UploadProps } from 'antd';
+
+import { Button, Select, UploadProps, message } from 'antd';
 import './style.css';
-import { Option } from 'antd/lib/mentions';
 import Input from 'antd/lib/input/Input';
+import { Option } from 'antd/lib/mentions';
+import Upload, { RcFile } from 'antd/lib/upload';
 import Dragger from 'antd/lib/upload/Dragger';
 import { InboxOutlined } from '@ant-design/icons';
 import { Assignment } from '~/domain/assignment';
-import { RcFile } from 'antd/lib/upload';
 import { useSubmission } from '~/adapters/appService/submission.service';
+
 import { useNavigate, useNavigation } from 'react-router-dom';
 
 export enum SubmissionSource {
   GIT = 'Git',
-  DRIVE = 'Drive',
-  MOODLE = 'Moodle',
+  // DRIVE = 'Drive',
+  // MOODLE = 'Moodle',
   SYSTEM = 'System',
 }
 
 type AddSubmissionProps = {
   assignment: Assignment;
+  onSubmitted?: () => void;
 };
 
 const AddSubmission: React.FC<AddSubmissionProps> = (props) => {
   const [isAddSubmission, setIsAddSubmission] = useState<boolean>(false);
-  const { assignment } = props;
+  const { assignment, onSubmitted } = props;
   const navigate = useNavigate();
   return (
     <div>
       <div className="gap-4">
-        <p className="submission-title">{assignment.name}</p>
-        <p>{assignment.description}</p>
+        <p className="submission-title">{assignment?.name}</p>
+        <p>{assignment?.description}</p>
       </div>
 
       {isAddSubmission === false ? (
@@ -55,8 +58,12 @@ const AddSubmission: React.FC<AddSubmissionProps> = (props) => {
           assignment={assignment}
           onSubmitted={() => {
             setIsAddSubmission(false);
+
+            onSubmitted?.();
+
+
             // location.reload();
-            navigate(0);
+            // navigate(0);
           }}
         />
       )}
@@ -110,24 +117,6 @@ const AddSubmissionSection = (props: {
   >(undefined);
 
   const submitSubmission = async () => {
-    // const submitForm = new FormData();
-    // submitForm.append('assignmentId', assignment.id);
-    // submitForm.append('timemodified', Date.now().toLocaleString());
-    // submitForm.append('origin', 'origin');
-    // submitForm.append('submitType', submissionSrc.toLowerCase());
-    // submitForm.append('link', linkUrl);
-    // if (submissionSrc.toLowerCase().indexOf('sys') >= 0) {
-    //   submitForm.append('file', linkUrl);
-    // } else {
-    //   submitForm.append('link', linkUrl);
-    // }
-    // submitForm.append('note', null);
-    // submitForm.append('userId', '');
-
-    // submitForm.append("grade","");
-    // submitForm.append("status","");
-    // submitForm.append("submissionMoodleId","");
-
     const respond = await addSubmission(
       {
         submitType: submissionSrc.toLowerCase(),
@@ -136,6 +125,23 @@ const AddSubmissionSection = (props: {
       },
       assignment
     );
+  };
+
+  const validateFilePick = (file: RcFile) => {
+    const fileSize = file.size;
+    if (fileSize > 20 * 1024) {
+      message.error('Choosen file is too large');
+      return false;
+    }
+    // check type file
+    const fileType = file.name.split('.').reverse()[0];
+
+    if (fileType !== 'zip') {
+      message.error('Not support for other type except .zip file');
+      return false;
+    }
+    setSubmittedFile(file);
+    return true;
   };
 
   const uploadProps: UploadProps = {
@@ -155,17 +161,17 @@ const AddSubmissionSection = (props: {
       }
     },
     onDrop(e) {
-      console.log('Dropped files', e.dataTransfer.files.item(0));
+      setSubmittedFile(undefined);
     },
     beforeUpload: (file) => {
-      console.info(`File before upload: ${JSON.stringify(file)}`);
+      const validateRes = validateFilePick(file);
+      if (!validateRes) {
+        return Upload.LIST_IGNORE;
+      }
       setSubmittedFile(file);
       return false;
     },
-
   };
-
-
 
   return (
     <div className="add-submission-container">
@@ -218,12 +224,26 @@ const AddSubmissionSection = (props: {
               </p>
             </Dragger>
           ) : (
-            <Input
-              placeholder="URL of submission zip file"
-              onChange={(value) => {
-                linkUrl = value.target.value;
-              }}
-            />
+            <>
+              <Input
+                placeholder="URL of submission zip file"
+                onChange={(value) => {
+                  linkUrl = value.target.value;
+                }}
+              />
+              {submissionSrc === 'Git' && (
+                <span
+                  style={{
+                    color: '#d6d6d6',
+                    fontStyle: 'italic',
+                    fontSize: 14,
+                  }}
+                >
+                  Support for public GitHub projects and ensure .git at the end of
+                  submitted GitHub URL
+                </span>
+              )}
+            </>
           )}
           <div>
             <Button

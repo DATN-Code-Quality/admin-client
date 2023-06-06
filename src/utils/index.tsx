@@ -376,3 +376,14 @@ export const filterAllowedOptions = (options, allowedValues: any[]) => {
     return isAllowed;
   });
 };
+
+export const splitStr = (name: string, numberLetter: number) => {
+  const words = name.split(' ');
+  const result = [];
+
+  for (let i = 0; i < words.length; i += numberLetter) {
+    const combined = words.slice(i, i + 2).join(' ');
+    result.push(combined);
+  }
+  return result;
+};

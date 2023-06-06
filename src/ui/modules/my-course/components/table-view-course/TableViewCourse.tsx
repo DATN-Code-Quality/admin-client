@@ -97,7 +97,7 @@ function TableViewCourse() {
       />
       <Card>
         <TableToolbar
-          title={`Tìm thấy ${formatNumber(list.items?.length || 0)} khoá học`}
+          title={`Found ${formatNumber(list.items?.length || 0)} course`}
         >
           {/* <Button
             type="primary"
@@ -123,7 +123,7 @@ function TableViewCourse() {
             loading={list.isLoading}
             onClick={handleCreateCourse}
           >
-            Tạo mới
+            Create
           </Button> */}
         </TableToolbar>
         <BaseTable

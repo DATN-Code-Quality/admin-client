@@ -116,7 +116,7 @@ const ImportedModal: React.FC<ImportedModalProps> = ({
             onClick={handleImportNone}
             className="ml-4"
           >
-            Huỷ chọn
+            Discard
           </Button>
         )}
         {importIds.length <= list.items.length && (
@@ -126,7 +126,7 @@ const ImportedModal: React.FC<ImportedModalProps> = ({
             className="ml-4"
             disabled={importIds.length === list.items.length}
           >
-            Chọn tất cả
+            Select All
           </Button>
         )}
       </TableToolbar>

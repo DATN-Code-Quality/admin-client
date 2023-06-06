@@ -16,3 +16,19 @@ export interface Course {
   createdAt: number;
   updatedAt: number;
 }
+
+export interface ReportCourse {
+  assignment: {
+    id: string;
+    name: string;
+  };
+  submission: {
+    waitToScan?: number;
+    scanning?: number;
+    scanSuccess?: {
+      pass: number;
+      fail: number;
+    };
+    scanFail?: number;
+  };
+}

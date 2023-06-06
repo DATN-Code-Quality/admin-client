@@ -7,7 +7,7 @@ import { DOMAIN_API_URL, ResponseData } from '~/constant';
 import API from '~/constant/api';
 import { SubRole } from '~/constant/enum';
 import { Assignment } from '~/domain/assignment';
-import { Submission } from '~/domain/submission';
+import { ReportAssignment, Submission } from '~/domain/submission';
 import { SubmissionDTO, submissionFromDTO } from '~/dto/submission';
 import LocalStorage from '~/libs/LocalStorage/LocalStorage';
 import { mockAssignment } from '~/mock/assignment.mock';
@@ -24,6 +24,28 @@ export function useSubmission() {
     ): Promise<ResponseData<{ role: SubRole; submissions: Submission[] }>> {
       const response = await getWithPath(
         `${API.SUBMISSION.GET.SUBMISSIONS_BY_ASSIGNMENT_ID}/${courseId}/${assignmentId}`
+      );
+      response.total = response.data.total;
+      return response;
+    },
+
+    async getReportAssignment(
+      courseId: string,
+      assignmentId: string
+    ): Promise<ResponseData<{ role: SubRole; report: ReportAssignment }>> {
+      const response = await getWithPath(
+        `${API.ASSIGNMENT.GET.ASSIGNMENTS}/${courseId}/${assignmentId}/report`
+      );
+
+      return response;
+    },
+
+    async getDataExportAssignment(
+      courseId: string,
+      assignmentId: string
+    ): Promise<ResponseData<{ role: SubRole; report: ReportAssignment }>> {
+      const response = await getWithPath(
+        `${API.ASSIGNMENT.GET.ASSIGNMENTS}/${courseId}/${assignmentId}/export`
       );
 
       return response;
@@ -45,7 +67,7 @@ export function useSubmission() {
       return covertedResponse;
     },
 
-    async getDetailAssignment(id: string): Promise<ResponseData<Assignment>> {
+   async getDetailAssignment(id: string): Promise<ResponseData<Assignment>> {
       // const data = await getWithPath(`${API.PARTNER.GET.PARTNERS}/${id}`, {});
       const data = await mockAssignment().getAssignmentById(id);
       return formatResponse(data);
@@ -73,7 +95,7 @@ export function useSubmission() {
       }
       const accessToken = (await LocalStorage.get(['accessToken'])).accessToken
         .token;
-        console.log("domain api: "+DOMAIN_API_URL)
+      console.log('domain api: ' + DOMAIN_API_URL);
       const respond = await axios({
         url: `${DOMAIN_API_URL}/submission/${assignment.courseId}/${assignment.id}`,
         data: submitForm,

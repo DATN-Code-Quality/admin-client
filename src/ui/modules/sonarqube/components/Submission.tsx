@@ -24,13 +24,16 @@ import './index.less';
 import { BugType, SeverityType } from '~/constant/enum';
 import { Issue } from '~/domain/submission';
 import DetailRule from './DetailRule';
+import { keys } from 'highcharts';
+
+const PAGE_SIZE = 100;
 
 const Submission = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { getIssuesSubmission } = useSonarqube();
+  const { getIssuesSubmission, getOverViewSubmission } = useSonarqube();
 
   const issueSelected = useSelector(SonarqubeSelector.getIssueSelected);
   const data = useSelector(SonarqubeSelector.getSubmissionIssues);
@@ -65,7 +68,7 @@ const Submission = () => {
           Object.entries(filters).filter(([_, v]) => v !== '')
         ),
         page: pagination.page,
-        pageSize: 7,
+        pageSize: PAGE_SIZE,
       }
     );
     if (response?.status !== 0) return;
@@ -84,8 +87,10 @@ const Submission = () => {
       } else {
         objectResult[issue.component] = [issue];
       }
+
       return objectResult;
     }, issuesOfComponents);
+
     dispatch(setSubmissionIssues(issuesOfComponents));
     setLoading(false);
   }, [dataSelected, filters, pagination.page, dispatch]);
@@ -113,13 +118,30 @@ const Submission = () => {
     }
     dispatch(setSubmissionSelected({ courseId, assignmentId, submissionId }));
   }, [dispatch, location.search, navigate]);
+  const issueMapByBugType = useCallback(() => {
+    const result = new Map<BugType, number>();
+    let issues: any[] = [];
+    Object.keys(data).forEach((key) => {
+      issues = [...issues, ...data[key]];
+    });
+    issues.forEach((issue) => {
+      if (result[issue.type]) {
+        result[issue.type] += 1;
+      }
+      else {
+        result[issue.type] = 1;
+      }
+    })
 
+    return result;
+  }, [data, filters]);
+  const bugTypeMap = issueMapByBugType();
   return (
     <>
       {!loading && issueSelected && <DetailSubmission />}
 
       {!issueSelected && (
-        <div>
+        <div className="h-full overflow-hidden ">
           <p
             className="font-semibold cursor-pointer"
             onClick={() =>
@@ -130,7 +152,11 @@ const Submission = () => {
             <span>Back</span>
           </p>
           <div className="flex gap-4 h-full ">
-            <SubmissionFilter filters={filters} setFilters={setFilters} />
+            <SubmissionFilter
+              filters={filters}
+              setFilters={setFilters}
+              values={bugTypeMap}
+            />
 
             <div className="submission-issues-container ">
               {loading && (
@@ -159,9 +185,9 @@ const Submission = () => {
                             <FileTextOutlined />
                             <span className="ml-2">{fileNameShort}</span>
                           </p>
-                          {data[key].map((issue) => (
+                          {data[key].map((issue, index) => (
                             <IssueItem
-                              key={issue}
+                              key={index}
                               issue={issue}
                               handleSetIssue={handleSetIssue}
                               setRuleSelected={setRuleSelected}
@@ -177,10 +203,11 @@ const Submission = () => {
                       marginTop: '16px',
                       display: 'flex',
                       justifyContent: 'center',
+                      paddingBottom: '32px',
                     }}
                     defaultCurrent={pagination.page}
                     total={pagination.total}
-                    pageSize={6}
+                    pageSize={PAGE_SIZE}
                     onChange={(val) =>
                       setPagination((prev) => ({ ...prev, page: val }))
                     }

@@ -81,13 +81,13 @@ const FormAddAssignment = ({
     if (assignmentId) {
       dataSubmit.id = assignmentId;
       updateAssignment(courseId, dataSubmit)
-        .then(handleSubmitSuccess('Cập nhật Bài tập thành công!'))
-        .catch(handleSubmitFail('Cập nhật Bài tập thất bại!'))
+        .then(handleSubmitSuccess('Edit assignment successfully!'))
+        .catch(handleSubmitFail('Edit assignment failed!'))
         .finally(() => setLoading(false));
     } else {
       createAssignment(courseId, dataSubmit)
-        .then(handleSubmitSuccess('Tạo mới Bài tập thành công!'))
-        .catch(handleSubmitFail('Tạo mới Bài tập thất bại!'))
+        .then(handleSubmitSuccess('Create assignment successfully!'))
+        .catch(handleSubmitFail('Create assignment failed!'))
         .finally(() => setLoading(false));
     }
   };
@@ -167,7 +167,7 @@ const FormAddAssignment = ({
                 size="large"
                 onClick={handleEditAssignment}
               >
-                Edit thông tin
+                Save Changes
               </Button>
             </Space>
           </Form.Item>
@@ -181,7 +181,7 @@ const FormAddAssignment = ({
           className="form-edit-view"
         >
           <div className="form_group mb-4">
-            <h5 className="fs-18 mb-4">Thông tin bài tập</h5>
+            <h5 className="fs-18 mb-4">Assignment Detail</h5>
             <FormBuilder
               form={form}
               meta={metaFormAddAssignment({
@@ -192,7 +192,7 @@ const FormAddAssignment = ({
           </div>
           <div className="form_group mb-4">
             <div className="flex justify-between items-center">
-              <h5 className="fs-18 mb-4">Cấu hình điều kiện quét bài nộp</h5>
+              <h5 className="fs-18 mb-4">Config Quality Gates</h5>
               <BaseModal
                 onOkFn={handleAddCondition}
                 itemTitle=""
@@ -217,7 +217,7 @@ const FormAddAssignment = ({
           <Form.Item>
             <Space>
               <Button type="primary" htmlType="submit" size="large">
-                Lưu thông tin
+                Save Changes
               </Button>
             </Space>
           </Form.Item>

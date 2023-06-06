@@ -23,23 +23,25 @@ import { removeSubmitProps } from '~/dto/baseDTO';
 import { mockAssignment } from '~/mock/assignment.mock';
 
 export function useAssignment() {
-  const navigate = useNavigate();
-
   return {
     async getAllAssignments(
-      courseId: string
+      courseId: string,
+      filter?: any
     ): Promise<ResponseData<{ role: SubRole; assignments: Assignment[] }>> {
       const response = await getWithPath(
-        `${API.ASSIGNMENT.GET.ASSIGNMENTS}/${courseId}`
+        `${API.ASSIGNMENT.GET.ASSIGNMENTS}/${courseId}`,
+        filter
       );
       const validResponse = formatResponse<{
         role: SubRole;
         assignments: AssignmentDTO[];
+        total: number;
       }>(response);
       const convertedData =
         validResponse.data.assignments.map(assignmentFromDTO);
       const covertedResponse = {
         ...validResponse,
+        total: validResponse.data.total,
         data: { ...validResponse.data, assignments: convertedData },
       };
       return covertedResponse;

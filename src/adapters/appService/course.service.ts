@@ -11,7 +11,7 @@ import { ResponseData } from '~/constant';
 import API from '~/constant/api';
 import { SubRole } from '~/constant/enum';
 import { CourseFilter, ParticipantFilter } from '~/constant/type';
-import { Course } from '~/domain/course';
+import { Course, ReportCourse } from '~/domain/course';
 import { User } from '~/domain/user';
 import { removeSubmitProps } from '~/dto/baseDTO';
 import { CourseDTO, courseFromDTO, courseToDTO } from '~/dto/course';
@@ -72,13 +72,30 @@ export function useCourse() {
       filter?: CourseFilter
     ): Promise<ResponseData<Course[]>> {
       const response = await getWithPath(API.COURSE.GET.COURSES, filter);
-      const validResponse = formatResponse<CourseDTO[]>(response);
-      const convertedData = validResponse.data.map(courseFromDTO);
+      const validResponse = formatResponse<{
+        total: number;
+        courses: CourseDTO[];
+      }>(response);
+      const convertedData = validResponse.data.courses.map(courseFromDTO);
       const covertedResponse = {
         ...validResponse,
+        total: validResponse.data.total,
         data: convertedData,
       };
       return covertedResponse;
+    },
+
+    async getReportCourse(courseId: string): Promise<
+      ResponseData<{
+        role: SubRole;
+        report: { total: number; assignment: ReportCourse[] };
+      }>
+    > {
+      const response = await getWithPath(
+        `${API.COURSE.GET.COURSE}/${courseId}/report`
+      );
+
+      return response;
     },
 
     async getAllMyCourses(
@@ -88,10 +105,14 @@ export function useCourse() {
         API.USER_COURSE.GET.COURSES_OF_USER,
         filter
       );
-      const validResponse = formatResponse<CourseDTO[]>(response);
-      const convertedData = validResponse.data.map(courseFromDTO);
+      const validResponse = formatResponse<{
+        total: number;
+        courses: CourseDTO[];
+      }>(response);
+      const convertedData = validResponse.data.courses.map(courseFromDTO);
       const covertedResponse = {
         ...validResponse,
+        total: validResponse.data.total,
         data: convertedData,
       };
       return covertedResponse;
@@ -135,12 +156,15 @@ export function useCourse() {
         `${API.USER_COURSE.GET.USER_COURSE}/${courseId}/users`,
         filter
       );
-      const validResponse = formatResponse<{ role: SubRole; users: UserDTO[] }>(
-        response
-      );
+      const validResponse = formatResponse<{
+        role: SubRole;
+        users: UserDTO[];
+        total: number;
+      }>(response);
       const convertedData = validResponse.data.users.map(userFromDTO);
       const covertedResponse = {
         ...validResponse,
+        total: validResponse.data.total,
         data: { ...validResponse.data, users: convertedData },
       };
       return covertedResponse;

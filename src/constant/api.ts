@@ -83,10 +83,18 @@ export const SUBMISSION = {
 
 export const AUTH = {
   GET: {
-    LOGIN: '/auth/login',
-    LOGIN_MICROSOFT: '/auth/login/outlook',
     CHECK_PROFILE: '/auth/profile',
     LOGOUT: '/auth/logout',
+  },
+  POST: {
+    LOGIN: '/auth/login',
+    LOGIN_MICROSOFT: '/auth/login/outlook',
+  },
+  PUT: {
+    CHANGE_PASSWORD: '/auth/change-password',
+    CHANGE_PASSWORD_V2: '/auth/change-password-without-old-password',
+    ACTIVE_ACCOUNT: '/auth/active-account',
+    FORGOT_PASSWORD: '/auth/forget-password',
   },
 };
 

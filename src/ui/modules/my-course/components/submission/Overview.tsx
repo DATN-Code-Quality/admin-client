@@ -56,7 +56,7 @@ const Overview: React.FC<{
     }, initMap);
     setData(dataRes);
     setLoading(false);
-  }, [assignment?.courseId, assignment?.id, getOverViewSubmission, submission]);
+  }, [assignment?.courseId, assignment?.id, submission]);
 
   useEffect(() => {
     fetchOverview();
@@ -66,7 +66,15 @@ const Overview: React.FC<{
   return (
     <div>
       {!loading && (
-        <div className="p-4">
+        <div
+          style={{
+            marginLeft: 16,
+            marginTop: 32,
+            padding: 16,
+            border: '1px solid ',
+            borderRadius: 16,
+          }}
+        >
           <div
             className="flex items-center justify-between"
             style={{ borderBottom: '1px solid #ccc' }}
@@ -82,7 +90,7 @@ const Overview: React.FC<{
             <p className="flex items-center">
               <span className="mr-2">Reliability</span>
               {renderColorRatting(
-                data.get('reliability_rating') || 0,
+                +(data.get('reliability_rating') || 0),
                 'rating'
               )}
             </p>
@@ -102,7 +110,10 @@ const Overview: React.FC<{
             </p>
             <p className="flex items-center">
               <span className="mr-2">Reliability</span>
-              {renderColorRatting(data.get('security_rating') || 0, 'rating')}
+              {renderColorRatting(
+                +(data.get('security_rating') || 0),
+                'rating'
+              )}
             </p>
           </div>
 
@@ -120,7 +131,7 @@ const Overview: React.FC<{
             </p>
             <p className="flex items-center">
               <span className="mr-2">Sqale</span>
-              {renderColorRatting(data.get('sqale_rating') || 0, 'rating')}
+              {renderColorRatting(+(data.get('sqale_rating') || 0), 'rating')}
             </p>
           </div>
 

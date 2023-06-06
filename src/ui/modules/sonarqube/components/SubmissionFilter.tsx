@@ -28,8 +28,10 @@ const { Panel } = Collapse;
 const SubmissionFilter: React.FC<{
   filters: { type: BugType | ''; file: string; severity: SeverityType | '' };
   setFilters: (val: string) => void;
-}> = ({ filters, setFilters }) => {
+  values?: Map<BugType, number>;
+}> = ({ filters, setFilters, values }) => {
   const issuesOfComponents = useSelector(SonarqubeSelector.getSubmissionIssues);
+  const bugTypeMap = values ?? ({} as Map<BugType, number>);
 
   const bugTypes = useMemo(
     () => [
@@ -141,9 +143,14 @@ const SubmissionFilter: React.FC<{
                 filters.type === bug.value ? 'filter-active' : ''
               }`}
               onClick={() => handleSetFilter('type', bug.value)}
+              style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}
             >
+              <span>
               {bug.icon}
               <span className="ml-2">{bug.label}</span>
+              </span>
+              <span>{bugTypeMap[bug.value]??0}</span>
+              
             </div>
           );
         })}

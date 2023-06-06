@@ -59,7 +59,7 @@ function TableViewAssignment({ course }) {
   const isTeacher = currentRole === SubRole.TEACHER;
 
   const handleGetAssignments = async (args?) => {
-    const res = await getAllAssignments(course.id);
+    const res = await getAllAssignments(course.id, args);
     setCurrentRole(res.data.role);
     return {
       ...res,
@@ -139,7 +139,7 @@ function TableViewAssignment({ course }) {
     if (isTeacher) {
       columns.push({
         dataIndex: 'action',
-        title: 'Thao tác',
+        title: 'Action',
         width: 100,
         render: (_, record, index) => {
           return (
@@ -178,9 +178,9 @@ function TableViewAssignment({ course }) {
           />
           <Card>
             <TableToolbar
-              title={`Tìm thấy ${formatNumber(
+              title={`Found ${formatNumber(
                 list.items?.length || 0
-              )} bài tập`}
+              )} assignment`}
             >
               {isTeacher && (
                 <>
@@ -199,7 +199,7 @@ function TableViewAssignment({ course }) {
                     loading={list.isLoading}
                     onClick={handleCreateAssignment}
                   >
-                    Tạo mới
+                    Create
                   </Button>
                 </>
               )}

@@ -26,12 +26,12 @@ function ViewCourseDetailContainer() {
 
   const items = [
     {
-      label: 'Thông tin khoá học',
+      label: 'Course Detail',
       key: 'overview',
       children: <ViewOrCreateCourse course={course} initialViewMode />,
     },
     {
-      label: 'Thành viên khoá học',
+      label: 'Participant',
       key: 'participant',
       children: <TableViewParticipant course={course} />,
     },

@@ -35,7 +35,7 @@ function TableViewCondition({
       ...columnTableCondition(),
       {
         dataIndex: 'action',
-        title: 'Thao tác',
+        title: 'Action',
         width: 100,
         render: (_, record, index) => {
           const meta = metaFormUpdateCondition(record);
