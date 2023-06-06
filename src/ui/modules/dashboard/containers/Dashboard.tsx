@@ -110,7 +110,9 @@ function Dashboard() {
           </div>
         )}
         <div className="chart-container">
-          {series && <LineChart series={series} colors={[]} />}
+          {series && series?.length > 0 && (
+            <LineChart series={series} colors={[]} />
+          )} 
         </div>
       </Card>
       {/* <Card className="dashboard-card" title="Submission">
