@@ -98,11 +98,15 @@ export const AUTH = {
   },
 };
 
-export const SONARQUBE = {
+export const MOODLE = {
   GET: {
-    ISSUES_SUBMISSION: '/sonarqube/issue/e25b393e-cf56-4e12-8a0b-e7213648ac76',
+    CHECK_CONNECT: '/moodle/check-connect',
+  },
+  POST: {
+    CONNECT: '/moodle/connect',
   },
 };
+
 const API = {
   DASHBOARD,
   AUTH,
@@ -111,6 +115,7 @@ const API = {
   USER_COURSE,
   ASSIGNMENT,
   SUBMISSION,
+  MOODLE,
 };
 
 export default API;
