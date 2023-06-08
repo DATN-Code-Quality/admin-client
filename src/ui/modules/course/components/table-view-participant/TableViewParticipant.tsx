@@ -241,7 +241,6 @@ function TableViewParticipant({ course }: { course: Course }) {
           </Button>
           <Button
             type="primary"
-            className="mr-4"
             icon={<PlusCircleOutlined />}
             loading={list.isLoading}
             onClick={addParticipantModalActions.handleOpen}
