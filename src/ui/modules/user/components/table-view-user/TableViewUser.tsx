@@ -69,20 +69,14 @@ function TableViewUser() {
   };
 
   const handleCreateOrUpdate = async (value, id) => {
-    message.success(MESSAGE.SUCCESS);
-    try {
-      const dataSubmit = { ...value, id, role: Role.ADMIN };
-      if (!id) {
-        delete dataSubmit.id;
-        await createUser(dataSubmit);
-      } else {
-        await updateUser(dataSubmit);
-      }
-      handleUpdateList();
-      message.success(MESSAGE.SUCCESS);
-    } catch (error) {
-      message.error(MESSAGE.ERROR);
+    const dataSubmit = { ...value, id, role: Role.ADMIN };
+    if (!id) {
+      delete dataSubmit.id;
+      await createUser(dataSubmit);
+    } else {
+      await updateUser(dataSubmit);
     }
+    handleUpdateList();
   };
 
   const handleBlockUser = async (value, id) => {
@@ -115,7 +109,7 @@ function TableViewUser() {
             {record.status === UserStatus.ACTIVE ? (
               <BaseModal
                 onOkFn={handleBlockUser}
-                itemTitle="Chặn user"
+                itemTitle="User"
                 id={record.id}
                 mode={ButtonType.BLOCK}
                 isDelete
@@ -123,7 +117,7 @@ function TableViewUser() {
             ) : (
               <BaseModal
                 onOkFn={handleUnblockUser}
-                itemTitle="Mở khoá user"
+                itemTitle="User"
                 id={record.id}
                 mode={ButtonType.UNBLOCK}
                 isDelete

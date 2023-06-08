@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 
 import {
+  deleteWithPath,
   formatResponse,
   getWithPath,
   postWithPath,
@@ -10,7 +11,7 @@ import {
 import { ResponseData } from '~/constant';
 import API from '~/constant/api';
 import { SubRole } from '~/constant/enum';
-import { CourseFilter, ParticipantFilter } from '~/constant/type';
+import { CourseFilter, ParticipantFilter, UserFilter } from '~/constant/type';
 import { Course, ReportCourse } from '~/domain/course';
 import { User } from '~/domain/user';
 import { removeSubmitProps } from '~/dto/baseDTO';
@@ -68,6 +69,7 @@ export function useCourse() {
   const navigate = useNavigate();
 
   return {
+    // COURSE
     async getAllCourses(
       filter?: CourseFilter
     ): Promise<ResponseData<Course[]>> {
@@ -148,6 +150,25 @@ export function useCourse() {
       return covertedResponse;
     },
 
+    async importCourses(body): Promise<ResponseData<Course[]>> {
+      const submitData = body.map((course) => {
+        return removeSubmitProps(courseToDTO(course));
+      });
+      const response = await postWithPath(
+        `${API.COURSE.POST.CREATE_COURSE}`,
+        {},
+        submitData
+      );
+      const validResponse = formatResponse<CourseDTO[]>(response);
+      const convertedData = validResponse.data.map(courseFromDTO);
+      const covertedResponse = {
+        ...validResponse,
+        data: convertedData,
+      };
+      return covertedResponse;
+    },
+
+    // PARTICIPANT
     async getParticipantsByCourseId(
       courseId: string,
       filter?: ParticipantFilter
@@ -166,6 +187,27 @@ export function useCourse() {
         ...validResponse,
         total: validResponse.data.total,
         data: { ...validResponse.data, users: convertedData },
+      };
+      return covertedResponse;
+    },
+
+    async getOutsideUsersByCourseId(
+      courseId: string,
+      filter?: UserFilter
+    ): Promise<ResponseData<User[]>> {
+      const response = await getWithPath(
+        `${API.USER_COURSE.GET.USER_COURSE}/${courseId}/user-not-in-course`,
+        filter
+      );
+      const validResponse = formatResponse<{
+        users: UserDTO[];
+        total: number;
+      }>(response);
+      const convertedData = validResponse.data.users.map(userFromDTO);
+      const covertedResponse = {
+        ...validResponse,
+        total: validResponse.data.total,
+        data: convertedData,
       };
       return covertedResponse;
     },
@@ -190,28 +232,10 @@ export function useCourse() {
       return covertedResponse;
     },
 
-    async importCourses(body): Promise<ResponseData<Course[]>> {
-      const submitData = body.map((course) => {
-        return removeSubmitProps(courseToDTO(course));
-      });
-      const response = await postWithPath(
-        `${API.COURSE.POST.CREATE_COURSE}`,
-        {},
-        submitData
-      );
-      const validResponse = formatResponse<CourseDTO[]>(response);
-      const convertedData = validResponse.data.map(courseFromDTO);
-      const covertedResponse = {
-        ...validResponse,
-        data: convertedData,
-      };
-      return covertedResponse;
-    },
-
     async importParticipants(
       courseId: string,
       body
-    ): Promise<ResponseData<User[]>> {
+    ): Promise<ResponseData<any>> {
       const submitData = body.map((user) => {
         return removeSubmitProps(userToDTO(user));
       });
@@ -220,32 +244,42 @@ export function useCourse() {
         {},
         submitData
       );
-      const validResponse = formatResponse<UserDTO[]>(response);
-      const convertedData = validResponse.data.map(userFromDTO);
-      const covertedResponse = {
-        ...validResponse,
-        data: convertedData,
-      };
-      return covertedResponse;
+      const validResponse = formatResponse<any>(response);
+      return validResponse;
     },
 
     async addParticipants(
       courseId: string,
       body: { teacherRoleIds: string[]; studentRoleIds: string[] }
-    ): Promise<ResponseData<User[]>> {
+    ): Promise<ResponseData<any>> {
       const submitData = body;
       const response = await postWithPath(
         `${API.USER_COURSE.POST.USER_COURSE}/${courseId}/system`,
         {},
         submitData
       );
-      const validResponse = formatResponse<UserDTO[]>(response);
-      const convertedData = validResponse.data.map(userFromDTO);
-      const covertedResponse = {
-        ...validResponse,
-        data: convertedData,
-      };
-      return covertedResponse;
+      const validResponse = formatResponse<any>(response);
+      return validResponse;
+    },
+
+    async updateParticipant(courseId, body): Promise<ResponseData<any>> {
+      const response = await putWithPath(
+        `${API.USER_COURSE.PUT.USER_COURSE}/${courseId}/${body?.userId}`,
+        {},
+        body
+      );
+      const validResponse = formatResponse<any>(response);
+      return validResponse;
+    },
+
+    async removeParticipants(courseId, body): Promise<ResponseData<any>> {
+      const response = await deleteWithPath(
+        `${API.USER_COURSE.PUT.USER_COURSE}/${courseId}`,
+        {},
+        body
+      );
+      const validResponse = formatResponse<any>(response);
+      return validResponse;
     },
   };
 }

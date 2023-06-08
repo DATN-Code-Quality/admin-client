@@ -20,6 +20,7 @@ import { useUser } from '~/adapters/appService/user.service';
 import { MAP_SUB_ROLES, PAGE_SIZE_OPTIONS } from '~/constant';
 import { Role, SubRole } from '~/constant/enum';
 import { MESSAGE } from '~/constant/message';
+import { Course } from '~/domain/course';
 import { User } from '~/domain/user';
 import useDialog from '~/hooks/useDialog';
 import useList from '~/hooks/useList';
@@ -33,13 +34,16 @@ import BaseTable from '~/ui/shared/tables';
 import TableToolbar from '~/ui/shared/toolbar';
 import { formatNumber, removeFromArr } from '~/utils';
 
-function TableViewParticipant({ course }) {
+function TableViewParticipant({ course }: { course: Course }) {
   const navigate = useNavigate();
   const {
     getParticipantsByCourseId,
     getMoodleParticipantsByCourseId,
     importParticipants,
     addParticipants,
+    getOutsideUsersByCourseId,
+    updateParticipant,
+    removeParticipants,
   } = useCourse();
 
   const { getAllUsers } = useUser();
@@ -73,6 +77,16 @@ function TableViewParticipant({ course }) {
   ] = useList({
     fetchFn: (args) => handleGetParticipants(args),
   });
+
+  const handleGetOutsideUsers = async (args) => {
+    const res = await getOutsideUsersByCourseId(course.id, {
+      ...args,
+      limit: null,
+      offset: null,
+      role: Role.USER,
+    });
+    return res;
+  };
 
   const handleUpdateList = async () => {
     const response = await handleGetParticipants();
@@ -109,6 +123,7 @@ function TableViewParticipant({ course }) {
       handleUpdateList();
       message.success(MESSAGE.SUCCESS);
     } catch (error) {
+      console.log('error', error);
       message.error(MESSAGE.ERROR);
     } finally {
       addParticipantModalActions.handleClose();
@@ -116,11 +131,25 @@ function TableViewParticipant({ course }) {
   };
 
   const handleUpdateParticipantRole = async (values, id) => {
-    console.log('values', values);
-    console.log('id', id);
-    return;
+    const body = {
+      role: values.role,
+      userId: id,
+    };
     try {
-      await updateUser(id, values);
+      await updateParticipant(course.id, body);
+      handleUpdateList();
+      message.success(MESSAGE.SUCCESS);
+    } catch (error) {
+      message.error(MESSAGE.ERROR);
+    }
+  };
+
+  const handleRemoveParticipants = async (values, id) => {
+    const body = {
+      userIds: [id],
+    };
+    try {
+      await removeParticipants(course.id, body);
       handleUpdateList();
       message.success(MESSAGE.SUCCESS);
     } catch (error) {
@@ -145,23 +174,13 @@ function TableViewParticipant({ course }) {
               mode={ButtonType.EDIT}
               meta={meta}
             />
-            {/* {record.status === UserStatus.ACTIVE ? (
-              <BaseModal
-                onOkFn={handleBlockUser}
-                itemTitle="Chặn user"
-                id={record.id}
-                mode={ButtonType.BLOCK}
-                isDelete
-              />
-            ) : (
-              <BaseModal
-                onOkFn={handleUnblockUser}
-                itemTitle="Mở khoá user"
-                id={record.id}
-                mode={ButtonType.UNBLOCK}
-                isDelete
-              />
-            )} */}
+            <BaseModal
+              onOkFn={handleRemoveParticipants}
+              itemTitle="Participant"
+              id={record.id}
+              mode={ButtonType.DELETE}
+              isDelete
+            />
           </Space>
         );
       },
@@ -276,7 +295,7 @@ function TableViewParticipant({ course }) {
             idKey="id"
             baseFilterMeta={metaFilterAddParticipant()}
             columns={columnTableAddParticipantProps()}
-            fetchFn={(args) => getAllUsers({ ...args, role: Role.USER })}
+            fetchFn={(args) => handleGetOutsideUsers(args)}
             defaultFilters={{ role: Role.USER }}
             onOk={handleImportModalAddParticipantOk}
             onCancel={addParticipantModalActions.handleClose}
