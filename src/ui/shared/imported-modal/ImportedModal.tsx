@@ -80,7 +80,7 @@ const ImportedModal: React.FC<ImportedModalProps> = ({
     {
       dataIndex: 'action',
       title: 'Import',
-      width: 100,
+      width: 80,
       render: (_, record, index) => {
         const defaultChecked = importIds.includes(record[idKey]);
         return (
@@ -110,6 +110,7 @@ const ImportedModal: React.FC<ImportedModalProps> = ({
           loading={list.isLoading}
           meta={baseFilterMeta}
           onFilter={onFilterChange}
+          style={{ marginTop: '24px' }}
         />
       )}
       <TableToolbar>

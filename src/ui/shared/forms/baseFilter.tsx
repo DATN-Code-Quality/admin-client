@@ -1,10 +1,12 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { SearchOutlined } from '@ant-design/icons';
 import { Button, Form } from 'antd';
 
 import FormBuilder from './FormBuilder';
 
+import { BREAKPOINTS } from '~/constant';
+import useCurrentWidth from '~/hooks/useCurrentWidth';
 import logger from '~/utils/logger';
 
 type BaseFilterProps = {
@@ -14,6 +16,7 @@ type BaseFilterProps = {
   meta: any;
   filterOnChange?: boolean;
   showSubmitButton?: boolean;
+  style?: any;
 };
 
 const BaseFilter: React.FC<BaseFilterProps> = (props) => {
@@ -24,10 +27,15 @@ const BaseFilter: React.FC<BaseFilterProps> = (props) => {
     meta,
     filterOnChange,
     showSubmitButton = true,
+    style = {},
   } = props;
   const [form] = Form.useForm();
 
   const _filterOnChange = !showSubmitButton || filterOnChange;
+
+  const [formLayout, setFormLayout] = useState<
+    'vertical' | 'horizontal' | 'inline'
+  >('inline');
 
   const handleChange = useCallback((values) => {
     const submitFilter = normalizeFn ? normalizeFn(values) : values;
@@ -44,10 +52,20 @@ const BaseFilter: React.FC<BaseFilterProps> = (props) => {
     onFilter(submitFilter);
   };
 
+  const width = useCurrentWidth();
+
+  useEffect(() => {
+    if (width <= BREAKPOINTS.MD) {
+      setFormLayout('vertical');
+    } else {
+      setFormLayout('inline');
+    }
+  }, [width]);
+
   return (
     <Form
-      layout="inline"
-      style={{ marginBottom: '24px', gap: '12px 0' }}
+      layout={formLayout}
+      style={{ marginBottom: '24px', gap: '12px 0', ...style }}
       initialValues={meta.initialValues}
       form={form}
       onFinish={handleChange}

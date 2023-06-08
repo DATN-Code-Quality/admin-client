@@ -92,3 +92,11 @@ export const LINE_EMPTY_CODE = '';
 export const DEFAULT_PAGE_SIZE = 10;
 
 export const PAGE_SIZE_OPTIONS = [5, 10, 20, 50];
+
+export const BREAKPOINTS = {
+  XS: 0,
+  SM: 576,
+  MD: 768,
+  LG: 992,
+  XL: 1200,
+};
