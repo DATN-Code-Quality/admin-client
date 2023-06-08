@@ -7,9 +7,11 @@ import { generateMappingList, getMappingLabelByValue } from '~/utils';
 
 export const metaFilterParticipant = () => {
   return {
+    columns: 3,
     fields: [
       {
         key: 'search',
+        colSpan: 3,
         widgetProps: {
           placeholder: 'Search by Name or Email',
           style: {
@@ -19,13 +21,13 @@ export const metaFilterParticipant = () => {
       },
       {
         key: 'role',
+        colSpan: 3,
         options: MAP_SUB_ROLES,
         widget: 'select',
         widgetProps: {
           maxTagCount: 'responsive',
           style: {
             minWidth: '12rem',
-            maxWidth: '12rem',
           },
           placeholder: 'Role',
           allowClear: true,
@@ -33,13 +35,13 @@ export const metaFilterParticipant = () => {
       },
       {
         key: 'status',
+        colSpan: 3,
         options: MAP_USER_STATUS,
         widget: 'select',
         widgetProps: {
           maxTagCount: 'responsive',
           style: {
             minWidth: '12rem',
-            maxWidth: '12rem',
           },
           placeholder: 'Status',
           allowClear: true,
@@ -53,7 +55,7 @@ export const columnTableParticipant = (): ColumnType<any>[] => [
   {
     title: 'Name',
     dataIndex: 'name',
-    width: 200,
+    width: '40%',
     ellipsis: true,
     sorter: (a, b) => {
       return a.name.localeCompare(b.name);
@@ -62,7 +64,8 @@ export const columnTableParticipant = (): ColumnType<any>[] => [
   {
     title: 'Email',
     dataIndex: 'email',
-    width: 200,
+    width: '40%',
+    responsive: ['sm'],
     ellipsis: true,
     sorter: (a, b) => {
       return a.email.localeCompare(b.email);
@@ -142,9 +145,11 @@ export const metaUpdateParticipant = (record) => {
 
 export const metaFilterSyncParticipant = () => {
   return {
+    columns: 3,
     fields: [
       {
         key: 'search',
+        colSpan: 3,
         widgetProps: {
           placeholder: 'Search by Name or Email',
           style: {
@@ -154,13 +159,13 @@ export const metaFilterSyncParticipant = () => {
       },
       {
         key: 'role',
+        colSpan: 3,
         options: MAP_SUB_ROLES,
         widget: 'select',
         widgetProps: {
           maxTagCount: 'responsive',
           style: {
             minWidth: '12rem',
-            maxWidth: '12rem',
           },
           placeholder: 'Role',
           allowClear: true,
@@ -168,13 +173,13 @@ export const metaFilterSyncParticipant = () => {
       },
       {
         key: 'status',
+        colSpan: 3,
         options: MAP_USER_STATUS,
         widget: 'select',
         widgetProps: {
           maxTagCount: 'responsive',
           style: {
             minWidth: '12rem',
-            maxWidth: '12rem',
           },
           placeholder: 'Status',
           allowClear: true,
@@ -188,7 +193,7 @@ export const columnTableSyncParticipant = (): ColumnType<any>[] => [
   {
     title: 'Name',
     dataIndex: 'name',
-    width: 200,
+    width: '40%',
     ellipsis: true,
     sorter: (a, b) => {
       return a.name.localeCompare(b.name);
@@ -197,8 +202,9 @@ export const columnTableSyncParticipant = (): ColumnType<any>[] => [
   {
     title: 'Email',
     dataIndex: 'email',
-    width: 200,
+    width: '40%',
     ellipsis: true,
+    responsive: ['sm'],
     sorter: (a, b) => {
       return a.email.localeCompare(b.email);
     },
@@ -218,6 +224,7 @@ export const columnTableSyncParticipant = (): ColumnType<any>[] => [
   {
     title: 'Status',
     dataIndex: 'status',
+    responsive: ['sm'],
     width: 100,
     render: (value) => {
       return <p>{getMappingLabelByValue(MAP_USER_STATUS, value)}</p>;
@@ -227,9 +234,11 @@ export const columnTableSyncParticipant = (): ColumnType<any>[] => [
 
 export const metaFilterAddParticipant = () => {
   return {
+    columns: 3,
     fields: [
       {
         key: 'search',
+        colSpan: 3,
         widgetProps: {
           placeholder: 'Search by Name or Email',
           style: {
@@ -253,13 +262,13 @@ export const metaFilterAddParticipant = () => {
       // },
       {
         key: 'status',
+        colSpan: 3,
         options: MAP_USER_STATUS,
         widget: 'select',
         widgetProps: {
           maxTagCount: 'responsive',
           style: {
             minWidth: '12rem',
-            maxWidth: '12rem',
           },
           placeholder: 'Status',
           allowClear: true,
@@ -273,7 +282,7 @@ export const columnTableAddParticipant = (): ColumnType<any>[] => [
   {
     title: 'Name',
     dataIndex: 'name',
-    width: 200,
+    width: '40%',
     ellipsis: true,
     sorter: (a, b) => {
       return a.name.localeCompare(b.name);
@@ -282,7 +291,8 @@ export const columnTableAddParticipant = (): ColumnType<any>[] => [
   {
     title: 'Email',
     dataIndex: 'email',
-    width: 200,
+    width: '40%',
+    responsive: ['sm'],
     ellipsis: true,
     sorter: (a, b) => {
       return a.email.localeCompare(b.email);
