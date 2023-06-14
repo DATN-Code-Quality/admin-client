@@ -100,7 +100,6 @@ function TableViewCourse() {
         >
           <Button
             type="primary"
-            className="mr-4"
             icon={<SyncOutlined />}
             loading={list.isLoading}
             onClick={syncMoodleModalActions.handleOpen}

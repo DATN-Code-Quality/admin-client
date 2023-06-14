@@ -12,6 +12,8 @@ import { Assignment } from '~/domain/assignment';
 import { useSubmission } from '~/adapters/appService/submission.service';
 
 import { useNavigate, useNavigation } from 'react-router-dom';
+import { Submission } from '~/domain/submission';
+import { formatDate } from '~/utils';
 
 export enum SubmissionSource {
   GIT = 'Git',
@@ -22,12 +24,15 @@ export enum SubmissionSource {
 
 type AddSubmissionProps = {
   assignment: Assignment;
+  // displayAssignmentInfo?: boolean;
   onSubmitted?: () => void;
+  submission?: Submission;
 };
 
 const AddSubmission: React.FC<AddSubmissionProps> = (props) => {
   const [isAddSubmission, setIsAddSubmission] = useState<boolean>(false);
-  const { assignment, onSubmitted } = props;
+  const { assignment, onSubmitted, submission } = props;
+
   const navigate = useNavigate();
   return (
     <div>
@@ -35,10 +40,12 @@ const AddSubmission: React.FC<AddSubmissionProps> = (props) => {
         <p className="submission-title">{assignment?.name}</p>
         <p>{assignment?.description}</p>
       </div>
-
       {isAddSubmission === false ? (
         <>
-          <SubmmissionStatusSection />
+          <SubmmissionStatusSection
+            assignment={assignment}
+            submission={submission}
+          />
           <div
             style={{ marginTop: 16, display: 'flex', justifyContent: 'center' }}
           >
@@ -48,7 +55,7 @@ const AddSubmission: React.FC<AddSubmissionProps> = (props) => {
                 setIsAddSubmission(true);
               }}
             >
-              Add submission
+              {submission !== undefined ? 'Edit submission' : 'Add submission'}
             </button>
           </div>
         </>
@@ -56,6 +63,7 @@ const AddSubmission: React.FC<AddSubmissionProps> = (props) => {
         // eslint-disable-next-line no-console
         <AddSubmissionSection
           assignment={assignment}
+          submission={submission}
           onSubmitted={() => {
             setIsAddSubmission(false);
 
@@ -83,18 +91,52 @@ const SubmissionRow = (props: {
   );
 };
 
-const SubmmissionStatusSection = (): JSX.Element => {
+const SubmmissionStatusSection = (props: AddSubmissionProps): JSX.Element => {
+  const { assignment, submission } = props;
+  // console.log(`Due: ${assignment.dueDate}`);
+  // console.log(`Update: ${submission?.updatedAt}`);
+  // let updatedTime=undefined;
+  // if(submission){
+  //   console.log(assignment.dueDate?.toString().slice(0,19));
+  //   console.log(submission.updatedAt?.slice(0,19));
+  // }
   return (
     <div style={{ marginTop: 8 }}>
       <p className="submission-title">Submission status</p>
       <div>
-        <table style={{ width: '-moz-available' }}>
+        <table style={{ width: '-moz-available', marginTop: 16 }}>
           <tbody>
-            <SubmissionRow title="Attemp number" content="0" />
-            <SubmissionRow title="Submission status" content="No attempt" />
+            {/* <SubmissionRow title="Attemp number" content="0" /> */}
+            <SubmissionRow
+              title="Submission status"
+              content={submission !== undefined ? 'Submitted' : 'No attempt'}
+            />
+            <SubmissionRow
+              title="Last submitted"
+              content={
+                submission !== undefined && submission.updatedAt !== undefined
+                  ? formatDate(
+                      new Date(submission.updatedAt ?? ''),
+                      'vi-VN',
+                      'YYYY-MM-DD hh:mm:ss'
+                  )
+                  : '-'
+              }
+            />
             <SubmissionRow title="Grading status" content="Not graded" />
-            <SubmissionRow title="Due date" content="31/12/2023 7:00 AM" />
-            <SubmissionRow title="Last submission" content="-" />
+            <SubmissionRow
+              title="Due date"
+              content={
+                assignment.dueDate !== undefined
+                  ? formatDate(
+                      new Date(assignment.dueDate ?? ''),
+                      'vi-VN',
+                      'YYYY-MM-DD hh:mm:ss'
+                  )
+                  : '-'
+              }
+            />
+            {/* <SubmissionRow title="Last submission" content="-" /> */}
           </tbody>
         </table>
       </div>
@@ -103,11 +145,8 @@ const SubmmissionStatusSection = (): JSX.Element => {
 };
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-const AddSubmissionSection = (props: {
-  onSubmitted?: Function;
-  assignment: Assignment;
-}): JSX.Element => {
-  const { assignment, onSubmitted } = props;
+const AddSubmissionSection = (props: AddSubmissionProps): JSX.Element => {
+  const { assignment, onSubmitted, submission } = props;
   const { addSubmission } = useSubmission();
   // handle submit data
   let linkUrl = '';

@@ -1,4 +1,6 @@
-import { memo } from 'react';
+import React, { memo } from 'react';
+
+import './style.less';
 
 interface TableToolbarProps {
   title?: string;
@@ -8,15 +10,7 @@ interface TableToolbarProps {
 const TableToolbar: React.FC<TableToolbarProps> = (props) => {
   const { title } = props;
   return (
-    <div
-      className="table-toolbar"
-      style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        marginBottom: '24px',
-        alignItems: 'center',
-      }}
-    >
+    <div className="table-toolbar">
       <div className="left-wrapper">
         {title && (
           <div className="title" style={{ fontSize: '16px' }}>
