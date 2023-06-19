@@ -387,3 +387,29 @@ export const splitStr = (name: string, numberLetter: number) => {
   }
   return result;
 };
+
+export const removeDuplicateAndMerge = (
+  arr1: any[],
+  arr2: any[],
+  key?: string
+) => {
+  const result = [...arr1];
+  arr2.forEach((item) => {
+    if (key) {
+      const index = arr1.findIndex((i) => i[key] === item[key]);
+      if (index < 0) {
+        result.push(item);
+      } else {
+        result[index] = item;
+      }
+    } else {
+      const index = arr1.indexOf(item);
+      if (index < 0) {
+        result.push(item);
+      } else {
+        result[index] = item;
+      }
+    }
+  });
+  return result;
+};
