@@ -29,6 +29,7 @@ import TableToolbar from '~/ui/shared/toolbar';
 import { formatNumber } from '~/utils';
 
 import './TableViewCourse.less';
+import ExcelToObject from '~/ui/shared/data-import';
 
 function TableViewCourse() {
   const navigate = useNavigate();
@@ -104,6 +105,25 @@ function TableViewCourse() {
             <ExcelToObject
               handleImportModalOk={handleImportModalOk}
               loading={list.isLoading}
+              name="Import courses"
+              handleConvertData={(data, columnNames) => {
+                return data
+                  ?.slice(1)
+                  .map<Record<string, string | number>>((row) => {
+                    const obj: Record<string, string | number> = {
+                      name: row[columnNames.indexOf('name')],
+                      moodleId: row[columnNames.indexOf('moodleId')].toString(),
+                      courseMoodleId:
+                        row[columnNames.indexOf('courseMoodleId')].toString(),
+                      startAt: row[columnNames.indexOf('startAt')].toString(),
+                      endAt: row[columnNames.indexOf('endAt')].toString(),
+                      summary: row[columnNames.indexOf('summary')],
+                      categoryId: '',
+                    };
+                    return obj;
+                  });
+              }}
+              templateLink="https://www.dropbox.com/scl/fi/g5j8i0xxue7teq54pzof9/course-data.ods?dl=0&rlkey=5lldytc8lovur6jebypa905x2"
             />
           </div>
 
@@ -151,78 +171,5 @@ function TableViewCourse() {
     </>
   );
 }
-
-interface ExcelToObjectProps {
-  handleImportModalOk: (value: Record<string, string | number>[]) => void;
-  loading: boolean;
-}
-
-const ExcelToObject: React.FC<ExcelToObjectProps> = ({
-  handleImportModalOk,
-  loading,
-}) => {
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    const reader = new FileReader();
-
-    reader.onload = (e: ProgressEvent<FileReader>) => {
-      const data = new Uint8Array(e.target?.result as ArrayBuffer);
-      const workbook = XLSX.read(data, { type: 'array' });
-      const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-      const jsonData = XLSX.utils.sheet_to_json(worksheet, {
-        header: 1,
-        raw: false,
-      });
-
-      const columnNames = jsonData[0];
-
-      const objectsArray = jsonData
-        .slice(1)
-        .map<Record<string, string | number>>((row) => {
-          const obj: Record<string, string | number> = {
-            name: row[columnNames.indexOf('name')],
-            moodleId: row[columnNames.indexOf('moodleId')].toString(),
-            courseMoodleId:
-              row[columnNames.indexOf('courseMoodleId')].toString(),
-            startAt: row[columnNames.indexOf('startAt')].toString(),
-            endAt: row[columnNames.indexOf('endAt')].toString(),
-            summary: row[columnNames.indexOf('summary')],
-            categoryId: '',
-          };
-          return obj;
-        });
-      handleImportModalOk(objectsArray);
-    };
-
-    reader.readAsArrayBuffer(file);
-  };
-
-  const handleButtonClick = useCallback(() => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
-  }, []);
-
-  return (
-    <div>
-      <Button
-        type="primary"
-        icon={<SyncOutlined />}
-        onClick={handleButtonClick}
-        loading={loading}
-      >
-        Import Courses
-      </Button>
-      <input
-        type="file"
-        onChange={handleFileChange}
-        ref={fileInputRef}
-        style={{ display: 'none' }}
-      />
-    </div>
-  );
-};
 
 export default TableViewCourse;

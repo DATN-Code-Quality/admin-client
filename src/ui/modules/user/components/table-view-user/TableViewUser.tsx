@@ -22,6 +22,7 @@ import { User } from '~/domain/user';
 import useDialog from '~/hooks/useDialog';
 import useList from '~/hooks/useList';
 import Card from '~/ui/shared/card';
+import ExcelToObject from '~/ui/shared/data-import';
 import BaseFilter from '~/ui/shared/forms/baseFilter';
 import ImportedModal from '~/ui/shared/imported-modal';
 import Loading from '~/ui/shared/loading';
@@ -141,16 +142,40 @@ function TableViewUser() {
         <TableToolbar
           title={`Found ${formatNumber(list.items?.length || 0)} user`}
         >
-          <Button
-            type="primary"
-            className="mr-4"
-            icon={<SyncOutlined />}
-            loading={list.isLoading}
-            onClick={syncMoodleModalActions.handleOpen}
-          >
-            Sync Moodle
-          </Button>
-          {/* <Button
+          <div className="flex items-center" style={{ gap: '16px' }}>
+            <Button
+              type="primary"
+              className="mr-4"
+              icon={<SyncOutlined />}
+              loading={list.isLoading}
+              onClick={syncMoodleModalActions.handleOpen}
+            >
+              Sync Moodle
+            </Button>
+            <ExcelToObject
+              handleImportModalOk={handleImportModalOk}
+              loading={list.isLoading}
+              name="Import users"
+              handleConvertData={(data, columnNames) => {
+                return data
+                  ?.slice(1)
+                  .map<Record<string, string | number>>((row) => {
+                    const obj: Record<string, string | number> = {
+                      name: row[columnNames.indexOf('name')],
+                      moodleId: row[columnNames.indexOf('moodleId')].toString(),
+                      role: row[columnNames.indexOf('role')].toString(),
+                      email: row[columnNames.indexOf('email')].toString(),
+                      userId: row[columnNames.indexOf('userId')].toString(),
+                      password: row[columnNames.indexOf('password')],
+                      status: +row[columnNames.indexOf('status')],
+                    };
+                    return obj;
+                  });
+              }}
+              templateLink="https://www.dropbox.com/scl/fi/q8n6mn14jjpo56ytial4j/list-user.ods?dl=0&rlkey=3tbrfoixx47d212ysx0a5o9dd"
+            />
+
+            {/* <Button
             type="primary"
             className="mr-4"
             icon={<UploadOutlined />}
@@ -159,15 +184,16 @@ function TableViewUser() {
           >
             Import Excel
           </Button> */}
-          <BaseModal
-            onOkFn={handleCreateOrUpdate}
-            itemTitle=""
-            id={0}
-            mode={ButtonType.CREATE}
-            meta={metaCreateUser()}
-            loading={list.isLoading}
-            formProps={{ layout: 'vertical' }}
-          />
+            <BaseModal
+              onOkFn={handleCreateOrUpdate}
+              itemTitle=""
+              id={0}
+              mode={ButtonType.CREATE}
+              meta={metaCreateUser()}
+              loading={list.isLoading}
+              formProps={{ layout: 'vertical' }}
+            />
+          </div>
         </TableToolbar>
         <BaseTable
           idKey="id"
