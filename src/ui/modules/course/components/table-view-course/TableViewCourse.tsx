@@ -1,14 +1,11 @@
-import React, { useCallback, useState } from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { useCallback, useRef, useState } from 'react';
 
-import {
-  EditOutlined,
-  PlusCircleOutlined,
-  SyncOutlined,
-  UploadOutlined,
-} from '@ant-design/icons';
-import { message, Modal, Space } from 'antd';
+import { SyncOutlined } from '@ant-design/icons';
+import { message } from 'antd';
 import Button from 'antd-button-color';
 import { useNavigate } from 'react-router-dom';
+import * as XLSX from 'xlsx';
 
 import {
   columnTableCourse,
@@ -21,15 +18,12 @@ import { useCourse } from '~/adapters/appService/course.service';
 import { PAGE_SIZE_OPTIONS } from '~/constant';
 import { MESSAGE } from '~/constant/message';
 import ROUTE from '~/constant/routes';
-import { Course } from '~/domain/course';
 import useDialog from '~/hooks/useDialog';
 import useList from '~/hooks/useList';
 import Card from '~/ui/shared/card';
 import BaseFilter from '~/ui/shared/forms/baseFilter';
 import ImportedModal from '~/ui/shared/imported-modal';
 import Loading from '~/ui/shared/loading';
-import BaseModal from '~/ui/shared/modal';
-import { ButtonType } from '~/ui/shared/modal/props';
 import BaseTable from '~/ui/shared/tables';
 import TableToolbar from '~/ui/shared/toolbar';
 import { formatNumber } from '~/utils';
@@ -98,14 +92,21 @@ function TableViewCourse() {
         <TableToolbar
           title={`Found ${formatNumber(list.items?.length || 0)} course`}
         >
-          <Button
-            type="primary"
-            icon={<SyncOutlined />}
-            loading={list.isLoading}
-            onClick={syncMoodleModalActions.handleOpen}
-          >
-            Sync Moodle
-          </Button>
+          <div className="flex items-center" style={{ gap: '16px' }}>
+            <Button
+              type="primary"
+              icon={<SyncOutlined />}
+              loading={list.isLoading}
+              onClick={syncMoodleModalActions.handleOpen}
+            >
+              Sync Moodle
+            </Button>
+            <ExcelToObject
+              handleImportModalOk={handleImportModalOk}
+              loading={list.isLoading}
+            />
+          </div>
+
           {/* <Button
             type="primary"
             className="mr-4"
@@ -150,5 +151,78 @@ function TableViewCourse() {
     </>
   );
 }
+
+interface ExcelToObjectProps {
+  handleImportModalOk: (value: Record<string, string | number>[]) => void;
+  loading: boolean;
+}
+
+const ExcelToObject: React.FC<ExcelToObjectProps> = ({
+  handleImportModalOk,
+  loading,
+}) => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    const reader = new FileReader();
+
+    reader.onload = (e: ProgressEvent<FileReader>) => {
+      const data = new Uint8Array(e.target?.result as ArrayBuffer);
+      const workbook = XLSX.read(data, { type: 'array' });
+      const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+      const jsonData = XLSX.utils.sheet_to_json(worksheet, {
+        header: 1,
+        raw: false,
+      });
+
+      const columnNames = jsonData[0];
+
+      const objectsArray = jsonData
+        .slice(1)
+        .map<Record<string, string | number>>((row) => {
+          const obj: Record<string, string | number> = {
+            name: row[columnNames.indexOf('name')],
+            moodleId: row[columnNames.indexOf('moodleId')].toString(),
+            courseMoodleId:
+              row[columnNames.indexOf('courseMoodleId')].toString(),
+            startAt: row[columnNames.indexOf('startAt')].toString(),
+            endAt: row[columnNames.indexOf('endAt')].toString(),
+            summary: row[columnNames.indexOf('summary')],
+            categoryId: '',
+          };
+          return obj;
+        });
+      handleImportModalOk(objectsArray);
+    };
+
+    reader.readAsArrayBuffer(file);
+  };
+
+  const handleButtonClick = useCallback(() => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  }, []);
+
+  return (
+    <div>
+      <Button
+        type="primary"
+        icon={<SyncOutlined />}
+        onClick={handleButtonClick}
+        loading={loading}
+      >
+        Import Courses
+      </Button>
+      <input
+        type="file"
+        onChange={handleFileChange}
+        ref={fileInputRef}
+        style={{ display: 'none' }}
+      />
+    </div>
+  );
+};
 
 export default TableViewCourse;
