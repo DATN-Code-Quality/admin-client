@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useCallback, useRef, useState } from 'react';
 
-import { SyncOutlined } from '@ant-design/icons';
+import { PlusCircleOutlined, SyncOutlined } from '@ant-design/icons';
 import { message } from 'antd';
 import Button from 'antd-button-color';
 import { useNavigate } from 'react-router-dom';
@@ -125,25 +125,15 @@ function TableViewCourse() {
               }}
               templateLink="https://www.dropbox.com/scl/fi/g5j8i0xxue7teq54pzof9/course-data.ods?dl=0&rlkey=5lldytc8lovur6jebypa905x2"
             />
+            <Button
+              type="primary"
+              icon={<PlusCircleOutlined />}
+              loading={list.isLoading}
+              onClick={handleCreateCourse}
+            >
+              Create
+            </Button>
           </div>
-
-          {/* <Button
-            type="primary"
-            className="mr-4"
-            icon={<UploadOutlined />}
-            loading={list.isLoading}
-            onClick={handleImportExcel}
-          >
-            Import Excel
-          </Button>
-          <Button
-            type="primary"
-            icon={<PlusCircleOutlined />}
-            loading={list.isLoading}
-            onClick={handleCreateCourse}
-          >
-            Create
-          </Button> */}
         </TableToolbar>
         <BaseTable
           idKey="id"

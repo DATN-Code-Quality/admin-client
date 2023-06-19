@@ -15,7 +15,7 @@ import { formatDate, getMappingLabelByValue } from '~/utils';
 const FormAddCourse = ({ course, id, initialViewMode = false }) => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  const { getDetailCourse, importCourses: createCourse, updateCourse } = useCourse();
+  const { getDetailCourse, importCourses: createCourse } = useCourse();
   const [loading, setLoading] = useState<boolean>(false);
   const [viewMode, setViewMode] = useState<boolean>(initialViewMode);
   const [formValues, setFormValues] = useState<any>({});
@@ -24,41 +24,34 @@ const FormAddCourse = ({ course, id, initialViewMode = false }) => {
     console.log('err submit', err);
     message.error(errMsg);
     setLoading(false);
-    setViewMode(true);
+    // setViewMode(true);
   };
 
   const handleSubmitSuccess = (successMsg) => () => {
     message.success(successMsg);
-    // navigate(ROUTE.COURSE.LIST);
+    navigate(ROUTE.COURSE.LIST);
     setLoading(false);
-    setViewMode(true);
+    // setViewMode(true);
   };
 
   const handleSubmit = useCallback((values) => {
-    message.success('Edit successfully!');
-    // TODO: remove hardcode
-    if (!initialViewMode) {
-      navigate(ROUTE.COURSE.LIST);
-      return;
-    }
-    setViewMode(true);
-    return;
-
-    // TODO: handle submit
     setLoading(true);
     const dataSubmit = {
       ...values,
+      startAt: values.startAt.toISOString(),
+      endAt: values.endAt.toISOString(),
     };
     if (id) {
       dataSubmit.id = id;
-      updateCourse(dataSubmit)
-        .then(handleSubmitSuccess('Edit Ngành nghề successfully!'))
-        .catch(handleSubmitFail('Edit Ngành nghề failed!'))
-        .finally(() => setLoading(false));
+      setLoading(false);
+      // updateCourse(dataSubmit)
+      //   .then(handleSubmitSuccess('Edit Course successfully!'))
+      //   .catch(handleSubmitFail('Edit Course failed!'))
+      //   .finally(() => setLoading(false));
     } else {
-      createCourse(dataSubmit)
-        .then(handleSubmitSuccess('Edit Ngành nghề successfully!'))
-        .catch(handleSubmitFail('Edit Ngành nghề failed!'))
+      createCourse([dataSubmit])
+        .then(handleSubmitSuccess('Create Course successfully!'))
+        .catch(handleSubmitFail('Create Course failed!'))
         .finally(() => setLoading(false));
     }
   }, []);
