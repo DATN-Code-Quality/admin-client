@@ -14,7 +14,11 @@ export const metaFormAddCourse = () => {
       {
         key: 'summary',
         label: 'Summary',
-        required: true,
+        widget: Editor,
+      },
+      {
+        key: 'summary',
+        label: 'Summary',
         widget: Editor,
       },
       {
@@ -23,9 +27,11 @@ export const metaFormAddCourse = () => {
         widget: 'date-picker',
         required: true,
         widgetProps: {
-          autoSize: { maxRows: 20, minRows: 3 },
+          style: {
+            width: '100%',
+          },
+          autoSize: { minRows: 3 },
           showCount: true,
-          placeholder: 'Start Date',
         },
       },
       {
@@ -34,9 +40,11 @@ export const metaFormAddCourse = () => {
         widget: 'date-picker',
         required: true,
         widgetProps: {
-          autoSize: { maxRows: 20, minRows: 3 },
+          style: {
+            width: '100%',
+          },
+          autoSize: { minRows: 3 },
           showCount: true,
-          placeholder: 'End Date',
         },
       },
     ],

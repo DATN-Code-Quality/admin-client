@@ -33,6 +33,7 @@ import { ButtonType } from '~/ui/shared/modal/props';
 import BaseTable from '~/ui/shared/tables';
 import TableToolbar from '~/ui/shared/toolbar';
 import { formatNumber, removeFromArr } from '~/utils';
+import ExcelToObject from '~/ui/shared/data-import';
 
 function TableViewParticipant({ course }: { course: Course }) {
   const navigate = useNavigate();
@@ -106,6 +107,7 @@ function TableViewParticipant({ course }: { course: Course }) {
   };
 
   const handleImportModalAddParticipantOk = async (values) => {
+    console.log(values);
     const addedIds = values.map((item) => item.id);
     const teacherRoleIds = currentTeacherIds.filter((item) =>
       addedIds.includes(item)
@@ -230,23 +232,48 @@ function TableViewParticipant({ course }: { course: Course }) {
         <TableToolbar
           title={`Found ${formatNumber(list.items?.length || 0)} user`}
         >
-          <Button
-            type="primary"
-            className="mr-4"
-            icon={<SyncOutlined />}
-            loading={list.isLoading}
-            onClick={syncMoodleModalActions.handleOpen}
-          >
-            Sync Moodle
-          </Button>
-          <Button
-            type="primary"
-            icon={<PlusCircleOutlined />}
-            loading={list.isLoading}
-            onClick={addParticipantModalActions.handleOpen}
-          >
-            Add Participant
-          </Button>
+          <div className="flex items-center" style={{ gap: '16px' }}>
+            <Button
+              type="primary"
+              className="mr-4"
+              icon={<SyncOutlined />}
+              loading={list.isLoading}
+              onClick={syncMoodleModalActions.handleOpen}
+            >
+              Sync Moodle
+            </Button>
+            <Button
+              type="primary"
+              icon={<PlusCircleOutlined />}
+              loading={list.isLoading}
+              onClick={addParticipantModalActions.handleOpen}
+            >
+              Add Participant
+            </Button>
+
+            <ExcelToObject
+              handleImportModalOk={handleImportModalSyncMoodleOk}
+              loading={list.isLoading}
+              name="Import users"
+              handleConvertData={(data, columnNames) => {
+                return data
+                  ?.slice(1)
+                  .map<Record<string, string | number>>((row) => {
+                    const obj: Record<string, string | number> = {
+                      name: row[columnNames.indexOf('name')],
+                      moodleId: row[columnNames.indexOf('moodleId')].toString(),
+                      role: row[columnNames.indexOf('role')].toString(),
+                      email: row[columnNames.indexOf('email')].toString(),
+                      userId: row[columnNames.indexOf('userId')].toString(),
+                      password: row[columnNames.indexOf('password')],
+                      status: +row[columnNames.indexOf('status')],
+                    };
+                    return obj;
+                  });
+              }}
+              templateLink="https://www.dropbox.com/scl/fi/q8n6mn14jjpo56ytial4j/list-user.ods?dl=0&rlkey=3tbrfoixx47d212ysx0a5o9dd"
+            />
+          </div>
           {/* <Button
             type="primary"
             className="mr-4"
