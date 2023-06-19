@@ -1,14 +1,11 @@
-import React, { useCallback, useState } from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { useCallback, useRef, useState } from 'react';
 
-import {
-  EditOutlined,
-  PlusCircleOutlined,
-  SyncOutlined,
-  UploadOutlined,
-} from '@ant-design/icons';
-import { message, Modal, Space } from 'antd';
+import { PlusCircleOutlined, SyncOutlined } from '@ant-design/icons';
+import { message } from 'antd';
 import Button from 'antd-button-color';
 import { useNavigate } from 'react-router-dom';
+import * as XLSX from 'xlsx';
 
 import {
   columnTableCourse,
@@ -21,20 +18,18 @@ import { useCourse } from '~/adapters/appService/course.service';
 import { PAGE_SIZE_OPTIONS } from '~/constant';
 import { MESSAGE } from '~/constant/message';
 import ROUTE from '~/constant/routes';
-import { Course } from '~/domain/course';
 import useDialog from '~/hooks/useDialog';
 import useList from '~/hooks/useList';
 import Card from '~/ui/shared/card';
 import BaseFilter from '~/ui/shared/forms/baseFilter';
 import ImportedModal from '~/ui/shared/imported-modal';
 import Loading from '~/ui/shared/loading';
-import BaseModal from '~/ui/shared/modal';
-import { ButtonType } from '~/ui/shared/modal/props';
 import BaseTable from '~/ui/shared/tables';
 import TableToolbar from '~/ui/shared/toolbar';
 import { formatNumber } from '~/utils';
 
 import './TableViewCourse.less';
+import ExcelToObject from '~/ui/shared/data-import';
 
 function TableViewCourse() {
   const navigate = useNavigate();
@@ -98,31 +93,47 @@ function TableViewCourse() {
         <TableToolbar
           title={`Found ${formatNumber(list.items?.length || 0)} course`}
         >
-          <Button
-            type="primary"
-            icon={<SyncOutlined />}
-            loading={list.isLoading}
-            onClick={syncMoodleModalActions.handleOpen}
-          >
-            Sync Moodle
-          </Button>
-          {/* <Button
-            type="primary"
-            className="mr-4"
-            icon={<UploadOutlined />}
-            loading={list.isLoading}
-            onClick={handleImportExcel}
-          >
-            Import Excel
-          </Button>
-          <Button
-            type="primary"
-            icon={<PlusCircleOutlined />}
-            loading={list.isLoading}
-            onClick={handleCreateCourse}
-          >
-            Create
-          </Button> */}
+          <div className="flex items-center" style={{ gap: '16px' }}>
+            <Button
+              type="primary"
+              icon={<SyncOutlined />}
+              loading={list.isLoading}
+              onClick={syncMoodleModalActions.handleOpen}
+            >
+              Sync Moodle
+            </Button>
+            <ExcelToObject
+              handleImportModalOk={handleImportModalOk}
+              loading={list.isLoading}
+              name="Import courses"
+              handleConvertData={(data, columnNames) => {
+                return data
+                  ?.slice(1)
+                  .map<Record<string, string | number>>((row) => {
+                    const obj: Record<string, string | number> = {
+                      name: row[columnNames.indexOf('name')],
+                      moodleId: row[columnNames.indexOf('moodleId')].toString(),
+                      courseMoodleId:
+                        row[columnNames.indexOf('courseMoodleId')].toString(),
+                      startAt: row[columnNames.indexOf('startAt')].toString(),
+                      endAt: row[columnNames.indexOf('endAt')].toString(),
+                      summary: row[columnNames.indexOf('summary')],
+                      categoryId: '',
+                    };
+                    return obj;
+                  });
+              }}
+              templateLink="https://www.dropbox.com/scl/fi/g5j8i0xxue7teq54pzof9/course-data.ods?dl=0&rlkey=5lldytc8lovur6jebypa905x2"
+            />
+            <Button
+              type="primary"
+              icon={<PlusCircleOutlined />}
+              loading={list.isLoading}
+              onClick={handleCreateCourse}
+            >
+              Create
+            </Button>
+          </div>
         </TableToolbar>
         <BaseTable
           idKey="id"
