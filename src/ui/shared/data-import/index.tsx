@@ -1,6 +1,9 @@
 import React, { useCallback, useRef } from 'react';
 
-import { SyncOutlined } from '@ant-design/icons';
+import {
+  DownloadOutlined,
+  UploadOutlined,
+} from '@ant-design/icons';
 import { Button } from 'antd';
 import * as XLSX from 'xlsx';
 
@@ -71,7 +74,7 @@ const ExcelToObject: React.FC<ExcelToObjectProps> = ({
     <div className="flex items-center" style={{ gap: '16px' }}>
       <Button
         type="primary"
-        icon={<SyncOutlined />}
+        icon={<UploadOutlined />}
         onClick={handleButtonClick}
         loading={loading}
       >
@@ -86,7 +89,7 @@ const ExcelToObject: React.FC<ExcelToObjectProps> = ({
       />
       <Button
         type="primary"
-        icon={<SyncOutlined />}
+        icon={<DownloadOutlined />}
         onClick={handleDownload}
         loading={loading}
       >
