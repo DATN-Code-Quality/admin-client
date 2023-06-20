@@ -61,8 +61,8 @@ const ExcelToObject: React.FC<ExcelToObjectProps> = ({
 
   const handleDownload = useCallback(() => {
     const downloadLink = document.createElement('a');
-    downloadLink.href = templateLink; // Replace with the correct path to your Excel template file
-    downloadLink.download = 'template.xlsx'; // Specify the desired download filename
+    downloadLink.href = `/${templateLink}`; // Replace with the correct path to your Excel template file
+    downloadLink.download = templateLink; // Specify the desired download filename
     downloadLink.target = '_blank'; // Open in a new tab
     downloadLink.rel = 'noopener noreferrer';
     document.body.appendChild(downloadLink);
