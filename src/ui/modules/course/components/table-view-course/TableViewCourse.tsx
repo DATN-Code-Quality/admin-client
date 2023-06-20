@@ -123,7 +123,7 @@ function TableViewCourse() {
                     return obj;
                   });
               }}
-              templateLink="https://www.dropbox.com/scl/fi/g5j8i0xxue7teq54pzof9/course-data.ods?dl=0&rlkey=5lldytc8lovur6jebypa905x2"
+              templateLink="list-course.xlsx"
             />
             <Button
               type="primary"
