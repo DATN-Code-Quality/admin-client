@@ -106,6 +106,32 @@ function TableViewParticipant({ course }: { course: Course }) {
     }
   };
 
+  const handleImportExcelAddParticipantOk = async (values) => {
+    const teacherRoleIds = [];
+    const studentRoleIds = [];
+    values.forEach((item) => {
+      if (item.role === SubRole.TEACHER) {
+        teacherRoleIds.push(item.id);
+      } else if (item.role === SubRole.STUDENT) {
+        studentRoleIds.push(item.id);
+      }
+    });
+
+    try {
+      await addParticipants(course.id, {
+        teacherRoleIds,
+        studentRoleIds,
+      });
+      handleUpdateList();
+      message.success(MESSAGE.SUCCESS);
+    } catch (error) {
+      console.log('error', error);
+      message.error(MESSAGE.ERROR);
+    } finally {
+      addParticipantModalActions.handleClose();
+    }
+  };
+
   const handleImportModalAddParticipantOk = async (values) => {
     console.log(values);
     const addedIds = values.map((item) => item.id);
@@ -252,7 +278,7 @@ function TableViewParticipant({ course }: { course: Course }) {
             </Button>
 
             <ExcelToObject
-              handleImportModalOk={handleImportModalSyncMoodleOk}
+              handleImportModalOk={handleImportExcelAddParticipantOk}
               loading={list.isLoading}
               name="Import users"
               handleConvertData={(data, columnNames) => {
@@ -260,18 +286,13 @@ function TableViewParticipant({ course }: { course: Course }) {
                   ?.slice(1)
                   .map<Record<string, string | number>>((row) => {
                     const obj: Record<string, string | number> = {
-                      name: row[columnNames.indexOf('name')],
-                      moodleId: row[columnNames.indexOf('moodleId')].toString(),
-                      role: row[columnNames.indexOf('role')].toString(),
-                      email: row[columnNames.indexOf('email')].toString(),
-                      userId: row[columnNames.indexOf('userId')].toString(),
-                      password: row[columnNames.indexOf('password')],
-                      status: +row[columnNames.indexOf('status')],
+                      role: row[columnNames.indexOf('role')]?.toString(),
+                      id: row[columnNames.indexOf('userId')]?.toString(),
                     };
                     return obj;
                   });
               }}
-              templateLink="https://www.dropbox.com/scl/fi/q8n6mn14jjpo56ytial4j/list-user.ods?dl=0&rlkey=3tbrfoixx47d212ysx0a5o9dd"
+              templateLink="list-participant.xlsx"
             />
           </div>
           {/* <Button

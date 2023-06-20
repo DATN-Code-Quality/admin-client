@@ -162,17 +162,15 @@ function TableViewUser() {
                   .map<Record<string, string | number>>((row) => {
                     const obj: Record<string, string | number> = {
                       name: row[columnNames.indexOf('name')],
-                      moodleId: row[columnNames.indexOf('moodleId')].toString(),
                       role: row[columnNames.indexOf('role')].toString(),
                       email: row[columnNames.indexOf('email')].toString(),
                       userId: row[columnNames.indexOf('userId')].toString(),
-                      password: row[columnNames.indexOf('password')],
-                      status: +row[columnNames.indexOf('status')],
+                      status: 0,
                     };
                     return obj;
                   });
               }}
-              templateLink="https://www.dropbox.com/scl/fi/q8n6mn14jjpo56ytial4j/list-user.ods?dl=0&rlkey=3tbrfoixx47d212ysx0a5o9dd"
+              templateLink="list-user.xlsx"
             />
 
             {/* <Button
