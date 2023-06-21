@@ -12,6 +12,7 @@ import { useSonarqube } from '~/adapters/appService/sonarqube.service';
 import { Assignment } from '~/domain/assignment';
 import { Submission } from '~/domain/submission';
 import { renderColorRatting } from '~/utils';
+import useCurrentWidth from '~/hooks/useCurrentWidth';
 
 const Overview: React.FC<{
   submission?: Submission;
@@ -62,13 +63,15 @@ const Overview: React.FC<{
     fetchOverview();
   }, [fetchOverview]);
 
+  const width = useCurrentWidth();
+
   if (!data || data?.size === 0) return <></>;
   return (
     <div>
       {!loading && (
         <div
           style={{
-            marginLeft: 16,
+            marginLeft: width < 768 ? 0 : 16,
             marginTop: 32,
             padding: 16,
             border: '1px solid ',

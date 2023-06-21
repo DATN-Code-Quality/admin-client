@@ -18,6 +18,7 @@ import { formatDate } from '~/utils';
 import { SubmissionType } from '../../../../../constant/enum';
 import useQuery from '~/hooks/useQuery';
 import { useNavigate, useNavigation } from 'react-router-dom';
+import useCurrentWidth from '~/hooks/useCurrentWidth';
 
 const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
   assignment,
@@ -27,6 +28,7 @@ const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
   const [subRole, setRole] = useState<SubRole | null>(null);
   const [tab, setTab] = useState<SubmisisonTab>(SubmisisonTab.STATISTIC);
   const { getSubmissionByAssignmentId } = useSubmission();
+  const width = useCurrentWidth();
 
   const fetchSubmission = useCallback(async () => {
     const response = await getSubmissionByAssignmentId(
@@ -44,7 +46,6 @@ const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
     setSubmissionList(submissions);
     setSubmission(submissions[0]);
   }, [assignment.courseId, assignment.id]);
-
 
   useEffect(() => {
     fetchSubmission();
@@ -75,8 +76,7 @@ const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
                 tab === SubmisisonTab.SUBMISSION ? '1fr 1fr' : '1fr',
             }}
           >
-            <div className='assignment-information'>
-
+            <div className="assignment-information">
               {subRole === SubRole.ADMIN ||
                 (subRole === SubRole.TEACHER && (
                   <div className="flex items-center">
@@ -85,7 +85,7 @@ const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
                       size="middle"
                       type="card"
                       onChange={(selectedTab) => {
-                        setTab(selectedTab)
+                        setTab(selectedTab);
                       }}
                       style={{ marginBottom: 8, marginTop: 8 }}
                       hidden={false}
@@ -105,7 +105,6 @@ const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
             <div />
           </div>
         )}
-
       </div>
 
       {/* SECOND CARD */}
@@ -114,16 +113,13 @@ const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
           className="grid bg-white p-4 rounded-2"
           style={{
             gridTemplateColumns:
-              tab === SubmisisonTab.SUBMISSION ? '1fr 1fr' : '1fr',
+              tab !== SubmisisonTab.SUBMISSION || width < 768
+                ? '1fr'
+                : '1fr 1fr',
           }}
         >
           <div style={{ width: '100%', overflow: 'hidden' }}>
-
             <div className="submission-container">
-              {/* {subRole === SubRole.STUDENT && (
-  <p className="title">Submission</p>
-)} */}
-
               {tab === SubmisisonTab.SUBMISSION && (
                 <>
                   {subRole !== SubRole.STUDENT && (
@@ -141,7 +137,6 @@ const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
                         setSubmission={setSubmission}
                       />
                     ))}
-
                   </div>
                 </>
               )}
@@ -163,21 +158,13 @@ const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
               {submissionList?.length === 0 && (
                 <div className=" bg-white p-4 rounded-2 gap-4">
                   <div className="submission-container ">
-                    {(subRole === SubRole.ADMIN || subRole === SubRole.TEACHER) && (
+                    {(subRole === SubRole.ADMIN ||
+                      subRole === SubRole.TEACHER) && (
                       <div>
                         <p className="title">Bài nộp</p>
                         <Empty description="Không tồn tại bài nôp" />
                       </div>
                     )}
-
-                    {/* {subRole === SubRole.STUDENT && (
-    <div>
-      <AddSubmission
-        assignment={assignment}
-        onSubmitted={() => fetchSubmission()}
-      />
-    </div>
-  )} */}
                   </div>
                 </div>
               )}

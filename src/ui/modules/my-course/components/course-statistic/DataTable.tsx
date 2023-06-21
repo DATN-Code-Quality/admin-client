@@ -92,7 +92,11 @@ const DataTable: React.FC<{ courseReport: ReportCourse[]; total: number }> = ({
           Export to Excel
         </Button>
       </div>
-      <Table dataSource={dataSource} columns={columns} />
+      <Table
+        scroll={{ x: '800px' }}
+        dataSource={dataSource}
+        columns={columns}
+      />
     </div>
   );
 };

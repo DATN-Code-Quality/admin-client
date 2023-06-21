@@ -93,7 +93,10 @@ function TableViewCourse() {
         <TableToolbar
           title={`Found ${formatNumber(list.items?.length || 0)} course`}
         >
-          <div className="flex items-center" style={{ gap: '16px' }}>
+          <div
+            className="flex items-center flex-nowrap overflow-auto"
+            style={{ gap: '16px' }}
+          >
             <Button
               type="primary"
               icon={<SyncOutlined />}
