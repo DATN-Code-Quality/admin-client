@@ -49,24 +49,13 @@ const DataTable: React.FC<{ courseId: string; assignmentId: string }> = ({
   }, [fetchReport]);
 
   const columns = [
-    // {
-    //   title: 'User ID',
-    //   dataIndex: 'userMoodleId',
-    //   key: 'userMoodleId',
-    //   fixed: 'left',
-    //   // sorter: {
-    //   //   compare: (a, b) =>{
-    //   //     console.log(typeof(a));
-    //   //     return a-b;},
-    //   // },
-    // },
     {
       title: 'Username',
       dataIndex: 'userName',
       key: 'userName',
       fixed: 'left',
       sorter: {
-        compare: (a, b) =>{
+        compare: (a, b) => {
           return a.userName.localeCompare(b.userName);
         },
       },
