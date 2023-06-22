@@ -65,7 +65,11 @@ const BaseFilter: React.FC<BaseFilterProps> = (props) => {
   return (
     <Form
       layout={formLayout}
-      style={{ marginBottom: '24px', gap: '12px 0', ...style }}
+      style={{
+        marginBottom: width < 768 ? '0' : '24px',
+        gap: '12px 0',
+        ...style,
+      }}
       initialValues={meta.initialValues}
       form={form}
       onFinish={handleChange}
