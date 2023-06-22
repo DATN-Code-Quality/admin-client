@@ -8,7 +8,7 @@ export const metaFilterDashboard = ({ courses }) => {
   const mappingCourseList = generateMappingList(courses, 'id', 'name');
   const currentDate = new Date();
   const last7Days = addDays(currentDate, -7);
-
+  const width = window.innerWidth;
   const dateFormat = 'DD-MM-YYYY';
   const initialRangeValue = [
     dayjs(last7Days, dateFormat),
@@ -24,8 +24,8 @@ export const metaFilterDashboard = ({ courses }) => {
           mode: 'multiple',
           maxTagCount: 'responsive',
           style: {
-            minWidth: '24rem',
-            maxWidth: '24rem',
+            minWidth: width < 768 ? '100%' : '24rem',
+            maxWidth: width < 768 ? '100%' : '24rem',
           },
           placeholder: 'Course',
           allowClear: true,

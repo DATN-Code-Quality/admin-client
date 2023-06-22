@@ -93,7 +93,10 @@ function TableViewCourse() {
         <TableToolbar
           title={`Found ${formatNumber(list.items?.length || 0)} course`}
         >
-          <div className="flex items-center" style={{ gap: '16px' }}>
+          <div
+            className="flex items-center flex-nowrap overflow-auto"
+            style={{ gap: '16px' }}
+          >
             <Button
               type="primary"
               icon={<SyncOutlined />}
@@ -123,7 +126,7 @@ function TableViewCourse() {
                     return obj;
                   });
               }}
-              templateLink="https://www.dropbox.com/scl/fi/g5j8i0xxue7teq54pzof9/course-data.ods?dl=0&rlkey=5lldytc8lovur6jebypa905x2"
+              templateLink="list-course.xlsx"
             />
             <Button
               type="primary"

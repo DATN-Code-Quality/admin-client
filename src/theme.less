@@ -46,6 +46,10 @@
   align-items: center;
 }
 
+.flex-nowrap {
+  flex-wrap: nowrap;
+}
+
 .justify-center {
   justify-content: center;
 }
@@ -64,6 +68,10 @@
 
 .overflow-hidden {
   overflow: hidden;
+}
+
+.overflow-auto {
+  overflow: auto;
 }
 
 .ant-form-item-with-help .ant-form-item-explain {
@@ -254,4 +262,19 @@
 /* When the scrollbar is being hovered */
 ::-webkit-scrollbar-thumb:hover {
   background-color: #555; /* Color of the thumb on hover */
+}
+
+@media screen and (max-width: 767px) {
+  .cms-layout-app-change-password {
+    .card-form-change-password {
+      min-width: unset !important;
+      max-width: unset !important;
+      width: 90% !important;
+    }
+  }
+  .card-form-login {
+    min-width: unset !important;
+    max-width: unset !important;
+    width: 90% !important;
+  }
 }
