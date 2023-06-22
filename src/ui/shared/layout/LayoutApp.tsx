@@ -100,12 +100,18 @@ function LayoutApp() {
   useEffect(() => {
     checkProfile()
       .then((res) => {
+        const defaultRoute = getDefaultRoute([res?.data?.role]);
         if ([ROUTE.LOGIN, ROUTE.INDEX].includes(location.pathname)) {
-          const defaultRoute = getDefaultRoute([res?.data?.role]);
+          navigate(defaultRoute, { replace: true });
+        }
+        if (!MAIN_ROUTES.find((_) => _.path === location.pathname)) {
           navigate(defaultRoute, { replace: true });
         }
       })
       .catch((err) => {
+        if ([ROUTE.ACTIVE_ACCOUNT].includes(location.pathname)) {
+          return;
+        }
         navigate(ROUTE.LOGIN, { replace: true });
       });
   }, []);
@@ -182,6 +188,7 @@ function LayoutApp() {
           <Menu
             className="menu-header"
             mode="vertical"
+            selectedKeys={selectedKeys}
             onClick={handleOnClickMenuMobileItem}
           >
             {generateMenus(mobileMenuTree)}
@@ -196,7 +203,11 @@ function LayoutApp() {
             renderMobileMenu()
           ) : (
             <>
-              <Menu className="menu-header" mode="horizontal">
+              <Menu
+                className="menu-header"
+                mode="horizontal"
+                selectedKeys={selectedKeys}
+              >
                 {generateMenus(menuTree)}
               </Menu>
               <div className="top-right-container">
