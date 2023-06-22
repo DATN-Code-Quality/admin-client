@@ -31,19 +31,12 @@ const CourseStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
   const [dataLineChart, setDataLineChart] = useState<CourseReportDataLineChart>(
     []
   );
-  const [labelsLineChart, setLabelsLineChart] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
-  const [dataChart, setDataChart] = useState<{
-    labels: string[][];
-    data: { name: string; data: number[] }[];
-  }>({
-    labels: [],
-    data: [],
-  });
+
   const { getReportCourse } = useCourse();
 
-  const formarDataLineChart = useCallback(() => {
-    const { assignment, total } = report;
+  const formarDataLineChart = useCallback((reportData: Report) => {
+    const { assignment, total } = reportData;
     const series: { name: string; data: any[]; color: string }[] = [
       { name: 'Submission Pass', data: [], color: '#11bf31' },
       { name: 'Submission Fail', data: [], color: '#de1f0d' },
@@ -72,35 +65,7 @@ const CourseStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
         series[3].data.push([assignmentItem.assignment.name, notSubmitted]);
       });
     return series;
-  }, [report]);
-
-  // const formatDataChart = useCallback(
-  //   (total: number, assignment: ReportCourse[]) => {
-  //     const series: { key: string; name: string; data: number[] }[] = [
-  //       { key: 'pass', name: 'Submission Pass', data: [] },
-  //       { key: 'fail', name: 'Submission Fail', data: [] },
-  //       { key: 'error', name: 'Scan Error', data: [] },
-  //       { key: 'notsubmit', name: 'Not Submit', data: [] },
-  //     ];
-  //     const labels: string[][] = [];
-  //     assignment?.forEach((assignmentItem: ReportCourse) => {
-  //       const { submission } = assignmentItem;
-  //       const waitToScan = submission?.waitToScan || 0;
-  //       const scanning = submission?.scanning || 0;
-  //       const fail = submission?.scanSuccess?.fail || 0;
-  //       const pass = submission?.scanSuccess?.pass || 0;
-  //       const scanFail = submission?.scanFail || 0;
-  //       series[0].data.push(pass);
-  //       series[1].data.push(fail);
-  //       series[2].data.push(scanFail);
-  //       series[3].data.push(
-  //         (total || 0) - waitToScan - scanning - fail - pass - scanFail
-  //       );
-  //     });
-  //     return { labels, data: series };
-  //   },
-  //   []
-  // );
+  }, []);
 
   const fetchReport = useCallback(async () => {
     setLoading(true);
@@ -109,15 +74,13 @@ const CourseStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
     const reportData = response.data.report;
     const { total, assignment } = reportData;
     setReport({ total, assignment });
-    setDataLineChart(formarDataLineChart());
+    setDataLineChart(formarDataLineChart(reportData));
     setLoading(false);
   }, [courseId, formarDataLineChart]);
 
   useEffect(() => {
     fetchReport();
   }, [fetchReport]);
-  console.log(`Data line chart:  ${JSON.stringify(dataLineChart)}`);
-  console.log(`labels${JSON.stringify(labelsLineChart)}`);
 
   return (
     <Card>

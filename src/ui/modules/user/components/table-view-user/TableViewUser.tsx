@@ -142,7 +142,10 @@ function TableViewUser() {
         <TableToolbar
           title={`Found ${formatNumber(list.items?.length || 0)} user`}
         >
-          <div className="flex items-center" style={{ gap: '16px' }}>
+          <div
+            className="flex items-center flex-nowrap overflow-auto"
+            style={{ gap: '16px' }}
+          >
             <Button
               type="primary"
               className="mr-4"
