@@ -280,7 +280,7 @@ function TableViewParticipant({ course }: { course: Course }) {
             <ExcelToObject
               handleImportModalOk={handleImportExcelAddParticipantOk}
               loading={list.isLoading}
-              name="Import users"
+              name="Import Participant"
               handleConvertData={(data, columnNames) => {
                 return data
                   ?.slice(1)
