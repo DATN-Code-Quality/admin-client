@@ -62,7 +62,19 @@ const Overview: React.FC<{
     fetchOverview();
   }, [fetchOverview]);
 
-  if (!data || data?.size === 0) return <></>;
+  if (!data || data?.size === 0) {
+    return (
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <span style={{ fontStyle: 'italic',textAlign:'center' }}>No data display for this submission</span>
+      </div>
+    );
+  }
   return (
     <div>
       {!loading && (
