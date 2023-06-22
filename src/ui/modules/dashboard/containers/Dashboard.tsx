@@ -57,8 +57,6 @@ function Dashboard() {
     handleGetListCourse();
   }, []);
 
-  console.log("Series:"+JSON.stringify(series))
-
   return (
     <>
       <BaseFilter
@@ -69,31 +67,15 @@ function Dashboard() {
         onFilter={handleFilterDashboard}
       />
       <Card className="dashboard-card card-overview" title="Overview">
-        <div className="action-container">
-          <BaseFilter
-            loading={loading}
-            meta={metaFilterOverview()}
-            filterOnChange
-            showSubmitButton={false}
-            onFilter={handleFilterDashboard}
-          />
-          <Button
-            type="primary"
-            className="action-btn"
-            onClick={handleDownloadReport}
-          >
-            Download Report
-          </Button>
-        </div>
         {series?.length > 0 && (
           <div className="overall-container">
-            <div className="overall-item" key="Total">
+            {/* <div className="overall-item" key="Total">
               <p className="overall-item__label">Total</p>
               <p className="overall-item__value" style={{ color: '#429EFF' }}>
                 {series &&
                   series.reduce((prev, current) => prev + current.total, 0)}
               </p>
-            </div>
+            </div> */}
             {series?.map((item) => {
               return (
                 <div className="overall-item" key={item.name}>

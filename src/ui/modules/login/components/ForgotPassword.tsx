@@ -18,7 +18,7 @@ function ForgotPassword() {
       await forgotPassword(values);
       setIsDone(true);
     } catch (error) {
-      message.error((error as any).message);
+      // message.error((error as any).message);
     }
   };
 
@@ -45,14 +45,13 @@ function ForgotPassword() {
                   rules={[
                     {
                       required: true,
-                      message: 'Vui lòng không bỏ trống tài khoản!',
                     },
                   ]}
                 >
                   <Input
                     size="large"
                     prefix={<UserOutlined className="site-form-item-icon" />}
-                    placeholder="Tài khoản"
+                    placeholder="Username"
                   />
                 </Form.Item>
                 <Form.Item>

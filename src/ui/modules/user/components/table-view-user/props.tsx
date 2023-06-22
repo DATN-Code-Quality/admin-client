@@ -117,6 +117,17 @@ export const metaCreateUser = () => {
           type: 'email',
         },
       },
+      {
+        key: 'roles',
+        label: 'Roles',
+        options: MAP_ROLES,
+        widget: 'select',
+        required: true,
+        widgetProps: {
+          placeholder: 'Enter Roles',
+          allowClear: true,
+        },
+      },
     ],
   };
 };
