@@ -7,15 +7,12 @@ import { getThemeVariables } from 'antd/dist/theme';
 import vitePluginImp from 'vite-plugin-imp';
 import lessToJS from 'less-vars-to-js';
 
-
-
-
 export default ({ mode }) => {
   process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
   const themeVariables = lessToJS(
     fs.readFileSync(path.resolve(__dirname, './src/theme.less'), 'utf8')
   );
-  console.log(themeVariables)
+  console.log(themeVariables);
   return defineConfig({
     base: process.env.VITE_ASSET_PATH,
     plugins: [
@@ -38,7 +35,7 @@ export default ({ mode }) => {
             style: (name) => `antd/es/${name}/style`,
           },
         ],
-      })
+      }),
     ],
     css: {
       preprocessorOptions: {
@@ -60,7 +57,7 @@ export default ({ mode }) => {
       },
     },
     build: {
-      outDir: path.resolve(__dirname, './build'),
+      outDir: path.resolve(__dirname, './dist'),
     },
   });
 };
