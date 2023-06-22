@@ -40,8 +40,8 @@ export const MAP_SERVICE_TYPE = [
 
 export const MAP_CHART_TYPE = [
   [ChartType.DAY, 'Day'],
-  [ChartType.WEEK, 'Week'],
-  [ChartType.MONTH, 'Month'],
+  // [ChartType.WEEK, 'Week'],
+  // [ChartType.MONTH, 'Month'],
 ];
 
 export const MAP_ROLES = [
