@@ -57,7 +57,7 @@ export default ({ mode }) => {
       },
     },
     build: {
-      outDir: path.resolve(__dirname, './dist'),
+      outDir: path.resolve(__dirname, './build'),
     },
   });
 };
