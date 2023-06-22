@@ -10,22 +10,24 @@ import { formatDate, generateUrl } from '~/utils';
 
 export const metaFilterCourse = () => {
   return {
+    columns: 3,
     fields: [
       {
         key: 'search',
+        colSpan: 3,
         widgetProps: {
           placeholder: 'Enter keyword',
         },
       },
       {
         key: 'role',
+        colSpan: 3,
         options: MAP_SUB_ROLES,
         widget: 'select',
         widgetProps: {
           maxTagCount: 'responsive',
           style: {
             minWidth: '12rem',
-            maxWidth: '12rem',
           },
           placeholder: 'My Role',
           allowClear: true,
@@ -33,18 +35,26 @@ export const metaFilterCourse = () => {
       },
       {
         key: 'startAt',
+        colSpan: 3,
         widget: 'date-picker',
         widgetProps: {
-          autoSize: { maxRows: 20, minRows: 3 },
+          autoSize: { minRows: 3 },
+          style: {
+            width: '100%',
+          },
           showCount: true,
           placeholder: 'Start Date',
         },
       },
       {
         key: 'endAt',
+        colSpan: 3,
         widget: 'date-picker',
         widgetProps: {
-          autoSize: { maxRows: 20, minRows: 3 },
+          autoSize: { minRows: 3 },
+          style: {
+            width: '100%',
+          },
           showCount: true,
           placeholder: 'End Date',
         },
@@ -71,7 +81,7 @@ export const columnTableCourse = (): ColumnType<any>[] => [
   {
     title: 'Course Name',
     dataIndex: 'name',
-    width: 200,
+    width: '50%',
     ellipsis: true,
     sorter: (a, b) => {
       return a.name.localeCompare(b.name);
@@ -88,7 +98,7 @@ export const columnTableCourse = (): ColumnType<any>[] => [
   {
     title: 'Start Date',
     dataIndex: 'startAt',
-    width: 240,
+    width: '25%',
     sorter: (a, b) => {
       return new Date(a.startAt).getTime() - new Date(b.startAt).getTime();
     },
@@ -99,7 +109,7 @@ export const columnTableCourse = (): ColumnType<any>[] => [
   {
     title: 'End Date',
     dataIndex: 'endAt',
-    width: 240,
+    width: '25%',
     sorter: (a, b) => {
       return new Date(a.endAt).getTime() - new Date(b.endAt).getTime();
     },
@@ -187,3 +197,4 @@ export const columnTableSyncCourse = (): ColumnType<any>[] => [
     },
   },
 ];
+
