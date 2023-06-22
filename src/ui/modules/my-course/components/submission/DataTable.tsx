@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { ExportOutlined } from '@ant-design/icons';
 import { Table, Button, Empty } from 'antd';
 import * as XLSX from 'xlsx';
-
+import tableExport from 'antd-table-export';
 import { useSubmission } from '~/adapters/appService/submission.service';
 import { SubmissionType } from '../../../../../constant/enum';
 
@@ -210,33 +210,13 @@ const DataTable: React.FC<{ courseId: string; assignmentId: string }> = ({
     },
   ];
   const exportToExcel = () => {
-    const workbook = XLSX.utils.book_new();
-    const worksheet = XLSX.utils.json_to_sheet(data);
-    const sheetName = 'Table Data';
-    XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
-    const excelBuffer = XLSX.write(workbook, {
-      type: 'buffer',
-      bookType: 'xlsx',
-    });
-    saveAsExcelFile(excelBuffer, 'table_data.xlsx');
-  };
-
-  const saveAsExcelFile = (buffer, fileName) => {
-    const dataFile = new Blob([buffer], {
-      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    });
-    if (typeof window.navigator.msSaveBlob !== 'undefined') {
-      window.navigator.msSaveBlob(data, fileName);
-    } else {
-      const url = window.URL.createObjectURL(dataFile);
-      const a = document.createElement('a');
-      document.body.appendChild(a);
-      a.href = url;
-      a.download = fileName;
-      a.click();
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
-    }
+    const dataExport = data?.map((item) => ({
+      ...item,
+      status: SubmissionTypeConstant[item.status],
+    }));
+    console.log(dataExport);
+    const exportInstance = new tableExport(dataExport, columns);
+    exportInstance.download('overview', 'xlsx');
   };
 
   return (
