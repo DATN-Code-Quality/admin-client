@@ -8,24 +8,26 @@ export const metaFilterDashboard = ({ courses }) => {
   const mappingCourseList = generateMappingList(courses, 'id', 'name');
   const currentDate = new Date();
   const last7Days = addDays(currentDate, -7);
-
+  const width = window.innerWidth;
   const dateFormat = 'DD-MM-YYYY';
   const initialRangeValue = [
     dayjs(last7Days, dateFormat),
     dayjs(currentDate, dateFormat),
   ];
   return {
+    columns: 3,
     fields: [
       {
         key: 'course_id',
+        colSpan: 3,
         options: mappingCourseList,
         widget: 'select',
         widgetProps: {
           mode: 'multiple',
           maxTagCount: 'responsive',
           style: {
-            minWidth: '24rem',
-            maxWidth: '24rem',
+            minWidth: width < 768 ? '100%' : '24rem',
+            maxWidth: width < 768 ? '100%' : '24rem',
           },
           placeholder: 'Course',
           allowClear: true,
@@ -33,14 +35,15 @@ export const metaFilterDashboard = ({ courses }) => {
       },
       {
         key: 'chart_type',
+        colSpan: 3,
         options: MAP_CHART_TYPE,
         widget: 'select',
+        initialValue: MAP_CHART_TYPE[0],
         widgetProps: {
           style: {
             minWidth: '12rem',
           },
           placeholder: 'Type',
-          allowClear: true,
         },
       },
       {
@@ -51,14 +54,14 @@ export const metaFilterDashboard = ({ courses }) => {
         //   </span>
         // ),
         key: 'range_time',
+        colSpan: 3,
         widget: 'range-picker',
         initialValue: initialRangeValue,
         widgetProps: {
           style: {
-            minWidth: '16rem',
-            maxWidth: '16rem',
+            width: '100%',
           },
-          autoSize: { maxRows: 20, minRows: 3 },
+          autoSize: { minRows: 3 },
           showCount: true,
           maxLength: 300,
           placeholder: ['Start Date', 'End Date'],

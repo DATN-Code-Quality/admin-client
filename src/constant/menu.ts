@@ -7,11 +7,15 @@ import ROUTE from './routes';
 
 const ViewUser = lazy(() => import('../ui/modules/user/containers/ViewUser'));
 
-const ViewPartner = lazy(
-  () => import('../ui/modules/partner/containers/ViewPartner')
+const Login = lazy(() => import('../ui/modules/login/containers/Login'));
+
+const ConfigMoodle = lazy(
+  () => import('../ui/modules/config-moodle/containers/ConfigMoodle')
 );
 
-const Login = lazy(() => import('../ui/modules/login/containers/Login'));
+const ChangePassword = lazy(
+  () => import('../ui/modules/profile/containers/ChangePassword')
+);
 
 const Dashboard = lazy(
   () => import('../ui/modules/dashboard/containers/Dashboard')
@@ -29,8 +33,16 @@ const ViewCourseDetail = lazy(
   () => import('../ui/modules/course/containers/ViewCourseDetail')
 );
 
+const ViewMyCourseList = lazy(
+  () => import('../ui/modules/my-course/containers/ViewCourseList')
+);
+
+const ViewMyCourseDetail = lazy(
+  () => import('../ui/modules/my-course/containers/ViewCourseDetail')
+);
+
 const CreateOrViewAssignment = lazy(
-  () => import('../ui/modules/course/containers/ViewOrCreateAssignment')
+  () => import('../ui/modules/my-course/containers/ViewOrCreateAssignment')
 );
 
 const Sonarqube = lazy(
@@ -39,6 +51,13 @@ const Sonarqube = lazy(
 
 const SonarqubeSubmission = lazy(
   () => import('../ui/modules/sonarqube/containers/Submission')
+);
+const ViewAssignment = lazy(
+  () => import('../ui/modules/my-course/containers/ViewAssignment')
+);
+
+const ActiveAccount = lazy(
+  () => import('../ui/modules/active-account/containers/ActiveAccount')
 );
 
 // TODO: update allow route for each role
@@ -50,52 +69,87 @@ export const MAIN_ROUTES = [
     element: Login,
   },
   {
+    path: ROUTE.CONFIG_MOODLE,
+    name: 'configMoodle',
+    element: ConfigMoodle,
+    roles: [Role.ADMIN, Role.SUPERADMIN],
+  },
+  {
+    path: ROUTE.ACTIVE_ACCOUNT,
+    name: 'activeAccount',
+    element: ActiveAccount,
+  },
+  {
+    path: ROUTE.PROFILE.CHANGE_PASSWORD,
+    name: 'changePassword',
+    element: ChangePassword,
+    roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],
+  },
+  {
     path: ROUTE.DASHBOARD,
     name: 'dashboard',
     element: Dashboard,
-    roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],
+    roles: [Role.ADMIN, Role.SUPERADMIN],
   },
   {
     path: ROUTE.USER.LIST,
     name: 'users',
     element: ViewUser,
-    roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],
+    roles: [Role.ADMIN, Role.SUPERADMIN],
   },
   {
     path: ROUTE.COURSE.LIST,
     name: 'courseList',
     element: ViewCourseList,
-    roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],
+    roles: [Role.ADMIN, Role.SUPERADMIN],
   },
   {
     path: ROUTE.COURSE.CREATE,
     name: 'createCourse',
     element: CreateOrViewCourse,
-    roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],
+    roles: [Role.ADMIN, Role.SUPERADMIN],
   },
   {
     path: ROUTE.COURSE.EDIT,
     name: 'updateCourse',
     element: CreateOrViewCourse,
-    roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],
+    roles: [Role.ADMIN, Role.SUPERADMIN],
   },
   {
     path: ROUTE.COURSE.DETAIL,
     name: 'courseDetail',
     element: ViewCourseDetail,
-    roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],
+    roles: [Role.ADMIN, Role.SUPERADMIN],
   },
   {
-    path: ROUTE.COURSE.CREATE_ASSIGNMENT,
+    path: ROUTE.MY_COURSE.LIST,
+    name: 'courseList',
+    element: ViewMyCourseList,
+    roles: [Role.USER],
+  },
+  {
+    path: ROUTE.MY_COURSE.DETAIL,
+    name: 'courseDetail',
+    element: ViewMyCourseDetail,
+    roles: [Role.USER],
+  },
+  {
+    path: ROUTE.MY_COURSE.ASSIGN,
+    name: 'assignment',
+    element: ViewAssignment,
+    roles: [Role.USER, Role.ADMIN],
+  },
+  {
+    path: ROUTE.MY_COURSE.CREATE_ASSIGNMENT,
     name: 'createCourseAssignment',
     element: CreateOrViewAssignment,
-    roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],
+    roles: [Role.USER],
   },
   {
-    path: ROUTE.COURSE.EDIT_ASSIGNMENT,
+    path: ROUTE.MY_COURSE.EDIT_ASSIGNMENT,
     name: 'updateCourseAssignment',
     element: CreateOrViewAssignment,
-    roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],
+    roles: [Role.USER],
   },
   {
     path: ROUTE.SONARQUBE.LIST,
@@ -118,30 +172,43 @@ export const menus = [
     name: 'Dashboard',
     // icon: DownloadOutlined,
     route: ROUTE.DASHBOARD,
-    roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],
+    roles: [Role.ADMIN, Role.SUPERADMIN],
   },
   {
     id: 'user',
-    name: 'Users',
+    name: 'User Management',
     // icon: DownloadOutlined,
     route: ROUTE.USER.LIST,
-    roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],
+    roles: [Role.ADMIN, Role.SUPERADMIN],
   },
-
   {
     id: 'course',
-    name: 'Courses',
+    name: 'Course Management',
     // icon: DownloadOutlined,
     route: ROUTE.COURSE.LIST,
-    roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],
+    roles: [Role.ADMIN, Role.SUPERADMIN],
   },
+  // {
+  //   id: 'myCourse',
+  //   name: 'My Course',
+  //   // icon: DownloadOutlined,
+  //   route: ROUTE.MY_COURSE.LIST,
+  //   roles: [Role.USER],
+  // },
   {
-    id: 'history',
-    name: 'History',
+    id: 'configMoodle',
+    name: 'Config Moodle',
     // icon: DownloadOutlined,
-    route: ROUTE.HISTORY,
-    roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],
+    route: ROUTE.CONFIG_MOODLE,
+    roles: [Role.ADMIN, Role.SUPERADMIN],
   },
+  // {
+  //   id: 'history',
+  //   name: 'History',
+  //   // icon: DownloadOutlined,
+  //   route: ROUTE.HISTORY,
+  //   roles: [Role.USER],
+  // },
   // {
   //   id: 'sonarqube',
   //   name: 'Sonarqube',

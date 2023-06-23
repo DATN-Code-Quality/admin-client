@@ -1,28 +1,61 @@
 import { ColumnType } from 'antd/lib/table';
 
-import { MAP_ROLES } from '~/constant';
-import { StateStatus } from '~/constant/enum';
+import { MAP_ROLES, MAP_SUB_ROLES, MAP_USER_STATUS } from '~/constant';
+import { SubRole } from '~/constant/enum';
 import { IMetaFormBuilder } from '~/ui/shared/forms/FormBuilder/FormBuilder';
 import { generateMappingList, getMappingLabelByValue } from '~/utils';
 
-export const metaFilterUser = () => {
+export const metaFilterParticipant = () => {
   return {
+    columns: 3,
     fields: [
       {
-        key: 'name',
+        key: 'search',
+        colSpan: 3,
         widgetProps: {
-          placeholder: 'Nhập từ khoá cần tìm',
+          placeholder: 'Search by Name or Email',
+          style: {
+            minWidth: '250px',
+          },
+        },
+      },
+      {
+        key: 'role',
+        colSpan: 3,
+        options: MAP_SUB_ROLES,
+        widget: 'select',
+        widgetProps: {
+          maxTagCount: 'responsive',
+          style: {
+            minWidth: '12rem',
+          },
+          placeholder: 'Role',
+          allowClear: true,
+        },
+      },
+      {
+        key: 'status',
+        colSpan: 3,
+        options: MAP_USER_STATUS,
+        widget: 'select',
+        widgetProps: {
+          maxTagCount: 'responsive',
+          style: {
+            minWidth: '12rem',
+          },
+          placeholder: 'Status',
+          allowClear: true,
         },
       },
     ],
   } as IMetaFormBuilder;
 };
 
-export const columnTableUser = ({ partners }): ColumnType<any>[] => [
+export const columnTableParticipant = (): ColumnType<any>[] => [
   {
     title: 'Name',
     dataIndex: 'name',
-    width: 200,
+    width: '40%',
     ellipsis: true,
     sorter: (a, b) => {
       return a.name.localeCompare(b.name);
@@ -31,44 +64,34 @@ export const columnTableUser = ({ partners }): ColumnType<any>[] => [
   {
     title: 'Email',
     dataIndex: 'email',
-    width: 200,
+    width: '40%',
+    responsive: ['sm'],
     ellipsis: true,
     sorter: (a, b) => {
       return a.email.localeCompare(b.email);
     },
   },
   {
-    title: 'Roles',
-    dataIndex: 'roles',
+    title: 'Role',
+    dataIndex: 'role',
     width: 100,
     ellipsis: true,
     sorter: (a, b) => {
-      const aRole = getMappingLabelByValue(MAP_ROLES, a.roles[0]);
-      const bRole = getMappingLabelByValue(MAP_ROLES, b.roles[0]);
-      return aRole.localeCompare(bRole);
+      return a.role.localeCompare(b.role);
     },
     render: (value) => {
-      return <p>{getMappingLabelByValue(MAP_ROLES, value[0])}</p>;
-    },
-  },
-  {
-    title: 'Status',
-    dataIndex: 'status',
-    width: 100,
-    render: (value) => {
-      return <p>{value === StateStatus.INACTIVE ? 'Active' : 'Inactive'}</p>;
+      return <p>{getMappingLabelByValue(MAP_SUB_ROLES, value)}</p>;
     },
   },
 ];
 
-export const metaCreateUser = ({ partners }) => {
-  const mappingPartnerList = generateMappingList(partners, 'id', 'name');
+export const metaCreateParticipant = () => {
   return {
-    formItemLayout: [6, 20],
+    formItemLayout: [24, 24],
     fields: [
       {
         key: 'name',
-        label: 'Name:',
+        label: 'Name',
         required: true,
         widgetProps: {
           placeholder: 'Input Name',
@@ -76,60 +99,203 @@ export const metaCreateUser = ({ partners }) => {
       },
       {
         key: 'email',
-        label: 'Email:',
+        label: 'Email',
         required: true,
         widgetProps: {
           placeholder: 'Input Email',
           type: 'email',
         },
       },
-      {
-        key: 'phone_number',
-        label: 'Phone Number:',
-        required: true,
-        widgetProps: {
-          placeholder: 'Input Phone Number',
-          inputMode: 'numeric',
-        },
-      },
     ],
   };
 };
 
-export const metaUpdateUser = (record, { partners }) => {
-  const mappingPartnerList = generateMappingList(partners, 'id', 'name');
+export const metaUpdateParticipant = (record) => {
   return {
-    formItemLayout: [6, 20],
+    formItemLayout: [24, 24],
     fields: [
       {
         key: 'name',
-        label: 'Name:',
+        label: 'Name',
         required: true,
+        disabled: true,
         initialValue: record.name,
         widgetProps: {
           placeholder: 'Input Name',
         },
       },
       {
-        key: 'email',
-        label: 'Email:',
+        key: 'role',
+        label: 'Role',
         required: true,
-        initialValue: record.email,
+        options: MAP_SUB_ROLES,
+        widget: 'select',
+        initialValue: record.role,
         widgetProps: {
-          placeholder: 'Input Email',
-          type: 'email',
-        },
-      },
-      {
-        key: 'phone_number',
-        label: 'Phone Number:',
-        required: true,
-        initialValue: record.phone_number,
-        widgetProps: {
-          placeholder: 'Input Phone Number',
-          inputMode: 'numeric',
+          maxTagCount: 'responsive',
+          style: {
+            width: '100%',
+          },
+          placeholder: 'Role',
         },
       },
     ],
   };
 };
+
+export const metaFilterSyncParticipant = () => {
+  return {
+    columns: 3,
+    fields: [
+      {
+        key: 'search',
+        colSpan: 3,
+        widgetProps: {
+          placeholder: 'Search by Name or Email',
+          style: {
+            minWidth: '250px',
+          },
+        },
+      },
+      {
+        key: 'role',
+        colSpan: 3,
+        options: MAP_SUB_ROLES,
+        widget: 'select',
+        widgetProps: {
+          maxTagCount: 'responsive',
+          style: {
+            minWidth: '12rem',
+          },
+          placeholder: 'Role',
+          allowClear: true,
+        },
+      },
+      {
+        key: 'status',
+        colSpan: 3,
+        options: MAP_USER_STATUS,
+        widget: 'select',
+        widgetProps: {
+          maxTagCount: 'responsive',
+          style: {
+            minWidth: '12rem',
+          },
+          placeholder: 'Status',
+          allowClear: true,
+        },
+      },
+    ],
+  } as IMetaFormBuilder;
+};
+
+export const columnTableSyncParticipant = (): ColumnType<any>[] => [
+  {
+    title: 'Name',
+    dataIndex: 'name',
+    width: '40%',
+    ellipsis: true,
+    sorter: (a, b) => {
+      return a.name.localeCompare(b.name);
+    },
+  },
+  {
+    title: 'Email',
+    dataIndex: 'email',
+    width: '40%',
+    ellipsis: true,
+    responsive: ['sm'],
+    sorter: (a, b) => {
+      return a.email.localeCompare(b.email);
+    },
+  },
+  {
+    title: 'Role',
+    dataIndex: 'role',
+    width: 100,
+    ellipsis: true,
+    sorter: (a, b) => {
+      return a.role.localeCompare(b.role);
+    },
+    render: (value) => {
+      return <p>{getMappingLabelByValue(MAP_SUB_ROLES, value)}</p>;
+    },
+  },
+  {
+    title: 'Status',
+    dataIndex: 'status',
+    responsive: ['sm'],
+    width: 100,
+    render: (value) => {
+      return <p>{getMappingLabelByValue(MAP_USER_STATUS, value)}</p>;
+    },
+  },
+];
+
+export const metaFilterAddParticipant = () => {
+  return {
+    columns: 3,
+    fields: [
+      {
+        key: 'search',
+        colSpan: 3,
+        widgetProps: {
+          placeholder: 'Search by Name or Email',
+          style: {
+            minWidth: '250px',
+          },
+        },
+      },
+      // {
+      //   key: 'role',
+      //   options: MAP_ROLES,
+      //   widget: 'select',
+      //   widgetProps: {
+      //     maxTagCount: 'responsive',
+      //     style: {
+      //       minWidth: '12rem',
+      //       maxWidth: '12rem',
+      //     },
+      //     placeholder: 'Role',
+      //     allowClear: true,
+      //   },
+      // },
+      {
+        key: 'status',
+        colSpan: 3,
+        options: MAP_USER_STATUS,
+        widget: 'select',
+        widgetProps: {
+          maxTagCount: 'responsive',
+          style: {
+            minWidth: '12rem',
+          },
+          placeholder: 'Status',
+          allowClear: true,
+        },
+      },
+    ],
+  } as IMetaFormBuilder;
+};
+
+export const columnTableAddParticipant = (): ColumnType<any>[] => [
+  {
+    title: 'Name',
+    dataIndex: 'name',
+    width: '40%',
+    ellipsis: true,
+    sorter: (a, b) => {
+      return a.name.localeCompare(b.name);
+    },
+  },
+  {
+    title: 'Email',
+    dataIndex: 'email',
+    width: '40%',
+    responsive: ['sm'],
+    ellipsis: true,
+    sorter: (a, b) => {
+      return a.email.localeCompare(b.email);
+    },
+  },
+];

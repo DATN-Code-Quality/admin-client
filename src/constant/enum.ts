@@ -9,9 +9,10 @@ export enum ApiStatus {
   UNAUTHORIZED = 403,
 }
 
-export enum StateStatus {
+export enum UserStatus {
   INACTIVE = 0,
   ACTIVE = 1,
+  BLOCK = 2,
 }
 
 export enum ServiceType {
@@ -73,4 +74,17 @@ export enum SeverityTypeConstant {
   BLOCKER = 'Blocker',
   MINOR = 'Minor',
   INFO = 'Info',
+}
+
+export enum SubmissionType {
+  SUBMITTED = 0,
+  SCANNING = 1,
+  SCANNED_FAIL = 2,
+  PASS = 3,
+  FAIL = 4,
+}
+
+export enum SubmisisonTab {
+  STATISTIC = 'STATISTIC',
+  SUBMISSION = 'SUBMISSION',
 }

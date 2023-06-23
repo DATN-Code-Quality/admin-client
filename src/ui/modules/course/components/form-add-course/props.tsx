@@ -1,4 +1,4 @@
-import { MAP_STATE_STATUS } from '~/constant';
+import { MAP_USER_STATUS } from '~/constant';
 import Editor from '~/ui/shared/editor';
 
 export const metaFormAddCourse = () => {
@@ -8,48 +8,46 @@ export const metaFormAddCourse = () => {
     fields: [
       {
         key: 'name',
-        label: 'Course Name:',
+        label: 'Course Name',
         required: true,
       },
       {
-        key: 'description',
-        label: 'Description:',
-        required: true,
+        key: 'summary',
+        label: 'Summary',
         widget: Editor,
       },
       {
-        key: 'status',
-        label: 'Status:',
-        options: MAP_STATE_STATUS,
-        widget: 'select',
+        key: 'summary',
+        label: 'Summary',
+        widget: Editor,
+      },
+      {
+        key: 'startAt',
+        label: 'Start Date',
+        widget: 'date-picker',
         required: true,
         widgetProps: {
           style: {
-            minWidth: '12rem',
+            width: '100%',
           },
-          allowClear: true,
+          autoSize: { minRows: 3 },
+          showCount: true,
+        },
+      },
+      {
+        key: 'endAt',
+        label: 'End Date',
+        widget: 'date-picker',
+        required: true,
+        widgetProps: {
+          style: {
+            width: '100%',
+          },
+          autoSize: { minRows: 3 },
+          showCount: true,
         },
       },
     ],
   };
   return meta;
 };
-
-// export const metaUpdateCourse = (record) => {
-//   const meta: any = {
-//     formItemLayout: [6, 20],
-//     fields: [
-//       {
-//         key: 'name',
-//         label: 'Partner Name:',
-//         required: true,
-//         initialValue: record.name,
-//         message: 'Please input',
-//         widgetProps: {
-//           placeholder: 'Input Partner Name',
-//         },
-//       },
-//     ],
-//   };
-//   return meta;
-// };

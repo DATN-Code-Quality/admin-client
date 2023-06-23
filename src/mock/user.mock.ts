@@ -1,4 +1,4 @@
-import { Role, StateStatus } from '../constant/enum';
+import { Role, UserStatus } from '../constant/enum';
 
 import { mockApi } from './mock.helper';
 
@@ -17,7 +17,7 @@ export function mockUser() {
           roles: [Role.TEACHER],
           phone_number: '0123456789',
           partner_id: 1,
-          status: StateStatus.ACTIVE,
+          status: UserStatus.ACTIVE,
           created_at: 1676347525000,
           updated_at: 1677467490000,
         },
@@ -29,7 +29,7 @@ export function mockUser() {
           roles: [Role.ADMIN],
           phone_number: '0123456789',
           partner_id: 2,
-          status: StateStatus.ACTIVE,
+          status: UserStatus.ACTIVE,
           created_at: 1676347525000,
           updated_at: 1677467490000,
         },
@@ -41,7 +41,7 @@ export function mockUser() {
           roles: [Role.STUDENT],
           phone_number: '0123456789',
           partner_id: 3,
-          status: StateStatus.ACTIVE,
+          status: UserStatus.ACTIVE,
           created_at: 1676347525000,
           updated_at: 1677467490000,
         },
@@ -53,7 +53,7 @@ export function mockUser() {
           roles: [Role.TEACHER],
           phone_number: '0123456789',
           partner_id: 4,
-          status: StateStatus.INACTIVE,
+          status: UserStatus.INACTIVE,
           created_at: 1676347525000,
           updated_at: 1677467490000,
         },
@@ -65,7 +65,7 @@ export function mockUser() {
           roles: [Role.TEACHER],
           phone_number: '0123456789',
           partner_id: 5,
-          status: StateStatus.INACTIVE,
+          status: UserStatus.INACTIVE,
           created_at: 1676347525000,
           updated_at: 1677467490000,
         },
@@ -77,7 +77,7 @@ export function mockUser() {
           roles: [Role.TEACHER],
           phone_number: '0123456789',
           partner_id: 2,
-          status: StateStatus.ACTIVE,
+          status: UserStatus.ACTIVE,
           created_at: 1676347525000,
           updated_at: 1677467490000,
         },
@@ -89,7 +89,7 @@ export function mockUser() {
           roles: [Role.TEACHER],
           phone_number: '0123456789',
           partner_id: 3,
-          status: StateStatus.ACTIVE,
+          status: UserStatus.ACTIVE,
           created_at: 1676347525000,
           updated_at: 1677467490000,
         },

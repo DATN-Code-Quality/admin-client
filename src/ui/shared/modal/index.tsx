@@ -1,6 +1,6 @@
-import { useEffect, useCallback } from 'react';
+import React, { useEffect } from 'react';
 
-import { Modal, Form } from 'antd';
+import { Form, Modal } from 'antd';
 import { ModalProps } from 'antd/lib/modal';
 import Button from 'antd-button-color';
 
@@ -16,6 +16,7 @@ import { asyncAction } from '~/utils';
 interface BaseModalProps extends ModalProps {
   id: string | number;
   onOkFn: (value: any, id?: any) => Promise<any>;
+  onOpenFn?: (...args) => void;
   onCloseFn?: () => void;
   initializeFn?: (...args) => void;
   mode: ButtonType;
@@ -24,6 +25,7 @@ interface BaseModalProps extends ModalProps {
   disabledModal?: boolean;
   itemTitle?: string;
   isDelete?: boolean;
+  formProps?: any;
 }
 
 const BaseModal: React.FC<BaseModalProps> = (props) => {
@@ -39,19 +41,21 @@ const BaseModal: React.FC<BaseModalProps> = (props) => {
     mode,
     loading,
     onOkFn,
+    onOpenFn,
     initializeFn,
-    cancelText = 'Huỷ',
+    cancelText = 'Cancel',
     closeIcon = <></>,
     okText = 'Ok',
     isDelete = false,
+    formProps,
     ...rest
   } = props;
 
-  const title = `${MAP_BUTTON_TYPE[mode]} ${itemTitle}`;
+  const title = MAP_BUTTON_TYPE[mode] + ' ' + itemTitle;
   const [form] = Form.useForm();
   const [visible, { handleClose, handleOpen }] = useDialog();
 
-  const handleOkBtn = useCallback((values: any): Promise<any> => {
+  const handleOkBtn = (values: any): Promise<any> => {
     return asyncAction(title, () => {
       return onOkFn(values, id).then((resp) => {
         // if (isMounted()) {
@@ -61,7 +65,7 @@ const BaseModal: React.FC<BaseModalProps> = (props) => {
         return resp;
       });
     });
-  }, []);
+  };
 
   const { handleSubmit, isSubmitting } = useForm(form, handleOkBtn);
 
@@ -73,6 +77,8 @@ const BaseModal: React.FC<BaseModalProps> = (props) => {
   useEffect(() => {
     if (visible && initializeFn) {
       initializeFn();
+    } else {
+      form.resetFields();
     }
   }, [visible]);
 
@@ -80,7 +86,10 @@ const BaseModal: React.FC<BaseModalProps> = (props) => {
     <>
       <Button
         {...MAP_BUTTON_PROPS[mode]}
-        onClick={handleOpen}
+        onClick={() => {
+          onOpenFn?.();
+          handleOpen();
+        }}
         disabled={disabledModal}
         loading={loading}
         className="modal-btn"
@@ -98,7 +107,7 @@ const BaseModal: React.FC<BaseModalProps> = (props) => {
           {...rest}
         >
           {!isDelete ? (
-            <Form form={form}>
+            <Form form={form} {...formProps}>
               <FormBuilder meta={meta} />
             </Form>
           ) : (

@@ -1,0 +1,100 @@
+p {
+  margin: 0;
+  padding: 0;
+}
+
+.assignment-name {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.submission-container {
+  border-radius: 8px;
+  /* padding: 16px; */
+  min-height: 200px;
+}
+
+.submission-container .title {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.btn-show-result {
+  background: blue;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+}
+
+.assignment-information .ant-tabs-nav{
+  margin: 0px;
+}
+
+.issues-amount {
+  color: #236a97;
+  font-weight: 400;
+  font-size: 36px;
+}
+
+.rating {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  border-radius: 24px;
+  box-sizing: border-box;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 400;
+  text-align: center;
+  text-shadow: 0 0 1px rgba(0, 0, 0, 0.35);
+}
+
+.border {
+  border: 1px solid rgba(0, 0, 0, 0.35);
+}
+
+.submission-list {
+  max-height: 600px;
+  overflow: auto;
+  padding-right: 8px;
+  border-right: 1px solid gainsboro;
+}
+
+.submission-field {
+  width: 100px;
+}
+.submission-title {
+  font-size: 18px;
+  font-weight: 600;
+}
+.submission-row {
+  border: 1px solid #ebeced;
+}
+.submission-field-td {
+  background-color: #f8f8f8;
+  width: 200px;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 8px;
+}
+.submission-content-td {
+  background-color: 'white';
+  padding: 8px;
+  font-size: 14px;
+}
+
+.add-submission-container {
+  margin-top: 16px;
+}
+
+.submission-tab-active {
+  color: #1890ff;
+  position: relative;
+}

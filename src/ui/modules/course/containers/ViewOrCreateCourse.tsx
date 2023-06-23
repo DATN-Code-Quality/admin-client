@@ -1,26 +1,22 @@
-import React from 'react';
-
-import { PageHeader } from 'antd';
+import React, { PageHeader } from 'antd';
 
 import { FormAddCourse } from '../components/form-add-course';
 
 import useQuery from '~/hooks/useQuery';
 import Card from '~/ui/shared/card';
-import Loading from '~/ui/shared/loading';
-import SubmissionComponent from '../components/submission';
 
 const ViewOrCreateCourse = ({ course, initialViewMode = false }) => {
   const query = useQuery();
   const id: any = query.get('id');
   const renderTitle = () => {
-    let preTitle = 'Tạo mới ';
+    let preTitle = 'Create ';
     if (id && initialViewMode) {
-      preTitle = 'Thông tin ';
+      preTitle = 'Detail ';
     }
     if (id && !initialViewMode) {
-      preTitle = 'Cập nhật ';
+      preTitle = 'Edit ';
     }
-    return `${preTitle}Course`;
+    return `${preTitle}course`;
   };
   return (
     <Card className="card-edit-view">

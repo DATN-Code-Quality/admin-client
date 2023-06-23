@@ -1,7 +1,6 @@
 .cms-layout-app {
   min-height: 100vh;
 
-
   .trigger {
     padding: 0 24px;
     font-size: 18px;
@@ -17,13 +16,10 @@
     cursor: pointer;
     // background-image: url('https://stc-fin.zdn.vn/fiza-website/images/logo_v2.svg');
     background-image: url(../../assets/images/logo.png);
-    
+
     background-size: contain;
     background-repeat: no-repeat;
   }
-
-
- 
 
   .site-layout .site-layout-background {
     padding: 24px;
@@ -38,13 +34,17 @@
     padding: 0 80px;
     display: flex;
     justify-content: space-between;
+    border-bottom: 1px solid #efefef;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    height: auto;
 
     .menu-header {
       flex: auto;
       justify-content: center;
     }
   }
-
 }
 
 .ant-layout-sider-collapsed {
@@ -115,12 +115,31 @@
   }
 }
 
-th {
-  color: #1890ff !important;
+@media screen and (max-width: 1023px) {
+  .cms-layout-app {
+    .site-layout {
+      .site-layout-background {
+        padding: 16px;
+        margin: 0;
+      }
+      .site-layout-background-header {
+        padding: 0 !important;
+      }
+    }
+  }
 }
 
-table {
-  .ant-btn-link {
-    padding-left: 0;
+@media screen and (max-width: 767px) {
+  .cms-layout-app-change-password {
+    .card-form-change-password {
+      min-width: unset !important;
+      max-width: unset !important;
+      width: 90% !important;
+    }
+  }
+  .card-form-login {
+    min-width: unset !important;
+    max-width: unset !important;
+    width: 90% !important;
   }
 }

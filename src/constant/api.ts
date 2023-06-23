@@ -16,6 +16,7 @@ export const USER = {
   },
   POST: {
     CREATE_USER: '/user',
+    IMPORT_USER: '/user/import-sync-users',
   },
   PUT: {
     UPDATE_USER: '/user',
@@ -36,6 +37,20 @@ export const COURSE = {
   },
 };
 
+export const USER_COURSE = {
+  GET: {
+    USER_COURSE: '/user-course',
+    COURSES_OF_USER: '/user-course/courses-of-user',
+    MOODLE_USERS_COURSE: '/user-course/sync-users',
+  },
+  POST: {
+    USER_COURSE: '/user-course',
+  },
+  PUT: {
+    USER_COURSE: '/user-course',
+  },
+};
+
 export const ASSIGNMENT = {
   GET: {
     ASSIGNMENTS: '/assignment',
@@ -46,7 +61,7 @@ export const ASSIGNMENT = {
     CREATE_ASSIGNMENT: '/assignment',
   },
   PUT: {
-    UPDATE_ASSIGNMENT: '/assignment/update-assignment',
+    UPDATE_ASSIGNMENT: '/assignment',
   },
 };
 
@@ -66,40 +81,41 @@ export const SUBMISSION = {
   },
 };
 
-export const PARTNER = {
-  GET: {
-    PARTNERS: '/partner',
-  },
-  POST: {
-    CREATE_PARTNER: '/partner',
-  },
-  PUT: {
-    UPDATE_PARTNER: '/partner',
-  },
-};
-
 export const AUTH = {
   GET: {
-    LOGIN: '/auth/login',
-    LOGIN_MICROSOFT: '/auth/login/outlook',
     CHECK_PROFILE: '/auth/profile',
     LOGOUT: '/auth/logout',
   },
-};
-
-export const SONARQUBE = {
-  GET: {
-    ISSUES_SUBMISSION: '/sonarqube/issue/e25b393e-cf56-4e12-8a0b-e7213648ac76',
+  POST: {
+    LOGIN: '/auth/login',
+    LOGIN_MICROSOFT: '/auth/login/outlook',
+  },
+  PUT: {
+    CHANGE_PASSWORD: '/auth/change-password',
+    CHANGE_PASSWORD_V2: '/auth/change-password-without-old-password',
+    ACTIVE_ACCOUNT: '/auth/active-account',
+    FORGOT_PASSWORD: '/auth/forget-password',
   },
 };
+
+export const MOODLE = {
+  GET: {
+    CHECK_CONNECT: '/moodle/check-connect',
+  },
+  POST: {
+    CONNECT: '/moodle/connect',
+  },
+};
+
 const API = {
   DASHBOARD,
   AUTH,
   USER,
   COURSE,
+  USER_COURSE,
   ASSIGNMENT,
   SUBMISSION,
-  PARTNER,
+  MOODLE,
 };
 
 export default API;

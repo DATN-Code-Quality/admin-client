@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import {
   BugOutlined,
@@ -7,12 +7,13 @@ import {
   ExclamationCircleFilled,
   FileTextOutlined,
   InfoCircleFilled,
+  SettingOutlined,
   UnlockOutlined,
   UpCircleFilled,
   WarningFilled,
   WarningOutlined,
 } from '@ant-design/icons';
-import { Collapse } from 'antd';
+import { Collapse, Drawer, DrawerProps } from 'antd';
 import { useSelector } from 'react-redux';
 
 import SonarqubeSelector from '~/adapters/redux/selectors/sonarqube';
@@ -28,7 +29,8 @@ const { Panel } = Collapse;
 const SubmissionFilter: React.FC<{
   filters: { type: BugType | ''; file: string; severity: SeverityType | '' };
   setFilters: (val: string) => void;
-}> = ({ filters, setFilters }) => {
+  components: any;
+}> = ({ filters, setFilters, components }) => {
   const issuesOfComponents = useSelector(SonarqubeSelector.getSubmissionIssues);
 
   const bugTypes = useMemo(
@@ -140,7 +142,9 @@ const SubmissionFilter: React.FC<{
               className={`bug-label cursor-pointer pl-4 ${
                 filters.type === bug.value ? 'filter-active' : ''
               }`}
-              onClick={() => handleSetFilter('type', bug.value)}
+              onClick={() => {
+                handleSetFilter('type', bug.value);
+              }}
             >
               {bug.icon}
               <span className="ml-2">{bug.label}</span>
@@ -176,14 +180,25 @@ const SubmissionFilter: React.FC<{
         {Object.keys(issuesOfComponents || {})?.map((issueKey) => {
           const value = issueKey.split(':');
           const fileNameShort = value[value.length - 1];
-
+          const component = value[0];
+          let fileuuid = '';
+          const componentList = components.filter(
+            (item) => item.key === component
+          );
+          if (componentList.length > 0) {
+            fileuuid = componentList[0]?.uuid || '';
+          }
+          console.log('Components', components);
           return (
             <div
               key={issueKey}
               className={`bug-label mt-2 cursor-pointer pl-4 ${
                 filters.file === fileNameShort ? 'active' : ''
               }`}
-              onClick={() => handleSetFilter('file', fileNameShort)}
+              onClick={() => {
+                handleSetFilter('file', fileNameShort);
+                handleSetFilter('fileuuid', fileuuid);
+              }}
             >
               <FileTextOutlined style={{ color: 'blue' }} />
               <span className="ml-2">{fileNameShort}</span>
@@ -235,4 +250,41 @@ const SubmissionFilter: React.FC<{
   );
 };
 
-export default SubmissionFilter;
+const SubmissionFilterMobile: React.FC<{
+  filters: { type: BugType | ''; file: string; severity: SeverityType | '' };
+  setFilters: (val: string) => void;
+  open: boolean;
+  setOpen: (val: boolean) => void;
+  components: any;
+}> = ({ filters, setFilters, open, setOpen, components }) => {
+  const [placement, setPlacement] = useState<DrawerProps['placement']>('left');
+
+  const onClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <div>
+      <Drawer
+        width={300}
+        placement={placement}
+        closable={false}
+        onClose={onClose}
+        open={open}
+        key={placement}
+      >
+        <div className="flex items-center mb-2" onClick={() => setOpen(true)}>
+          <SettingOutlined />
+          <p className="ml-2 font-semibold">Setting</p>
+        </div>
+        <SubmissionFilter
+          filters={filters}
+          setFilters={setFilters}
+          components={components}
+        />
+      </Drawer>
+    </div>
+  );
+};
+
+export { SubmissionFilter, SubmissionFilterMobile };

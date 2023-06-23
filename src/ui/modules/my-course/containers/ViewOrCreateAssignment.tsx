@@ -1,0 +1,37 @@
+import React from 'react';
+
+import { PageHeader } from 'antd';
+
+import { FormAddAssignment } from '../components/form-add-assignment';
+
+import useQuery from '~/hooks/useQuery';
+import Card from '~/ui/shared/card';
+import Loading from '~/ui/shared/loading';
+
+const ViewOrCreateAssignment = ({ initialViewMode = false }) => {
+  const query = useQuery();
+  const courseId: any = query.get('course_id');
+  const assignmentId: any = query.get('assignment_id');
+  const renderTitle = () => {
+    let preTitle = 'Create ';
+    if (assignmentId && initialViewMode) {
+      preTitle = 'Detail ';
+    }
+    if (assignmentId && !initialViewMode) {
+      preTitle = 'Edit ';
+    }
+    return `${preTitle}assignment`;
+  };
+  return (
+    <Card className="card-edit-view">
+      <PageHeader className="site-page-header" title={renderTitle()} ghost />
+      <FormAddAssignment
+        courseId={courseId}
+        assignmentId={assignmentId}
+        initialViewMode={initialViewMode}
+      />
+    </Card>
+  );
+};
+
+export default ViewOrCreateAssignment;

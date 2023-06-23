@@ -2,6 +2,11 @@ const ROUTE = {
   INDEX: '/',
   DASHBOARD: '/dashboard',
   HISTORY: '/history',
+  ACTIVE_ACCOUNT: '/active-account',
+  PROFILE: {
+    DETAIL: '/profile',
+    CHANGE_PASSWORD: '/profile/change-password',
+  },
   USER: {
     LIST: '/user/list',
   },
@@ -10,13 +15,16 @@ const ROUTE = {
     DETAIL: '/course/detail',
     CREATE: '/course/create',
     EDIT: '/course/edit',
-    CREATE_ASSIGNMENT: '/course/create-assignment',
-    EDIT_ASSIGNMENT: '/course/edit-assignment',
   },
-  PARTNER: {
-    LIST: '/partner/list',
+  MY_COURSE: {
+    LIST: '/my-course/list',
+    DETAIL: '/my-course/detail',
+    ASSIGN: '/my-course/assign',
+    CREATE_ASSIGNMENT: '/my-course/create-assignment',
+    EDIT_ASSIGNMENT: '/my-course/edit-assignment',
   },
   LOGIN: '/login',
+  CONFIG_MOODLE: '/config-moodle',
   SONARQUBE: {
     LIST: '/sonarqube/list',
     SUBMISSION: '/sonarqube/submission',

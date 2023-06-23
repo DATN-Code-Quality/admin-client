@@ -4,31 +4,43 @@ import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input, Layout } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
+import ForgotPassword from '../components/ForgotPassword';
+
 import { useAuth } from '~/adapters/appService/auth.service';
-import ROUTE from '~/constant/routes';
 import Logo from '~/ui/assets/images/logo.png';
 import Card from '~/ui/shared/card';
-// import ZaloLogo from '~/ui/assets/images/zalo-logo.svg';
-
+import { getDefaultRoute } from '~/utils';
 import './Login.less';
 
 function Login() {
   const { checkProfile, login, loginMicrosoft } = useAuth();
   const navigate = useNavigate();
+
+  const [isForgotPassword, setIsForgotPassword] = React.useState(false);
+
   const onFinish = async (values: any) => {
     await login(values);
-    navigate(ROUTE.DASHBOARD);
+    navigate('/', { replace: true });
   };
 
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
   };
 
+  const handleForgotPassword = () => {
+    setIsForgotPassword(true);
+  };
+
   useEffect(() => {
-    checkProfile().then((data) => {
-      navigate(ROUTE.DASHBOARD, { replace: true });
+    checkProfile().then((res) => {
+      const defaultRoute = getDefaultRoute([res?.data?.role]);
+      navigate(defaultRoute, { replace: true });
     });
   }, []);
+
+  if (isForgotPassword) {
+    return <ForgotPassword />;
+  }
 
   return (
     <Layout className="cms-layout-app cms-layout-app-login">
@@ -49,7 +61,6 @@ function Login() {
               rules={[
                 {
                   required: true,
-                  message: 'Please input your Username!',
                 },
               ]}
             >
@@ -61,12 +72,26 @@ function Login() {
             </Form.Item>
             <Form.Item
               name="password"
-              rules={[
-                {
-                  required: true,
-                  message: 'Please input your Password!',
-                },
-              ]}
+              // rules={[
+              //   {
+              //     required: true,
+              //     message: 'Vui lòng không bỏ trống mật khẩu!',
+              //   },
+              //   {
+              //     pattern:
+              //       /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
+              //     message: (
+              //       <ul>
+              //         Password must contain:
+              //         <li>At least one upper case</li>
+              //         <li>At least one lower case</li>
+              //         <li>At least one digit</li>
+              //         <li>At least one special character </li>
+              //         <li>Minimum 8 in length</li>
+              //       </ul>
+              //     ),
+              //   },
+              // ]}
             >
               <Input
                 size="large"
@@ -75,6 +100,15 @@ function Login() {
                 placeholder="Password"
               />
             </Form.Item>
+
+            <Button
+              type="text"
+              style={{ width: '100%', marginBottom: 5 }}
+              onClick={handleForgotPassword}
+            >
+              Forgot password?
+            </Button>
+
             <Form.Item>
               <Button type="primary" htmlType="submit" className="login-button">
                 Login

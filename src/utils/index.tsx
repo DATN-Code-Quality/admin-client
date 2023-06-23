@@ -5,6 +5,9 @@ import dayjs, { Dayjs } from 'dayjs';
 import Is from './is';
 
 import { Role } from '~/constant/enum';
+import { MESSAGE } from '~/constant/message';
+import { List } from '~/constant/type';
+import ROUTE from '~/constant/routes';
 
 export const buildParams = (data?: any) => {
   if (data) {
@@ -83,29 +86,19 @@ export function asyncAction(title = '', actionFn) {
     .then(() => actionFn())
     .then((data) => {
       if (data && data.status !== 0) {
-        message.error(
-          `${title} thất bại! [${
-            data.status ? `status: ${data.status} | ` : ''
-          }message: ${data.msg}]`
-        );
+        message.error(MESSAGE.ERROR);
         return undefined;
       }
       if (title) {
-        message.success(`${title} thành công!`);
+        message.success(MESSAGE.SUCCESS);
       }
       return data;
     })
     .catch((data) => {
       if (title && data && data.status) {
-        message.error(
-          `${title} thất bại! [${
-            data.status ? `status: ${data.status} | ` : ''
-          }message: ${data.msg}]`
-        );
+        message.error(MESSAGE.ERROR);
       } else {
-        message.error(
-          `${title} thất bại!${data?.msg ? ` | ${data?.msg}` : ''}`
-        );
+        message.error(MESSAGE.ERROR);
       }
       return Promise.reject(data);
     });
@@ -198,7 +191,7 @@ export const formatNumber = (number, locale = 'vi-VN') => {
 
 // function to format date to locale
 export const formatDate = (date, locale?: 'vi-VN', format?: string) => {
-  return date && dayjs(Number(date)).format(format || 'DD/MM/YYYY HH:mm:ss');
+  return date && dayjs(Number(date)).format(format || 'DD-MM-YYYY HH:mm:ss');
 };
 
 export function debounce(func, timeout = 300) {
@@ -230,8 +223,13 @@ export function capitalizeFirstLetter(string: string) {
 }
 
 export const getMappingLabelByValue = (map: any, value: any) => {
-  const result = map.find((item) => item[0] === value);
-  return result ? result[1] : '';
+  const result = map.find((item) => item.value === value);
+  return result ? result.label : '';
+};
+
+export const getListLabelByValue = (list: List, value: any) => {
+  const result = list.find((item) => item.value === value);
+  return result ? result.label : '';
 };
 
 export const generateMappingList = (
@@ -239,7 +237,12 @@ export const generateMappingList = (
   keyField: any,
   valueField: any
 ) => {
-  return list.map((item) => [item[keyField], item[valueField]]);
+  const result: List = list.map((item) => ({
+    label: item[valueField],
+    value: item[keyField],
+    disabled: item?.disabled || false,
+  }));
+  return result;
 };
 
 export const addDays = (date: Date, days: number): Date => {
@@ -247,6 +250,28 @@ export const addDays = (date: Date, days: number): Date => {
   result.setDate(result.getDate() + parseInt(days));
   return result;
 };
+
+export const convertToList = (data, valueField, labelField): List => {
+  return data.map((item) => ({
+    value: item[valueField],
+    label: item[labelField],
+  }));
+};
+
+export function mergeDeep(target, source) {
+  let output = Object.assign({}, target);
+  if (Is.object(target) && Is.object(source)) {
+    Object.keys(source).forEach((key) => {
+      if (Is.object(source[key])) {
+        if (!(key in target)) Object.assign(output, { [key]: source[key] });
+        else output[key] = mergeDeep(target[key], source[key]);
+      } else {
+        Object.assign(output, { [key]: source[key] });
+      }
+    });
+  }
+  return output;
+}
 
 export const convertNlocToScale = (val: string) => {
   if (val === 'NO_DATA') {
@@ -325,4 +350,66 @@ export const filterRole = (roles?: Role[], userRoles?: Role[]) => {
     return false;
   }
   return true;
+};
+
+export const getDefaultRoute = (roles: Role[]) => {
+  if (roles.includes(Role.ADMIN) || roles.includes(Role.SUPERADMIN)) {
+    return ROUTE.DASHBOARD;
+  }
+  return ROUTE.MY_COURSE.LIST;
+};
+
+export const generateUrl = (url, params = {}) => {
+  const urlParams = new URLSearchParams(params);
+  return `${url}?${urlParams.toString()}`;
+};
+
+export const enableAllowedOptions = (options, allowedValues: any[]) => {
+  return options.map((item) => {
+    return { ...item, disabled: !allowedValues?.includes(item.value) };
+  });
+};
+
+export const filterAllowedOptions = (options, allowedValues: any[]) => {
+  return options.filter((item) => {
+    const isAllowed = allowedValues?.includes(item.value);
+    return isAllowed;
+  });
+};
+
+export const splitStr = (name: string, numberLetter: number) => {
+  const words = name.split(' ');
+  const result = [];
+
+  for (let i = 0; i < words.length; i += numberLetter) {
+    const combined = words.slice(i, i + 2).join(' ');
+    result.push(combined);
+  }
+  return result;
+};
+
+export const removeDuplicateAndMerge = (
+  arr1: any[],
+  arr2: any[],
+  key?: string
+) => {
+  const result = [...arr1];
+  arr2.forEach((item) => {
+    if (key) {
+      const index = arr1.findIndex((i) => i[key] === item[key]);
+      if (index < 0) {
+        result.push(item);
+      } else {
+        result[index] = item;
+      }
+    } else {
+      const index = arr1.indexOf(item);
+      if (index < 0) {
+        result.push(item);
+      } else {
+        result[index] = item;
+      }
+    }
+  });
+  return result;
 };
