@@ -75,3 +75,16 @@ export enum SeverityTypeConstant {
   MINOR = 'Minor',
   INFO = 'Info',
 }
+
+export enum SubmissionType {
+  SUBMITTED = 0,
+  SCANNING = 1,
+  SCANNED_FAIL = 2,
+  PASS = 3,
+  FAIL = 4,
+}
+
+export enum SubmisisonTab {
+  STATISTIC = 'STATISTIC',
+  SUBMISSION = 'SUBMISSION',
+}

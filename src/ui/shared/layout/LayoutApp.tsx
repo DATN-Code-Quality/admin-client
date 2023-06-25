@@ -3,12 +3,22 @@ import React, { useEffect, useState } from 'react';
 import {
   LogoutOutlined,
   MenuFoldOutlined,
+  MenuOutlined,
   MenuUnfoldOutlined,
   MobileOutlined,
   UserOutlined,
   WindowsOutlined,
 } from '@ant-design/icons';
-import { Layout, Menu, Button, Dropdown, Space, MenuProps, Avatar } from 'antd';
+import {
+  Layout,
+  Menu,
+  Button,
+  Dropdown,
+  Space,
+  MenuProps,
+  Avatar,
+  Drawer,
+} from 'antd';
 import { pathToRegexp } from 'path-to-regexp';
 import { useSelector } from 'react-redux';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
@@ -17,8 +27,11 @@ import './LayoutApp.less';
 
 import { useAuth } from '~/adapters/appService/auth.service';
 import { authSelector } from '~/adapters/redux/selectors/auth';
+import { BREAKPOINTS } from '~/constant';
 import { MAIN_ROUTES, menus } from '~/constant/menu';
 import ROUTE from '~/constant/routes';
+import useCurrentWidth from '~/hooks/useCurrentWidth';
+import useDialog from '~/hooks/useDialog';
 import useQuery from '~/hooks/useQuery';
 import { capitalizeFirstLetter, filterRole, getDefaultRoute } from '~/utils';
 import { arrayToTree, queryAncestors } from '~/utils/menu';
@@ -56,6 +69,8 @@ const generateMenus = (data, appType?) => {
 function LayoutApp() {
   const navigate = useNavigate();
   const { role, name } = useSelector(authSelector);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [mobileMenuVisible, mobileMenuActions] = useDialog();
   const [collapsed, setCollapsed] = useState<boolean>(false);
   const query = useQuery();
   const { checkProfile, logout } = useAuth();
@@ -85,55 +100,140 @@ function LayoutApp() {
   useEffect(() => {
     checkProfile()
       .then((res) => {
+        const defaultRoute = getDefaultRoute([res?.data?.role]);
         if ([ROUTE.LOGIN, ROUTE.INDEX].includes(location.pathname)) {
-          const defaultRoute = getDefaultRoute([res?.data?.role]);
+          navigate(defaultRoute, { replace: true });
+        }
+        if (!MAIN_ROUTES.find((_) => _.path === location.pathname)) {
           navigate(defaultRoute, { replace: true });
         }
       })
       .catch((err) => {
+        if (
+          [ROUTE.ACTIVE_ACCOUNT, ROUTE.CHANGE_FORGOT_PASSWORD].includes(
+            location.pathname
+          )
+        ) {
+          return;
+        }
         navigate(ROUTE.LOGIN, { replace: true });
       });
   }, []);
 
   const itemsAvatar: MenuProps['items'] = [
     {
+      key: 'change-password',
+      label: (
+        <a onClick={() => navigate(ROUTE.PROFILE.CHANGE_PASSWORD)}>
+          Change Password
+        </a>
+      ),
+      icon: <LogoutOutlined />,
+    },
+    {
       key: 'logout',
-      label: <a onClick={() => logout()}>Log out</a>,
+      label: <a onClick={() => logout()}>Logout</a>,
       icon: <LogoutOutlined />,
     },
   ];
 
+  const width = useCurrentWidth();
+
+  useEffect(() => {
+    if (width <= BREAKPOINTS.MD) {
+      setIsMobile(true);
+    } else {
+      setIsMobile(false);
+      mobileMenuActions.handleClose();
+    }
+  }, [width]);
+
+  const handleOnClickMenuMobileItem = ({ key }) => {
+    if (key === 'log-out') {
+      logout();
+    }
+    mobileMenuActions.handleClose();
+  };
+
+  const renderMobileMenu = () => {
+    return (
+      <div className="mobile-menu">
+        <div
+          style={{ marginRight: '16px' }}
+          className="mobile-menu-icon"
+          onClick={mobileMenuActions.handleToggle}
+        >
+          <MenuOutlined />
+        </div>
+      </div>
+    );
+  };
+
+  const mobileMenuTree = [...menuTree];
+  mobileMenuTree.push(
+    {
+      id: 'change-password',
+      name: 'Change Password',
+      route: ROUTE.PROFILE.CHANGE_PASSWORD,
+    },
+    {
+      id: 'log-out',
+      name: 'Logout',
+    }
+  );
+
   return (
     <Layout className="cms-layout-app">
       <Layout className="site-layout">
-        <Header className="site-layout-background-header">
-          <div className="logo" onClick={() => navigate(ROUTE.DASHBOARD)} />
-          {/* <div className="logo" /> */}
+        <Drawer
+          open={mobileMenuVisible}
+          onClose={mobileMenuActions.handleClose}
+        >
           <Menu
             className="menu-header"
-            mode="horizontal"
+            mode="vertical"
             selectedKeys={selectedKeys}
+            onClick={handleOnClickMenuMobileItem}
           >
-            {generateMenus(menuTree)}
+            {generateMenus(mobileMenuTree)}
           </Menu>
-          <div className="top-right-container">
-            <div className="action-container">
-              <Dropdown
-                menu={{
-                  items: itemsAvatar,
-                }}
+        </Drawer>
+        <Header className="site-layout-background-header">
+          <div
+            className="logo"
+            onClick={() => navigate(getDefaultRoute([role]))}
+          />
+          {isMobile ? (
+            renderMobileMenu()
+          ) : (
+            <>
+              <Menu
+                className="menu-header"
+                mode="horizontal"
+                selectedKeys={selectedKeys}
               >
-                <Space>
-                  <Avatar
-                    icon={<UserOutlined />}
-                    style={{ verticalAlign: 'middle' }}
-                    size="small"
-                  />
-                  {name}
-                </Space>
-              </Dropdown>
-            </div>
-          </div>
+                {generateMenus(menuTree)}
+              </Menu>
+              <div className="top-right-container">
+                <div className="action-container">
+                  <Dropdown
+                    menu={{
+                      items: itemsAvatar,
+                    }}
+                  >
+                    <Space>
+                      <Avatar
+                        icon={<UserOutlined />}
+                        style={{ verticalAlign: 'middle' }}
+                        size="small"
+                      />
+                      {name}
+                    </Space>
+                  </Dropdown>
+                </div>
+              </div>
+            </>
+          )}
         </Header>
         <Content className="site-layout-background">
           {renderRoutes(MAIN_ROUTES, [role])}

@@ -9,6 +9,14 @@ const ViewUser = lazy(() => import('../ui/modules/user/containers/ViewUser'));
 
 const Login = lazy(() => import('../ui/modules/login/containers/Login'));
 
+const ConfigMoodle = lazy(
+  () => import('../ui/modules/config-moodle/containers/ConfigMoodle')
+);
+
+const ChangePassword = lazy(
+  () => import('../ui/modules/profile/containers/ChangePassword')
+);
+
 const Dashboard = lazy(
   () => import('../ui/modules/dashboard/containers/Dashboard')
 );
@@ -44,6 +52,13 @@ const Sonarqube = lazy(
 const SonarqubeSubmission = lazy(
   () => import('../ui/modules/sonarqube/containers/Submission')
 );
+const ViewAssignment = lazy(
+  () => import('../ui/modules/my-course/containers/ViewAssignment')
+);
+
+const ActiveAccount = lazy(
+  () => import('../ui/modules/active-account/containers/ActiveAccount')
+);
 
 // TODO: update allow route for each role
 
@@ -52,6 +67,23 @@ export const MAIN_ROUTES = [
     path: ROUTE.LOGIN,
     name: 'login',
     element: Login,
+  },
+  {
+    path: ROUTE.CONFIG_MOODLE,
+    name: 'configMoodle',
+    element: ConfigMoodle,
+    roles: [Role.ADMIN, Role.SUPERADMIN],
+  },
+  {
+    path: ROUTE.ACTIVE_ACCOUNT,
+    name: 'activeAccount',
+    element: ActiveAccount,
+  },
+  {
+    path: ROUTE.PROFILE.CHANGE_PASSWORD,
+    name: 'changePassword',
+    element: ChangePassword,
+    roles: [Role.ADMIN, Role.SUPERADMIN, Role.USER],
   },
   {
     path: ROUTE.DASHBOARD,
@@ -102,6 +134,12 @@ export const MAIN_ROUTES = [
     roles: [Role.USER],
   },
   {
+    path: ROUTE.MY_COURSE.ASSIGN,
+    name: 'assignment',
+    element: ViewAssignment,
+    roles: [Role.USER, Role.ADMIN],
+  },
+  {
     path: ROUTE.MY_COURSE.CREATE_ASSIGNMENT,
     name: 'createCourseAssignment',
     element: CreateOrViewAssignment,
@@ -138,32 +176,39 @@ export const menus = [
   },
   {
     id: 'user',
-    name: 'Quản lý người dùng',
+    name: 'User Management',
     // icon: DownloadOutlined,
     route: ROUTE.USER.LIST,
     roles: [Role.ADMIN, Role.SUPERADMIN],
   },
   {
     id: 'course',
-    name: 'Quản lý khoá học',
+    name: 'Course Management',
     // icon: DownloadOutlined,
     route: ROUTE.COURSE.LIST,
     roles: [Role.ADMIN, Role.SUPERADMIN],
   },
+  // {
+  //   id: 'myCourse',
+  //   name: 'My Course',
+  //   // icon: DownloadOutlined,
+  //   route: ROUTE.MY_COURSE.LIST,
+  //   roles: [Role.USER],
+  // },
   {
-    id: 'myCourse',
-    name: 'Khoá học của tôi',
+    id: 'configMoodle',
+    name: 'Config Moodle',
     // icon: DownloadOutlined,
-    route: ROUTE.MY_COURSE.LIST,
-    roles: [Role.USER],
+    route: ROUTE.CONFIG_MOODLE,
+    roles: [Role.ADMIN, Role.SUPERADMIN],
   },
-  {
-    id: 'history',
-    name: 'Lịch sử quét code',
-    // icon: DownloadOutlined,
-    route: ROUTE.HISTORY,
-    roles: [Role.USER],
-  },
+  // {
+  //   id: 'history',
+  //   name: 'History',
+  //   // icon: DownloadOutlined,
+  //   route: ROUTE.HISTORY,
+  //   roles: [Role.USER],
+  // },
   // {
   //   id: 'sonarqube',
   //   name: 'Sonarqube',

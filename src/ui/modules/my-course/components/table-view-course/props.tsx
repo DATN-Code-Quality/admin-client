@@ -3,35 +3,60 @@ import { ColumnType } from 'antd/lib/table';
 import dayjs from 'dayjs';
 import { Link } from 'react-router-dom';
 
+import { MAP_SUB_ROLES } from '~/constant';
 import ROUTE from '~/constant/routes';
 import { IMetaFormBuilder } from '~/ui/shared/forms/FormBuilder/FormBuilder';
-import { formatDate } from '~/utils';
+import { formatDate, generateUrl } from '~/utils';
 
 export const metaFilterCourse = () => {
   return {
+    columns: 3,
     fields: [
       {
         key: 'search',
+        colSpan: 3,
         widgetProps: {
-          placeholder: 'Nhập từ khoá cần tìm',
+          placeholder: 'Enter keyword',
+        },
+      },
+      {
+        key: 'role',
+        colSpan: 3,
+        options: MAP_SUB_ROLES,
+        widget: 'select',
+        widgetProps: {
+          maxTagCount: 'responsive',
+          style: {
+            minWidth: '12rem',
+          },
+          placeholder: 'My Role',
+          allowClear: true,
         },
       },
       {
         key: 'startAt',
+        colSpan: 3,
         widget: 'date-picker',
         widgetProps: {
-          autoSize: { maxRows: 20, minRows: 3 },
+          autoSize: { minRows: 3 },
+          style: {
+            width: '100%',
+          },
           showCount: true,
-          placeholder: 'Thời gian bắt đầu',
+          placeholder: 'Start Date',
         },
       },
       {
         key: 'endAt',
+        colSpan: 3,
         widget: 'date-picker',
         widgetProps: {
-          autoSize: { maxRows: 20, minRows: 3 },
+          autoSize: { minRows: 3 },
+          style: {
+            width: '100%',
+          },
           showCount: true,
-          placeholder: 'Thời gian kết thúc',
+          placeholder: 'End Date',
         },
       },
       // {
@@ -54,41 +79,42 @@ export const metaFilterCourse = () => {
 
 export const columnTableCourse = (): ColumnType<any>[] => [
   {
-    title: 'Tên khoá học',
+    title: 'Course Name',
     dataIndex: 'name',
-    width: 200,
+    width: '50%',
     ellipsis: true,
     sorter: (a, b) => {
       return a.name.localeCompare(b.name);
     },
     render: (value, record, index) => {
+      const url = generateUrl(ROUTE.MY_COURSE.DETAIL, { course_id: record.id });
       return (
-        <Link to={`${ROUTE.MY_COURSE.DETAIL}?id=${record.id}`}>
+        <Link to={url}>
           <Button type="link">{value}</Button>
         </Link>
       );
     },
   },
   {
-    title: 'Thời gian bắt đầu',
+    title: 'Start Date',
     dataIndex: 'startAt',
-    width: 240,
+    width: '25%',
     sorter: (a, b) => {
       return new Date(a.startAt).getTime() - new Date(b.startAt).getTime();
     },
     render: (value) => {
-      return <p>{formatDate(value) || 'Chưa cập nhật'}</p>;
+      return <p>{formatDate(value) || 'N/A'}</p>;
     },
   },
   {
-    title: 'Thời gian kết thúc',
+    title: 'End Date',
     dataIndex: 'endAt',
-    width: 240,
+    width: '25%',
     sorter: (a, b) => {
       return new Date(a.endAt).getTime() - new Date(b.endAt).getTime();
     },
     render: (value) => {
-      return <p>{formatDate(value) || 'Chưa cập nhật'}</p>;
+      return <p>{formatDate(value) || 'N/A'}</p>;
     },
   },
 ];
@@ -99,7 +125,7 @@ export const metaFilterSyncCourse = () => {
       {
         key: 'search',
         widgetProps: {
-          placeholder: 'Nhập từ khoá cần tìm',
+          placeholder: 'Enter keyword',
         },
       },
       {
@@ -108,7 +134,7 @@ export const metaFilterSyncCourse = () => {
         widgetProps: {
           autoSize: { maxRows: 20, minRows: 3 },
           showCount: true,
-          placeholder: 'Thời gian bắt đầu',
+          placeholder: 'Start Date',
         },
       },
       {
@@ -117,7 +143,7 @@ export const metaFilterSyncCourse = () => {
         widgetProps: {
           autoSize: { maxRows: 20, minRows: 3 },
           showCount: true,
-          placeholder: 'Thời gian kết thúc',
+          placeholder: 'End Date',
         },
       },
       // {
@@ -140,7 +166,7 @@ export const metaFilterSyncCourse = () => {
 
 export const columnTableSyncCourse = (): ColumnType<any>[] => [
   {
-    title: 'Tên khoá học',
+    title: 'Course Name',
     dataIndex: 'name',
     width: 200,
     ellipsis: true,
@@ -149,25 +175,26 @@ export const columnTableSyncCourse = (): ColumnType<any>[] => [
     },
   },
   {
-    title: 'Thời gian bắt đầu',
+    title: 'Start Date',
     dataIndex: 'startAt',
     width: 240,
     sorter: (a, b) => {
       return new Date(a.startAt).getTime() - new Date(b.startAt).getTime();
     },
     render: (value) => {
-      return <p>{formatDate(value) || 'Chưa cập nhật'}</p>;
+      return <p>{formatDate(value) || 'N/A'}</p>;
     },
   },
   {
-    title: 'Thời gian kết thúc',
+    title: 'End Date',
     dataIndex: 'endAt',
     width: 240,
     sorter: (a, b) => {
       return new Date(a.endAt).getTime() - new Date(b.endAt).getTime();
     },
     render: (value) => {
-      return <p>{formatDate(value) || 'Chưa cập nhật'}</p>;
+      return <p>{formatDate(value) || 'N/A'}</p>;
     },
   },
 ];
+

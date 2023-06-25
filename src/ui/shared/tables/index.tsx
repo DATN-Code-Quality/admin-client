@@ -156,23 +156,31 @@ const BaseTable = <T extends object>(props: BaseTableProps<T>) => {
     );
 
   return (
-    <Table
-      {...rest}
-      className={`${className} ${minHeight ? `min_height_${minHeight}` : ''}`}
-      // locale={{
-      //     emptyText: args => <EmptyContent {...args} isFilterChanged={isFilterChanged} />,
-      // }}
-      size={compact ? 'small' : undefined}
-      columns={columns}
-      onChange={onTableChange}
-      dataSource={items}
-      loading={isLoading}
-      rowKey={(record) =>
-        Array.isArray(idKey)
-          ? idKey.reduce((acc, current) => `${acc}-${record[current]}`, '')
-          : record[idKey]
-      }
-    />
+    <div
+      style={{
+        width: '100%',
+        overflowX: 'auto',
+      }}
+    >
+      <Table
+        {...rest}
+        className={`${className} ${minHeight ? `min_height_${minHeight}` : ''}`}
+        // locale={{
+        //     emptyText: args => <EmptyContent {...args} isFilterChanged={isFilterChanged} />,
+        // }}
+        size={compact ? 'small' : undefined}
+        columns={columns}
+        onChange={onTableChange}
+        dataSource={items}
+        loading={isLoading}
+        scroll={{ x: '800px' }}
+        rowKey={(record) =>
+          Array.isArray(idKey)
+            ? idKey.reduce((acc, current) => `${acc}-${record[current]}`, '')
+            : record[idKey]
+        }
+      />
+    </div>
   );
 };
 

@@ -1,51 +1,80 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { Tabs } from 'antd';
+import { useSelector } from 'react-redux';
 
+import CourseStatistic from '../components/course-statistic';
 import { TableViewAssignment } from '../components/table-view-assignment';
 import { TableViewParticipant } from '../components/table-view-participant';
 
 import ViewCourse from './ViewCourse';
 
 import { useCourse } from '~/adapters/appService/course.service';
+import { authSelector } from '~/adapters/redux/selectors/auth';
+import { Role, SubRole } from '~/constant/enum';
 import useQuery from '~/hooks/useQuery';
-import Card from '~/ui/shared/card';
 
 function ViewCourseDetailContainer() {
   const query = useQuery();
   const { getDetailCourse } = useCourse();
-  const type: any = query.get('type');
-  const id = query.get('id');
+
+  const [roleInCourse, setRoleInCourse] = useState();
+
+  const type: any = query.get('type') || 'overview';
+  const courseId = query.get('course_id');
 
   const [course, setCourse] = React.useState<any>(null);
 
   useEffect(() => {
-    getDetailCourse(id).then((res) => {
-      setCourse(res.data.course);
-    });
-  }, []);
+    getDetailCourse(courseId)
+      .then((res) => {
+        setRoleInCourse(res.data.role);
+        setCourse(res.data.course);
+      })
+      .catch((err) => {
+        // TODO: handle error
+      });
+  }, [courseId]);
 
   const items = [
     {
-      label: 'Thông tin khoá học',
+      label: 'Course Detail',
       key: 'overview',
       children: <ViewCourse course={course} initialViewMode />,
     },
     {
-      label: 'Thành viên khoá học',
+      label: 'Participant',
       key: 'participant',
       children: <TableViewParticipant course={course} />,
     },
     {
-      label: 'Bài tập',
+      label: 'Assignment',
       key: 'assignment',
       children: <TableViewAssignment course={course} />,
     },
   ];
 
+  const extraTab = useMemo(
+    () => [
+      {
+        label: 'Statistics',
+        key: 'course-report',
+        children: <CourseStatistic courseId={course?.id} />,
+        hidden: true,
+      },
+    ],
+    [course?.id]
+  );
+
   return (
     <>
-      <Tabs defaultActiveKey={type || 'overview'} items={items} />
+      <Tabs
+        destroyInactiveTabPane
+        defaultActiveKey={type}
+        items={
+          roleInCourse === SubRole.TEACHER ? [...items, ...extraTab] : items
+        }
+      />
     </>
   );
 }

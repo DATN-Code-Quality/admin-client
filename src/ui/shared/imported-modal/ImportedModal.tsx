@@ -10,13 +10,14 @@ import BaseTable from '../tables';
 import { PAGE_SIZE_OPTIONS } from '~/constant';
 import useList from '~/hooks/useList';
 import TableToolbar from '~/ui/shared/toolbar';
-
 import './ImportedModal.less';
+import { removeDuplicateAndMerge } from '~/utils';
 
 export interface ImportedModalProps {
   idKey?: string;
   baseFilterMeta?: any;
   columns: any;
+  defaultFilters?: any;
   fetchFn: (args) => Promise<any>;
   onOk: (values) => Promise<any>;
   onCancel: () => void;
@@ -26,6 +27,7 @@ const ImportedModal: React.FC<ImportedModalProps> = ({
   idKey = 'id',
   baseFilterMeta,
   columns,
+  defaultFilters,
   fetchFn,
   onOk,
   onCancel,
@@ -36,6 +38,7 @@ const ImportedModal: React.FC<ImportedModalProps> = ({
   ] = useList({
     fetchFn,
     defaultPageSize: 5,
+    defaultFilters,
   });
 
   const handleOk = (values: any): Promise<any> => {
@@ -64,7 +67,8 @@ const ImportedModal: React.FC<ImportedModalProps> = ({
 
   const handleImportAll = () => {
     const ids = list.items.map((item) => item[idKey]);
-    setImportIds(ids);
+    const updatedIds = removeDuplicateAndMerge(importIds, ids);
+    setImportIds(updatedIds);
   };
 
   const handleImportNone = () => {
@@ -76,7 +80,7 @@ const ImportedModal: React.FC<ImportedModalProps> = ({
     {
       dataIndex: 'action',
       title: 'Import',
-      width: 100,
+      width: 80,
       render: (_, record, index) => {
         const defaultChecked = importIds.includes(record[idKey]);
         return (
@@ -106,6 +110,7 @@ const ImportedModal: React.FC<ImportedModalProps> = ({
           loading={list.isLoading}
           meta={baseFilterMeta}
           onFilter={onFilterChange}
+          style={{ marginTop: '24px' }}
         />
       )}
       <TableToolbar>
@@ -116,7 +121,20 @@ const ImportedModal: React.FC<ImportedModalProps> = ({
             onClick={handleImportNone}
             className="ml-4"
           >
-            Huỷ chọn
+            Discard
+          </Button>
+        )}
+        <Button type="primary" onClick={handleImportAll} className="ml-4">
+          Select All
+        </Button>
+        {/* {importIds.length > 0 && (
+          <Button
+            type="primary"
+            ghost
+            onClick={handleImportNone}
+            className="ml-4"
+          >
+            Discard
           </Button>
         )}
         {importIds.length <= list.items.length && (
@@ -126,11 +144,12 @@ const ImportedModal: React.FC<ImportedModalProps> = ({
             className="ml-4"
             disabled={importIds.length === list.items.length}
           >
-            Chọn tất cả
+            Select All
           </Button>
-        )}
+        )} */}
       </TableToolbar>
       <BaseTable
+        className="imported-modal-table"
         idKey={idKey}
         columns={tableColumns}
         data={list}

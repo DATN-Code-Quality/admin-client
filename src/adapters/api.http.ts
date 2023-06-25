@@ -113,7 +113,7 @@ export const postWithUrlBinary = (
 export const postWithPath = (
   path,
   params?: {},
-  data?: {},
+  data?: {} | FormData,
   options?: {},
   timeOut?: 10
 ) => {
@@ -149,7 +149,7 @@ export const postWithPathBinary = (
 export const postWithUrl = (
   url,
   params?: {},
-  data?: {},
+  data?: {} | FormData,
   options?: {},
   timeOut?: 10
 ) => {

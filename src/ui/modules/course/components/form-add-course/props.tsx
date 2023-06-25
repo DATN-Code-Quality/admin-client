@@ -8,39 +8,43 @@ export const metaFormAddCourse = () => {
     fields: [
       {
         key: 'name',
-        label: 'Tên khoá học:',
-        message: 'Vui lòng không bỏ trống',
+        label: 'Course Name',
         required: true,
       },
       {
         key: 'summary',
-        label: 'Mô tả:',
-        required: true,
-        message: 'Vui lòng không bỏ trống',
+        label: 'Summary',
+        widget: Editor,
+      },
+      {
+        key: 'summary',
+        label: 'Summary',
         widget: Editor,
       },
       {
         key: 'startAt',
-        label: 'Ngày bắt đầu:',
+        label: 'Start Date',
         widget: 'date-picker',
         required: true,
-        message: 'Vui lòng không bỏ trống',
         widgetProps: {
-          autoSize: { maxRows: 20, minRows: 3 },
+          style: {
+            width: '100%',
+          },
+          autoSize: { minRows: 3 },
           showCount: true,
-          placeholder: 'Ngày bắt đầu',
         },
       },
       {
         key: 'endAt',
-        label: 'Ngày kết thúc:',
+        label: 'End Date',
         widget: 'date-picker',
         required: true,
-        message: 'Vui lòng không bỏ trống',
         widgetProps: {
-          autoSize: { maxRows: 20, minRows: 3 },
+          style: {
+            width: '100%',
+          },
+          autoSize: { minRows: 3 },
           showCount: true,
-          placeholder: 'Ngày kết thúc',
         },
       },
     ],

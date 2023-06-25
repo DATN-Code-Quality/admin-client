@@ -2,7 +2,7 @@ import { message } from 'antd';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import { getWithPath, postWithPath } from '~/adapters/api.http';
+import { getWithPath, postWithPath, putWithPath } from '~/adapters/api.http';
 import { setUserInfo } from '~/adapters/redux/actions/auth';
 import { ResponseData } from '~/constant';
 import API from '~/constant/api';
@@ -21,7 +21,7 @@ export function useAuth() {
       password: string;
     }): Promise<ResponseData<Auth>> {
       try {
-        const resp = await postWithPath(`${API.AUTH.GET.LOGIN}`, {}, body);
+        const resp = await postWithPath(`${API.AUTH.POST.LOGIN}`, {}, body);
         if (resp.status === ApiStatus.SUCCESS) {
           const { accessToken, user } = resp.data;
           LocalStorage.set({
@@ -33,24 +33,32 @@ export function useAuth() {
         }
         return resp;
       } catch (e) {
-        message.error('Đăng nhập thất bại!');
+        message.error('Login Failed!');
         throw e;
       }
     },
 
-    async loginMicrosoft(): Promise<ResponseData<string>> {
+    async loginMicrosoft(body: {
+      token: string;
+    }): Promise<ResponseData<string>> {
       try {
-        // const resp = await getWithPath(`${API.AUTH.GET.LOGIN_MICROSOFT}`);
-        const resp = await mockAuth().loginMicrosoft();
+        const resp = await postWithPath(
+          `${API.AUTH.POST.LOGIN_MICROSOFT}`,
+          {},
+          body
+        );
         if (resp.status === ApiStatus.SUCCESS) {
-          const { data: callbackUrl } = resp;
-          window.location.href = callbackUrl;
+          const { accessToken, user } = resp.data;
+          LocalStorage.set({
+            accessToken,
+          });
+          dispatch(setUserInfo(user));
         } else {
           throw new Error(JSON.stringify(resp));
         }
         return resp;
       } catch (e) {
-        message.error('Đăng nhập thất bại!');
+        message.error('Login Failed!');
         throw e;
       }
     },
@@ -63,6 +71,70 @@ export function useAuth() {
         throw new Error(JSON.stringify(resp));
       }
       return resp;
+    },
+    async changePassword(body: {
+      oldPassword: string;
+      newPassword: string;
+    }): Promise<ResponseData<Auth>> {
+      try {
+        const resp = await putWithPath(
+          `${API.AUTH.PUT.CHANGE_PASSWORD}`,
+          {},
+          body
+        );
+        if (resp.status !== ApiStatus.SUCCESS) {
+          throw new Error(JSON.stringify(resp));
+        }
+        return resp;
+      } catch (e) {
+        message.error('Change password failed!');
+        throw e;
+      }
+    },
+    async changePasswordV2(
+      token: string,
+      body: {
+        newPassword: string;
+      }
+    ): Promise<ResponseData<Auth>> {
+      try {
+        const resp = await putWithPath(
+          `${API.AUTH.PUT.CHANGE_PASSWORD_V2}`,
+          { token },
+          body
+        );
+        if (resp.status === ApiStatus.SUCCESS) {
+          const { accessToken, user } = resp.data;
+          LocalStorage.set({
+            accessToken,
+          });
+          dispatch(setUserInfo(user));
+        } else {
+          throw new Error(JSON.stringify(resp));
+        }
+        return resp;
+      } catch (e) {
+        message.error('Error in changing password!');
+        throw e;
+      }
+    },
+    async forgotPassword(body: {
+      username: string;
+    }): Promise<ResponseData<Auth>> {
+      try {
+        const resp = await putWithPath(
+          `${API.AUTH.PUT.FORGOT_PASSWORD}`,
+          {},
+          body
+        );
+        if (resp.status !== ApiStatus.SUCCESS) {
+          throw new Error(JSON.stringify(resp));
+        }
+        return resp;
+      } catch (e) {
+        message.error('Error in reset password!');
+        throw e;
+      }
     },
     async logout(): Promise<ResponseData<any>> {
       // const resp = await getWithPath(`${API.AUTH.GET.LOGOUT}`);

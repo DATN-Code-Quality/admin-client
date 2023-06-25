@@ -15,32 +15,33 @@ export enum ButtonType {
 }
 
 export const MAP_BUTTON_TYPE: Record<number, string> = {
-  [ButtonType.CREATE]: 'Tạo mới',
-  [ButtonType.EDIT]: 'Sửa',
-  [ButtonType.DELETE]: 'Xoá',
-  [ButtonType.BLOCK]: '',
-  [ButtonType.UNBLOCK]: '',
+  [ButtonType.CREATE]: 'Create',
+  [ButtonType.EDIT]: 'Edit',
+  [ButtonType.DELETE]: 'Delete',
+  [ButtonType.BLOCK]: 'Block',
+  [ButtonType.UNBLOCK]: 'Unblock',
 };
 
 export const MAP_BUTTON_PROPS: Record<number, any> = {
   [ButtonType.CREATE]: {
     icon: <PlusCircleOutlined />,
     type: 'primary',
-    title: 'Tạo mới',
-    children: 'Tạo mới',
+    title: '',
+    children: 'Create',
   },
   [ButtonType.EDIT]: {
     size: 'small',
     type: 'primary',
     ghost: true,
     icon: <EditOutlined />,
-    title: 'Sửa',
+    title: '',
   },
   [ButtonType.DELETE]: {
     size: 'small',
     type: 'danger',
+    ghost: true,
     icon: <DeleteOutlined />,
-    title: 'Xoá',
+    title: '',
   },
   [ButtonType.BLOCK]: {
     size: 'small',

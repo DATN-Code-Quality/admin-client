@@ -191,7 +191,7 @@ export const formatNumber = (number, locale = 'vi-VN') => {
 
 // function to format date to locale
 export const formatDate = (date, locale?: 'vi-VN', format?: string) => {
-  return date && dayjs(Number(date)).format(format || 'DD/MM/YYYY HH:mm:ss');
+  return date && dayjs(Number(date)).format(format || 'DD-MM-YYYY HH:mm:ss');
 };
 
 export function debounce(func, timeout = 300) {
@@ -357,4 +357,59 @@ export const getDefaultRoute = (roles: Role[]) => {
     return ROUTE.DASHBOARD;
   }
   return ROUTE.MY_COURSE.LIST;
+};
+
+export const generateUrl = (url, params = {}) => {
+  const urlParams = new URLSearchParams(params);
+  return `${url}?${urlParams.toString()}`;
+};
+
+export const enableAllowedOptions = (options, allowedValues: any[]) => {
+  return options.map((item) => {
+    return { ...item, disabled: !allowedValues?.includes(item.value) };
+  });
+};
+
+export const filterAllowedOptions = (options, allowedValues: any[]) => {
+  return options.filter((item) => {
+    const isAllowed = allowedValues?.includes(item.value);
+    return isAllowed;
+  });
+};
+
+export const splitStr = (name: string, numberLetter: number) => {
+  const words = name.split(' ');
+  const result = [];
+
+  for (let i = 0; i < words.length; i += numberLetter) {
+    const combined = words.slice(i, i + 2).join(' ');
+    result.push(combined);
+  }
+  return result;
+};
+
+export const removeDuplicateAndMerge = (
+  arr1: any[],
+  arr2: any[],
+  key?: string
+) => {
+  const result = [...arr1];
+  arr2.forEach((item) => {
+    if (key) {
+      const index = arr1.findIndex((i) => i[key] === item[key]);
+      if (index < 0) {
+        result.push(item);
+      } else {
+        result[index] = item;
+      }
+    } else {
+      const index = arr1.indexOf(item);
+      if (index < 0) {
+        result.push(item);
+      } else {
+        result[index] = item;
+      }
+    }
+  });
+  return result;
 };

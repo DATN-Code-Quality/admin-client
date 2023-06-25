@@ -13,21 +13,21 @@ const ViewOrCreateAssignment = ({ initialViewMode = false }) => {
   const courseId: any = query.get('course_id');
   const assignmentId: any = query.get('assignment_id');
   const renderTitle = () => {
-    let preTitle = 'Tạo mới ';
+    let preTitle = 'Create ';
     if (assignmentId && initialViewMode) {
-      preTitle = 'Thông tin ';
+      preTitle = 'Detail ';
     }
     if (assignmentId && !initialViewMode) {
-      preTitle = 'Cập nhật ';
+      preTitle = 'Edit ';
     }
-    return `${preTitle}Assignment`;
+    return `${preTitle}assignment`;
   };
   return (
     <Card className="card-edit-view">
       <PageHeader className="site-page-header" title={renderTitle()} ghost />
       <FormAddAssignment
         courseId={courseId}
-        id={assignmentId}
+        assignmentId={assignmentId}
         initialViewMode={initialViewMode}
       />
     </Card>

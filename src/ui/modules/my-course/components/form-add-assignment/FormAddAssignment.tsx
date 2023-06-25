@@ -1,19 +1,49 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { Button, Form, Input, message, Space } from 'antd';
+import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 
-import { metaFormAddAssignment } from './props';
+import { TableViewCondition } from '../table-view-condition';
+
+import { metaFormAddAssignment, metaFormAddCondition } from './props';
 
 import { useAssignment } from '~/adapters/appService/assignment.service';
 import { MAP_USER_STATUS } from '~/constant';
+import { ApiStatus } from '~/constant/enum';
 import ROUTE from '~/constant/routes';
 import FormBuilder from '~/ui/shared/forms';
 import Loading from '~/ui/shared/loading';
-import { getMappingLabelByValue } from '~/utils';
-import dayjs from 'dayjs';
+import BaseModal from '~/ui/shared/modal';
+import { ButtonType } from '~/ui/shared/modal/props';
+import {
+  findAndReplace,
+  generateUrl,
+  getMappingLabelByValue,
+  removeFromArr,
+} from '~/utils';
 
-const FormAddAssignment = ({ courseId, id, initialViewMode = false }) => {
+const configObjectToConditions = (configObject) => {
+  if (!configObject) return [];
+  return Object.entries(configObject).map(([key, value]) => ({
+    key,
+    value,
+  }));
+};
+
+const conditionsToConfigObject = (conditions) => {
+  if (!conditions) return {};
+  return conditions.reduce((acc, cur) => {
+    acc[cur.key] = cur.value;
+    return acc;
+  }, {});
+};
+
+const FormAddAssignment = ({
+  courseId,
+  assignmentId,
+  initialViewMode = false,
+}) => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const { getDetailAssignment, createAssignment, updateAssignment } =
@@ -22,72 +52,94 @@ const FormAddAssignment = ({ courseId, id, initialViewMode = false }) => {
   const [viewMode, setViewMode] = useState<boolean>(initialViewMode);
   const [submissionType, setSubmissionType] = useState<any>(null);
   const [formValues, setFormValues] = useState({});
+  const [conditions, setConditions] = useState<any>([]);
+  const [currentCondition, setCurrentCondition] = useState<any>(null);
 
   const handleSubmitFail = (errMsg) => (err) => {
-    console.log('err submit', err);
     message.error(errMsg);
     setLoading(false);
-    setViewMode(true);
+    // setViewMode(true);
   };
 
   const handleSubmitSuccess = (successMsg) => () => {
     message.success(successMsg);
-    // navigate(ROUTE.MY_COURSE.LIST);
+    const url = generateUrl(ROUTE.MY_COURSE.DETAIL, {
+      course_id: courseId,
+    });
+    navigate(url);
     setLoading(false);
-    setViewMode(true);
+    // setViewMode(true);
   };
 
-  const handleSubmit = useCallback((values) => {
-    message.success('Cập nhật thành công!');
-    // TODO: remove hardcode
-    if (!initialViewMode) {
-      navigate(`${ROUTE.MY_COURSE.DETAIL}?id=${courseId}`);
-      return;
-    }
-    setViewMode(true);
-    return;
-
+  const handleSubmit = (values) => {
     // TODO: handle submit
     setLoading(true);
     const dataSubmit = {
       ...values,
+      configObject: conditionsToConfigObject(conditions),
     };
-    if (id) {
-      dataSubmit.id = id;
-      updateAssignment(dataSubmit)
-        .then(handleSubmitSuccess('Cập nhật Ngành nghề thành công!'))
-        .catch(handleSubmitFail('Cập nhật Ngành nghề thất bại!'))
+    if (assignmentId) {
+      dataSubmit.id = assignmentId;
+      updateAssignment(courseId, dataSubmit)
+        .then(handleSubmitSuccess('Edit assignment successfully!'))
+        .catch(handleSubmitFail('Edit assignment failed!'))
         .finally(() => setLoading(false));
     } else {
-      createAssignment(dataSubmit)
-        .then(handleSubmitSuccess('Cập nhật Ngành nghề thành công!'))
-        .catch(handleSubmitFail('Cập nhật Ngành nghề thất bại!'))
+      createAssignment(courseId, dataSubmit)
+        .then(handleSubmitSuccess('Create assignment successfully!'))
+        .catch(handleSubmitFail('Create assignment failed!'))
         .finally(() => setLoading(false));
     }
-  }, []);
+  };
 
   const handleEditAssignment = () => {
     setViewMode(false);
   };
 
   const handleChangeSubmissionType = (e) => {
-    console.log(e.target.value);
     setSubmissionType(e.target.value);
   };
 
+  const handleSelectCondition = (value) => {
+    setCurrentCondition(value);
+  };
+
+  const handleAddCondition = async (values) => {
+    const newCondition = {
+      ...values,
+    };
+    setConditions([...conditions, newCondition]);
+    return Promise.resolve({ status: ApiStatus.SUCCESS, data: values });
+  };
+
+  const handleUpdateCondition = async (values) => {
+    const newConditions = findAndReplace(conditions, values, 'key');
+    setConditions(newConditions);
+
+    return Promise.resolve({ status: ApiStatus.SUCCESS, data: values });
+  };
+
+  const handleRemoveCondition = (value) => {
+    const newConditions = removeFromArr(conditions, value, 'key');
+    setConditions(newConditions);
+    return Promise.resolve({ status: ApiStatus.SUCCESS, data: value });
+  };
+
   useEffect(() => {
-    if (id) {
-      setLoading(true);
-      getDetailAssignment(id).then((res) => {
-        res.data.dueDate = dayjs(res.data.dueDate);
-        form.setFieldsValue(res.data);
-        setFormValues(res.data);
-        setLoading(false);
-      });
-    } else {
-      setLoading(false);
+    if (!courseId || !assignmentId) {
+      // TODO: handle no data
+      return;
     }
-  }, [id]);
+    setLoading(true);
+    getDetailAssignment({ courseId, assignmentId }).then((res) => {
+      const data = res.data.assignment;
+      data.dueDate = dayjs(data.dueDate);
+      setConditions(configObjectToConditions(data.configObject));
+      form.setFieldsValue(data);
+      setFormValues(data);
+      setLoading(false);
+    });
+  }, [courseId, assignmentId]);
 
   return (
     <>
@@ -115,7 +167,7 @@ const FormAddAssignment = ({ courseId, id, initialViewMode = false }) => {
                 size="large"
                 onClick={handleEditAssignment}
               >
-                Edit thông tin
+                Save Changes
               </Button>
             </Space>
           </Form.Item>
@@ -128,16 +180,44 @@ const FormAddAssignment = ({ courseId, id, initialViewMode = false }) => {
           layout="vertical"
           className="form-edit-view"
         >
-          <FormBuilder
-            meta={metaFormAddAssignment({
-              submissionType,
-              handleChangeSubmissionType,
-            })}
-          />
+          <div className="form_group mb-4">
+            <h5 className="fs-18 mb-4">Assignment Detail</h5>
+            <FormBuilder
+              form={form}
+              meta={metaFormAddAssignment({
+                submissionType,
+                handleChangeSubmissionType,
+              })}
+            />
+          </div>
+          <div className="form_group mb-4">
+            <div className="flex justify-between items-center">
+              <h5 className="fs-18 mb-4">Config Quality Gates</h5>
+              <BaseModal
+                onOkFn={handleAddCondition}
+                itemTitle=""
+                id={0}
+                mode={ButtonType.CREATE}
+                meta={metaFormAddCondition({
+                  conditions,
+                  currentCondition,
+                  handleSelectCondition,
+                })}
+                formProps={{ layout: 'vertical' }}
+              />
+            </div>
+            <TableViewCondition
+              data={conditions}
+              idKey="key"
+              handleDeleteItem={handleRemoveCondition}
+              handleUpdateItem={handleUpdateCondition}
+            />
+          </div>
+
           <Form.Item>
             <Space>
               <Button type="primary" htmlType="submit" size="large">
-                Lưu thông tin
+                Save Changes
               </Button>
             </Space>
           </Form.Item>

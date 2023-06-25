@@ -21,6 +21,7 @@ import {
 
 import { useAssignment } from '~/adapters/appService/assignment.service';
 import { PAGE_SIZE_OPTIONS } from '~/constant';
+import { SubRole } from '~/constant/enum';
 import { MESSAGE } from '~/constant/message';
 import ROUTE from '~/constant/routes';
 import { Assignment } from '~/domain/assignment';
@@ -34,7 +35,7 @@ import BaseModal from '~/ui/shared/modal';
 import { ButtonType } from '~/ui/shared/modal/props';
 import BaseTable from '~/ui/shared/tables';
 import TableToolbar from '~/ui/shared/toolbar';
-import { formatNumber } from '~/utils';
+import { formatNumber, generateUrl } from '~/utils';
 
 import './TableViewAssignment.less';
 
@@ -43,7 +44,7 @@ function TableViewAssignment({ course }) {
   const {
     getAllAssignments,
     getMoodleAssignments,
-    createAssignment,
+    importAssignments,
     blockAssignment,
   } = useAssignment();
 
@@ -51,11 +52,15 @@ function TableViewAssignment({ course }) {
   const [assignmentSelected, setAssignmentSelected] =
     useState<Assignment | null>(null);
 
+  const [userRole, setUserRole] = useState<SubRole | undefined>(undefined);
+
   const [syncMoodleModalVisible, syncMoodleModalActions] = useDialog();
+  const [currentRole, setCurrentRole] = useState<SubRole>(SubRole.STUDENT);
+  const isTeacher = currentRole === SubRole.TEACHER;
 
   const handleGetAssignments = async (args?) => {
-    const res = await getAllAssignments(course.id);
-    console.log(res);
+    const res = await getAllAssignments(course.id, args);
+    setCurrentRole(res.data.role);
     return {
       ...res,
       data: res.data.assignments,
@@ -71,6 +76,12 @@ function TableViewAssignment({ course }) {
       data: res.data.assignments,
     };
   };
+
+  useEffect(() => {
+    return () => {
+      setAssignmentSelected(null);
+    };
+  }, []);
 
   const [
     list,
@@ -92,7 +103,7 @@ function TableViewAssignment({ course }) {
           configObject: {},
         };
       });
-      await createAssignment(course.id, newValues);
+      await importAssignments(course.id, newValues);
       handleUpdateList();
       message.success(MESSAGE.SUCCESS);
     } catch (error) {
@@ -103,11 +114,18 @@ function TableViewAssignment({ course }) {
   };
 
   const handleCreateAssignment = async () => {
-    navigate(ROUTE.MY_COURSE.CREATE_ASSIGNMENT);
+    const url = generateUrl(ROUTE.MY_COURSE.CREATE_ASSIGNMENT, {
+      course_id: course.id,
+    });
+    navigate(url);
   };
 
   const handleUpdateAssignment = async (id) => {
-    navigate(`${ROUTE.MY_COURSE.EDIT_ASSIGNMENT}?id=${id}`);
+    const url = generateUrl(ROUTE.MY_COURSE.EDIT_ASSIGNMENT, {
+      course_id: course.id,
+      assignment_id: id,
+    });
+    navigate(url);
   };
 
   const handleBlockAssignment = (id) => {
@@ -116,34 +134,37 @@ function TableViewAssignment({ course }) {
     });
   };
 
-  const columnTableProps = () => [
-    ...columnTableAssignment(setAssignmentSelected),
-    {
-      dataIndex: 'action',
-      title: 'Thao tác',
-      width: 100,
-      render: (_, record, index) => {
-        return (
-          <Space size="small">
-            <Button
-              type="primary"
-              size="small"
-              ghost
-              icon={<EditOutlined />}
-              onClick={() => handleUpdateAssignment(record.id)}
-            />
-            <BaseModal
-              onOkFn={handleBlockAssignment}
-              itemTitle="Bạn có muốn chặn assignment"
-              id={record.id}
-              mode={ButtonType.BLOCK}
-              isDelete
-            />
-          </Space>
-        );
-      },
-    },
-  ];
+  const columnTableProps = () => {
+    const columns = [...columnTableAssignment(setAssignmentSelected)];
+    if (isTeacher) {
+      columns.push({
+        dataIndex: 'action',
+        title: 'Action',
+        width: 100,
+        render: (_, record, index) => {
+          return (
+            <Space size="small">
+              <Button
+                type="primary"
+                size="small"
+                ghost
+                icon={<EditOutlined />}
+                onClick={() => handleUpdateAssignment(record.id)}
+              />
+              <BaseModal
+                onOkFn={handleBlockAssignment}
+                itemTitle="Bạn có muốn chặn assignment"
+                id={record.id}
+                mode={ButtonType.BLOCK}
+                isDelete
+              />
+            </Space>
+          );
+        },
+      });
+    }
+    return columns;
+  };
 
   return (
     <>
@@ -157,27 +178,33 @@ function TableViewAssignment({ course }) {
           />
           <Card>
             <TableToolbar
-              title={`Tìm thấy ${formatNumber(
+              title={`Found ${formatNumber(
                 list.items?.length || 0
-              )} bài tập`}
+              )} assignment`}
             >
-              <Button
-                type="primary"
-                className="mr-4"
-                icon={<SyncOutlined />}
-                loading={list.isLoading}
-                onClick={syncMoodleModalActions.handleOpen}
-              >
-                Sync Moodle
-              </Button>
-              <Button
-                type="primary"
-                icon={<PlusCircleOutlined />}
-                loading={list.isLoading}
-                onClick={handleCreateAssignment}
-              >
-                Tạo mới
-              </Button>
+              {isTeacher && (
+                <>
+                  {course?.courseMoodleId && (
+                    <Button
+                      type="primary"
+                      className="mr-4"
+                      icon={<SyncOutlined />}
+                      loading={list.isLoading}
+                      onClick={syncMoodleModalActions.handleOpen}
+                    >
+                      Sync Moodle
+                    </Button>
+                  )}
+                  <Button
+                    type="primary"
+                    icon={<PlusCircleOutlined />}
+                    loading={list.isLoading}
+                    onClick={handleCreateAssignment}
+                  >
+                    Create
+                  </Button>
+                </>
+              )}
             </TableToolbar>
             <BaseTable
               idKey="id"

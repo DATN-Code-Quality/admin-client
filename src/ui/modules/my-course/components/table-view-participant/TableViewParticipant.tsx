@@ -7,9 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 import {
   columnTableParticipant,
-  columnTableSyncParticipant,
   metaFilterParticipant,
-  metaFilterSyncParticipant,
 } from './props';
 
 import { useCourse } from '~/adapters/appService/course.service';
@@ -43,8 +41,8 @@ function TableViewParticipant({ course }) {
   const [syncMoodleModalVisible, syncMoodleModalActions] = useDialog();
   const [currentRole, setCurrentRole] = useState<SubRole>(SubRole.STUDENT);
 
-  const handleGetParticipants = async () => {
-    const res = await getParticipantsByCourseId(course.id);
+  const handleGetParticipants = async (args) => {
+    const res = await getParticipantsByCourseId(course.id, args);
     setCurrentRole(res.data.role);
     return {
       ...res,
@@ -95,9 +93,9 @@ function TableViewParticipant({ course }) {
       />
       <Card>
         <TableToolbar
-          title={`Tìm thấy ${formatNumber(list.items?.length || 0)} người dùng`}
+          title={`Found ${formatNumber(list.items?.length || 0)} user`}
         >
-          <Button
+          {/* <Button
             type="primary"
             className="mr-4"
             icon={<SyncOutlined />}
@@ -105,7 +103,7 @@ function TableViewParticipant({ course }) {
             onClick={syncMoodleModalActions.handleOpen}
           >
             Sync Moodle
-          </Button>
+          </Button> */}
           {/* <Button
             type="primary"
             className="mr-4"
@@ -135,18 +133,6 @@ function TableViewParticipant({ course }) {
           onChange={onPageChange}
         />
       </Card>
-      {syncMoodleModalVisible && (
-        <>
-          <ImportedModal
-            idKey="moodleId"
-            baseFilterMeta={metaFilterSyncParticipant()}
-            columns={columnTableSyncParticipant()}
-            fetchFn={(args) => handleGetMoodleParticipants(args)}
-            onOk={handleImportModalOk}
-            onCancel={syncMoodleModalActions.handleClose}
-          />
-        </>
-      )}
     </>
   );
 }

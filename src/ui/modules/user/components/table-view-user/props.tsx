@@ -7,11 +7,14 @@ import { generateMappingList, getMappingLabelByValue } from '~/utils';
 
 export const metaFilterUser = () => {
   return {
+    columns: 3,
     fields: [
       {
         key: 'search',
+        colSpan: 3,
         widgetProps: {
-          placeholder: 'Tìm kiếm theo Họ tên hoặc Email',
+          placeholder: 'Search by Name or Email',
+          allowClear: true,
           style: {
             minWidth: '250px',
           },
@@ -19,29 +22,29 @@ export const metaFilterUser = () => {
       },
       {
         key: 'role',
+        colSpan: 3,
         options: MAP_ROLES,
         widget: 'select',
         widgetProps: {
           maxTagCount: 'responsive',
           style: {
             minWidth: '12rem',
-            maxWidth: '12rem',
           },
-          placeholder: 'Vai trò',
+          placeholder: 'Role',
           allowClear: true,
         },
       },
       {
         key: 'status',
+        colSpan: 3,
         options: MAP_USER_STATUS,
         widget: 'select',
         widgetProps: {
           maxTagCount: 'responsive',
           style: {
             minWidth: '12rem',
-            maxWidth: '12rem',
           },
-          placeholder: 'Trạng thái',
+          placeholder: 'Status',
           allowClear: true,
         },
       },
@@ -51,9 +54,9 @@ export const metaFilterUser = () => {
 
 export const columnTableUser = (): ColumnType<any>[] => [
   {
-    title: 'Họ tên',
+    title: 'Name',
     dataIndex: 'name',
-    width: 200,
+    width: '40%',
     ellipsis: true,
     sorter: (a, b) => {
       return a.name.localeCompare(b.name);
@@ -62,17 +65,17 @@ export const columnTableUser = (): ColumnType<any>[] => [
   {
     title: 'Email',
     dataIndex: 'email',
-    width: 200,
+    width: '40%',
     ellipsis: true,
     sorter: (a, b) => {
       return a.email.localeCompare(b.email);
     },
   },
   {
-    title: 'Vai trò',
+    title: 'Role',
     dataIndex: 'role',
     width: 100,
-    ellipsis: true,
+    responsive: ['lg', 'md'],
     sorter: (a, b) => {
       return a.role.localeCompare(b.role);
     },
@@ -88,30 +91,41 @@ export const metaCreateUser = () => {
     fields: [
       {
         key: 'userId',
-        label: 'Tên đăng nhập:',
+        label: 'Username',
         required: true,
-        message: 'Vui lòng không bỏ trống',
+
         widgetProps: {
-          placeholder: 'Nhập username',
+          placeholder: 'Enter Username',
         },
       },
       {
         key: 'name',
-        label: 'Họ tên:',
+        label: 'Full Name',
         required: true,
-        message: 'Vui lòng không bỏ trống',
+
         widgetProps: {
-          placeholder: 'Nhập Họ tên',
+          placeholder: 'Enter Full Name',
         },
       },
       {
         key: 'email',
-        label: 'Email:',
+        label: 'Email',
         required: true,
-        message: 'Vui lòng không bỏ trống',
+
         widgetProps: {
-          placeholder: 'Nhập Email',
+          placeholder: 'Enter Email',
           type: 'email',
+        },
+      },
+      {
+        key: 'roles',
+        label: 'Roles',
+        options: MAP_ROLES,
+        widget: 'select',
+        required: true,
+        widgetProps: {
+          placeholder: 'Enter Roles',
+          allowClear: true,
         },
       },
     ],
@@ -124,35 +138,35 @@ export const metaUpdateUser = (record) => {
     fields: [
       {
         key: 'userId',
-        label: 'Tên đăng nhập:',
+        label: 'Username',
         required: true,
         initialValue: record.userId,
-        message: 'Vui lòng không bỏ trống',
+
         formItemProps: {
           style: { display: 'none' },
         },
         widgetProps: {
-          placeholder: 'Nhập username',
+          placeholder: 'Enter Username',
         },
       },
       {
         key: 'name',
-        label: 'Họ tên:',
+        label: 'Full Name',
         required: true,
-        message: 'Vui lòng không bỏ trống',
+
         initialValue: record.name,
         widgetProps: {
-          placeholder: 'Nhập Họ tên',
+          placeholder: 'Enter Full Name',
         },
       },
       {
         key: 'email',
-        label: 'Email:',
+        label: 'Email',
         required: true,
-        message: 'Vui lòng không bỏ trống',
+
         initialValue: record.email,
         widgetProps: {
-          placeholder: 'Nhập Email',
+          placeholder: 'Enter Email',
           type: 'email',
         },
       },
@@ -162,11 +176,14 @@ export const metaUpdateUser = (record) => {
 
 export const metaFilterSyncUser = () => {
   return {
+    columns: 3,
+
     fields: [
       {
         key: 'search',
+        colSpan: 3,
         widgetProps: {
-          placeholder: 'Tìm kiếm theo Họ tên hoặc Email',
+          placeholder: 'Search by Name or Email',
           style: {
             minWidth: '250px',
           },
@@ -178,9 +195,9 @@ export const metaFilterSyncUser = () => {
 
 export const columnTableSyncUser = (): ColumnType<any>[] => [
   {
-    title: 'Họ tên',
+    title: 'Name',
     dataIndex: 'name',
-    width: 200,
+    width: '40%',
     ellipsis: true,
     sorter: (a, b) => {
       return a.name.localeCompare(b.name);
@@ -189,7 +206,7 @@ export const columnTableSyncUser = (): ColumnType<any>[] => [
   {
     title: 'Email',
     dataIndex: 'email',
-    width: 200,
+    width: '40%',
     ellipsis: true,
     sorter: (a, b) => {
       return a.email.localeCompare(b.email);

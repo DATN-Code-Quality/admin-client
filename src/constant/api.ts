@@ -61,7 +61,7 @@ export const ASSIGNMENT = {
     CREATE_ASSIGNMENT: '/assignment',
   },
   PUT: {
-    UPDATE_ASSIGNMENT: '/assignment/update-assignment',
+    UPDATE_ASSIGNMENT: '/assignment',
   },
 };
 
@@ -83,18 +83,30 @@ export const SUBMISSION = {
 
 export const AUTH = {
   GET: {
-    LOGIN: '/auth/login',
-    LOGIN_MICROSOFT: '/auth/login/outlook',
     CHECK_PROFILE: '/auth/profile',
     LOGOUT: '/auth/logout',
   },
-};
-
-export const SONARQUBE = {
-  GET: {
-    ISSUES_SUBMISSION: '/sonarqube/issue/e25b393e-cf56-4e12-8a0b-e7213648ac76',
+  POST: {
+    LOGIN: '/auth/login',
+    LOGIN_MICROSOFT: '/auth/login/outlook',
+  },
+  PUT: {
+    CHANGE_PASSWORD: '/auth/change-password',
+    CHANGE_PASSWORD_V2: '/auth/change-password-without-old-password',
+    ACTIVE_ACCOUNT: '/auth/active-account',
+    FORGOT_PASSWORD: '/auth/forget-password',
   },
 };
+
+export const MOODLE = {
+  GET: {
+    CHECK_CONNECT: '/moodle/check-connect',
+  },
+  POST: {
+    CONNECT: '/moodle/connect',
+  },
+};
+
 const API = {
   DASHBOARD,
   AUTH,
@@ -103,6 +115,7 @@ const API = {
   USER_COURSE,
   ASSIGNMENT,
   SUBMISSION,
+  MOODLE,
 };
 
 export default API;
