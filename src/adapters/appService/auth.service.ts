@@ -127,8 +127,7 @@ export function useAuth() {
           {},
           body
         );
-        if (resp.status === ApiStatus.SUCCESS) {
-        } else {
+        if (resp.status !== ApiStatus.SUCCESS) {
           throw new Error(JSON.stringify(resp));
         }
         return resp;
