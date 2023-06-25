@@ -8,7 +8,7 @@ import { buildURLWithParam, extend } from '~/utils';
 export function fetch(
   url,
   params?: {},
-  options?: { responseType?},
+  options?: { responseType? },
   timeOut?: 10
 ): Promise<ResponseData<any>> {
   const defaultHeaders = {
@@ -16,7 +16,7 @@ export function fetch(
   };
   const accessTokenPersist: any = localStorage.getItem('accessToken');
   let accessToken: any = {};
-  if (accessTokenPersist) {
+  if (accessTokenPersist && accessTokenPersist.token) {
     accessToken = JSON.parse(accessTokenPersist);
   }
   const exOptions = extend(
