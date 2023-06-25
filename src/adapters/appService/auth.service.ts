@@ -38,13 +38,23 @@ export function useAuth() {
       }
     },
 
-    async loginMicrosoft(): Promise<ResponseData<string>> {
+    async loginMicrosoft(body: {
+      token: string;
+    }): Promise<ResponseData<string>> {
       try {
-        // const resp = await getWithPath(`${API.AUTH.GET.LOGIN_MICROSOFT}`);
-        const resp = await mockAuth().loginMicrosoft();
+        console.log({ body });
+
+        const resp = await postWithPath(
+          `${API.AUTH.POST.LOGIN_MICROSOFT}`,
+          {},
+          body
+        );
         if (resp.status === ApiStatus.SUCCESS) {
-          const { data: callbackUrl } = resp;
-          window.location.href = callbackUrl;
+          const { accessToken, user } = resp.data;
+          LocalStorage.set({
+            accessToken,
+          });
+          dispatch(setUserInfo(user));
         } else {
           throw new Error(JSON.stringify(resp));
         }
