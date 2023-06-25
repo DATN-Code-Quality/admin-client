@@ -6,6 +6,8 @@ import { filterRole } from '.';
 
 import { Role } from '~/constant/enum';
 import Loading from '~/ui/shared/loading';
+import ROUTE from '~/constant/routes';
+import Login from '~/ui/modules/login/containers/Login';
 
 export interface IRouteBase {
   id?: number;
@@ -37,12 +39,23 @@ export function renderRoute(route: IRoute, roles?: Role[]) {
     );
   }
 
+  if (roles && roles.length > 0 && roles[0]) {
+    return (
+      <Route
+        key={route.path}
+        // exact={route.path !== "*"}
+        path={route.path}
+        element={<p>Sorry, you are not allowed to access this page</p>}
+      />
+    );
+  }
+
   return (
     <Route
-      key={route.path}
+      key="login"
       // exact={route.path !== "*"}
-      path={route.path}
-      element={<p>Sorry, you are not allowed to access this page</p>}
+      path={ROUTE.LOGIN}
+      element={<Login />}
     />
   );
 }

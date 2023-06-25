@@ -4,12 +4,13 @@ import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input, Layout } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
+import ForgotPassword from '../components/ForgotPassword';
+
 import { useAuth } from '~/adapters/appService/auth.service';
 import Logo from '~/ui/assets/images/logo.png';
 import Card from '~/ui/shared/card';
 import { getDefaultRoute } from '~/utils';
 import './Login.less';
-import ForgotPassword from '../components/ForgotPassword';
 
 function Login() {
   const { checkProfile, login, loginMicrosoft } = useAuth();
@@ -60,44 +61,42 @@ function Login() {
               rules={[
                 {
                   required: true,
-                  message: 'Vui lòng không bỏ trống tài khoản!',
                 },
               ]}
             >
               <Input
                 size="large"
                 prefix={<UserOutlined className="site-form-item-icon" />}
-                placeholder="Tài khoản"
+                placeholder="Username"
               />
             </Form.Item>
             <Form.Item
               name="password"
-              // rules={[
-              //   {
-              //     required: true,
-              //     message: 'Vui lòng không bỏ trống mật khẩu!',
-              //   },
-              //   {
-              //     pattern:
-              //       /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
-              //     message: (
-              //       <ul>
-              //         Password must contain:
-              //         <li>At least one upper case</li>
-              //         <li>At least one lower case</li>
-              //         <li>At least one digit</li>
-              //         <li>At least one special character </li>
-              //         <li>Minimum 8 in length</li>
-              //       </ul>
-              //     ),
-              //   },
-              // ]}
+              rules={[
+                {
+                  required: true,
+                },
+                {
+                  pattern:
+                    /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
+                  message: (
+                    <ul>
+                      Password must contain:
+                      <li>At least one upper case</li>
+                      <li>At least one lower case</li>
+                      <li>At least one digit</li>
+                      <li>At least one special character </li>
+                      <li>Minimum 8 in length</li>
+                    </ul>
+                  ),
+                },
+              ]}
             >
               <Input
                 size="large"
                 prefix={<LockOutlined className="site-form-item-icon" />}
                 type="password"
-                placeholder="Mật khẩu"
+                placeholder="Password"
               />
             </Form.Item>
 
@@ -106,12 +105,12 @@ function Login() {
               style={{ width: '100%', marginBottom: 5 }}
               onClick={handleForgotPassword}
             >
-              Quên mật khẩu?
+              Forgot password?
             </Button>
 
             <Form.Item>
               <Button type="primary" htmlType="submit" className="login-button">
-                Đăng nhập
+                Login
               </Button>
             </Form.Item>
           </Form>
@@ -121,7 +120,7 @@ function Login() {
             onClick={loginMicrosoft}
             className="login-button login-button-microsoft"
           >
-            Đăng nhập bằng Microsoft 365
+            Login with Microsoft 365
           </Button>
         </div>
         {/* <Button type="primary" onClick={loginZalo} className="login-button">

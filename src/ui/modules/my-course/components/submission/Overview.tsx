@@ -11,12 +11,14 @@ import { useNavigate } from 'react-router-dom';
 import { useSonarqube } from '~/adapters/appService/sonarqube.service';
 import { Assignment } from '~/domain/assignment';
 import { Submission } from '~/domain/submission';
+import useCurrentWidth from '~/hooks/useCurrentWidth';
 import { renderColorRatting } from '~/utils';
 
 const Overview: React.FC<{
   submission?: Submission;
   assignment: Assignment;
 }> = ({ submission, assignment }) => {
+  const width = useCurrentWidth();
   const { getOverViewSubmission } = useSonarqube();
   const navigate = useNavigate();
 
@@ -71,7 +73,9 @@ const Overview: React.FC<{
           alignItems: 'center',
         }}
       >
-        <span style={{ fontStyle: 'italic',textAlign:'center' }}>No data display for this submission</span>
+        <span style={{ fontStyle: 'italic', textAlign: 'center' }}>
+          No data display for this submission
+        </span>
       </div>
     );
   }
@@ -80,7 +84,7 @@ const Overview: React.FC<{
       {!loading && (
         <div
           style={{
-            marginLeft: 16,
+            marginLeft: width < 768 ? 0 : 16,
             marginTop: 32,
             padding: 16,
             border: '1px solid ',

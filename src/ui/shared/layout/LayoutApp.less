@@ -34,7 +34,7 @@
     padding: 0 80px;
     display: flex;
     justify-content: space-between;
-    border-bottom: 1px solid #EFEFEF;
+    border-bottom: 1px solid #efefef;
     position: sticky;
     top: 0;
     z-index: 999;
@@ -126,5 +126,20 @@
         padding: 0 !important;
       }
     }
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .cms-layout-app-change-password {
+    .card-form-change-password {
+      min-width: unset !important;
+      max-width: unset !important;
+      width: 90% !important;
+    }
+  }
+  .card-form-login {
+    min-width: unset !important;
+    max-width: unset !important;
+    width: 90% !important;
   }
 }

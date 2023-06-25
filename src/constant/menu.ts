@@ -188,13 +188,13 @@ export const menus = [
     route: ROUTE.COURSE.LIST,
     roles: [Role.ADMIN, Role.SUPERADMIN],
   },
-  {
-    id: 'myCourse',
-    name: 'My Course',
-    // icon: DownloadOutlined,
-    route: ROUTE.MY_COURSE.LIST,
-    roles: [Role.USER],
-  },
+  // {
+  //   id: 'myCourse',
+  //   name: 'My Course',
+  //   // icon: DownloadOutlined,
+  //   route: ROUTE.MY_COURSE.LIST,
+  //   roles: [Role.USER],
+  // },
   {
     id: 'configMoodle',
     name: 'Config Moodle',

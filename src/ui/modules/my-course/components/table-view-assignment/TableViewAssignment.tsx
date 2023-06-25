@@ -184,15 +184,17 @@ function TableViewAssignment({ course }) {
             >
               {isTeacher && (
                 <>
-                  <Button
-                    type="primary"
-                    className="mr-4"
-                    icon={<SyncOutlined />}
-                    loading={list.isLoading}
-                    onClick={syncMoodleModalActions.handleOpen}
-                  >
-                    Sync Moodle
-                  </Button>
+                  {course?.courseMoodleId && (
+                    <Button
+                      type="primary"
+                      className="mr-4"
+                      icon={<SyncOutlined />}
+                      loading={list.isLoading}
+                      onClick={syncMoodleModalActions.handleOpen}
+                    >
+                      Sync Moodle
+                    </Button>
+                  )}
                   <Button
                     type="primary"
                     icon={<PlusCircleOutlined />}

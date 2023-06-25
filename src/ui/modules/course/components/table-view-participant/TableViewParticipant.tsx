@@ -25,6 +25,7 @@ import { User } from '~/domain/user';
 import useDialog from '~/hooks/useDialog';
 import useList from '~/hooks/useList';
 import Card from '~/ui/shared/card';
+import ExcelToObject from '~/ui/shared/data-import';
 import BaseFilter from '~/ui/shared/forms/baseFilter';
 import ImportedModal from '~/ui/shared/imported-modal';
 import Loading from '~/ui/shared/loading';
@@ -33,7 +34,6 @@ import { ButtonType } from '~/ui/shared/modal/props';
 import BaseTable from '~/ui/shared/tables';
 import TableToolbar from '~/ui/shared/toolbar';
 import { formatNumber, removeFromArr } from '~/utils';
-import ExcelToObject from '~/ui/shared/data-import';
 
 function TableViewParticipant({ course }: { course: Course }) {
   const navigate = useNavigate();
@@ -259,15 +259,17 @@ function TableViewParticipant({ course }: { course: Course }) {
           title={`Found ${formatNumber(list.items?.length || 0)} user`}
         >
           <div className="flex items-center" style={{ gap: '16px' }}>
-            <Button
-              type="primary"
-              className="mr-4"
-              icon={<SyncOutlined />}
-              loading={list.isLoading}
-              onClick={syncMoodleModalActions.handleOpen}
-            >
-              Sync Moodle
-            </Button>
+            {course?.courseMoodleId && (
+              <Button
+                type="primary"
+                className="mr-4"
+                icon={<SyncOutlined />}
+                loading={list.isLoading}
+                onClick={syncMoodleModalActions.handleOpen}
+              >
+                Sync Moodle
+              </Button>
+            )}
             <Button
               type="primary"
               icon={<PlusCircleOutlined />}
@@ -280,7 +282,7 @@ function TableViewParticipant({ course }: { course: Course }) {
             <ExcelToObject
               handleImportModalOk={handleImportExcelAddParticipantOk}
               loading={list.isLoading}
-              name="Import users"
+              name="Import Participant"
               handleConvertData={(data, columnNames) => {
                 return data
                   ?.slice(1)
