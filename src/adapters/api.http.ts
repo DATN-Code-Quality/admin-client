@@ -16,7 +16,7 @@ export function fetch(
   };
   const accessTokenPersist: any = localStorage.getItem('accessToken');
   let accessToken: any = {};
-  if (accessTokenPersist && accessTokenPersist.token) {
+  if (accessTokenPersist) {
     accessToken = JSON.parse(accessTokenPersist);
   }
   const exOptions = extend(
