@@ -144,6 +144,9 @@ const SubmmissionStatusSection = (props: AddSubmissionProps): JSX.Element => {
   );
 };
 
+// calculate by bytes
+const MAXIUM_FILE_SIZE = 20 * 1024 * 1024; // 20MB
+
 // eslint-disable-next-line @typescript-eslint/ban-types
 const AddSubmissionSection = (props: AddSubmissionProps): JSX.Element => {
   const { assignment, onSubmitted, submission } = props;
@@ -168,7 +171,7 @@ const AddSubmissionSection = (props: AddSubmissionProps): JSX.Element => {
 
   const validateFilePick = (file: RcFile) => {
     const fileSize = file.size;
-    if (fileSize > 20 * 1024) {
+    if (fileSize > MAXIUM_FILE_SIZE) {
       message.error('Choosen file is too large');
       return false;
     }
