@@ -2,26 +2,22 @@ import React, { useState } from 'react';
 
 import { LockOutlined } from '@ant-design/icons';
 import { Button, Form, Input, Layout, Typography, message } from 'antd';
-import { useSelector } from 'react-redux';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { useAuth } from '~/adapters/appService/auth.service';
-import { authSelector } from '~/adapters/redux/selectors/auth';
 import Logo from '~/ui/assets/images/logo.png';
 import Card from '~/ui/shared/card';
-import './ChangePassword.less';
-import { getDefaultRoute } from '~/utils';
+import './ChangeForgotPassword.less';
 
-function ChangePassword() {
-  const { changePassword } = useAuth();
-  const { role } = useSelector(authSelector);
+function ChangeForgotPassword() {
+  const { changePasswordV2 } = useAuth();
 
   const [err, setErr] = useState('');
   const navigate = useNavigate();
   const [params] = useSearchParams();
 
   const onFinish = async (values: any) => {
-    const { oldPassword, newPassword, confirmPassword } = values;
+    const { newPassword, confirmPassword } = values;
 
     if (newPassword !== confirmPassword) {
       message.error('Confirm password is not match!');
@@ -29,10 +25,9 @@ function ChangePassword() {
     }
 
     try {
-      await changePassword({ oldPassword, newPassword });
+      await changePasswordV2(params.get('token') || '', { newPassword });
       message.success('Change password successfully!');
-      const defaultRoute = getDefaultRoute([role]);
-      navigate(defaultRoute, { replace: true });
+      navigate('/', { replace: true });
     } catch (error) {
       setErr((error as any)?.message || 'Something went wrong!');
     }
@@ -59,26 +54,12 @@ function ChangePassword() {
             onFinishFailed={onFinishFailed}
             autoComplete="off"
           >
-            <Form.Item
+            {/* <Form.Item
               name="oldPassword"
               rules={[
                 {
                   required: true,
-                  message: 'Please enter your new password!',
-                },
-                {
-                  pattern:
-                    /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
-                  message: (
-                    <ul>
-                      Password must contain:
-                      <li>At least one upper case</li>
-                      <li>At least one lower case</li>
-                      <li>At least one digit</li>
-                      <li>At least one special character </li>
-                      <li>Minimum 8 in length</li>
-                    </ul>
-                  ),
+                  message: 'Vui lòng không bỏ trống!',
                 },
               ]}
             >
@@ -86,9 +67,9 @@ function ChangePassword() {
                 size="large"
                 prefix={<LockOutlined className="site-form-item-icon" />}
                 type="password"
-                placeholder="Current password"
+                placeholder="Mật khẩu cũ"
               />
-            </Form.Item>
+            </Form.Item> */}
             <Form.Item
               name="newPassword"
               rules={[
@@ -152,4 +133,4 @@ function ChangePassword() {
   );
 }
 
-export default ChangePassword;
+export default ChangeForgotPassword;

@@ -33,44 +33,17 @@ export function useAuth() {
         }
         return resp;
       } catch (e) {
-        message.error('Đăng nhập thất bại!');
+        message.error('Login Failed!');
         throw e;
       }
     },
 
-    async loginMicrosoft(): Promise<ResponseData<string>> {
+    async loginMicrosoft(body: {
+      token: string;
+    }): Promise<ResponseData<string>> {
       try {
-        // const resp = await getWithPath(`${API.AUTH.GET.LOGIN_MICROSOFT}`);
-        const resp = await mockAuth().loginMicrosoft();
-        if (resp.status === ApiStatus.SUCCESS) {
-          const { data: callbackUrl } = resp;
-          window.location.href = callbackUrl;
-        } else {
-          throw new Error(JSON.stringify(resp));
-        }
-        return resp;
-      } catch (e) {
-        message.error('Đăng nhập thất bại!');
-        throw e;
-      }
-    },
-    async checkProfile(): Promise<ResponseData<Auth>> {
-      const resp = await getWithPath(`${API.AUTH.GET.CHECK_PROFILE}`);
-      if (resp.status === ApiStatus.SUCCESS) {
-        const auth = resp.data;
-        dispatch(setUserInfo(auth));
-      } else {
-        throw new Error(JSON.stringify(resp));
-      }
-      return resp;
-    },
-    async changePassword(body: {
-      username: string;
-      password: string;
-    }): Promise<ResponseData<Auth>> {
-      try {
-        const resp = await putWithPath(
-          `${API.AUTH.PUT.CHANGE_PASSWORD}`,
+        const resp = await postWithPath(
+          `${API.AUTH.POST.LOGIN_MICROSOFT}`,
           {},
           body
         );
@@ -85,7 +58,36 @@ export function useAuth() {
         }
         return resp;
       } catch (e) {
-        message.error('Đăng nhập thất bại!');
+        message.error('Login Failed!');
+        throw e;
+      }
+    },
+    async checkProfile(): Promise<ResponseData<Auth>> {
+      const resp = await getWithPath(`${API.AUTH.GET.CHECK_PROFILE}`);
+      if (resp.status === ApiStatus.SUCCESS) {
+        const auth = resp.data;
+        dispatch(setUserInfo(auth));
+      } else {
+        throw new Error(JSON.stringify(resp));
+      }
+      return resp;
+    },
+    async changePassword(body: {
+      oldPassword: string;
+      newPassword: string;
+    }): Promise<ResponseData<Auth>> {
+      try {
+        const resp = await putWithPath(
+          `${API.AUTH.PUT.CHANGE_PASSWORD}`,
+          {},
+          body
+        );
+        if (resp.status !== ApiStatus.SUCCESS) {
+          throw new Error(JSON.stringify(resp));
+        }
+        return resp;
+      } catch (e) {
+        message.error('Change password failed!');
         throw e;
       }
     },
