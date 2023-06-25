@@ -33,7 +33,7 @@ export function useAuth() {
         }
         return resp;
       } catch (e) {
-        message.error('Đăng nhập thất bại!');
+        message.error('Login Failed!');
         throw e;
       }
     },
@@ -42,8 +42,6 @@ export function useAuth() {
       token: string;
     }): Promise<ResponseData<string>> {
       try {
-        console.log({ body });
-
         const resp = await postWithPath(
           `${API.AUTH.POST.LOGIN_MICROSOFT}`,
           {},
@@ -60,7 +58,7 @@ export function useAuth() {
         }
         return resp;
       } catch (e) {
-        message.error('Đăng nhập thất bại!');
+        message.error('Login Failed!');
         throw e;
       }
     },
@@ -75,8 +73,8 @@ export function useAuth() {
       return resp;
     },
     async changePassword(body: {
-      username: string;
-      password: string;
+      oldPassword: string;
+      newPassword: string;
     }): Promise<ResponseData<Auth>> {
       try {
         const resp = await putWithPath(
@@ -84,18 +82,12 @@ export function useAuth() {
           {},
           body
         );
-        if (resp.status === ApiStatus.SUCCESS) {
-          const { accessToken, user } = resp.data;
-          LocalStorage.set({
-            accessToken,
-          });
-          dispatch(setUserInfo(user));
-        } else {
+        if (resp.status !== ApiStatus.SUCCESS) {
           throw new Error(JSON.stringify(resp));
         }
         return resp;
       } catch (e) {
-        message.error('Đăng nhập thất bại!');
+        message.error('Change password failed!');
         throw e;
       }
     },

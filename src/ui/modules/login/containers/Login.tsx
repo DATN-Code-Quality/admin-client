@@ -142,13 +142,6 @@ function Login() {
             </Button>
           </MicrosoftLogin>
         </div>
-        {/* <Button type="primary" onClick={loginZalo} className="login-button">
-          Login with Microsoft 365
-        </Button> */}
-        {/* <div className="zalo-wrap-img">
-          <span className="text-login-with">Login with:</span>
-          <img className="icon" alt="" src={ZaloLogo} onClick={loginZalo} />
-        </div> */}
       </Card>
     </Layout>
   );
