@@ -18,7 +18,7 @@ function ActiveAccount() {
   const [err, setErr] = useState(false);
 
   const handleNextBtn = () => {
-    navigate(`${ROUTE.PROFILE.CHANGE_PASSWORD}?token=${params.get('token')}`);
+    navigate(`${ROUTE.CHANGE_FORGOT_PASSWORD}?token=${params.get('token')}`);
   };
 
   const activateAccount = async () => {
