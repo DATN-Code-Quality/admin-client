@@ -192,7 +192,7 @@ const FormAddAssignment = ({
           </div>
           <div className="form_group mb-4">
             <div className="flex justify-between items-center">
-              <h5 className="fs-18 mb-4">Config Quality Gates</h5>
+              <h5 className="fs-18 mb-4">Quality Gates</h5>
               <BaseModal
                 onOkFn={handleAddCondition}
                 itemTitle=""

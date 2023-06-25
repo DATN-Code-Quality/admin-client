@@ -151,13 +151,6 @@ function TableViewAssignment({ course }) {
                 icon={<EditOutlined />}
                 onClick={() => handleUpdateAssignment(record.id)}
               />
-              <BaseModal
-                onOkFn={handleBlockAssignment}
-                itemTitle="Bạn có muốn chặn assignment"
-                id={record.id}
-                mode={ButtonType.BLOCK}
-                isDelete
-              />
             </Space>
           );
         },
