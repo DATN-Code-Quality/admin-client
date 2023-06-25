@@ -9,6 +9,9 @@ type CourseLineChartProps = {
 
 function CourseLineChart(props: CourseLineChartProps) {
   const options = {
+    lang: {
+      noData: 'No data for display ',
+    },
     title: {
       text: props.chartTitle ?? '',
       style: {
