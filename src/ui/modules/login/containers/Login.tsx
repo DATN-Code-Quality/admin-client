@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import ForgotPassword from '../components/ForgotPassword';
 
 import { useAuth } from '~/adapters/appService/auth.service';
+import { APP_URL } from '~/constant';
 import Logo from '~/ui/assets/images/logo.png';
 import Card from '~/ui/shared/card';
 import { getDefaultRoute } from '~/utils';
@@ -128,7 +129,7 @@ function Login() {
             }}
             clientId="cd6968a3-3b9b-4658-8e2d-ce846578e092"
             debug
-            redirectUri="http://localhost:3000"
+            redirectUri={APP_URL}
             prompt="login"
           >
             <Button

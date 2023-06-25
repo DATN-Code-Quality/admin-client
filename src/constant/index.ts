@@ -14,6 +14,8 @@ export const IS_PRODUCTION = import.meta.env.VITE_ENV === 'production';
 
 export const DOMAIN_API_URL = import.meta.env.VITE_API_URL;
 
+export const APP_URL = import.meta.env.VITE_APP_URL;
+
 export interface ResponseData<T> {
   status: number;
   data: T;
