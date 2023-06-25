@@ -9,6 +9,10 @@ const ViewUser = lazy(() => import('../ui/modules/user/containers/ViewUser'));
 
 const Login = lazy(() => import('../ui/modules/login/containers/Login'));
 
+const ConfigMoodle = lazy(
+  () => import('../ui/modules/config-moodle/containers/ConfigMoodle')
+);
+
 const ChangePassword = lazy(
   () => import('../ui/modules/profile/containers/ChangePassword')
 );
@@ -63,6 +67,12 @@ export const MAIN_ROUTES = [
     path: ROUTE.LOGIN,
     name: 'login',
     element: Login,
+  },
+  {
+    path: ROUTE.CONFIG_MOODLE,
+    name: 'configMoodle',
+    element: ConfigMoodle,
+    roles: [Role.ADMIN, Role.SUPERADMIN],
   },
   {
     path: ROUTE.ACTIVE_ACCOUNT,
@@ -178,12 +188,19 @@ export const menus = [
     route: ROUTE.COURSE.LIST,
     roles: [Role.ADMIN, Role.SUPERADMIN],
   },
+  // {
+  //   id: 'myCourse',
+  //   name: 'My Course',
+  //   // icon: DownloadOutlined,
+  //   route: ROUTE.MY_COURSE.LIST,
+  //   roles: [Role.USER],
+  // },
   {
-    id: 'myCourse',
-    name: 'My Course',
+    id: 'configMoodle',
+    name: 'Config Moodle',
     // icon: DownloadOutlined,
-    route: ROUTE.MY_COURSE.LIST,
-    roles: [Role.USER],
+    route: ROUTE.CONFIG_MOODLE,
+    roles: [Role.ADMIN, Role.SUPERADMIN],
   },
   // {
   //   id: 'history',

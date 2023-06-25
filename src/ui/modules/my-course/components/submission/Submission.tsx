@@ -18,6 +18,7 @@ import { formatDate } from '~/utils';
 import { SubmissionType } from '../../../../../constant/enum';
 import useQuery from '~/hooks/useQuery';
 import { useNavigate, useNavigation } from 'react-router-dom';
+import useCurrentWidth from '~/hooks/useCurrentWidth';
 
 const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
   assignment,
@@ -27,6 +28,7 @@ const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
   const [subRole, setRole] = useState<SubRole | null>(null);
   const [tab, setTab] = useState<SubmisisonTab>(SubmisisonTab.STATISTIC);
   const { getSubmissionByAssignmentId } = useSubmission();
+  const width = useCurrentWidth();
 
   const fetchSubmission = useCallback(async () => {
     const response = await getSubmissionByAssignmentId(
@@ -45,67 +47,86 @@ const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
     setSubmission(submissions[0]);
   }, [assignment.courseId, assignment.id]);
 
-  
   useEffect(() => {
     fetchSubmission();
   }, [fetchSubmission]);
   const query = useQuery();
   return (
-    <div className="bg-white p-4 rounded-2 gap-4">
-      {submissionList?.length > 0 && (
+    <>
+      {/* first CARD */}
+      <div className="bg-white p-4 rounded-2 gap-4">
+        {/* <p className="assignment-name" style={{ marginTop: 8, marginBottom: 8 }}>
+        {assignment?.name}
+      </p>
+      <p>{assignment?.description}</p> */}
+        {subRole === SubRole.STUDENT && (
+          <>
+            <AddSubmission
+              assignment={assignment}
+              submission={submission}
+              onSubmitted={() => fetchSubmission()}
+            />
+          </>
+        )}
+        {submissionList?.length > 0 && (
+          <div
+            className="grid bg-white p-4 rounded-2"
+            style={{
+              gridTemplateColumns:
+                tab === SubmisisonTab.SUBMISSION ? '1fr 1fr' : '1fr',
+            }}
+          >
+            <div className="assignment-information">
+              {subRole === SubRole.ADMIN ||
+                (subRole === SubRole.TEACHER && (
+                  <div className="flex items-center">
+                    <Tabs
+                      defaultActiveKey={tab}
+                      size="middle"
+                      type="card"
+                      onChange={(selectedTab) => {
+                        setTab(selectedTab);
+                      }}
+                      style={{ marginBottom: 8, marginTop: 8 }}
+                      hidden={false}
+                      items={Object.keys(SubmisisonTab).map((tab) => {
+                        const tabName =
+                          tab.charAt(0).toUpperCase() +
+                          tab.substring(1).toLowerCase();
+                        return {
+                          label: tabName,
+                          key: tab,
+                        };
+                      })}
+                    />
+                  </div>
+                ))}
+            </div>
+            <div />
+          </div>
+        )}
+      </div>
+
+      {/* SECOND CARD */}
+      <div className="bg-white p-4 rounded-2 gap-4 mt-4">
         <div
           className="grid bg-white p-4 rounded-2"
           style={{
             gridTemplateColumns:
-              tab === SubmisisonTab.SUBMISSION ? '1fr 1fr' : '1fr',
+              tab !== SubmisisonTab.SUBMISSION || width < 768
+                ? '1fr'
+                : '1fr 1fr',
           }}
         >
-          <div className='assignment-information'>
-            <p
-              className="assignment-name"
-              style={{ marginTop: 8, marginBottom: 8 }}
-            >
-              {assignment?.name}
-            </p>
-            <p>{assignment?.description}</p>
-            {subRole === SubRole.ADMIN ||
-              (subRole === SubRole.TEACHER && (
-                <div className="flex items-center">
-                  <Tabs
-                    defaultActiveKey={tab}
-                    size="middle"
-                    type="card"
-                    onChange={(selectedTab) => {
-                      setTab(selectedTab)
-                    }}
-                    style={{ marginBottom: 8, marginTop: 8 }}
-                    hidden={false}
-                    items={Object.keys(SubmisisonTab).map((tab) => {
-                      const tabName =
-                        tab.charAt(0).toUpperCase() +
-                        tab.substring(1).toLowerCase();
-                      return {
-                        label: tabName,
-                        key: tab,
-                      };
-                    })}
-                  />
-                </div>
-              ))}
-          </div>
-          <div />
-
           <div style={{ width: '100%', overflow: 'hidden' }}>
-
             <div className="submission-container">
-              {/* {subRole === SubRole.STUDENT && (
-                <p className="title">Submission</p>
-              )} */}
-
               {tab === SubmisisonTab.SUBMISSION && (
                 <>
                   {subRole !== SubRole.STUDENT && (
                     <h3>Student submissions list</h3>
+                  )}
+                  {subRole === SubRole.STUDENT && (
+                    <h3 className="submission-title">Submitted submission</h3>
                   )}
                   <div className="submission-list">
                     {submissionList?.map((submissionItem) => (
@@ -118,7 +139,6 @@ const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
                     ))}
                   </div>
                 </>
-
               )}
               {tab === SubmisisonTab.STATISTIC && (
                 <div className="mt-4">
@@ -133,34 +153,26 @@ const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
           {tab === SubmisisonTab.SUBMISSION && (
             <Overview submission={submission} assignment={assignment} />
           )}
-        </div>
-      )}
-      {tab === SubmisisonTab.SUBMISSION && (
-        <>
-          {submissionList?.length === 0 && (
-            <div className=" bg-white p-4 rounded-2 gap-4">
-              <div className="submission-container ">
-                {(subRole === SubRole.ADMIN || subRole === SubRole.TEACHER) && (
-                  <div>
-                    <p className="title">Bài nộp</p>
-                    <Empty description="Không tồn tại bài nôp" />
+          {tab === SubmisisonTab.SUBMISSION && (
+            <>
+              {submissionList?.length === 0 && (
+                <div className=" bg-white p-4 rounded-2 gap-4">
+                  <div className="submission-container ">
+                    {(subRole === SubRole.ADMIN ||
+                      subRole === SubRole.TEACHER) && (
+                      <div>
+                        <p className="title">Bài nộp</p>
+                        <Empty description="Không tồn tại bài nôp" />
+                      </div>
+                    )}
                   </div>
-                )}
-
-                {subRole === SubRole.STUDENT && (
-                  <div>
-                    <AddSubmission
-                      assignment={assignment}
-                      onSubmitted={() => fetchSubmission()}
-                    />
-                  </div>
-                )}
-              </div>
-            </div>
+                </div>
+              )}
+            </>
           )}
-        </>
-      )}
-    </div>
+        </div>
+      </div>
+    </>
   );
 };
 
@@ -170,85 +182,48 @@ const SubmissionItem: React.FC<{
   active: boolean;
 }> = ({ submission, setSubmission, active }) => {
   const renderStatus = useCallback((status: SubmissionType) => {
+    let backgroundColor = '';
+    let statusStr = '';
     switch (status) {
-      case SubmissionType.SUBMITTED:
-        return (
-          <div
-            className="px-4 py-2 rounded-2"
-            style={{
-              background: '#7e7676',
-              color: 'white',
-              fontWeight: 600,
-              minWidth: '80px',
-              textAlign: 'center',
-            }}
-          >
-            Submitted
-          </div>
-        );
       case SubmissionType.SCANNING:
-        return (
-          <div
-            className="px-4 py-3 rounded-2"
-            style={{
-              background: 'blue',
-              color: 'white',
-              fontWeight: 600,
-              minWidth: '80px',
-              textAlign: 'center',
-            }}
-          >
-            Scanning
-          </div>
-        );
+        backgroundColor = 'blue';
+        statusStr = 'Scanning';
+        break;
       case SubmissionType.PASS:
-        return (
-          <div
-            className="px-4 py-2 rounded-2"
-            style={{
-              background: 'green',
-              color: 'white',
-              fontWeight: 600,
-              minWidth: '80px',
-              textAlign: 'center',
-            }}
-          >
-            Pass
-          </div>
-        );
+        backgroundColor = 'green';
+        statusStr = 'Pass';
+        break;
       case SubmissionType.FAIL:
-        return (
-          <div
-            className="px-4 py-2 rounded-2"
-            style={{
-              background: 'red',
-              color: 'white',
-              fontWeight: 600,
-              minWidth: '80px',
-              textAlign: 'center',
-            }}
-          >
-            Fail
-          </div>
-        );
+        backgroundColor = 'red';
+        statusStr = 'Failed';
+        break;
       case SubmissionType.SCANNED_FAIL:
-        return (
-          <div
-            className="px-4 py-2 rounded-2"
-            style={{
-              background: 'green',
-              color: 'white',
-              fontWeight: 600,
-              minWidth: '80px',
-              textAlign: 'center',
-            }}
-          >
-            Scanned Fail
-          </div>
-        );
+        backgroundColor = 'red';
+        statusStr = 'Scan failed';
+        break;
       default:
-        return <></>;
+        statusStr = 'Submitted';
+        backgroundColor = 'gray';
     }
+
+    return (
+      <div
+        className="rounded-2"
+        style={{
+          background: backgroundColor,
+          color: 'white',
+          fontWeight: 600,
+          minWidth: '80px',
+          textAlign: 'center',
+          paddingLeft: 6,
+          paddingRight: 6,
+          paddingTop: 2,
+          paddingBottom: 2,
+        }}
+      >
+        {statusStr}
+      </div>
+    );
   }, []);
   return (
     <div
@@ -266,7 +241,7 @@ const SubmissionItem: React.FC<{
           <div>
             <span className="font-semibold">Time submit: </span>
             {formatDate(
-              new Date(submission.createdAt ?? ''),
+              new Date(submission.updatedAt ?? ''),
               'vi-VN',
               'YYYY-MM-DD hh:mm:ss'
             )}

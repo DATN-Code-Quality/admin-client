@@ -47,7 +47,7 @@ const Statistic: React.FC<{ courseId: string; assignmentId: string }> = ({
         scanFail,
         total - waitToScan - scanning - fail - pass - scanFail,
       ];
-      
+
       setReport({ labels, data });
     } catch (err) {
       console.log(err);
@@ -74,7 +74,9 @@ const Statistic: React.FC<{ courseId: string; assignmentId: string }> = ({
         ]}
         loading={loading}
       />
-      <DataTable courseId={courseId} assignmentId={assignmentId} />
+      <div className="mt-2">
+        <DataTable courseId={courseId} assignmentId={assignmentId} />
+      </div>
     </div>
   );
 };

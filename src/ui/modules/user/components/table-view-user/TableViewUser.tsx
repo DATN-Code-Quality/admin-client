@@ -22,6 +22,7 @@ import { User } from '~/domain/user';
 import useDialog from '~/hooks/useDialog';
 import useList from '~/hooks/useList';
 import Card from '~/ui/shared/card';
+import ExcelToObject from '~/ui/shared/data-import';
 import BaseFilter from '~/ui/shared/forms/baseFilter';
 import ImportedModal from '~/ui/shared/imported-modal';
 import Loading from '~/ui/shared/loading';
@@ -69,20 +70,14 @@ function TableViewUser() {
   };
 
   const handleCreateOrUpdate = async (value, id) => {
-    message.success(MESSAGE.SUCCESS);
-    try {
-      const dataSubmit = { ...value, id, role: Role.ADMIN };
-      if (!id) {
-        delete dataSubmit.id;
-        await createUser(dataSubmit);
-      } else {
-        await updateUser(dataSubmit);
-      }
-      handleUpdateList();
-      message.success(MESSAGE.SUCCESS);
-    } catch (error) {
-      message.error(MESSAGE.ERROR);
+    const dataSubmit = { ...value, id, role: Role.ADMIN };
+    if (!id) {
+      delete dataSubmit.id;
+      await createUser(dataSubmit);
+    } else {
+      await updateUser(dataSubmit);
     }
+    handleUpdateList();
   };
 
   const handleBlockUser = async (value, id) => {
@@ -115,7 +110,7 @@ function TableViewUser() {
             {record.status === UserStatus.ACTIVE ? (
               <BaseModal
                 onOkFn={handleBlockUser}
-                itemTitle="Chặn user"
+                itemTitle="User"
                 id={record.id}
                 mode={ButtonType.BLOCK}
                 isDelete
@@ -123,7 +118,7 @@ function TableViewUser() {
             ) : (
               <BaseModal
                 onOkFn={handleUnblockUser}
-                itemTitle="Mở khoá user"
+                itemTitle="User"
                 id={record.id}
                 mode={ButtonType.UNBLOCK}
                 isDelete
@@ -147,16 +142,41 @@ function TableViewUser() {
         <TableToolbar
           title={`Found ${formatNumber(list.items?.length || 0)} user`}
         >
-          <Button
-            type="primary"
-            className="mr-4"
-            icon={<SyncOutlined />}
-            loading={list.isLoading}
-            onClick={syncMoodleModalActions.handleOpen}
+          <div
+            className="flex items-center flex-nowrap overflow-auto"
+            style={{ gap: '16px' }}
           >
-            Sync Moodle
-          </Button>
-          {/* <Button
+            <Button
+              type="primary"
+              className="mr-4"
+              icon={<SyncOutlined />}
+              loading={list.isLoading}
+              onClick={syncMoodleModalActions.handleOpen}
+            >
+              Sync Moodle
+            </Button>
+            <ExcelToObject
+              handleImportModalOk={handleImportModalOk}
+              loading={list.isLoading}
+              name="Import users"
+              handleConvertData={(data, columnNames) => {
+                return data
+                  ?.slice(1)
+                  .map<Record<string, string | number>>((row) => {
+                    const obj: Record<string, string | number> = {
+                      name: row[columnNames.indexOf('name')],
+                      role: row[columnNames.indexOf('role')].toString(),
+                      email: row[columnNames.indexOf('email')].toString(),
+                      userId: row[columnNames.indexOf('userId')].toString(),
+                      status: 0,
+                    };
+                    return obj;
+                  });
+              }}
+              templateLink="list-user.xlsx"
+            />
+
+            {/* <Button
             type="primary"
             className="mr-4"
             icon={<UploadOutlined />}
@@ -165,15 +185,16 @@ function TableViewUser() {
           >
             Import Excel
           </Button> */}
-          <BaseModal
-            onOkFn={handleCreateOrUpdate}
-            itemTitle=""
-            id={0}
-            mode={ButtonType.CREATE}
-            meta={metaCreateUser()}
-            loading={list.isLoading}
-            formProps={{ layout: 'vertical' }}
-          />
+            <BaseModal
+              onOkFn={handleCreateOrUpdate}
+              itemTitle=""
+              id={0}
+              mode={ButtonType.CREATE}
+              meta={metaCreateUser()}
+              loading={list.isLoading}
+              formProps={{ layout: 'vertical' }}
+            />
+          </div>
         </TableToolbar>
         <BaseTable
           idKey="id"

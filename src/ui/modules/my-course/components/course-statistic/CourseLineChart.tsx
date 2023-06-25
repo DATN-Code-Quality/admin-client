@@ -3,7 +3,7 @@ import HighchartsReact from 'highcharts-react-official';
 
 type CourseLineChartProps = {
   chartTitle?: string;
-  series: [],
+  series: [] | any,
   // labels: string[]
 };
 
@@ -58,6 +58,7 @@ function CourseLineChart(props: CourseLineChartProps) {
     tooltip: {
       shared: true,
     },
+    // eslint-disable-next-line react/destructuring-assignment
     series: props.series,
   };
   return <HighchartsReact highcharts={Highcharts} options={options} />;

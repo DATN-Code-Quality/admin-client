@@ -24,6 +24,7 @@ const ROUTE = {
     EDIT_ASSIGNMENT: '/my-course/edit-assignment',
   },
   LOGIN: '/login',
+  CONFIG_MOODLE: '/config-moodle',
   SONARQUBE: {
     LIST: '/sonarqube/list',
     SUBMISSION: '/sonarqube/submission',

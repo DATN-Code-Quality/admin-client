@@ -1,7 +1,11 @@
 /* eslint-disable import/order */
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { ArrowLeftOutlined, FileTextOutlined } from '@ant-design/icons';
+import {
+  ArrowLeftOutlined,
+  FileTextOutlined,
+  SettingOutlined,
+} from '@ant-design/icons';
 import { Pagination, Spin } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -9,7 +13,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import DetailSubmission from './DetailSubmission';
 import EmptyIssue from './EmptyIssue';
 import IssueItem from './IssueItem';
-import SubmissionFilter from './SubmissionFilter';
+import { SubmissionFilter, SubmissionFilterMobile } from './SubmissionFilter';
 
 import { useSonarqube } from '~/adapters/appService/sonarqube.service';
 import {
@@ -24,16 +28,15 @@ import './index.less';
 import { BugType, SeverityType } from '~/constant/enum';
 import { Issue } from '~/domain/submission';
 import DetailRule from './DetailRule';
-import { keys } from 'highcharts';
-
-const PAGE_SIZE = 100;
 
 const Submission = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
+  const [width, setWidth] = useState(window.innerWidth);
 
-  const { getIssuesSubmission, getOverViewSubmission } = useSonarqube();
+  const [components, setComponents] = useState();
+  const { getIssuesSubmission } = useSonarqube();
 
   const issueSelected = useSelector(SonarqubeSelector.getIssueSelected);
   const data = useSelector(SonarqubeSelector.getSubmissionIssues);
@@ -43,10 +46,12 @@ const Submission = () => {
     type: BugType | '';
     file: string;
     severity: SeverityType | '';
+    fileuuid: string;
   }>({
     type: '',
     file: '',
     severity: '',
+    fileuuid: '',
   });
 
   const [loading, setLoading] = useState(false);
@@ -54,6 +59,9 @@ const Submission = () => {
     page: 1,
     total: 0,
   });
+
+  const [open, setOpen] = useState(false);
+
   const [ruleSelected, setRuleSelected] = useState<string | null>(null);
 
   const handleFetchData = useCallback(async () => {
@@ -68,12 +76,12 @@ const Submission = () => {
           Object.entries(filters).filter(([_, v]) => v !== '')
         ),
         page: pagination.page,
-        pageSize: PAGE_SIZE,
+        pageSize: 7,
       }
     );
     if (response?.status !== 0) return;
     const { data: dataRes } = response;
-    const { issues } = dataRes || { components: [], issues: [] };
+    const { issues, components } = dataRes || { components: [], issues: [] };
     setPagination({
       page: dataRes.p,
       total: dataRes.total,
@@ -87,11 +95,10 @@ const Submission = () => {
       } else {
         objectResult[issue.component] = [issue];
       }
-
       return objectResult;
     }, issuesOfComponents);
-
     dispatch(setSubmissionIssues(issuesOfComponents));
+    setComponents(components);
     setLoading(false);
   }, [dataSelected, filters, pagination.page, dispatch]);
 
@@ -107,6 +114,15 @@ const Submission = () => {
   }, [handleFetchData]);
 
   useEffect(() => {
+    window.addEventListener('resize', () => {
+      setWidth(window.innerWidth);
+    });
+    return () => {
+      window.removeEventListener('resize', () => {});
+    };
+  }, []);
+
+  useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const courseId = queryParams.get('courseId');
     const assignmentId = queryParams.get('assignmentId');
@@ -118,45 +134,48 @@ const Submission = () => {
     }
     dispatch(setSubmissionSelected({ courseId, assignmentId, submissionId }));
   }, [dispatch, location.search, navigate]);
-  const issueMapByBugType = useCallback(() => {
-    const result = new Map<BugType, number>();
-    let issues: any[] = [];
-    Object.keys(data).forEach((key) => {
-      issues = [...issues, ...data[key]];
-    });
-    issues.forEach((issue) => {
-      if (result[issue.type]) {
-        result[issue.type] += 1;
-      }
-      else {
-        result[issue.type] = 1;
-      }
-    })
 
-    return result;
-  }, [data, filters]);
-  const bugTypeMap = issueMapByBugType();
   return (
     <>
       {!loading && issueSelected && <DetailSubmission />}
 
       {!issueSelected && (
         <div className="h-full overflow-hidden ">
-          <p
-            className="font-semibold cursor-pointer"
-            onClick={() =>
-              navigate(`/course/detail?id=${dataSelected?.courseId}`)
-            }
-          >
-            <ArrowLeftOutlined size={32} className=" mr-2" />
-            <span>Back</span>
-          </p>
+          <div className="flex items-center w-full justify-between p-4">
+            <p
+              className="font-semibold cursor-pointer"
+              onClick={() => {
+                navigate(
+                  `/my-course/assign?id=${dataSelected.assignmentId}&course_id=${dataSelected.courseId}`
+                );
+              }}
+            >
+              <ArrowLeftOutlined size={32} className=" mr-2" />
+              <span>Back</span>
+            </p>
+            {width < 1024 && (
+              <div className="flex items-center" onClick={() => setOpen(true)}>
+                <SettingOutlined />
+                <p className="ml-2 font-semibold">Setting</p>
+              </div>
+            )}
+          </div>
           <div className="flex gap-4 h-full ">
-            <SubmissionFilter
-              filters={filters}
-              setFilters={setFilters}
-              values={bugTypeMap}
-            />
+            {width >= 1024 ? (
+              <SubmissionFilter
+                filters={filters}
+                setFilters={setFilters}
+                components={components}
+              />
+            ) : (
+              <SubmissionFilterMobile
+                filters={filters}
+                setFilters={setFilters}
+                open={open}
+                setOpen={setOpen}
+                components={components}
+              />
+            )}
 
             <div className="submission-issues-container ">
               {loading && (
@@ -185,9 +204,9 @@ const Submission = () => {
                             <FileTextOutlined />
                             <span className="ml-2">{fileNameShort}</span>
                           </p>
-                          {data[key].map((issue, index) => (
+                          {data[key].map((issue) => (
                             <IssueItem
-                              key={index}
+                              key={issue}
                               issue={issue}
                               handleSetIssue={handleSetIssue}
                               setRuleSelected={setRuleSelected}
@@ -204,10 +223,11 @@ const Submission = () => {
                       display: 'flex',
                       justifyContent: 'center',
                       paddingBottom: '32px',
+                      marginBottom: '40px',
                     }}
                     defaultCurrent={pagination.page}
                     total={pagination.total}
-                    pageSize={PAGE_SIZE}
+                    pageSize={6}
                     onChange={(val) =>
                       setPagination((prev) => ({ ...prev, page: val }))
                     }

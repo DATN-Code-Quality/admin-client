@@ -1,7 +1,9 @@
+import React, { useEffect, useState } from 'react';
+
 import { MehOutlined, SmileOutlined } from '@ant-design/icons';
-import { Button, Result, Spin } from 'antd';
-import { useEffect, useState } from 'react';
+import { Button, Layout, Result, Spin } from 'antd';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+
 import { putWithPath } from '~/adapters/api.http';
 import API from '~/constant/api';
 import ROUTE from '~/constant/routes';

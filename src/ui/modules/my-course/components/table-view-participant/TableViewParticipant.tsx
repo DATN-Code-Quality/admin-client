@@ -7,9 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 import {
   columnTableParticipant,
-  columnTableSyncParticipant,
   metaFilterParticipant,
-  metaFilterSyncParticipant,
 } from './props';
 
 import { useCourse } from '~/adapters/appService/course.service';
@@ -135,18 +133,6 @@ function TableViewParticipant({ course }) {
           onChange={onPageChange}
         />
       </Card>
-      {syncMoodleModalVisible && (
-        <>
-          <ImportedModal
-            idKey="moodleId"
-            baseFilterMeta={metaFilterSyncParticipant()}
-            columns={columnTableSyncParticipant()}
-            fetchFn={(args) => handleGetMoodleParticipants(args)}
-            onOk={handleImportModalOk}
-            onCancel={syncMoodleModalActions.handleClose}
-          />
-        </>
-      )}
     </>
   );
 }

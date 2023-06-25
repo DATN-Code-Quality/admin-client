@@ -18,15 +18,15 @@ export const MAP_BUTTON_TYPE: Record<number, string> = {
   [ButtonType.CREATE]: 'Create',
   [ButtonType.EDIT]: 'Edit',
   [ButtonType.DELETE]: 'Delete',
-  [ButtonType.BLOCK]: '',
-  [ButtonType.UNBLOCK]: '',
+  [ButtonType.BLOCK]: 'Block',
+  [ButtonType.UNBLOCK]: 'Unblock',
 };
 
 export const MAP_BUTTON_PROPS: Record<number, any> = {
   [ButtonType.CREATE]: {
     icon: <PlusCircleOutlined />,
     type: 'primary',
-    title: 'Create',
+    title: '',
     children: 'Create',
   },
   [ButtonType.EDIT]: {
@@ -34,13 +34,14 @@ export const MAP_BUTTON_PROPS: Record<number, any> = {
     type: 'primary',
     ghost: true,
     icon: <EditOutlined />,
-    title: 'Edit',
+    title: '',
   },
   [ButtonType.DELETE]: {
     size: 'small',
     type: 'danger',
+    ghost: true,
     icon: <DeleteOutlined />,
-    title: 'Delete',
+    title: '',
   },
   [ButtonType.BLOCK]: {
     size: 'small',

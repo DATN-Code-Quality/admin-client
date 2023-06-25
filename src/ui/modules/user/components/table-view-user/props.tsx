@@ -7,11 +7,14 @@ import { generateMappingList, getMappingLabelByValue } from '~/utils';
 
 export const metaFilterUser = () => {
   return {
+    columns: 3,
     fields: [
       {
         key: 'search',
+        colSpan: 3,
         widgetProps: {
           placeholder: 'Search by Name or Email',
+          allowClear: true,
           style: {
             minWidth: '250px',
           },
@@ -19,13 +22,13 @@ export const metaFilterUser = () => {
       },
       {
         key: 'role',
+        colSpan: 3,
         options: MAP_ROLES,
         widget: 'select',
         widgetProps: {
           maxTagCount: 'responsive',
           style: {
             minWidth: '12rem',
-            maxWidth: '12rem',
           },
           placeholder: 'Role',
           allowClear: true,
@@ -33,13 +36,13 @@ export const metaFilterUser = () => {
       },
       {
         key: 'status',
+        colSpan: 3,
         options: MAP_USER_STATUS,
         widget: 'select',
         widgetProps: {
           maxTagCount: 'responsive',
           style: {
             minWidth: '12rem',
-            maxWidth: '12rem',
           },
           placeholder: 'Status',
           allowClear: true,
@@ -53,7 +56,7 @@ export const columnTableUser = (): ColumnType<any>[] => [
   {
     title: 'Name',
     dataIndex: 'name',
-    width: 200,
+    width: '40%',
     ellipsis: true,
     sorter: (a, b) => {
       return a.name.localeCompare(b.name);
@@ -62,7 +65,7 @@ export const columnTableUser = (): ColumnType<any>[] => [
   {
     title: 'Email',
     dataIndex: 'email',
-    width: 200,
+    width: '40%',
     ellipsis: true,
     sorter: (a, b) => {
       return a.email.localeCompare(b.email);
@@ -72,7 +75,7 @@ export const columnTableUser = (): ColumnType<any>[] => [
     title: 'Role',
     dataIndex: 'role',
     width: 100,
-    ellipsis: true,
+    responsive: ['lg', 'md'],
     sorter: (a, b) => {
       return a.role.localeCompare(b.role);
     },
@@ -112,6 +115,17 @@ export const metaCreateUser = () => {
         widgetProps: {
           placeholder: 'Enter Email',
           type: 'email',
+        },
+      },
+      {
+        key: 'roles',
+        label: 'Roles',
+        options: MAP_ROLES,
+        widget: 'select',
+        required: true,
+        widgetProps: {
+          placeholder: 'Enter Roles',
+          allowClear: true,
         },
       },
     ],
@@ -162,9 +176,12 @@ export const metaUpdateUser = (record) => {
 
 export const metaFilterSyncUser = () => {
   return {
+    columns: 3,
+
     fields: [
       {
         key: 'search',
+        colSpan: 3,
         widgetProps: {
           placeholder: 'Search by Name or Email',
           style: {
@@ -180,7 +197,7 @@ export const columnTableSyncUser = (): ColumnType<any>[] => [
   {
     title: 'Name',
     dataIndex: 'name',
-    width: 200,
+    width: '40%',
     ellipsis: true,
     sorter: (a, b) => {
       return a.name.localeCompare(b.name);
@@ -189,7 +206,7 @@ export const columnTableSyncUser = (): ColumnType<any>[] => [
   {
     title: 'Email',
     dataIndex: 'email',
-    width: 200,
+    width: '40%',
     ellipsis: true,
     sorter: (a, b) => {
       return a.email.localeCompare(b.email);
