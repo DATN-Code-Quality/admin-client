@@ -96,6 +96,7 @@ const DataTable: React.FC<{ courseReport: ReportCourse[]; total: number }> = ({
         scroll={{ x: '800px' }}
         dataSource={dataSource}
         columns={columns}
+        locale={{emptyText:'No submission found'}}
       />
     </div>
   );

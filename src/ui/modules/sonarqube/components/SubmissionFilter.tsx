@@ -182,10 +182,10 @@ const SubmissionFilter: React.FC<{
           const fileNameShort = value[value.length - 1];
           const component = value[0];
           let fileuuid = '';
-          const componentList = components.filter(
+          const componentList = components?.filter(
             (item) => item.key === component
           );
-          if (componentList.length > 0) {
+          if (componentList?.length > 0) {
             fileuuid = componentList[0]?.uuid || '';
           }
           console.log('Components', components);
