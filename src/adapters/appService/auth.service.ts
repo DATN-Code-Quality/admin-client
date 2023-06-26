@@ -103,13 +103,7 @@ export function useAuth() {
           { token },
           body
         );
-        if (resp.status === ApiStatus.SUCCESS) {
-          const { accessToken, user } = resp.data;
-          LocalStorage.set({
-            accessToken,
-          });
-          dispatch(setUserInfo(user));
-        } else {
+        if (resp.status !== ApiStatus.SUCCESS) {
           throw new Error(JSON.stringify(resp));
         }
         return resp;
