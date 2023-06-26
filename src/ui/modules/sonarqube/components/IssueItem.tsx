@@ -12,7 +12,40 @@ const IssueItem: React.FC<{
   handleSetIssue?: (val: Issue) => void;
   setRuleSelected: (val: string) => void;
 }> = ({ issue, handleSetIssue, setRuleSelected }) => {
-  
+  const renderErrorPosition = useCallback(
+    (errorPosition: {
+      startLine: number;
+      endLine: number;
+      startOffset: number;
+      endOffset: number;
+    }) => {
+      const { startLine, endLine, startOffset, endOffset } =
+        errorPosition || {};
+      const errorPositionStr = `${startOffset} ${
+        startOffset !== endLine ? `- ${endLine}` : ''
+      }`;
+      const errorPositionOffsetStr = `${startOffset} ${
+        startOffset !== endOffset ? `- ${endOffset}` : ''
+      }`;
+      return (
+        <>
+          {startLine && endLine && (
+            <>
+              <p>
+                Error line :{' '}
+                <span className="issue-type">{errorPositionStr}</span>
+              </p>
+              <p>
+                Error offset :{' '}
+                <span className="issue-type">{errorPositionOffsetStr}</span>
+              </p>
+            </>
+          )}
+        </>
+      );
+    },
+    []
+  );
   const renderBugError = useCallback(
     (
       type: string,
@@ -23,14 +56,6 @@ const IssueItem: React.FC<{
         endOffset: number;
       }
     ) => {
-      const { startLine, endLine, startOffset, endOffset } = errorPosition;
-      const errorPositionStr = `${startLine} ${
-        startLine !== endLine ? `- ${endLine}` : ''
-      }`;
-      const errorPositionOffsetStr = `${startOffset} ${
-        startOffset !== endOffset ? `- ${endOffset}` : ''
-      }`;
-
       switch (type) {
         case BugType.CODE_SMELL:
           return (
@@ -40,15 +65,8 @@ const IssueItem: React.FC<{
                 {/* <span className="issue-type">{formattedCodeSmell(type)}</span> */}
                 <span className="issue-type">Code Smell</span>
               </p>
-              <p>
-                Error line :{' '}
-                <span className="issue-type">{errorPositionStr}</span>
-              </p>
 
-              <p>
-                Error offset :{' '}
-                <span className="issue-type">{errorPositionOffsetStr}</span>
-              </p>
+              {renderErrorPosition(errorPosition)}
             </div>
           );
         case BugType.BUG:
@@ -58,22 +76,14 @@ const IssueItem: React.FC<{
                 <BugOutlined />
                 <span className="issue-type">Bug</span>
               </p>
-              <p>
-                Error line :{' '}
-                <span className="issue-type">{errorPositionStr}</span>
-              </p>
-
-              <p>
-                Error offset :{' '}
-                <span className="issue-type">{errorPositionOffsetStr}</span>
-              </p>
+              {renderErrorPosition(errorPosition)}
             </div>
           );
         default:
           return <></>;
       }
     },
-    []
+    [renderErrorPosition]
   );
   return (
     <div key={issue.key} className="issue-component">
@@ -95,7 +105,7 @@ const IssueItem: React.FC<{
         </p>
         <div />
       </div>
-      <div>{renderBugError(issue.type, issue.textRange)}</div>
+      <div>{renderBugError(issue.type, issue?.textRange)}</div>
     </div>
   );
 };
