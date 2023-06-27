@@ -11,7 +11,8 @@ const IssueItem: React.FC<{
   issue: Issue;
   handleSetIssue?: (val: Issue) => void;
   setRuleSelected: (val: string) => void;
-}> = ({ issue, handleSetIssue, setRuleSelected }) => {
+  style?: Record<string, string | number>;
+}> = ({ issue, handleSetIssue, setRuleSelected, style }) => {
   const renderErrorPosition = useCallback(
     (errorPosition: {
       startLine: number;
@@ -21,8 +22,8 @@ const IssueItem: React.FC<{
     }) => {
       const { startLine, endLine, startOffset, endOffset } =
         errorPosition || {};
-      const errorPositionStr = `${startOffset} ${
-        startOffset !== endLine ? `- ${endLine}` : ''
+      const errorPositionStr = `${startLine} ${
+        startLine !== endLine ? `- ${endLine}` : ''
       }`;
       const errorPositionOffsetStr = `${startOffset} ${
         startOffset !== endOffset ? `- ${endOffset}` : ''
@@ -86,7 +87,7 @@ const IssueItem: React.FC<{
     [renderErrorPosition]
   );
   return (
-    <div key={issue.key} className="issue-component">
+    <div key={issue.key} className="issue-component" style={style}>
       <div
         className="issue-content"
         onClick={() => {
