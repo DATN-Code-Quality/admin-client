@@ -166,7 +166,7 @@ const Overview: React.FC<{
           </div>
 
           <div className="btn-show-result mt-4" onClick={handleShowResult}>
-            Kết quả chi tiết
+            Detail Result
           </div>
         </div>
       )}
