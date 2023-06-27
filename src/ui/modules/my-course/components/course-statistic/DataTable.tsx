@@ -10,7 +10,6 @@ const DataTable: React.FC<{ courseReport: ReportCourse[]; total: number }> = ({
   courseReport,
   total,
 }) => {
-  console.log(courseReport, total);
   const exportToExcel = () => {
     const workbook = XLSX.utils.book_new();
     const modifiedDataSource = dataSource.map((item) => {
