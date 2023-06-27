@@ -151,7 +151,7 @@ function TableViewAssignment({ course }) {
       />
       <Card>
         <TableToolbar
-          title={`Found ${formatNumber(list.items?.length || 0)} assignment`}
+          title={`Found ${formatNumber(list.total || 0)} assignment`}
         >
           {isTeacher && (
             <>
