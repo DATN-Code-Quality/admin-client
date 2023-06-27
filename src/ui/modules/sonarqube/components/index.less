@@ -104,7 +104,13 @@ body {
   font-weight: 600;
   background-color: #f2dede;
   cursor: pointer;
-  max-width: 900px;
+  // max-width: 900px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  // align-items: center
+  justify-content: center;
+  max-height: 100px;
 }
 
 .issue-content {
@@ -160,11 +166,11 @@ body {
 }
 
 .line-code-container:hover {
-  background: rgba(0, 0, 0, 0.03) !important;
+  background: rgba(0, 0, 0, 0.1) !important;
 }
 
 .line-code-container.active {
-  background: rgba(0, 0, 0, 0.03) !important;
+  background: rgba(0, 0, 0, 0.1) !important;
 }
 
 .line-code-container.active .line-index,
@@ -236,6 +242,7 @@ body {
   font-weight: 800;
   cursor: pointer;
   transition: all linear 0.1s;
+  overflow: auto;
 }
 
 .issue-message.active {
@@ -270,8 +277,10 @@ body {
 }
 
 .issue-rule-container {
-  flex: 1;
+  // flex: 1;
+  margin-left: auto;
   text-align: right;
+  color: #236a97;
 }
 
 .submission-issues-container {
@@ -365,4 +374,10 @@ body {
 
 .w-10 {
   width: 40px;
+}
+
+@media screen and (max-width: 768px) {
+  .issue-component {
+    max-height: unset;
+  }
 }
