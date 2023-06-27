@@ -18,7 +18,9 @@ const TableToolbar: React.FC<TableToolbarProps> = (props) => {
           </div>
         )}
       </div>
-      <div className="right-wrapper">{props.children}</div>
+      <div className="right-wrapper" style={{ maxWidth: '100%' }}>
+        {props.children}
+      </div>
     </div>
   );
 };

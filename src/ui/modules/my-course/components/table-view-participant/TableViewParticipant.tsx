@@ -5,10 +5,7 @@ import { message, Space } from 'antd';
 import Button from 'antd-button-color';
 import { useNavigate } from 'react-router-dom';
 
-import {
-  columnTableParticipant,
-  metaFilterParticipant,
-} from './props';
+import { columnTableParticipant, metaFilterParticipant } from './props';
 
 import { useCourse } from '~/adapters/appService/course.service';
 import { useUser } from '~/adapters/appService/user.service';
@@ -92,9 +89,7 @@ function TableViewParticipant({ course }) {
         onFilter={onFilterChange}
       />
       <Card>
-        <TableToolbar
-          title={`Found ${formatNumber(list.items?.length || 0)} user`}
-        >
+        <TableToolbar title={`Found ${formatNumber(list.total || 0)} user`}>
           {/* <Button
             type="primary"
             className="mr-4"
