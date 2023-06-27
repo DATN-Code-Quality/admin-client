@@ -10,8 +10,6 @@ import { message, Modal, Space } from 'antd';
 import Button from 'antd-button-color';
 import { useNavigate } from 'react-router-dom';
 
-import SubmissionComponent from '../submission';
-
 import {
   columnTableAssignment,
   columnTableSyncAssignment,
@@ -49,10 +47,6 @@ function TableViewAssignment({ course }) {
   } = useAssignment();
 
   const [loading, setLoading] = useState<boolean>(false);
-  const [assignmentSelected, setAssignmentSelected] =
-    useState<Assignment | null>(null);
-
-  const [userRole, setUserRole] = useState<SubRole | undefined>(undefined);
 
   const [syncMoodleModalVisible, syncMoodleModalActions] = useDialog();
   const [currentRole, setCurrentRole] = useState<SubRole>(SubRole.STUDENT);
@@ -76,12 +70,6 @@ function TableViewAssignment({ course }) {
       data: res.data.assignments,
     };
   };
-
-  useEffect(() => {
-    return () => {
-      setAssignmentSelected(null);
-    };
-  }, []);
 
   const [
     list,
@@ -128,14 +116,8 @@ function TableViewAssignment({ course }) {
     navigate(url);
   };
 
-  const handleBlockAssignment = (id) => {
-    return blockAssignment(id).then((data) => {
-      onEditItem(data, 'id');
-    });
-  };
-
   const columnTableProps = () => {
-    const columns = [...columnTableAssignment(setAssignmentSelected)];
+    const columns = [...columnTableAssignment()];
     if (isTeacher) {
       columns.push({
         dataIndex: 'action',
@@ -161,71 +143,62 @@ function TableViewAssignment({ course }) {
 
   return (
     <>
-      {!assignmentSelected && (
-        <>
-          {loading && <Loading />}
-          <BaseFilter
-            loading={list.isLoading}
-            meta={metaFilterAssignment()}
-            onFilter={onFilterChange}
-          />
-          <Card>
-            <TableToolbar
-              title={`Found ${formatNumber(
-                list.items?.length || 0
-              )} assignment`}
-            >
-              {isTeacher && (
-                <>
-                  {course?.courseMoodleId && (
-                    <Button
-                      type="primary"
-                      className="mr-4"
-                      icon={<SyncOutlined />}
-                      loading={list.isLoading}
-                      onClick={syncMoodleModalActions.handleOpen}
-                    >
-                      Sync Moodle
-                    </Button>
-                  )}
-                  <Button
-                    type="primary"
-                    icon={<PlusCircleOutlined />}
-                    loading={list.isLoading}
-                    onClick={handleCreateAssignment}
-                  >
-                    Create
-                  </Button>
-                </>
-              )}
-            </TableToolbar>
-            <BaseTable
-              idKey="id"
-              columns={columnTableProps()}
-              data={list}
-              paginationProps={{
-                showSizeChanger: true,
-                pageSizeOptions: PAGE_SIZE_OPTIONS,
-              }}
-              onChange={onPageChange}
-            />
-          </Card>
-          {syncMoodleModalVisible && (
+      {loading && <Loading />}
+      <BaseFilter
+        loading={list.isLoading}
+        meta={metaFilterAssignment()}
+        onFilter={onFilterChange}
+      />
+      <Card>
+        <TableToolbar
+          title={`Found ${formatNumber(list.items?.length || 0)} assignment`}
+        >
+          {isTeacher && (
             <>
-              <ImportedModal
-                idKey="assignmentMoodleId"
-                baseFilterMeta={metaFilterSyncAssignment()}
-                columns={columnTableSyncAssignment()}
-                fetchFn={(args) => handleGetMoodleAssignments(args)}
-                onOk={handleImportModalOk}
-                onCancel={syncMoodleModalActions.handleClose}
-              />
+              {course?.courseMoodleId && (
+                <Button
+                  type="primary"
+                  className="mr-4"
+                  icon={<SyncOutlined />}
+                  loading={list.isLoading}
+                  onClick={syncMoodleModalActions.handleOpen}
+                >
+                  Sync Moodle
+                </Button>
+              )}
+              <Button
+                type="primary"
+                icon={<PlusCircleOutlined />}
+                loading={list.isLoading}
+                onClick={handleCreateAssignment}
+              >
+                Create
+              </Button>
             </>
           )}
+        </TableToolbar>
+        <BaseTable
+          idKey="id"
+          columns={columnTableProps()}
+          data={list}
+          paginationProps={{
+            showSizeChanger: true,
+            pageSizeOptions: PAGE_SIZE_OPTIONS,
+          }}
+          onChange={onPageChange}
+        />
+      </Card>
+      {syncMoodleModalVisible && (
+        <>
+          <ImportedModal
+            idKey="assignmentMoodleId"
+            baseFilterMeta={metaFilterSyncAssignment()}
+            columns={columnTableSyncAssignment()}
+            fetchFn={(args) => handleGetMoodleAssignments(args)}
+            onOk={handleImportModalOk}
+            onCancel={syncMoodleModalActions.handleClose}
+          />
         </>
-      )}
-      {assignmentSelected && (
-        <SubmissionComponent assignment={assignmentSelected} />
       )}
     </>
   );

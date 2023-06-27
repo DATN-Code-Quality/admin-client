@@ -40,8 +40,8 @@ function ConfigMoodle() {
       ...values,
     };
     createConnect(dataSubmit)
-      .then(handleSubmitSuccess('Edit assignment successfully!'))
-      .catch(handleSubmitFail('Edit assignment failed!'))
+      .then(handleSubmitSuccess('Config successfully!'))
+      .catch(handleSubmitFail('Config failed!'))
       .finally(() => setLoading(false));
   };
 
