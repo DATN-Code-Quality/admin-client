@@ -118,8 +118,8 @@ export const metaCreateUser = () => {
         },
       },
       {
-        key: 'roles',
-        label: 'Roles',
+        key: 'role',
+        label: 'Role',
         options: MAP_ROLES,
         widget: 'select',
         required: true,
