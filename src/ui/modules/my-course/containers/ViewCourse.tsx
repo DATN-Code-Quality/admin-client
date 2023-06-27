@@ -7,7 +7,7 @@ import Card from '~/ui/shared/card';
 
 const ViewCourse = ({ course, initialViewMode = false }) => {
   const query = useQuery();
-  const id: any = query.get('id');
+  const id: any = query.get('course_id');
   const renderTitle = () => {
     let preTitle = 'Create ';
     if (id && initialViewMode) {
