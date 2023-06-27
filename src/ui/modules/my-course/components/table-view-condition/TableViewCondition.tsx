@@ -4,7 +4,6 @@ import { Space } from 'antd';
 
 import { columnTableCondition, metaFormUpdateCondition } from './props';
 
-import { PAGE_SIZE_OPTIONS } from '~/constant';
 import useList from '~/hooks/useList';
 import BaseModal from '~/ui/shared/modal';
 import { ButtonType } from '~/ui/shared/modal/props';
@@ -15,10 +14,12 @@ import './TableViewCondition.less';
 function TableViewCondition({
   data,
   idKey,
-  handleUpdateItem,
-  handleDeleteItem,
+  readOnly = false,
+  handleUpdateItem = (record) => {},
+  handleDeleteItem = (record) => {},
 }) {
   const handleGetData = async (args?) => {
+    console.log('data', data);
     return data;
   };
 
@@ -31,9 +32,10 @@ function TableViewCondition({
   }, [data]);
 
   const columnTableProps = () => {
-    const columns = [
-      ...columnTableCondition(),
-      {
+    const columns = [...columnTableCondition()];
+
+    if (!readOnly) {
+      columns.push({
         dataIndex: 'action',
         title: 'Action',
         width: 100,
@@ -58,8 +60,8 @@ function TableViewCondition({
             </Space>
           );
         },
-      },
-    ];
+      });
+    }
 
     return columns;
   };
@@ -70,11 +72,7 @@ function TableViewCondition({
         idKey={idKey}
         columns={columnTableProps()}
         data={list}
-        paginationProps={{
-          showSizeChanger: true,
-          pageSizeOptions: PAGE_SIZE_OPTIONS,
-        }}
-        onChange={onPageChange}
+        disablePagination
       />
     </>
   );

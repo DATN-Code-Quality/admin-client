@@ -12,7 +12,7 @@ export const columnTableCondition = (): ColumnType<any>[] => [
   {
     title: 'Condition',
     dataIndex: 'key',
-    width: 200,
+    width: '33%',
     ellipsis: true,
     sorter: (a, b) => {
       return a.key.localeCompare(b.key);
@@ -23,7 +23,7 @@ export const columnTableCondition = (): ColumnType<any>[] => [
   },
   {
     title: 'Operator',
-    width: 200,
+    width: '33%',
     ellipsis: true,
     sorter: (a, b) => {
       const operatorA: any = CONDITION_OPERATOR[a.key];
@@ -38,7 +38,7 @@ export const columnTableCondition = (): ColumnType<any>[] => [
   {
     title: 'Value',
     dataIndex: 'value',
-    width: 200,
+    width: '33%',
     ellipsis: true,
     sorter: (a, b) => {
       return a.value - b.value;
