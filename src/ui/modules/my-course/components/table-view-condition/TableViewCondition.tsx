@@ -52,7 +52,7 @@ function TableViewCondition({
                 onOkFn={() => handleDeleteItem(record[idKey])}
                 itemTitle=""
                 id={record[idKey]}
-                mode={ButtonType.BLOCK}
+                mode={ButtonType.DELETE}
                 isDelete
               />
             </Space>

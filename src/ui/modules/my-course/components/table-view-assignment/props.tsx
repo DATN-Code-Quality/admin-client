@@ -1,7 +1,10 @@
+import React from 'react';
+
 import { ColumnType } from 'antd/lib/table';
+import { Link } from 'react-router-dom';
+
 import ROUTE from '~/constant/routes';
 import { Assignment } from '~/domain/assignment';
-
 import { IMetaFormBuilder } from '~/ui/shared/forms/FormBuilder/FormBuilder';
 import { formatDate, generateUrl } from '~/utils';
 
@@ -18,7 +21,7 @@ export const metaFilterAssignment = () => {
   } as IMetaFormBuilder;
 };
 
-export const columnTableAssignment = (setAssignment): ColumnType<any>[] => [
+export const columnTableAssignment = (): ColumnType<any>[] => [
   {
     title: 'Assignment Title',
     dataIndex: 'name',
@@ -28,16 +31,12 @@ export const columnTableAssignment = (setAssignment): ColumnType<any>[] => [
       return a.name.localeCompare(b.name);
     },
     render: (value, record, index) => {
-      const assignment=record as Assignment;
+      const assignment = record as Assignment;
       const assignmentUrl = generateUrl(ROUTE.MY_COURSE.ASSIGN, {
         id: assignment.id,
         course_id: assignment.courseId,
       });
-      console.log("Navigate url: "+assignmentUrl);
-      // TODO: handle link later
-      return (
-          <a href={assignmentUrl}>{value}</a>
-      );
+      return <Link to={assignmentUrl}>{value}</Link>;
     },
   },
   {
