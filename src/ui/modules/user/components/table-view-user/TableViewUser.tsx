@@ -75,6 +75,7 @@ function TableViewUser() {
       delete dataSubmit.id;
       await createUser(dataSubmit);
     } else {
+      dataSubmit.password = '';
       await updateUser(dataSubmit);
     }
     handleUpdateList();
