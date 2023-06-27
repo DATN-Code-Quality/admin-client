@@ -14,6 +14,9 @@ export const columnTableCondition = (): ColumnType<any>[] => [
     dataIndex: 'key',
     width: 200,
     ellipsis: true,
+    sorter: (a, b) => {
+      return a.key.localeCompare(b.key);
+    },
     render: (value, record, index) => {
       return <p>{getMappingLabelByValue(MAP_CONFIG_OBJECT, value)}</p>;
     },
@@ -22,6 +25,11 @@ export const columnTableCondition = (): ColumnType<any>[] => [
     title: 'Operator',
     width: 200,
     ellipsis: true,
+    sorter: (a, b) => {
+      const operatorA: any = CONDITION_OPERATOR[a.key];
+      const operatorB: any = CONDITION_OPERATOR[b.key];
+      return operatorA.localeCompare(operatorB);
+    },
     render: (value, record, index) => {
       const operator: any = CONDITION_OPERATOR[record.key];
       return <p>{getMappingLabelByValue(MAP_CONDITION_OPERATOR, operator)}</p>;

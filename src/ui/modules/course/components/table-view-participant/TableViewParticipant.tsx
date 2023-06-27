@@ -56,8 +56,8 @@ function TableViewParticipant({ course }: { course: Course }) {
   const [currentRole, setCurrentRole] = useState<SubRole>(SubRole.STUDENT);
   const [currentTeacherIds, setCurrentTeacherIds] = useState<any[]>([]);
 
-  const handleGetParticipants = async () => {
-    const res = await getParticipantsByCourseId(course.id);
+  const handleGetParticipants = async (filter?) => {
+    const res = await getParticipantsByCourseId(course.id, filter);
     setCurrentRole(res.data.role);
     return {
       ...res,
