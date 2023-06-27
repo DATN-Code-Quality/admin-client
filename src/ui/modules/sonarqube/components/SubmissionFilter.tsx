@@ -138,7 +138,9 @@ const SubmissionFilter: React.FC<{
       style={{
         backgroundColor: '#f0f2f5',
         width: width > 1024 ? '27%' : 'unset',
+        maxHeight: width > 1024 ? '725px' : 'unset',
         ...customPanelStyle,
+        overflow: 'auto',
       }}
     >
       {loading && <Spin />}
