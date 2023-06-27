@@ -70,7 +70,7 @@ function TableViewUser() {
   };
 
   const handleCreateOrUpdate = async (value, id) => {
-    const dataSubmit = { ...value, id, role: Role.ADMIN };
+    const dataSubmit = { ...value, id };
     if (!id) {
       delete dataSubmit.id;
       await createUser(dataSubmit);
