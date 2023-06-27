@@ -413,3 +413,11 @@ export const removeDuplicateAndMerge = (
   });
   return result;
 };
+
+export const configObjectToConditions = (configObject) => {
+  if (!configObject) return [];
+  return Object.entries(configObject).map(([key, value]) => ({
+    key,
+    value,
+  }));
+};

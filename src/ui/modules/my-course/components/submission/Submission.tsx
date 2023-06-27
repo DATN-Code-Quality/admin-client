@@ -19,6 +19,7 @@ import { SubmissionType } from '../../../../../constant/enum';
 import useQuery from '~/hooks/useQuery';
 import { useNavigate, useNavigation } from 'react-router-dom';
 import useCurrentWidth from '~/hooks/useCurrentWidth';
+import { FormAddAssignment } from '../form-add-assignment';
 
 const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
   assignment,
@@ -51,6 +52,24 @@ const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
     fetchSubmission();
   }, [fetchSubmission]);
   const query = useQuery();
+
+  let teacherTabs = Object.keys(SubmisisonTab).map((tab) => {
+    const tabName =
+      tab.charAt(0).toUpperCase() + tab.substring(1).toLowerCase();
+    return {
+      label: tabName,
+      key: tab,
+    };
+  });
+
+  teacherTabs = [
+    {
+      label: 'Detail',
+      key: 'detail',
+    },
+    ...teacherTabs,
+  ];
+
   return (
     <>
       {/* first CARD */}
@@ -89,15 +108,7 @@ const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
                       }}
                       style={{ marginBottom: 8, marginTop: 8 }}
                       hidden={false}
-                      items={Object.keys(SubmisisonTab).map((tab) => {
-                        const tabName =
-                          tab.charAt(0).toUpperCase() +
-                          tab.substring(1).toLowerCase();
-                        return {
-                          label: tabName,
-                          key: tab,
-                        };
-                      })}
+                      items={teacherTabs}
                     />
                   </div>
                 ))}
@@ -147,6 +158,13 @@ const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
                     assignmentId={assignment?.id}
                   />
                 </div>
+              )}
+              {tab === 'detail' && (
+                <FormAddAssignment
+                  courseId={assignment?.courseId}
+                  assignmentId={assignment?.id}
+                  initialViewMode
+                />
               )}
             </div>
           </div>

@@ -70,6 +70,12 @@ p {
 .submission-field {
   width: 100px;
 }
+
+.submission-heading {
+  font-size: 28px;
+  font-weight: 600;
+}
+
 .submission-title {
   font-size: 18px;
   font-weight: 600;
