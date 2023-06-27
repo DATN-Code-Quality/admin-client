@@ -208,7 +208,9 @@ const Submission = () => {
                         <div key={key} className="h-full flex flex-col">
                           <p className="mt-4 mb-2 flex items-center">
                             <FileTextOutlined />
-                            <span className="ml-2">{fileNameShort}</span>
+                            <span className="ml-2 overflow-auto">
+                              {fileNameShort}
+                            </span>
                           </p>
                           <div className="flex-1 flex flex-col ">
                             {data[key].map((issue) => (

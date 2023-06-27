@@ -102,7 +102,10 @@ const DetailSubmission: React.FC<{
     const result: Record<string | number, unknown> = {};
     Object.values(submissionIssues)?.forEach((issueGroup) => {
       (issueGroup as Issue[])?.forEach((issue) => {
-        result[issue?.textRange?.endLine] = issue;
+        result[issue?.textRange?.endLine] = [
+          ...(result[issue?.textRange?.endLine] || []),
+          issue,
+        ];
       });
     });
     return result;
@@ -136,6 +139,7 @@ const DetailSubmission: React.FC<{
 
   const handleSelect = useCallback(
     (item: Issue) => {
+      console.log(selected);
       setSelected(item);
       if (componentIssue !== item.component) {
         setComponentIssue(() => item.component);
@@ -145,14 +149,14 @@ const DetailSubmission: React.FC<{
   );
 
   useEffect(() => {
-    if (!selected) return;
-    if (issueContainer?.current) {
-      const nextTop = selected?.line < 5 ? 0 : ((selected?.line || 0) + 5) * 30;
-      (issueContainer?.current as HTMLElement)?.scrollTo({
-        top: nextTop,
-        behavior: 'smooth',
-      });
-    }
+    const element = document.getElementById(
+      `${selected?.hash}_${JSON.stringify(selected?.textRange)}`
+    );
+    element?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',
+      inline: 'nearest',
+    });
   }, [selected, componentIssue]);
 
   const renderListIssues = useCallback(
@@ -166,6 +170,12 @@ const DetailSubmission: React.FC<{
             {fileNameShort}
           </p>
           {issueData?.map((item) => {
+            if (
+              item.message ===
+              'Use "java.nio.file.Files#delete" here for better messages on error conditions.'
+            ) {
+              console.log(item);
+            }
             return (
               <div
                 key={item.key}
@@ -314,6 +324,7 @@ const DetailSubmission: React.FC<{
     if (!value) return '';
     return value[value.length - 1];
   }, [componentIssue]);
+  console.log('Issues list ', issueList);
 
   return (
     <>
@@ -353,28 +364,30 @@ const DetailSubmission: React.FC<{
             </p>
           </div>
           <div className="issues-container" ref={issueContainer}>
-            {Object.values(issueList)
-              .filter((item) => !item.textRange)
-              .map((issueItem) => (
-                <div
-                  className="pl-6 line-code-container w-full"
-                  style={{
-                    paddingTop: 0,
-                    paddingBottom: '12px',
-                    background: '#f3f3f3',
-                    paddingRight: '32px',
-                    width: '100%',
-                  }}
-                  key={JSON.stringify(issueItem)}
-                >
-                  <div className="line-index" />
-                  <IssueItem
-                    issue={issueItem}
-                    style={{ width: '100%' }}
-                    setRuleSelected={setRuleSelected}
-                  />
-                </div>
-              ))}
+            {Object.values(issueList).map((itemI) =>
+              itemI
+                .filter((item) => !item.textRange)
+                .map((issueItem) => (
+                  <div
+                    className="pl-6 line-code-container w-full"
+                    style={{
+                      paddingTop: 0,
+                      paddingBottom: '12px',
+                      background: '#f3f3f3',
+                      paddingRight: '32px',
+                      width: '100%',
+                    }}
+                    key={JSON.stringify(issueItem)}
+                  >
+                    <div className="line-index" />
+                    <IssueItem
+                      issue={issueItem}
+                      style={{ width: '100%' }}
+                      setRuleSelected={setRuleSelected}
+                    />
+                  </div>
+                ))
+            )}
             {data?.map((item, index) => {
               const isExistIssues =
                 item.code !== LINE_EMPTY_CODE &&
@@ -391,11 +404,18 @@ const DetailSubmission: React.FC<{
 
               const isActiveLine =
                 isExistIssues &&
-                (issueList[+item.line] as Issue)?.key === selected?.key;
+                (issueList[+item.line][0] as Issue)?.key === selected?.key;
 
               return (
                 <div
                   key={`${item.code}_${item.line}`}
+                  id={
+                    isExistIssues
+                      ? `${issueList[+item.line][0]?.hash}_${JSON.stringify(
+                          issueList[+item.line][0]?.textRange
+                        )}`
+                      : ''
+                  }
                   className={`pl-6 line-code-container ${
                     isActiveLine ? 'active' : ''
                   }`}
@@ -412,13 +432,17 @@ const DetailSubmission: React.FC<{
                     <p className="source-line-code code">
                       <pre>{result}</pre>
                     </p>
-                    {isExistIssues && (
-                      <IssueItem
-                        issue={issueList[+item.line] || null}
-                        style={{ maxWidth: 'unset' }}
-                        setRuleSelected={setRuleSelected}
-                      />
-                    )}
+
+                    {isExistIssues &&
+                      issueList[+item.line]?.map((issueItemLine) => {
+                        return (
+                          <IssueItem
+                            issue={issueItemLine || null}
+                            style={{ maxWidth: 'unset' }}
+                            setRuleSelected={setRuleSelected}
+                          />
+                        );
+                      })}
                   </div>
                 </div>
               );

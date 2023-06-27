@@ -277,7 +277,8 @@ body {
 }
 
 .issue-rule-container {
-  flex: 1;
+  // flex: 1;
+  margin-left: auto;
   text-align: right;
   color: #236a97;
 }
@@ -373,4 +374,10 @@ body {
 
 .w-10 {
   width: 40px;
+}
+
+@media screen and (max-width: 768px) {
+  .issue-component {
+    max-height: unset;
+  }
 }
