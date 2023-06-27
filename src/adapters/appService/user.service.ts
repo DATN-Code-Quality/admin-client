@@ -106,10 +106,11 @@ export function useUser() {
     },
 
     async updateUser(body): Promise<ResponseData<User>> {
+      const { id, ...dataSubmit } = body;
       const response = await putWithPath(
-        `${API.USER.PUT.UPDATE_USER}/${body?.id}`,
+        `${API.USER.PUT.UPDATE_USER}/${id}`,
         {},
-        body
+        dataSubmit
       );
       const validResponse = formatResponse<UserDTO>(response);
       const convertedData = userFromDTO(validResponse.data);
