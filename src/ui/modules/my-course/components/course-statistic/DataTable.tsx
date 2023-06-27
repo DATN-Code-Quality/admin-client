@@ -10,7 +10,6 @@ const DataTable: React.FC<{ courseReport: ReportCourse[]; total: number }> = ({
   courseReport,
   total,
 }) => {
-  console.log(courseReport, total);
   const exportToExcel = () => {
     const workbook = XLSX.utils.book_new();
     const modifiedDataSource = dataSource.map((item) => {
@@ -96,6 +95,7 @@ const DataTable: React.FC<{ courseReport: ReportCourse[]; total: number }> = ({
         scroll={{ x: '800px' }}
         dataSource={dataSource}
         columns={columns}
+        locale={{emptyText:'No submission found'}}
       />
     </div>
   );

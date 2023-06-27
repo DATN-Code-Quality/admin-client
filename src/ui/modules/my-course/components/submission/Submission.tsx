@@ -247,12 +247,12 @@ const SubmissionItem: React.FC<{
             )}
             {/* {submission?.updatedAt} */}
           </div>
-          <div>
+          {/* <div>
             <span className="font-semibold">Submitted file: </span>
             <a href={submission.link} target="_blank" rel="noopener noreferrer">
               link
             </a>
-          </div>
+          </div> */}
         </div>
         <div
           style={{

@@ -29,7 +29,7 @@ export default function useForm(
                     });
             })
             .catch(error => {
-                message.error('Có lỗi xảy ra');
+                message.error('Something went wrong');
                 logger.debug('useForm | submitForm Fail ', error);
                 setIsSubbmiting(false);
             })

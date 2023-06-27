@@ -3,11 +3,12 @@ import HighchartsReact from 'highcharts-react-official';
 
 type CourseLineChartProps = {
   chartTitle?: string;
-  series: [] | any,
+  series: [],
   // labels: string[]
 };
 
 function CourseLineChart(props: CourseLineChartProps) {
+  console.log("Series: "+JSON.stringify(props.series))
   const options = {
     title: {
       text: props.chartTitle ?? '',
@@ -61,7 +62,12 @@ function CourseLineChart(props: CourseLineChartProps) {
     // eslint-disable-next-line react/destructuring-assignment
     series: props.series,
   };
-  return <HighchartsReact highcharts={Highcharts} options={options} />;
+  return (
+    <div>
+      <HighchartsReact highcharts={Highcharts} options={options} />
+      {(props.series.length !== 0 && props.series[0].data.length===0)&& <div style={{ position: 'relative', top: -235, display: 'flex', justifyContent: 'center',color:'#bfbfbf' }}>No data display</div>}
+    </div>
+  );
 }
 
 export default CourseLineChart;

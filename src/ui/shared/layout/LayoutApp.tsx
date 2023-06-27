@@ -109,7 +109,11 @@ function LayoutApp() {
         }
       })
       .catch((err) => {
-        if ([ROUTE.ACTIVE_ACCOUNT].includes(location.pathname)) {
+        if (
+          [ROUTE.ACTIVE_ACCOUNT, ROUTE.CHANGE_FORGOT_PASSWORD].includes(
+            location.pathname
+          )
+        ) {
           return;
         }
         navigate(ROUTE.LOGIN, { replace: true });

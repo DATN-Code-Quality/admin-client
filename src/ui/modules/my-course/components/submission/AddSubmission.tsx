@@ -1,17 +1,17 @@
 /* eslint-disable react/destructuring-assignment */
 import React, { useCallback, useState } from 'react';
 
+import { InboxOutlined } from '@ant-design/icons';
 import { Button, Select, UploadProps, message } from 'antd';
 import './style.css';
 import Input from 'antd/lib/input/Input';
 import { Option } from 'antd/lib/mentions';
 import Upload, { RcFile } from 'antd/lib/upload';
 import Dragger from 'antd/lib/upload/Dragger';
-import { InboxOutlined } from '@ant-design/icons';
-import { Assignment } from '~/domain/assignment';
-import { useSubmission } from '~/adapters/appService/submission.service';
-
 import { useNavigate, useNavigation } from 'react-router-dom';
+
+import { useSubmission } from '~/adapters/appService/submission.service';
+import { Assignment } from '~/domain/assignment';
 import { Submission } from '~/domain/submission';
 import { formatDate } from '~/utils';
 
@@ -69,7 +69,6 @@ const AddSubmission: React.FC<AddSubmissionProps> = (props) => {
 
             onSubmitted?.();
 
-
             // location.reload();
             // navigate(0);
           }}
@@ -119,7 +118,7 @@ const SubmmissionStatusSection = (props: AddSubmissionProps): JSX.Element => {
                       new Date(submission.updatedAt ?? ''),
                       'vi-VN',
                       'YYYY-MM-DD hh:mm:ss'
-                  )
+                    )
                   : '-'
               }
             />
@@ -132,7 +131,7 @@ const SubmmissionStatusSection = (props: AddSubmissionProps): JSX.Element => {
                       new Date(assignment.dueDate ?? ''),
                       'vi-VN',
                       'YYYY-MM-DD hh:mm:ss'
-                  )
+                    )
                   : '-'
               }
             />
@@ -143,6 +142,9 @@ const SubmmissionStatusSection = (props: AddSubmissionProps): JSX.Element => {
     </div>
   );
 };
+
+// calculate by bytes
+const MAXIMUM_FILE_SIZE = 20 * 1024 * 1024; // 20MB
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 const AddSubmissionSection = (props: AddSubmissionProps): JSX.Element => {
@@ -168,7 +170,7 @@ const AddSubmissionSection = (props: AddSubmissionProps): JSX.Element => {
 
   const validateFilePick = (file: RcFile) => {
     const fileSize = file.size;
-    if (fileSize > 20 * 1024) {
+    if (fileSize > MAXIMUM_FILE_SIZE) {
       message.error('Choosen file is too large');
       return false;
     }
@@ -278,8 +280,8 @@ const AddSubmissionSection = (props: AddSubmissionProps): JSX.Element => {
                     fontSize: 14,
                   }}
                 >
-                  Support for public GitHub projects and ensure .git at the end of
-                  submitted GitHub URL
+                  Support for public GitHub projects and ensure .git at the end
+                  of submitted GitHub URL
                 </span>
               )}
             </>

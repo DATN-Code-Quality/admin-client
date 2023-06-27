@@ -291,6 +291,25 @@ const DetailSubmission = () => {
             </p>
           </div>
           <div className="issues-container" ref={issueContainer}>
+            {Object.values(issueList)
+              .filter((item) => item.textRange)
+              .map((issueItem) => (
+                <div
+                  className="pl-6 line-code-container"
+                  style={{
+                    paddingTop: 0,
+                    paddingBottom: '12px',
+                    background: '#f3f3f3',
+                  }}
+                  key={JSON.stringify(issueItem)}
+                >
+                  <div className="line-index" />
+                  <IssueItem
+                    issue={issueItem}
+                    setRuleSelected={setRuleSelected}
+                  />
+                </div>
+              ))}
             {data?.map((item, index) => {
               const isExistIssues =
                 item.code !== LINE_EMPTY_CODE &&

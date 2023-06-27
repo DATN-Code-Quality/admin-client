@@ -3,6 +3,7 @@ const ROUTE = {
   DASHBOARD: '/dashboard',
   HISTORY: '/history',
   ACTIVE_ACCOUNT: '/active-account',
+  CHANGE_FORGOT_PASSWORD: '/change-forgot-password',
   PROFILE: {
     DETAIL: '/profile',
     CHANGE_PASSWORD: '/profile/change-password',
