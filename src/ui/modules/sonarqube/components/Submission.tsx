@@ -58,6 +58,7 @@ const Submission = () => {
   const [pagination, setPagination] = useState({
     page: 1,
     total: 0,
+    pageSize: 7,
   });
 
   const [open, setOpen] = useState(false);
@@ -76,16 +77,17 @@ const Submission = () => {
           Object.entries(filters).filter(([_, v]) => v !== '')
         ),
         page: pagination.page,
-        pageSize: 7,
+        pageSize: pagination.pageSize,
       }
     );
     if (response?.status !== 0) return;
     const { data: dataRes } = response;
     const { issues, components } = dataRes || { components: [], issues: [] };
-    setPagination({
+    setPagination((prev) => ({
+      ...prev,
       page: dataRes.p,
       total: dataRes.total,
-    });
+    }));
     const issuesOfComponents: Record<string, unknown> = {};
     issues?.reduce((objectResult, issue) => {
       if (objectResult[issue.component]) {
@@ -100,7 +102,7 @@ const Submission = () => {
     dispatch(setSubmissionIssues(issuesOfComponents));
     setComponents(components);
     setLoading(false);
-  }, [dataSelected, filters, pagination.page, dispatch]);
+  }, [dataSelected, filters, pagination.page, pagination.pageSize, dispatch]);
 
   const handleSetIssue = useCallback(
     (issue: Issue) => {
@@ -135,6 +137,7 @@ const Submission = () => {
     dispatch(setSubmissionSelected({ courseId, assignmentId, submissionId }));
   }, [dispatch, location.search, navigate]);
 
+  console.log(data);
   return (
     <>
       {!loading && issueSelected && (
@@ -172,6 +175,9 @@ const Submission = () => {
                 filters={filters}
                 setFilters={setFilters}
                 components={components}
+                courseId={dataSelected?.courseId}
+                assignmentId={dataSelected?.assignmentId}
+                submissionId={dataSelected?.submissionId || ''}
               />
             ) : (
               <SubmissionFilterMobile
@@ -180,6 +186,9 @@ const Submission = () => {
                 open={open}
                 setOpen={setOpen}
                 components={components}
+                courseId={dataSelected?.courseId}
+                assignmentId={dataSelected?.assignmentId}
+                submissionId={dataSelected?.submissionId || ''}
               />
             )}
 
@@ -205,7 +214,7 @@ const Submission = () => {
                       const fileNameShort = value[value.length - 1];
 
                       return (
-                        <div key={key} className="h-full flex flex-col">
+                        <div key={key}>
                           <p className="mt-4 mb-2 flex items-center">
                             <FileTextOutlined />
                             <span className="ml-2 overflow-auto">
@@ -237,10 +246,14 @@ const Submission = () => {
                     }}
                     defaultCurrent={pagination.page}
                     total={pagination.total}
-                    pageSize={7}
-                    onChange={(val) =>
-                      setPagination((prev) => ({ ...prev, page: val }))
+                    pageSize={pagination.pageSize}
+                    pageSizeOptions={['7', '14', '21', '28']}
+                    onShowSizeChange={(_, size) =>
+                      setPagination((prev) => ({ ...prev, pageSize: size }))
                     }
+                    onChange={(val) => {
+                      setPagination((prev) => ({ ...prev, page: val }));
+                    }}
                   />
                 </>
               )}
