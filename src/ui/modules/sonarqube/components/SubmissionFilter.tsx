@@ -106,7 +106,7 @@ const SubmissionFilter: React.FC<{
       bordered={false}
       style={{
         backgroundColor: '#f0f2f5',
-        minWidth: '30%',
+        width: '27%',
         ...customPanelStyle,
       }}
     >
@@ -188,13 +188,13 @@ const SubmissionFilter: React.FC<{
           if (componentList?.length > 0) {
             fileuuid = componentList[0]?.uuid || '';
           }
-          console.log('Components', components);
           return (
             <div
               key={issueKey}
-              className={`bug-label mt-2 cursor-pointer pl-4 ${
+              className={`bug-label mt-2 cursor-pointer pl-4 flex items-center overflow-auto ${
                 filters.file === fileNameShort ? 'active' : ''
               }`}
+              style={{ overflow: 'auto' }}
               onClick={() => {
                 handleSetFilter('file', fileNameShort);
                 handleSetFilter('fileuuid', fileuuid);
