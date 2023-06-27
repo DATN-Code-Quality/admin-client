@@ -137,7 +137,13 @@ const Submission = () => {
 
   return (
     <>
-      {!loading && issueSelected && <DetailSubmission />}
+      {!loading && issueSelected && (
+        <DetailSubmission
+          courseId={dataSelected?.courseId}
+          assignmentId={dataSelected?.assignmentId}
+          submissionId={dataSelected?.submissionId || ''}
+        />
+      )}
 
       {!issueSelected && (
         <div className="h-full overflow-hidden ">
@@ -199,19 +205,21 @@ const Submission = () => {
                       const fileNameShort = value[value.length - 1];
 
                       return (
-                        <div key={key}>
+                        <div key={key} className="h-full flex flex-col">
                           <p className="mt-4 mb-2 flex items-center">
                             <FileTextOutlined />
                             <span className="ml-2">{fileNameShort}</span>
                           </p>
-                          {data[key].map((issue) => (
-                            <IssueItem
-                              key={issue}
-                              issue={issue}
-                              handleSetIssue={handleSetIssue}
-                              setRuleSelected={setRuleSelected}
-                            />
-                          ))}
+                          <div className="flex-1 flex flex-col ">
+                            {data[key].map((issue) => (
+                              <IssueItem
+                                key={issue}
+                                issue={issue}
+                                handleSetIssue={handleSetIssue}
+                                setRuleSelected={setRuleSelected}
+                              />
+                            ))}
+                          </div>
                         </div>
                       );
                     })}
@@ -227,7 +235,7 @@ const Submission = () => {
                     }}
                     defaultCurrent={pagination.page}
                     total={pagination.total}
-                    pageSize={6}
+                    pageSize={7}
                     onChange={(val) =>
                       setPagination((prev) => ({ ...prev, page: val }))
                     }

@@ -59,7 +59,7 @@ const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
         {assignment?.name}
       </p>
       <p>{assignment?.description}</p> */}
-        {subRole === SubRole.STUDENT && (
+        {!submissionList?.length && subRole === SubRole.STUDENT && (
           <>
             <AddSubmission
               assignment={assignment}
