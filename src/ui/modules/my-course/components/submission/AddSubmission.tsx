@@ -1,5 +1,5 @@
 /* eslint-disable react/destructuring-assignment */
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { InboxOutlined } from '@ant-design/icons';
 import { Button, Select, UploadProps, message } from 'antd';
@@ -10,10 +10,13 @@ import Upload, { RcFile } from 'antd/lib/upload';
 import Dragger from 'antd/lib/upload/Dragger';
 import { useNavigate, useNavigation } from 'react-router-dom';
 
+import { TableViewCondition } from '../table-view-condition';
+
 import { useSubmission } from '~/adapters/appService/submission.service';
 import { Assignment } from '~/domain/assignment';
 import { Submission } from '~/domain/submission';
-import { formatDate } from '~/utils';
+import { configObjectToConditions, formatDate } from '~/utils';
+
 
 export enum SubmissionSource {
   GIT = 'Git',
@@ -32,13 +35,31 @@ type AddSubmissionProps = {
 const AddSubmission: React.FC<AddSubmissionProps> = (props) => {
   const [isAddSubmission, setIsAddSubmission] = useState<boolean>(false);
   const { assignment, onSubmitted, submission } = props;
+  const [conditions, setConditions] = useState<any>([]);
+
+  useEffect(() => {
+    if (assignment?.configObject) {
+      setConditions(configObjectToConditions(assignment?.configObject));
+    }
+  }, [assignment]);
 
   const navigate = useNavigate();
   return (
     <div>
       <div className="gap-4">
-        <p className="submission-title">{assignment?.name}</p>
-        <p>{assignment?.description}</p>
+        <h2 className="submission-heading">{assignment?.name}</h2>
+        <p className="mb-4" />
+        <p className="submission-title">Description: </p>
+        <p
+          dangerouslySetInnerHTML={{ __html: assignment?.description || 'N/A' }}
+        />
+        <p className="mb-4" />
+        <p className="submission-title">Due Date: </p>
+        <p>{formatDate(new Date(assignment?.dueDate)) || 'N/A'}</p>
+        <p className="mb-4" />
+        <p className="submission-title">Quality Gates: </p>
+        <TableViewCondition data={conditions} idKey="key" readOnly />
+        <p className="mb-4" />
       </div>
       {isAddSubmission === false ? (
         <>
