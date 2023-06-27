@@ -2,10 +2,10 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import { ExportOutlined } from '@ant-design/icons';
 import { Table, Button, Empty } from 'antd';
-import * as XLSX from 'xlsx';
 import tableExport from 'antd-table-export';
+
 import { useSubmission } from '~/adapters/appService/submission.service';
-import { SubmissionType } from '../../../../../constant/enum';
+import { SubmissionType } from '~/constant/enum';
 
 const SubmissionTypeConstant: Record<SubmissionType, string> = {
   [SubmissionType.SUBMITTED]: 'Submitted',
@@ -214,7 +214,6 @@ const DataTable: React.FC<{ courseId: string; assignmentId: string }> = ({
       ...item,
       status: SubmissionTypeConstant[item.status],
     }));
-    console.log(dataExport);
     const exportInstance = new tableExport(dataExport, columns);
     exportInstance.download('overview', 'xlsx');
   };

@@ -1,19 +1,22 @@
 /* eslint-disable react/destructuring-assignment */
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
+import { InboxOutlined } from '@ant-design/icons';
 import { Button, Select, UploadProps, message } from 'antd';
 import './style.css';
 import Input from 'antd/lib/input/Input';
 import { Option } from 'antd/lib/mentions';
 import Upload, { RcFile } from 'antd/lib/upload';
 import Dragger from 'antd/lib/upload/Dragger';
-import { InboxOutlined } from '@ant-design/icons';
-import { Assignment } from '~/domain/assignment';
-import { useSubmission } from '~/adapters/appService/submission.service';
-
 import { useNavigate, useNavigation } from 'react-router-dom';
+
+import { TableViewCondition } from '../table-view-condition';
+
+import { useSubmission } from '~/adapters/appService/submission.service';
+import { Assignment } from '~/domain/assignment';
 import { Submission } from '~/domain/submission';
-import { formatDate } from '~/utils';
+import { configObjectToConditions, formatDate } from '~/utils';
+
 
 export enum SubmissionSource {
   GIT = 'Git',
@@ -32,13 +35,31 @@ type AddSubmissionProps = {
 const AddSubmission: React.FC<AddSubmissionProps> = (props) => {
   const [isAddSubmission, setIsAddSubmission] = useState<boolean>(false);
   const { assignment, onSubmitted, submission } = props;
+  const [conditions, setConditions] = useState<any>([]);
+
+  useEffect(() => {
+    if (assignment?.configObject) {
+      setConditions(configObjectToConditions(assignment?.configObject));
+    }
+  }, [assignment]);
 
   const navigate = useNavigate();
   return (
     <div>
       <div className="gap-4">
-        <p className="submission-title">{assignment?.name}</p>
-        <p>{assignment?.description}</p>
+        <h2 className="submission-heading">{assignment?.name}</h2>
+        <p className="mb-4" />
+        <p className="submission-title">Description: </p>
+        <p
+          dangerouslySetInnerHTML={{ __html: assignment?.description || 'N/A' }}
+        />
+        <p className="mb-4" />
+        <p className="submission-title">Due Date: </p>
+        <p>{formatDate(new Date(assignment?.dueDate)) || 'N/A'}</p>
+        <p className="mb-4" />
+        <p className="submission-title">Quality Gates: </p>
+        <TableViewCondition data={conditions} idKey="key" readOnly />
+        <p className="mb-4" />
       </div>
       {isAddSubmission === false ? (
         <>
@@ -68,7 +89,6 @@ const AddSubmission: React.FC<AddSubmissionProps> = (props) => {
             setIsAddSubmission(false);
 
             onSubmitted?.();
-
 
             // location.reload();
             // navigate(0);
@@ -119,7 +139,7 @@ const SubmmissionStatusSection = (props: AddSubmissionProps): JSX.Element => {
                       new Date(submission.updatedAt ?? ''),
                       'vi-VN',
                       'YYYY-MM-DD hh:mm:ss'
-                  )
+                    )
                   : '-'
               }
             />
@@ -132,7 +152,7 @@ const SubmmissionStatusSection = (props: AddSubmissionProps): JSX.Element => {
                       new Date(assignment.dueDate ?? ''),
                       'vi-VN',
                       'YYYY-MM-DD hh:mm:ss'
-                  )
+                    )
                   : '-'
               }
             />
@@ -145,7 +165,7 @@ const SubmmissionStatusSection = (props: AddSubmissionProps): JSX.Element => {
 };
 
 // calculate by bytes
-const MAXIUM_FILE_SIZE = 20 * 1024 * 1024; // 20MB
+const MAXIMUM_FILE_SIZE = 20 * 1024 * 1024; // 20MB
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 const AddSubmissionSection = (props: AddSubmissionProps): JSX.Element => {
@@ -171,7 +191,7 @@ const AddSubmissionSection = (props: AddSubmissionProps): JSX.Element => {
 
   const validateFilePick = (file: RcFile) => {
     const fileSize = file.size;
-    if (fileSize > MAXIUM_FILE_SIZE) {
+    if (fileSize > MAXIMUM_FILE_SIZE) {
       message.error('Choosen file is too large');
       return false;
     }
@@ -281,8 +301,8 @@ const AddSubmissionSection = (props: AddSubmissionProps): JSX.Element => {
                     fontSize: 14,
                   }}
                 >
-                  Support for public GitHub projects and ensure .git at the end of
-                  submitted GitHub URL
+                  Support for public GitHub projects and ensure .git at the end
+                  of submitted GitHub URL
                 </span>
               )}
             </>

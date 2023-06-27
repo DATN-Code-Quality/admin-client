@@ -17,19 +17,13 @@ import Loading from '~/ui/shared/loading';
 import BaseModal from '~/ui/shared/modal';
 import { ButtonType } from '~/ui/shared/modal/props';
 import {
+  configObjectToConditions,
   findAndReplace,
+  formatDate,
   generateUrl,
   getMappingLabelByValue,
   removeFromArr,
 } from '~/utils';
-
-const configObjectToConditions = (configObject) => {
-  if (!configObject) return [];
-  return Object.entries(configObject).map(([key, value]) => ({
-    key,
-    value,
-  }));
-};
 
 const conditionsToConfigObject = (conditions) => {
   if (!conditions) return {};
@@ -152,25 +146,23 @@ const FormAddAssignment = ({
           </div>
           <div className="group_field">
             <label>Description: </label>
-            <div className="field_value">{formValues?.description}</div>
+            <div
+              className="field_value"
+              dangerouslySetInnerHTML={{
+                __html: formValues?.description || 'N/A',
+              }}
+            />
           </div>
           <div className="group_field">
-            <label>Status: </label>
+            <label>Due Date: </label>
             <div className="field_value">
-              {getMappingLabelByValue(MAP_USER_STATUS, formValues?.status)}
+              {formatDate(new Date(formValues?.dueDate)) || 'N/A'}
             </div>
           </div>
-          <Form.Item>
-            <Space>
-              <Button
-                type="primary"
-                size="large"
-                onClick={handleEditAssignment}
-              >
-                Save Changes
-              </Button>
-            </Space>
-          </Form.Item>
+          <div className="group_field">
+            <label className="mb-2">Quality Gates: </label>
+            <TableViewCondition idKey="key" data={conditions} readOnly />
+          </div>
         </Form>
       )}
       {!viewMode && (
