@@ -140,7 +140,7 @@ function TableViewUser() {
       />
       <Card>
         <TableToolbar
-          title={`Found ${formatNumber(list.items?.length || 0)} user`}
+          title={`Found ${formatNumber(list.total || 0)} user`}
         >
           <div
             className="flex items-center flex-nowrap overflow-auto"

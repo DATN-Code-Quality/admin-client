@@ -90,9 +90,7 @@ function TableViewCourse() {
         onFilter={onFilterChange}
       />
       <Card>
-        <TableToolbar
-          title={`Found ${formatNumber(list.items?.length || 0)} course`}
-        >
+        <TableToolbar title={`Found ${formatNumber(list.total || 0)} course`}>
           <div
             className="flex items-center flex-nowrap overflow-auto"
             style={{ gap: '16px' }}
