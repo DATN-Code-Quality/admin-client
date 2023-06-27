@@ -189,6 +189,7 @@ const SubmissionFilter: React.FC<{
             })}
           </Panel>
           <Panel
+            style={{ maxHeight: '300px', overflow: 'auto' }}
             header={
               <div className="flex items-center">
                 <div className="flex-1">
