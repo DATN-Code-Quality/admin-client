@@ -91,6 +91,26 @@ export function useAuth() {
         throw e;
       }
     },
+
+    async changePasswordFirstTimeLogin(body: {
+      newPassword: string;
+    }): Promise<ResponseData<Auth>> {
+      try {
+        const resp = await putWithPath(
+          '/auth/change-password-first-time-login',
+          {},
+          body
+        );
+        if (resp.status !== ApiStatus.SUCCESS) {
+          throw new Error(JSON.stringify(resp));
+        }
+        return resp;
+      } catch (e) {
+        message.error('Change password failed!');
+        throw e;
+      }
+    },
+
     async changePasswordV2(
       token: string,
       body: {

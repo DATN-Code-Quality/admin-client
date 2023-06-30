@@ -32,11 +32,12 @@ import { setIssueSelected } from '~/adapters/redux/actions/sonarqube';
 import DetailRule from './DetailRule';
 import { useLocation } from 'react-router-dom';
 
+import ErrorIcon from '~/ui/assets/images/error.png';
+
 const DetailSubmission: React.FC<{
-  courseId: string;
-  assignmentId: string;
-  submissionId: string;
-}> = ({ courseId, assignmentId, submissionId }) => {
+  submissionIssues: any;
+  loadingIssues: boolean;
+}> = ({ submissionIssues, loadingIssues }) => {
   const dispatch = useDispatch();
   const location = useLocation();
 
@@ -45,8 +46,8 @@ const DetailSubmission: React.FC<{
   const [componentIssue, setComponentIssue] = useState<string>('');
 
   // const submissionIssues = useSelector(SonarqubeSelector.getSubmissionIssues);
-  const [submissionIssues, setSubmissionIssues] = useState({});
-  const [loadingIssues, setLoadingIssues] = useState(false);
+
+  const [issuesVisible, setIssuesVisible] = useState([]);
 
   const [selected, setSelected] = useState<Issue | null>(null);
   const [loading, setLoading] = useState(false);
@@ -65,51 +66,20 @@ const DetailSubmission: React.FC<{
     setLoading(false);
   }, [componentIssue]);
 
-  const handleGetAllIssues = useCallback(async () => {
-    if (!courseId || !assignmentId || !submissionId) {
-      return;
-    }
-    setLoadingIssues(true);
-    const response = await getIssuesSubmission(
-      courseId,
-      assignmentId,
-      submissionId
-    );
-
-    if (response?.status !== 0) return;
-    const { data: dataRes } = response;
-    const { issues } = dataRes || { components: [], issues: [] };
-    const issuesOfComponents: Record<string, unknown> = {};
-    issues?.reduce((objectResult, issue) => {
-      if (objectResult[issue.component]) {
-        const data = [...objectResult[issue.component]];
-        data.push(issue);
-        objectResult[issue.component] = data;
-      } else {
-        objectResult[issue.component] = [issue];
-      }
-      return objectResult;
-    }, issuesOfComponents);
-    setSubmissionIssues(issuesOfComponents);
-    setLoadingIssues(false);
-  }, [assignmentId, courseId, submissionId]);
-
-  useEffect(() => {
-    handleGetAllIssues();
-  }, [handleGetAllIssues]);
-
   const issueList = useMemo(() => {
     const result: Record<string | number, unknown> = {};
-    Object.values(submissionIssues)?.forEach((issueGroup) => {
-      (issueGroup as Issue[])?.forEach((issue) => {
-        result[issue?.textRange?.endLine] = [
-          ...(result[issue?.textRange?.endLine] || []),
-          issue,
-        ];
+    Object.entries(submissionIssues)
+      ?.filter(([key, value]) => key === componentIssue)
+      .forEach(([key, issueGroup]) => {
+        (issueGroup as Issue[])?.forEach((issue) => {
+          result[issue?.textRange?.endLine] = [
+            ...(result[issue?.textRange?.endLine] || []),
+            issue,
+          ];
+        });
       });
-    });
     return result;
-  }, [submissionIssues]);
+  }, [componentIssue, submissionIssues]);
 
   const lineIssueList = useMemo(
     () => Object.keys(issueList || {})?.map((item) => +item),
@@ -117,6 +87,18 @@ const DetailSubmission: React.FC<{
   );
 
   const [ruleSelected, setRuleSelected] = useState<string | null>(null);
+
+  const handleChoiceIssue = useCallback((value) => {
+    setIssuesVisible((prev) => {
+      const index = prev.indexOf(value);
+      if (index > -1) {
+        const newData = [...prev];
+        newData.splice(index, 1);
+        return newData;
+      }
+      return [...prev, value];
+    });
+  }, []);
 
   useEffect(() => {
     setComponentIssue(issueSelected?.component);
@@ -139,9 +121,9 @@ const DetailSubmission: React.FC<{
 
   const handleSelect = useCallback(
     (item: Issue) => {
-      console.log(selected);
       setSelected(item);
       if (componentIssue !== item.component) {
+        setIssuesVisible([]);
         setComponentIssue(() => item.component);
       }
     },
@@ -169,25 +151,21 @@ const DetailSubmission: React.FC<{
             <span className="font-semibold ">File: </span>
             {fileNameShort}
           </p>
-          {issueData?.map((item) => {
-            if (
-              item.message ===
-              'Use "java.nio.file.Files#delete" here for better messages on error conditions.'
-            ) {
-              console.log(item);
-            }
-            return (
-              <div
-                key={item.key}
-                className={`issue-message ${
-                  selected?.key === item.key ? 'active' : ''
-                }`}
-                onClick={() => handleSelect(item)}
-              >
-                {item.message}
-              </div>
-            );
-          })}
+          {issueData
+            ?.sort((a, b) => a?.line < b?.line)
+            ?.map((item) => {
+              return (
+                <div
+                  key={item.key}
+                  className={`issue-message ${
+                    selected?.key === item.key ? 'active' : ''
+                  }`}
+                  onClick={() => handleSelect(item)}
+                >
+                  {item.message}
+                </div>
+              );
+            })}
         </div>
       );
     },
@@ -324,7 +302,6 @@ const DetailSubmission: React.FC<{
     if (!value) return '';
     return value[value.length - 1];
   }, [componentIssue]);
-  console.log('Issues list ', issueList);
 
   return (
     <>
@@ -429,20 +406,48 @@ const DetailSubmission: React.FC<{
                     } bg-white`}
                     style={{ paddingBottom: isExistIssues ? '8px' : '0' }}
                   >
-                    <p className="source-line-code code">
-                      <pre>{result}</pre>
-                    </p>
+                    <div
+                      className="flex items-start overflow-hidden "
+                      onClick={() => handleChoiceIssue(item.line)}
+                    >
+                      <p
+                        className="source-line-code code flex-1 overflow-auto"
+                        style={{ lineHeight: '18px' }}
+                      >
+                        <pre>{result}</pre>
+                      </p>
+                      {isExistIssues && (
+                        <img
+                          src={ErrorIcon}
+                          style={{
+                            marginLeft: '16px',
+                            width: '16px',
+                            height: '16px',
+                          }}
+                        />
+                      )}
+                    </div>
 
-                    {isExistIssues &&
-                      issueList[+item.line]?.map((issueItemLine) => {
-                        return (
-                          <IssueItem
-                            issue={issueItemLine || null}
-                            style={{ maxWidth: 'unset' }}
-                            setRuleSelected={setRuleSelected}
-                          />
-                        );
-                      })}
+                    {isExistIssues && (
+                      <div
+                        style={{
+                          overflow: 'hidden',
+                          maxHeight: issuesVisible.includes(item.line)
+                            ? '500px'
+                            : '0',
+                        }}
+                      >
+                        {issueList[+item.line]?.map((issueItemLine) => {
+                          return (
+                            <IssueItem
+                              issue={issueItemLine || null}
+                              style={{ maxWidth: 'unset' }}
+                              setRuleSelected={setRuleSelected}
+                            />
+                          );
+                        })}
+                      </div>
+                    )}
                   </div>
                 </div>
               );
