@@ -151,7 +151,7 @@ function TableViewAssignment({ course }) {
       />
       <Card>
         <TableToolbar
-          title={`Found ${formatNumber(list.total || 0)} assignment`}
+          title={`Found ${formatNumber(list.total || 0)} assignments`}
         >
           {isTeacher && (
             <>
@@ -163,7 +163,7 @@ function TableViewAssignment({ course }) {
                   loading={list.isLoading}
                   onClick={syncMoodleModalActions.handleOpen}
                 >
-                  Sync Moodle
+                  Import from Moodle
                 </Button>
               )}
               <Button

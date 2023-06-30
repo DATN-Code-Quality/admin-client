@@ -17,7 +17,6 @@ import { Assignment } from '~/domain/assignment';
 import { Submission } from '~/domain/submission';
 import { configObjectToConditions, formatDate } from '~/utils';
 
-
 export enum SubmissionSource {
   GIT = 'Git',
   // DRIVE = 'Drive',
@@ -192,7 +191,7 @@ const AddSubmissionSection = (props: AddSubmissionProps): JSX.Element => {
   const validateFilePick = (file: RcFile) => {
     const fileSize = file.size;
     if (fileSize > MAXIMUM_FILE_SIZE) {
-      message.error('Choosen file is too large');
+      message.error('Chosen file is too large');
       return false;
     }
     // check type file
