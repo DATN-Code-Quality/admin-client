@@ -34,7 +34,6 @@ const PieChart: React.FC<{
     }),
     [labels, color]
   );
-  console.log(series);
   return (
     <div style={{ width: '100%' }} className="flex items-center justify-center">
       {!loading && series?.length > 0 && (

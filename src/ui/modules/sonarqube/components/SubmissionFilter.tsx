@@ -97,7 +97,6 @@ const SubmissionFilter: React.FC<{
     [setFilters]
   );
 
-  console.log(filters.file);
   const customPanelStyle = {
     borderRadius: 4,
     border: 0,
@@ -114,6 +113,8 @@ const SubmissionFilter: React.FC<{
         maxHeight: width > 1024 ? '725px' : 'unset',
         ...customPanelStyle,
         overflow: 'auto',
+        display: 'flex',
+        flexDirection: 'column',
       }}
     >
       <>
@@ -161,52 +162,6 @@ const SubmissionFilter: React.FC<{
             );
           })}
         </Panel>
-        <Panel
-          style={{ maxHeight: '300px', overflow: 'auto' }}
-          header={
-            <div className="flex items-center">
-              <div className="flex-1">
-                <span className="font-semibold">File</span>
-              </div>
-
-              {filters.file && (
-                <CloseOutlined
-                  className="ml-auto w-10"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setFilters((prev) => ({ ...prev, file: '' }));
-                  }}
-                />
-              )}
-            </div>
-          }
-          key="2"
-        >
-          {loading && <Spin />}
-
-          {!loading &&
-            componentFiles?.map((fileItem) => {
-              return (
-                <div
-                  key={JSON.stringify(fileItem)}
-                  className={`bug-label mt-2 cursor-pointer pl-4 flex items-center overflow-auto ${
-                    filters.file === fileItem?.path ? 'filter-active' : ''
-                  }`}
-                  style={{ overflow: 'auto' }}
-                  onClick={() => {
-                    if (filters.file === fileItem?.path) return;
-                    handleSetFilter('file', fileItem?.path);
-                    if (fileItem?.fileuuid) {
-                      handleSetFilter('fileuuid', fileItem?.fileuuid);
-                    }
-                  }}
-                >
-                  <FileTextOutlined style={{ color: 'blue' }} />
-                  <span className="ml-2">{fileItem?.path}</span>
-                </div>
-              );
-            })}
-        </Panel>
 
         <Panel
           header={
@@ -252,6 +207,55 @@ const SubmissionFilter: React.FC<{
               </div>
             );
           })}
+        </Panel>
+        <Panel
+          style={{
+            overflow: 'hidden',
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+          header={
+            <div className="flex items-center">
+              <div className="flex-1">
+                <span className="font-semibold">File</span>
+              </div>
+
+              {filters.file && (
+                <CloseOutlined
+                  className="ml-auto w-10"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setFilters((prev) => ({ ...prev, file: '' }));
+                  }}
+                />
+              )}
+            </div>
+          }
+          key="2"
+        >
+          {loading && <Spin />}
+
+          {!loading &&
+            componentFiles?.map((fileItem) => {
+              return (
+                <div
+                  key={JSON.stringify(fileItem)}
+                  className={`bug-label mt-2 cursor-pointer pl-4 flex items-center ${
+                    filters.file === fileItem?.path ? 'filter-active' : ''
+                  }`}
+                  onClick={() => {
+                    if (filters.file === fileItem?.path) return;
+                    handleSetFilter('file', fileItem?.path);
+                    if (fileItem?.fileuuid) {
+                      handleSetFilter('fileuuid', fileItem?.fileuuid);
+                    }
+                  }}
+                >
+                  <FileTextOutlined style={{ color: 'blue' }} />
+                  <span className="ml-2">{fileItem?.path}</span>
+                </div>
+              );
+            })}
         </Panel>
       </>
     </Collapse>

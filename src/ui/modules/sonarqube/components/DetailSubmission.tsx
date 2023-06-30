@@ -68,16 +68,18 @@ const DetailSubmission: React.FC<{
 
   const issueList = useMemo(() => {
     const result: Record<string | number, unknown> = {};
-    Object.values(submissionIssues)?.forEach((issueGroup) => {
-      (issueGroup as Issue[])?.forEach((issue) => {
-        result[issue?.textRange?.endLine] = [
-          ...(result[issue?.textRange?.endLine] || []),
-          issue,
-        ];
+    Object.entries(submissionIssues)
+      ?.filter(([key, value]) => key === componentIssue)
+      .forEach(([key, issueGroup]) => {
+        (issueGroup as Issue[])?.forEach((issue) => {
+          result[issue?.textRange?.endLine] = [
+            ...(result[issue?.textRange?.endLine] || []),
+            issue,
+          ];
+        });
       });
-    });
     return result;
-  }, [submissionIssues]);
+  }, [componentIssue, submissionIssues]);
 
   const lineIssueList = useMemo(
     () => Object.keys(issueList || {})?.map((item) => +item),
@@ -89,7 +91,6 @@ const DetailSubmission: React.FC<{
   const handleChoiceIssue = useCallback((value) => {
     setIssuesVisible((prev) => {
       const index = prev.indexOf(value);
-      console.log(index);
       if (index > -1) {
         const newData = [...prev];
         newData.splice(index, 1);
@@ -142,7 +143,6 @@ const DetailSubmission: React.FC<{
 
   const renderListIssues = useCallback(
     (fileName: string, issueData: Issue[]) => {
-      console.log(issueData?.sort((a, b) => a?.line < b?.line));
       const value = fileName.split(':');
       const fileNameShort = value[value.length - 1];
       return (
@@ -162,7 +162,7 @@ const DetailSubmission: React.FC<{
                   }`}
                   onClick={() => handleSelect(item)}
                 >
-                  {item.message} - {item.line}
+                  {item.message}
                 </div>
               );
             })}
@@ -302,7 +302,6 @@ const DetailSubmission: React.FC<{
     if (!value) return '';
     return value[value.length - 1];
   }, [componentIssue]);
-  console.log('Issues list ', issuesVisible);
 
   return (
     <>
