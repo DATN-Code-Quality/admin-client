@@ -217,7 +217,7 @@ const SubmissionItem: React.FC<{
         break;
       case SubmissionType.SCANNED_FAIL:
         backgroundColor = 'red';
-        statusStr = 'Scan failed';
+        statusStr = 'Error';
         break;
       default:
         statusStr = 'Submitted';

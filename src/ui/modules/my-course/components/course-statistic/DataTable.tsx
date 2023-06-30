@@ -66,7 +66,7 @@ const DataTable: React.FC<{ courseReport: ReportCourse[]; total: number }> = ({
       align: 'center',
     },
     {
-      title: 'Scan Fail',
+      title: 'Error',
       dataIndex: 'scanFail',
       key: 'scanFail',
       align: 'center',
@@ -95,7 +95,7 @@ const DataTable: React.FC<{ courseReport: ReportCourse[]; total: number }> = ({
         scroll={{ x: '800px' }}
         dataSource={dataSource}
         columns={columns}
-        locale={{emptyText:'No submission found'}}
+        locale={{ emptyText: 'No submission found' }}
       />
     </div>
   );

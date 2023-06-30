@@ -1,6 +1,8 @@
+/* eslint-disable no-restricted-syntax */
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { ExportOutlined } from '@ant-design/icons';
+import ProTable from '@ant-design/pro-table';
 import { Table, Button, Empty } from 'antd';
 import tableExport from 'antd-table-export';
 
@@ -20,8 +22,90 @@ const DataTable: React.FC<{ courseId: string; assignmentId: string }> = ({
   assignmentId,
 }) => {
   const [data, setData] = useState();
+  const [dataFilter, setDataFilter] = useState();
   const [loading, setLoading] = useState(false);
   const { getDataExportAssignment } = useSubmission();
+
+  const renderStatus = useCallback((status: SubmissionType) => {
+    let backgroundColor = '';
+    let statusStr = '';
+    switch (status) {
+      case SubmissionType.SCANNING:
+        backgroundColor = 'blue';
+        statusStr = 'Scanning';
+        break;
+      case SubmissionType.PASS:
+        backgroundColor = 'green';
+        statusStr = 'Pass';
+        break;
+      case SubmissionType.FAIL:
+        backgroundColor = 'red';
+        statusStr = 'Failed';
+        break;
+      case SubmissionType.SCANNED_FAIL:
+        backgroundColor = 'red';
+        statusStr = 'Error';
+        break;
+      default:
+        statusStr = 'Submitted';
+        backgroundColor = 'gray';
+    }
+
+    return (
+      <div
+        className="rounded-2"
+        style={{
+          color: backgroundColor,
+          // color: 'white',
+          fontWeight: 600,
+          minWidth: '80px',
+          textAlign: 'left',
+          paddingLeft: 6,
+          paddingRight: 6,
+          paddingTop: 2,
+          paddingBottom: 2,
+        }}
+      >
+        {statusStr}
+      </div>
+    );
+  }, []);
+
+  const handleFilter = useCallback(
+    ({ current, pageSize, ...filters }) => {
+      setLoading(true);
+      if (Object.keys(filters)?.length === 0 || !filters) {
+        setDataFilter(data);
+        setLoading(false);
+        return;
+      }
+      const filterData = data?.filter((item) => {
+        const v = Object.entries(filters).every(([field, value]) => {
+          if (!value) return true;
+          if (field === 'userName') {
+            return item[field]?.toLowerCase()?.includes(value?.toLowerCase());
+          }
+          if (field === 'status') {
+            let key = -1;
+            for (const [keyType, valType] of Object.entries(
+              SubmissionTypeConstant
+            )) {
+              if (valType?.toLocaleLowerCase() === value?.toLocaleLowerCase()) {
+                key = +keyType;
+              }
+            }
+            return item[field] === key;
+          }
+          return item[field] <= +value;
+        });
+        return v;
+      });
+
+      setDataFilter(filterData);
+      setLoading(false);
+    },
+    [data]
+  );
 
   const fetchReport = useCallback(async () => {
     setLoading(true);
@@ -38,6 +122,7 @@ const DataTable: React.FC<{ courseId: string; assignmentId: string }> = ({
       }));
 
       setData(dataSource);
+      setDataFilter(dataSource);
     } catch (err) {
       console.log(err);
     }
@@ -50,7 +135,7 @@ const DataTable: React.FC<{ courseId: string; assignmentId: string }> = ({
 
   const columns = [
     {
-      title: 'Username',
+      title: 'Name',
       dataIndex: 'userName',
       key: 'userName',
       fixed: 'left',
@@ -66,7 +151,7 @@ const DataTable: React.FC<{ courseId: string; assignmentId: string }> = ({
       key: 'status',
       fixed: 'left',
       render: (value) => {
-        return <span>{SubmissionTypeConstant[value]}</span>;
+        return <span>{renderStatus(value)}</span>;
       },
       sorter: {
         compare: (a, b) => {
@@ -210,7 +295,7 @@ const DataTable: React.FC<{ courseId: string; assignmentId: string }> = ({
     },
   ];
   const exportToExcel = () => {
-    const dataExport = data?.map((item) => ({
+    const dataExport = dataFilter?.map((item) => ({
       ...item,
       status: SubmissionTypeConstant[item.status],
     }));
@@ -218,24 +303,46 @@ const DataTable: React.FC<{ courseId: string; assignmentId: string }> = ({
     exportInstance.download('overview', 'xlsx');
   };
 
+  console.log(data, dataFilter);
+
   return (
     <div
       style={{
         width: '100%',
         maxWidth: '800px',
-        overflowX: 'auto',
         margin: '0 auto',
       }}
     >
-      <Table
-        dataSource={data}
+      <h2>Data Table</h2>
+      <ProTable
+        dataSource={dataFilter}
         columns={columns}
         scroll={{ x: 1300 }}
         loading={loading}
+        options={{
+          reload: false,
+        }}
+        toolBarRender={() => {
+          return (
+            <Button
+              type="primary"
+              icon={<ExportOutlined />}
+              onClick={exportToExcel}
+            >
+              Export to Excel
+            </Button>
+          );
+        }}
+        onReset={() => {
+          handleFilter({});
+        }}
+        request={(params) => {
+          handleFilter(params);
+        }}
+        onFilter={(val) => {
+          console.log(val);
+        }}
       />
-      <Button type="primary" icon={<ExportOutlined />} onClick={exportToExcel}>
-        Export to Excel
-      </Button>
     </div>
   );
 };
