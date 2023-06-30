@@ -18,6 +18,12 @@ const PieChart: React.FC<{
       },
       labels,
       colors: color,
+      dataLabels: {
+        formatter: function (val, opt) {
+          console.log(val);
+          return val !== 0 ? val : 'jkljl';
+        },
+      },
       responsive: [
         {
           breakpoint: 480,
