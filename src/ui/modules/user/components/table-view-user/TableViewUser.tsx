@@ -107,7 +107,7 @@ function TableViewUser() {
               mode={ButtonType.EDIT}
               meta={meta}
             />
-            {record.status === UserStatus.ACTIVE ? (
+            {record.status === UserStatus.ACTIVE && (
               <BaseModal
                 onOkFn={handleBlockUser}
                 itemTitle="User"
@@ -115,7 +115,8 @@ function TableViewUser() {
                 mode={ButtonType.BLOCK}
                 isDelete
               />
-            ) : (
+            )}
+            {record.status === UserStatus.BLOCK && (
               <BaseModal
                 onOkFn={handleUnblockUser}
                 itemTitle="User"

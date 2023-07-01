@@ -15,7 +15,11 @@ import { formatDate, getMappingLabelByValue } from '~/utils';
 const FormAddCourse = ({ course, id, initialViewMode = false }) => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  const { getDetailCourse, importCourses: createCourse, updateCourse } = useCourse();
+  const {
+    getDetailCourse,
+    importCourses: createCourse,
+    updateCourse,
+  } = useCourse();
   const [loading, setLoading] = useState<boolean>(false);
   const [viewMode, setViewMode] = useState<boolean>(initialViewMode);
   const [formValues, setFormValues] = useState<any>({});
