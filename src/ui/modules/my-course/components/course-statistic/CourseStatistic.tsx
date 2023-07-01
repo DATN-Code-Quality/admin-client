@@ -30,6 +30,7 @@ const CourseStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
   const formatDataChart = useCallback(
     (total: number, assignment: ReportCourse[]) => {
       const series: { name: string; data: number[] }[] = [
+        { name: 'Wait to Scan', data: [] },
         { name: 'Submission Pass', data: [] },
         { name: 'Submission Fail', data: [] },
         { name: 'Scan Error', data: [] },
@@ -45,10 +46,11 @@ const CourseStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
         const fail = submission?.scanSuccess?.fail || 0;
         const pass = submission?.scanSuccess?.pass || 0;
         const scanFail = submission?.scanFail || 0;
-        series[0].data.push(fail);
+        series[0].data.push(waitToScan);
         series[1].data.push(pass);
-        series[2].data.push(scanFail);
-        series[3].data.push(
+        series[2].data.push(fail);
+        series[3].data.push(scanFail);
+        series[4].data.push(
           (total || 0) - waitToScan - scanning - fail - pass - scanFail
         );
       });
