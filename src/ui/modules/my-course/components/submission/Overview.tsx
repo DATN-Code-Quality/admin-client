@@ -30,15 +30,20 @@ const Overview: React.FC<{
       `/sonarqube/submission?courseId=${assignment?.courseId}&assignmentId=${assignment?.id}&submissionId=${submission?.id}`
     );
   }, [assignment?.courseId, assignment?.id, navigate, submission?.id]);
-
   const fetchOverview = useCallback(async () => {
     const initMap = new Map();
     if (!submission) {
       setData(initMap);
       return;
     }
+
+    if (
+      !assignment?.id ||
+      !assignment?.courseId ||
+      ![3, 4].includes(submission?.status)
+    )
+      return;
     setLoading(true);
-    if (!assignment?.id || !assignment?.courseId) return;
     const response = await getOverViewSubmission(
       assignment?.courseId,
       assignment?.id,
@@ -64,7 +69,7 @@ const Overview: React.FC<{
     fetchOverview();
   }, [fetchOverview]);
 
-  if (!data || data?.size === 0) {
+  if (!data || data?.size === 0 || ![3, 4].includes(submission?.status)) {
     return (
       <div
         style={{
