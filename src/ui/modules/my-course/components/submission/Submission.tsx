@@ -87,35 +87,33 @@ const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
             />
           </>
         )}
-        {submissionList?.length > 0 && (
-          <div
-            className="grid bg-white p-4 rounded-2"
-            style={{
-              gridTemplateColumns:
-                tab === SubmisisonTab.SUBMISSION ? '1fr 1fr' : '1fr',
-            }}
-          >
-            <div className="assignment-information">
-              {subRole === SubRole.ADMIN ||
-                (subRole === SubRole.TEACHER && (
-                  <div className="flex items-center">
-                    <Tabs
-                      defaultActiveKey={tab}
-                      size="middle"
-                      type="card"
-                      onChange={(selectedTab) => {
-                        setTab(selectedTab);
-                      }}
-                      style={{ marginBottom: 8, marginTop: 8 }}
-                      hidden={false}
-                      items={teacherTabs}
-                    />
-                  </div>
-                ))}
-            </div>
-            <div />
+        <div
+          className="grid bg-white p-4 rounded-2"
+          style={{
+            gridTemplateColumns:
+              tab === SubmisisonTab.SUBMISSION ? '1fr 1fr' : '1fr',
+          }}
+        >
+          <div className="assignment-information">
+            {subRole === SubRole.ADMIN ||
+              (subRole === SubRole.TEACHER && (
+                <div className="flex items-center">
+                  <Tabs
+                    defaultActiveKey={tab}
+                    size="middle"
+                    type="card"
+                    onChange={(selectedTab) => {
+                      setTab(selectedTab);
+                    }}
+                    style={{ marginBottom: 8, marginTop: 8 }}
+                    hidden={false}
+                    items={teacherTabs}
+                  />
+                </div>
+              ))}
           </div>
-        )}
+          <div />
+        </div>
       </div>
 
       {/* SECOND CARD */}
@@ -170,23 +168,6 @@ const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
           </div>
           {tab === SubmisisonTab.SUBMISSION && (
             <Overview submission={submission} assignment={assignment} />
-          )}
-          {tab === SubmisisonTab.SUBMISSION && (
-            <>
-              {submissionList?.length === 0 && (
-                <div className=" bg-white p-4 rounded-2 gap-4">
-                  <div className="submission-container ">
-                    {(subRole === SubRole.ADMIN ||
-                      subRole === SubRole.TEACHER) && (
-                      <div>
-                        <p className="title">Bài nộp</p>
-                        <Empty description="Không tồn tại bài nôp" />
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
-            </>
           )}
         </div>
       </div>

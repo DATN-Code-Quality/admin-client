@@ -37,6 +37,7 @@
     "html-react-parser": "^3.0.15",
     "http-proxy-middleware": "^2.0.6",
     "lodash.clonedeep": "^4.5.0",
+    "moment": "^2.29.4",
     "path-to-regexp": "^6.2.1",
     "react": "^18.2.0",
     "react-apexcharts": "^1.4.0",

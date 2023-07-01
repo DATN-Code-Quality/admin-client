@@ -13,8 +13,12 @@ export const metaFormAddCourse = () => {
       },
       {
         key: 'summary',
-        label: 'Description',
-        required: true,
+        label: 'Summary',
+        widget: Editor,
+      },
+      {
+        key: 'detail',
+        label: 'Detail',
         widget: Editor,
       },
       {
