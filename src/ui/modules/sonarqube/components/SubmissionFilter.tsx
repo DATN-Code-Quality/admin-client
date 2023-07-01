@@ -247,8 +247,8 @@ const SubmissionFilter: React.FC<{
                   onClick={() => {
                     if (filters.file === fileItem?.path) return;
                     handleSetFilter('file', fileItem?.path);
-                    if (fileItem?.fileuuid) {
-                      handleSetFilter('fileuuid', fileItem?.fileuuid);
+                    if (fileItem?.uuid) {
+                      handleSetFilter('fileuuid', fileItem?.uuid);
                     }
                   }}
                 >
