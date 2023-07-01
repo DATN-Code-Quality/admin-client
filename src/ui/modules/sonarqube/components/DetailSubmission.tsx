@@ -88,17 +88,35 @@ const DetailSubmission: React.FC<{
 
   const [ruleSelected, setRuleSelected] = useState<string | null>(null);
 
-  const handleChoiceIssue = useCallback((value) => {
-    setIssuesVisible((prev) => {
-      const index = prev.indexOf(value);
-      if (index > -1) {
-        const newData = [...prev];
-        newData.splice(index, 1);
-        return newData;
+  const handleSelect = useCallback(
+    (item: Issue) => {
+      setSelected(item);
+      if (componentIssue !== item.component) {
+        setIssuesVisible([]);
+        setComponentIssue(() => item.component);
       }
-      return [...prev, value];
-    });
-  }, []);
+    },
+    [componentIssue]
+  );
+
+  const handleChoiceIssue = useCallback(
+    (line, data) => {
+      console.log(data);
+      // console.log();
+      document.getElementById(data.key)?.scrollIntoView();
+      handleSelect(data);
+      setIssuesVisible((prev) => {
+        const index = prev.indexOf(line);
+        if (index > -1) {
+          const newData = [...prev];
+          newData.splice(index, 1);
+          return newData;
+        }
+        return [...prev, line];
+      });
+    },
+    [handleSelect]
+  );
 
   useEffect(() => {
     setComponentIssue(issueSelected?.component);
@@ -119,17 +137,6 @@ const DetailSubmission: React.FC<{
     };
   }, []);
 
-  const handleSelect = useCallback(
-    (item: Issue) => {
-      setSelected(item);
-      if (componentIssue !== item.component) {
-        setIssuesVisible([]);
-        setComponentIssue(() => item.component);
-      }
-    },
-    [componentIssue]
-  );
-
   useEffect(() => {
     const element = document.getElementById(
       `${selected?.hash}_${JSON.stringify(selected?.textRange)}`
@@ -147,7 +154,7 @@ const DetailSubmission: React.FC<{
       const fileNameShort = value[value.length - 1];
       return (
         <div>
-          <p style={{ marginBottom: '8px' }} className="overflow-auto">
+          <p style={{ marginBottom: '8px' }}>
             <span className="font-semibold ">File: </span>
             {fileNameShort}
           </p>
@@ -157,6 +164,7 @@ const DetailSubmission: React.FC<{
               return (
                 <div
                   key={item.key}
+                  id={item.key}
                   className={`issue-message ${
                     selected?.key === item.key ? 'active' : ''
                   }`}
@@ -269,7 +277,6 @@ const DetailSubmission: React.FC<{
             className="cursor-pointer"
             onClick={setEmptyIssue}
           />
-          <p>Issues</p>
         </div>
         <div style={{ flex: 1, overflow: 'auto' }}>
           {!loadingIssues &&
@@ -404,14 +411,21 @@ const DetailSubmission: React.FC<{
                         ? 'line-code-detail'
                         : 'empty-line'
                     } bg-white`}
-                    style={{ paddingBottom: isExistIssues ? '8px' : '0' }}
+                    // style={{ paddingBottom: isExistIssues ? '8px' : '0' }}
                   >
                     <div
-                      className="flex items-start overflow-hidden "
-                      onClick={() => handleChoiceIssue(item.line)}
+                      className="flex items-start  "
+                      onClick={() => {
+                        if (isExistIssues) {
+                          handleChoiceIssue(
+                            item.line,
+                            issueList[+item.line][0]
+                          );
+                        }
+                      }}
                     >
                       <p
-                        className="source-line-code code flex-1 overflow-auto"
+                        className="source-line-code code flex-1 "
                         style={{ lineHeight: '18px' }}
                       >
                         <pre>{result}</pre>
@@ -432,9 +446,13 @@ const DetailSubmission: React.FC<{
                       <div
                         style={{
                           overflow: 'hidden',
+                          marginTop: issuesVisible.includes(item.line)
+                            ? '8px'
+                            : '0',
                           maxHeight: issuesVisible.includes(item.line)
                             ? '500px'
                             : '0',
+                          transition: 'all linear 0.1s',
                         }}
                       >
                         {issueList[+item.line]?.map((issueItemLine) => {

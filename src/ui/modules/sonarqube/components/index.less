@@ -158,7 +158,6 @@ body {
   padding-right: 32px;
   cursor: pointer;
   background: white;
-  overflow: hidden;
 }
 
 .line-code-container {
@@ -243,7 +242,8 @@ body {
   font-weight: 800;
   cursor: pointer;
   transition: all linear 0.1s;
-  overflow: auto;
+  width: fit-content;
+  // overflow: auto;
 }
 
 .issue-message.active {
@@ -382,4 +382,9 @@ body {
   .issue-component {
     max-height: unset;
   }
+}
+
+.cms-layout-app .site-layout .site-layout-background {
+  padding: 24px !important;
+  margin: 0 80px !important;
 }

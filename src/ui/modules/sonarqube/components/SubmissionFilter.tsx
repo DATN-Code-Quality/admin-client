@@ -110,7 +110,8 @@ const SubmissionFilter: React.FC<{
       style={{
         backgroundColor: '#f0f2f5',
         width: width > 1024 ? '27%' : 'unset',
-        maxHeight: width > 1024 ? '725px' : 'unset',
+        // maxHeight: width > 1024 ? '725px' : 'unset',
+        height: '100%',
         ...customPanelStyle,
         overflow: 'auto',
         display: 'flex',
@@ -210,7 +211,7 @@ const SubmissionFilter: React.FC<{
         </Panel>
         <Panel
           style={{
-            overflow: 'hidden',
+            // overflow: 'hidden',
             display: 'flex',
             flexDirection: 'column',
           }}
