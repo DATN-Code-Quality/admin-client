@@ -90,7 +90,7 @@ function TableViewCourse() {
         onFilter={onFilterChange}
       />
       <Card>
-        <TableToolbar title={`Found ${formatNumber(list.total || 0)} course`}>
+        <TableToolbar title={`Found ${formatNumber(list.total || 0)} courses`}>
           <div
             className="flex items-center flex-nowrap overflow-auto"
             style={{ gap: '16px' }}
@@ -101,7 +101,7 @@ function TableViewCourse() {
               loading={list.isLoading}
               onClick={syncMoodleModalActions.handleOpen}
             >
-              Sync Moodle
+              Import From Moodle
             </Button>
             <ExcelToObject
               handleImportModalOk={handleImportModalOk}

@@ -139,9 +139,7 @@ function TableViewUser() {
         onFilter={onFilterChange}
       />
       <Card>
-        <TableToolbar
-          title={`Found ${formatNumber(list.total || 0)} user`}
-        >
+        <TableToolbar title={`Found ${formatNumber(list.total || 0)} users`}>
           <div
             className="flex items-center flex-nowrap overflow-auto"
             style={{ gap: '16px' }}
@@ -152,7 +150,7 @@ function TableViewUser() {
               loading={list.isLoading}
               onClick={syncMoodleModalActions.handleOpen}
             >
-              Sync Moodle
+              Import from Moodle
             </Button>
             <ExcelToObject
               handleImportModalOk={handleImportModalOk}

@@ -1,5 +1,5 @@
 /* eslint-disable import/order */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import {
   ArrowLeftOutlined,
@@ -35,12 +35,17 @@ const Submission = () => {
   const navigate = useNavigate();
   const [width, setWidth] = useState(window.innerWidth);
 
-  const [components, setComponents] = useState();
-  const { getIssuesSubmission } = useSonarqube();
+  const [loadingFile, setLoadingFile] = useState(false);
+  const [componentFiles, setComponentFiles] = useState([]);
 
+  const [components, setComponents] = useState();
+  const { getIssuesSubmission, getComponentsSubmission } = useSonarqube();
+  const isFetchFile = useRef(false);
   const issueSelected = useSelector(SonarqubeSelector.getIssueSelected);
   const data = useSelector(SonarqubeSelector.getSubmissionIssues);
   const dataSelected = useSelector(SonarqubeSelector.getSubmissionSelected);
+  const [submissionIssues, setSubmissionIssuesDetail] = useState({});
+  const [loadingIssues, setLoadingIssues] = useState(false);
 
   const [filters, setFilters] = useState<{
     type: BugType | '';
@@ -104,6 +109,76 @@ const Submission = () => {
     setLoading(false);
   }, [dataSelected, filters, pagination.page, pagination.pageSize, dispatch]);
 
+  const handleGetAllIssues = useCallback(async () => {
+    if (
+      !dataSelected?.courseId ||
+      !dataSelected?.assignmentId ||
+      !dataSelected?.submissionId
+    ) {
+      return;
+    }
+    setLoadingIssues(true);
+    const response = await getIssuesSubmission(
+      dataSelected?.courseId,
+      dataSelected?.assignmentId,
+      dataSelected?.submissionId
+    );
+
+    if (response?.status !== 0) return;
+    const { data: dataRes } = response;
+    const { issues } = dataRes || { components: [], issues: [] };
+    const issuesOfComponents: Record<string, unknown> = {};
+    issues?.reduce((objectResult, issue) => {
+      if (objectResult[issue.component]) {
+        const data = [...objectResult[issue.component]];
+        data.push(issue);
+        objectResult[issue.component] = data;
+      } else {
+        objectResult[issue.component] = [issue];
+      }
+      return objectResult;
+    }, issuesOfComponents);
+    setSubmissionIssuesDetail(issuesOfComponents);
+    setLoadingIssues(false);
+  }, [
+    dataSelected?.assignmentId,
+    dataSelected?.courseId,
+    dataSelected?.submissionId,
+  ]);
+
+  const fetchListFiles = useCallback(async () => {
+    try {
+      if (componentFiles.length > 0) return;
+      if (
+        !dataSelected?.courseId ||
+        !dataSelected?.assignmentId ||
+        !dataSelected?.submissionId
+      )
+        return;
+      setLoadingFile(true);
+      const response = await getComponentsSubmission(
+        dataSelected?.courseId,
+        dataSelected?.assignmentId,
+        dataSelected?.submissionId
+      );
+      if (response?.status !== 0) return;
+      setComponentFiles(response?.data?.components);
+      console.log(response);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoadingFile(false);
+    }
+  }, [
+    dataSelected?.assignmentId,
+    dataSelected?.courseId,
+    dataSelected?.submissionId,
+  ]);
+
+  useEffect(() => {
+    fetchListFiles();
+  }, [fetchListFiles]);
+
   const handleSetIssue = useCallback(
     (issue: Issue) => {
       dispatch(setIssueSelected(issue));
@@ -114,6 +189,10 @@ const Submission = () => {
   useEffect(() => {
     handleFetchData();
   }, [handleFetchData]);
+
+  useEffect(() => {
+    handleGetAllIssues();
+  }, [handleGetAllIssues]);
 
   useEffect(() => {
     window.addEventListener('resize', () => {
@@ -142,9 +221,8 @@ const Submission = () => {
     <>
       {!loading && issueSelected && (
         <DetailSubmission
-          courseId={dataSelected?.courseId}
-          assignmentId={dataSelected?.assignmentId}
-          submissionId={dataSelected?.submissionId || ''}
+          submissionIssues={submissionIssues}
+          loadingIssues={loadingIssues}
         />
       )}
 
@@ -169,26 +247,23 @@ const Submission = () => {
               </div>
             )}
           </div>
-          <div className="flex gap-4 h-full ">
+          <div className="flex gap-4 " style={{ height: 'calc(100% - 54px)' }}>
             {width >= 1024 ? (
               <SubmissionFilter
+                componentFiles={componentFiles}
+                loading={loadingFile}
                 filters={filters}
                 setFilters={setFilters}
                 components={components}
-                courseId={dataSelected?.courseId}
-                assignmentId={dataSelected?.assignmentId}
-                submissionId={dataSelected?.submissionId || ''}
               />
             ) : (
               <SubmissionFilterMobile
+                componentFiles={componentFiles}
+                loading={loadingFile}
                 filters={filters}
                 setFilters={setFilters}
                 open={open}
                 setOpen={setOpen}
-                components={components}
-                courseId={dataSelected?.courseId}
-                assignmentId={dataSelected?.assignmentId}
-                submissionId={dataSelected?.submissionId || ''}
               />
             )}
 

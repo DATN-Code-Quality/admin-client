@@ -89,7 +89,7 @@ function TableViewParticipant({ course }) {
         onFilter={onFilterChange}
       />
       <Card>
-        <TableToolbar title={`Found ${formatNumber(list.total || 0)} user`}>
+        <TableToolbar title={`Found ${formatNumber(list.total || 0)} users`}>
           {/* <Button
             type="primary"
             className="mr-4"

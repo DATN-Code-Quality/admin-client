@@ -31,36 +31,9 @@ const { Panel } = Collapse;
 const SubmissionFilter: React.FC<{
   filters: { type: BugType | ''; file: string; severity: SeverityType | '' };
   setFilters: (val: string) => void;
-  courseId: string;
-  assignmentId: string;
-  submissionId: string;
-}> = ({ filters, setFilters, courseId, assignmentId, submissionId }) => {
-  const { getComponentsSubmission } = useSonarqube();
-  const [loading, setLoading] = useState(false);
-  const [componentFiles, setComponentFiles] = useState([]);
-  const fetchListFiles = useCallback(async () => {
-    try {
-      if (!courseId || !assignmentId || !submissionId) return;
-      setLoading(true);
-      const response = await getComponentsSubmission(
-        courseId,
-        assignmentId,
-        submissionId
-      );
-      if (response?.status !== 0) return;
-      setComponentFiles(response?.data?.components);
-      console.log(response);
-    } catch (err) {
-      console.log(err);
-    } finally {
-      setLoading(false);
-    }
-  }, [assignmentId, courseId, submissionId]);
-
-  useEffect(() => {
-    fetchListFiles();
-  }, [fetchListFiles]);
-
+  componentFiles: any;
+  loading: boolean;
+}> = ({ filters, setFilters, componentFiles, loading }) => {
   const width = useCurrentWidth();
 
   const bugTypes = useMemo(
@@ -124,7 +97,6 @@ const SubmissionFilter: React.FC<{
     [setFilters]
   );
 
-  console.log(filters.file);
   const customPanelStyle = {
     borderRadius: 4,
     border: 0,
@@ -138,87 +110,140 @@ const SubmissionFilter: React.FC<{
       style={{
         backgroundColor: '#f0f2f5',
         width: width > 1024 ? '27%' : 'unset',
-        maxHeight: width > 1024 ? '725px' : 'unset',
+        // maxHeight: width > 1024 ? '725px' : 'unset',
+        height: '100%',
         ...customPanelStyle,
         overflow: 'auto',
+        display: 'flex',
+        flexDirection: 'column',
       }}
     >
-      {loading && <Spin />}
-      {!loading && (
-        <>
-          <Panel
-            header={
-              <div className="flex items-center">
-                <div className="flex-1">
-                  <span>Type</span>
-                  {/* {filters.type && (
+      <>
+        <Panel
+          header={
+            <div className="flex items-center">
+              <div className="flex-1">
+                <span>Type</span>
+                {/* {filters.type && (
                     <span className="ml-2 font-normal text-14 label-active-filter">
                       {BugTypeConstant[filters.type]}
                     </span>
                   )} */}
-                </div>
-                {filters.type && (
-                  <CloseOutlined
-                    className="ml-auto w-10"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setFilters((prev) => ({ ...prev, type: '' }));
-                    }}
-                  />
-                )}
               </div>
-            }
-            key="1"
-            style={{ fontWeight: 600 }}
-          >
-            {bugTypes?.map((bug) => {
-              return (
-                <div
-                  key={bug.label}
-                  className={`bug-label cursor-pointer pl-4 ${
-                    filters.type === bug.value ? 'filter-active' : ''
-                  }`}
-                  onClick={() => {
-                    if (filters.type === bug.value) {
-                      handleSetFilter('type', '');
-                    } else handleSetFilter('type', bug.value);
+              {filters.type && (
+                <CloseOutlined
+                  className="ml-auto w-10"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setFilters((prev) => ({ ...prev, type: '' }));
                   }}
-                >
-                  {bug.icon}
-                  <span className="ml-2">{bug.label}</span>
-                </div>
-              );
-            })}
-          </Panel>
-          <Panel
-            style={{ maxHeight: '300px', overflow: 'auto' }}
-            header={
-              <div className="flex items-center">
-                <div className="flex-1">
-                  <span className="font-semibold">File</span>
-                </div>
-
-                {filters.file && (
-                  <CloseOutlined
-                    className="ml-auto w-10"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setFilters((prev) => ({ ...prev, file: '' }));
-                    }}
-                  />
-                )}
+                />
+              )}
+            </div>
+          }
+          key="1"
+          style={{ fontWeight: 600 }}
+        >
+          {bugTypes?.map((bug) => {
+            return (
+              <div
+                key={bug.label}
+                className={`bug-label cursor-pointer pl-4 ${
+                  filters.type === bug.value ? 'filter-active' : ''
+                }`}
+                onClick={() => {
+                  if (filters.type === bug.value) {
+                    handleSetFilter('type', '');
+                  } else handleSetFilter('type', bug.value);
+                }}
+              >
+                {bug.icon}
+                <span className="ml-2">{bug.label}</span>
               </div>
-            }
-            key="2"
-          >
-            {componentFiles?.map((fileItem) => {
+            );
+          })}
+        </Panel>
+
+        <Panel
+          header={
+            <div className="flex items-center">
+              <div className="flex-1">
+                <span className="font-semibold">Severity</span>
+                {/* {filters.severity && (
+                    <span className="ml-2 font-normal label-active-filter">
+                      {SeverityTypeConstant[filters.severity]}
+                    </span>
+                  )} */}
+              </div>
+              {filters.severity && (
+                <CloseOutlined
+                  className="ml-auto w-10"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setFilters((prev) => ({ ...prev, severity: '' }));
+                  }}
+                />
+              )}
+            </div>
+          }
+          key="3"
+        >
+          {severity?.map((item) => {
+            return (
+              <div
+                key={item.label}
+                className={`bug-label cursor-pointer pl-4 ${
+                  filters.severity === item.value ? 'filter-active' : ''
+                }`}
+                onClick={() => {
+                  if (filters.severity === item.value) {
+                    handleSetFilter('severity', '');
+                  } else {
+                    handleSetFilter('severity', item.value);
+                  }
+                }}
+              >
+                {item.icon}
+                <span className="ml-2">{item.label}</span>
+              </div>
+            );
+          })}
+        </Panel>
+        <Panel
+          style={{
+            // overflow: 'hidden',
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+          header={
+            <div className="flex items-center">
+              <div className="flex-1">
+                <span className="font-semibold">File</span>
+              </div>
+
+              {filters.file && (
+                <CloseOutlined
+                  className="ml-auto w-10"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setFilters((prev) => ({ ...prev, file: '' }));
+                  }}
+                />
+              )}
+            </div>
+          }
+          key="2"
+        >
+          {loading && <Spin />}
+
+          {!loading &&
+            componentFiles?.map((fileItem) => {
               return (
                 <div
                   key={JSON.stringify(fileItem)}
-                  className={`bug-label mt-2 cursor-pointer pl-4 flex items-center overflow-auto ${
+                  className={`bug-label mt-2 cursor-pointer pl-4 flex items-center ${
                     filters.file === fileItem?.path ? 'filter-active' : ''
                   }`}
-                  style={{ overflow: 'auto' }}
                   onClick={() => {
                     if (filters.file === fileItem?.path) return;
                     handleSetFilter('file', fileItem?.path);
@@ -232,55 +257,8 @@ const SubmissionFilter: React.FC<{
                 </div>
               );
             })}
-          </Panel>
-
-          <Panel
-            header={
-              <div className="flex items-center">
-                <div className="flex-1">
-                  <span className="font-semibold">Severity</span>
-                  {/* {filters.severity && (
-                    <span className="ml-2 font-normal label-active-filter">
-                      {SeverityTypeConstant[filters.severity]}
-                    </span>
-                  )} */}
-                </div>
-                {filters.severity && (
-                  <CloseOutlined
-                    className="ml-auto w-10"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setFilters((prev) => ({ ...prev, severity: '' }));
-                    }}
-                  />
-                )}
-              </div>
-            }
-            key="3"
-          >
-            {severity?.map((item) => {
-              return (
-                <div
-                  key={item.label}
-                  className={`bug-label cursor-pointer pl-4 ${
-                    filters.severity === item.value ? 'filter-active' : ''
-                  }`}
-                  onClick={() => {
-                    if (filters.severity === item.value) {
-                      handleSetFilter('severity', '');
-                    } else {
-                      handleSetFilter('severity', item.value);
-                    }
-                  }}
-                >
-                  {item.icon}
-                  <span className="ml-2">{item.label}</span>
-                </div>
-              );
-            })}
-          </Panel>
-        </>
-      )}
+        </Panel>
+      </>
     </Collapse>
   );
 };
@@ -290,18 +268,9 @@ const SubmissionFilterMobile: React.FC<{
   setFilters: (val: string) => void;
   open: boolean;
   setOpen: (val: boolean) => void;
-  courseId: string;
-  assignmentId: string;
-  submissionId: string;
-}> = ({
-  filters,
-  setFilters,
-  open,
-  setOpen,
-  courseId,
-  assignmentId,
-  submissionId,
-}) => {
+  componentFiles: any;
+  loading: boolean;
+}> = ({ filters, setFilters, open, setOpen, componentFiles, loading }) => {
   const [placement, setPlacement] = useState<DrawerProps['placement']>('left');
 
   const onClose = () => {
@@ -325,9 +294,8 @@ const SubmissionFilterMobile: React.FC<{
         <SubmissionFilter
           filters={filters}
           setFilters={setFilters}
-          courseId={courseId}
-          assignmentId={assignmentId}
-          submissionId={submissionId}
+          componentFiles={componentFiles}
+          loading={loading}
         />
       </Drawer>
     </div>
