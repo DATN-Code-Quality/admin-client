@@ -91,6 +91,7 @@ const DetailSubmission: React.FC<{
   const handleSelect = useCallback(
     (item: Issue) => {
       setSelected(item);
+
       if (componentIssue !== item.component) {
         setIssuesVisible([]);
         setComponentIssue(() => item.component);
@@ -98,12 +99,16 @@ const DetailSubmission: React.FC<{
     },
     [componentIssue]
   );
-
   const handleChoiceIssue = useCallback(
     (line, data) => {
-      console.log(data);
-      // console.log();
-      document.getElementById(data.key)?.scrollIntoView();
+      setTimeout(() => {
+        document.getElementById(data.key)?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+          inline: 'nearest',
+        });
+      }, 100);
+
       handleSelect(data);
       setIssuesVisible((prev) => {
         const index = prev.indexOf(line);
@@ -122,6 +127,7 @@ const DetailSubmission: React.FC<{
     setComponentIssue(issueSelected?.component);
     // oldComponentIssue.current = issueSelected?.component;
     setSelected(issueSelected);
+    setIssuesVisible([issueSelected?.line]);
   }, [issueSelected, issueSelected?.component]);
 
   useEffect(() => {
@@ -139,7 +145,7 @@ const DetailSubmission: React.FC<{
 
   useEffect(() => {
     const element = document.getElementById(
-      `${selected?.hash}_${JSON.stringify(selected?.textRange)}`
+      `${selected?.hash}_${selected?.textRange?.startLine}`
     );
     element?.scrollIntoView({
       behavior: 'smooth',
@@ -168,7 +174,15 @@ const DetailSubmission: React.FC<{
                   className={`issue-message ${
                     selected?.key === item.key ? 'active' : ''
                   }`}
-                  onClick={() => handleSelect(item)}
+                  onClick={() => {
+                    handleSelect(item);
+                    setIssuesVisible((prev) => {
+                      if (!prev.includes(item?.line)) {
+                        return [item?.line];
+                      }
+                      return prev;
+                    });
+                  }}
                 >
                   {item.message}
                 </div>
@@ -388,16 +402,16 @@ const DetailSubmission: React.FC<{
 
               const isActiveLine =
                 isExistIssues &&
-                (issueList[+item.line][0] as Issue)?.key === selected?.key;
+                (issueList[+item.line] as Issue[])?.some(
+                  (itemI) => itemI.key === selected?.key
+                );
 
               return (
                 <div
                   key={`${item.code}_${item.line}`}
                   id={
                     isExistIssues
-                      ? `${issueList[+item.line][0]?.hash}_${JSON.stringify(
-                          issueList[+item.line][0]?.textRange
-                        )}`
+                      ? `${issueList[+item.line][0]?.hash}_${item?.line}`
                       : ''
                   }
                   className={`pl-6 line-code-container ${
@@ -424,22 +438,22 @@ const DetailSubmission: React.FC<{
                         }
                       }}
                     >
+                      {isExistIssues && (
+                        <img
+                          src={ErrorIcon}
+                          style={{
+                            marginRight: '16px',
+                            width: '16px',
+                            height: '16px',
+                          }}
+                        />
+                      )}
                       <p
                         className="source-line-code code flex-1 "
                         style={{ lineHeight: '18px' }}
                       >
                         <pre>{result}</pre>
                       </p>
-                      {isExistIssues && (
-                        <img
-                          src={ErrorIcon}
-                          style={{
-                            marginLeft: '16px',
-                            width: '16px',
-                            height: '16px',
-                          }}
-                        />
-                      )}
                     </div>
 
                     {isExistIssues && (
@@ -447,6 +461,9 @@ const DetailSubmission: React.FC<{
                         style={{
                           overflow: 'hidden',
                           marginTop: issuesVisible.includes(item.line)
+                            ? '8px'
+                            : '0',
+                          marginBottom: issuesVisible.includes(item.line)
                             ? '8px'
                             : '0',
                           maxHeight: issuesVisible.includes(item.line)
