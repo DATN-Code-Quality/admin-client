@@ -19,20 +19,20 @@ export const metaFilterCourse = () => {
           placeholder: 'Enter keyword',
         },
       },
-      {
-        key: 'role',
-        colSpan: 3,
-        options: MAP_SUB_ROLES,
-        widget: 'select',
-        widgetProps: {
-          maxTagCount: 'responsive',
-          style: {
-            minWidth: '12rem',
-          },
-          placeholder: 'My Role',
-          allowClear: true,
-        },
-      },
+      // {
+      //   key: 'role',
+      //   colSpan: 3,
+      //   options: MAP_SUB_ROLES,
+      //   widget: 'select',
+      //   widgetProps: {
+      //     maxTagCount: 'responsive',
+      //     style: {
+      //       minWidth: '12rem',
+      //     },
+      //     placeholder: 'My Role',
+      //     allowClear: true,
+      //   },
+      // },
       {
         key: 'startAt',
         colSpan: 3,

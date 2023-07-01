@@ -38,11 +38,11 @@ export const metaFormAddAssignment = ({
         colSpan: 6,
         key: 'description',
         label: 'Description',
-        required: true,
         widget: Editor,
       },
       {
         colSpan: 6,
+        required: true,
         key: 'dueDate',
         label: 'Due Date',
         widget: 'date-picker',

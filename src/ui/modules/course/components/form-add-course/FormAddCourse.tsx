@@ -79,11 +79,20 @@ const FormAddCourse = ({ course, id, initialViewMode = false }) => {
             <div className="field_value">{formValues?.name}</div>
           </div>
           <div className="group_field">
-            <label>Description </label>
+            <label>Summary </label>
             <div
               className="field_value"
               dangerouslySetInnerHTML={{
                 __html: formValues?.summary || 'N/A',
+              }}
+            />
+          </div>
+          <div className="group_field">
+            <label>Detail </label>
+            <div
+              className="field_value"
+              dangerouslySetInnerHTML={{
+                __html: formValues?.detail || 'N/A',
               }}
             />
           </div>
