@@ -247,7 +247,7 @@ const Submission = () => {
               </div>
             )}
           </div>
-          <div className="flex gap-4 h-full ">
+          <div className="flex gap-4 " style={{ height: 'calc(100% - 54px)' }}>
             {width >= 1024 ? (
               <SubmissionFilter
                 componentFiles={componentFiles}
