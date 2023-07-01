@@ -41,6 +41,9 @@ export default function ViewAssignment() {
       {loading && <Loading />}
       <p
         className="cursor-pointer mb-2"
+        style={{
+          display: 'inline-block',
+        }}
         onClick={() => {
           const courseDetailUrl = generateUrl(ROUTE.MY_COURSE.DETAIL, {
             course_id: courseId,

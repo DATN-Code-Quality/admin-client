@@ -46,6 +46,9 @@ function ViewCourseDetailContainer() {
     <>
       <p
         className="cursor-pointer mb-2"
+        style={{
+          display: 'inline-block',
+        }}
         onClick={() => {
           navigate(ROUTE.COURSE.LIST);
         }}
