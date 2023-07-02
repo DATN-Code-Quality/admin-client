@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
+import { ArrowLeftOutlined } from '@ant-design/icons';
 import { Tabs } from 'antd';
-import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 import CourseStatistic from '../components/course-statistic';
 import { TableViewAssignment } from '../components/table-view-assignment';
@@ -12,10 +13,12 @@ import ViewCourse from './ViewCourse';
 import { useCourse } from '~/adapters/appService/course.service';
 import { authSelector } from '~/adapters/redux/selectors/auth';
 import { Role, SubRole } from '~/constant/enum';
+import ROUTE from '~/constant/routes';
 import useQuery from '~/hooks/useQuery';
 
 function ViewCourseDetailContainer() {
   const query = useQuery();
+  const navigate = useNavigate();
   const { getDetailCourse } = useCourse();
 
   const [roleInCourse, setRoleInCourse] = useState();
@@ -68,6 +71,18 @@ function ViewCourseDetailContainer() {
 
   return (
     <>
+      <p
+        className="cursor-pointer mb-2"
+        style={{
+          display: 'inline-block',
+        }}
+        onClick={() => {
+          navigate(ROUTE.MY_COURSE.LIST);
+        }}
+      >
+        <ArrowLeftOutlined size={32} className=" mr-2" />
+        <span>Back</span>
+      </p>
       <Tabs
         destroyInactiveTabPane
         defaultActiveKey={type}

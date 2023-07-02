@@ -255,19 +255,19 @@ function TableViewParticipant({ course }: { course: Course }) {
         onFilter={onFilterChange}
       />
       <Card>
-        <TableToolbar
-          title={`Found ${formatNumber(list.items?.length || 0)} user`}
-        >
-          <div className="flex items-center" style={{ gap: '16px' }}>
+        <TableToolbar title={`Found ${formatNumber(list.total || 0)} users`}>
+          <div
+            className="flex items-center flex-nowrap overflow-auto"
+            style={{ gap: '16px' }}
+          >
             {course?.courseMoodleId && (
               <Button
                 type="primary"
-                className="mr-4"
                 icon={<SyncOutlined />}
                 loading={list.isLoading}
                 onClick={syncMoodleModalActions.handleOpen}
               >
-                Sync Moodle
+                Import from Moodle
               </Button>
             )}
             <Button

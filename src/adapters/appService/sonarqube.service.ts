@@ -8,6 +8,20 @@ import {
 
 export function useSonarqube() {
   return {
+    async getComponentsSubmission(
+      courseId: string,
+      assignmentId: string,
+      submissionId: string,
+      params?: Record<string, unknown>
+    ): Promise<SubmissionResponse> {
+      const response = await getWithPath(
+        `/sonarqube/component/${courseId}/${assignmentId}/${submissionId}`,
+        params
+      ).then((res) => res);
+
+      return response;
+    },
+
     async getIssuesSubmission(
       courseId: string,
       assignmentId: string,

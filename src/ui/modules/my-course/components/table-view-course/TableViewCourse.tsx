@@ -96,9 +96,7 @@ function TableViewCourse() {
         onFilter={onFilterChange}
       />
       <Card>
-        <TableToolbar
-          title={`Found ${formatNumber(list.items?.length || 0)} course`}
-        >
+        <TableToolbar title={`Found ${formatNumber(list.total || 0)} courses`}>
           {/* <Button
             type="primary"
             className="mr-4"

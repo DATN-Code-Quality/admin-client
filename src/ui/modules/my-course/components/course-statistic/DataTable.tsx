@@ -26,14 +26,15 @@ const DataTable: React.FC<{ courseReport: ReportCourse[]; total: number }> = ({
     const { submission } = item;
     const waitToScan = submission.waitToScan || 0;
     const { pass, fail } = { pass: 0, fail: 0, ...submission.scanSuccess };
-
+    const scanning = submission?.scanning || 0;
     const scanFail = submission.scanFail || 0;
-    const notSubmit = total - waitToScan - scanFail - pass - fail;
+    const notSubmit = total - scanning - waitToScan - scanFail - pass - fail;
 
     return {
       key: item.assignment.id,
       name: item.assignment.name,
       waitToScan,
+      scanning,
       submissionPass: pass,
       submissionFail: fail,
       scanFail,
@@ -54,6 +55,12 @@ const DataTable: React.FC<{ courseReport: ReportCourse[]; total: number }> = ({
       align: 'center',
     },
     {
+      title: 'Scanning',
+      dataIndex: 'scanning',
+      key: 'scanning',
+      align: 'center',
+    },
+    {
       title: 'Submisison Pass',
       dataIndex: 'submissionPass',
       key: 'submissionPass',
@@ -66,7 +73,7 @@ const DataTable: React.FC<{ courseReport: ReportCourse[]; total: number }> = ({
       align: 'center',
     },
     {
-      title: 'Scan Fail',
+      title: 'Error',
       dataIndex: 'scanFail',
       key: 'scanFail',
       align: 'center',
@@ -95,7 +102,7 @@ const DataTable: React.FC<{ courseReport: ReportCourse[]; total: number }> = ({
         scroll={{ x: '800px' }}
         dataSource={dataSource}
         columns={columns}
-        locale={{emptyText:'No submission found'}}
+        locale={{ emptyText: 'No submission found' }}
       />
     </div>
   );

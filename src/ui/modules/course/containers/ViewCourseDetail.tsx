@@ -1,17 +1,22 @@
 import React, { useEffect } from 'react';
 
+import { ArrowLeftOutlined } from '@ant-design/icons';
 import { Tabs } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 import { TableViewParticipant } from '../components/table-view-participant';
 
 import ViewOrCreateCourse from './ViewOrCreateCourse';
 
 import { useCourse } from '~/adapters/appService/course.service';
+import ROUTE from '~/constant/routes';
 import useQuery from '~/hooks/useQuery';
 import Card from '~/ui/shared/card';
 
 function ViewCourseDetailContainer() {
   const query = useQuery();
+  const navigate = useNavigate();
+
   const { getDetailCourse } = useCourse();
   const type: any = query.get('type');
   const id = query.get('id');
@@ -39,6 +44,18 @@ function ViewCourseDetailContainer() {
 
   return (
     <>
+      <p
+        className="cursor-pointer mb-2"
+        style={{
+          display: 'inline-block',
+        }}
+        onClick={() => {
+          navigate(ROUTE.COURSE.LIST);
+        }}
+      >
+        <ArrowLeftOutlined size={32} className=" mr-2" />
+        <span>Back</span>
+      </p>
       <Tabs defaultActiveKey={type || 'overview'} items={items} />
     </>
   );

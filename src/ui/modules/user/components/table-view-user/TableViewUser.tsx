@@ -70,7 +70,7 @@ function TableViewUser() {
   };
 
   const handleCreateOrUpdate = async (value, id) => {
-    const dataSubmit = { ...value, id, role: Role.ADMIN };
+    const dataSubmit = { ...value, id };
     if (!id) {
       delete dataSubmit.id;
       await createUser(dataSubmit);
@@ -107,7 +107,7 @@ function TableViewUser() {
               mode={ButtonType.EDIT}
               meta={meta}
             />
-            {record.status === UserStatus.ACTIVE ? (
+            {record.status === UserStatus.ACTIVE && (
               <BaseModal
                 onOkFn={handleBlockUser}
                 itemTitle="User"
@@ -115,7 +115,8 @@ function TableViewUser() {
                 mode={ButtonType.BLOCK}
                 isDelete
               />
-            ) : (
+            )}
+            {record.status === UserStatus.BLOCK && (
               <BaseModal
                 onOkFn={handleUnblockUser}
                 itemTitle="User"
@@ -139,21 +140,18 @@ function TableViewUser() {
         onFilter={onFilterChange}
       />
       <Card>
-        <TableToolbar
-          title={`Found ${formatNumber(list.items?.length || 0)} user`}
-        >
+        <TableToolbar title={`Found ${formatNumber(list.total || 0)} users`}>
           <div
             className="flex items-center flex-nowrap overflow-auto"
             style={{ gap: '16px' }}
           >
             <Button
               type="primary"
-              className="mr-4"
               icon={<SyncOutlined />}
               loading={list.isLoading}
               onClick={syncMoodleModalActions.handleOpen}
             >
-              Sync Moodle
+              Import from Moodle
             </Button>
             <ExcelToObject
               handleImportModalOk={handleImportModalOk}

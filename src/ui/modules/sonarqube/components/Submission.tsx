@@ -1,5 +1,5 @@
 /* eslint-disable import/order */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import {
   ArrowLeftOutlined,
@@ -35,12 +35,17 @@ const Submission = () => {
   const navigate = useNavigate();
   const [width, setWidth] = useState(window.innerWidth);
 
-  const [components, setComponents] = useState();
-  const { getIssuesSubmission } = useSonarqube();
+  const [loadingFile, setLoadingFile] = useState(false);
+  const [componentFiles, setComponentFiles] = useState([]);
 
+  const [components, setComponents] = useState();
+  const { getIssuesSubmission, getComponentsSubmission } = useSonarqube();
+  const isFetchFile = useRef(false);
   const issueSelected = useSelector(SonarqubeSelector.getIssueSelected);
   const data = useSelector(SonarqubeSelector.getSubmissionIssues);
   const dataSelected = useSelector(SonarqubeSelector.getSubmissionSelected);
+  const [submissionIssues, setSubmissionIssuesDetail] = useState({});
+  const [loadingIssues, setLoadingIssues] = useState(false);
 
   const [filters, setFilters] = useState<{
     type: BugType | '';
@@ -58,6 +63,7 @@ const Submission = () => {
   const [pagination, setPagination] = useState({
     page: 1,
     total: 0,
+    pageSize: 7,
   });
 
   const [open, setOpen] = useState(false);
@@ -76,16 +82,17 @@ const Submission = () => {
           Object.entries(filters).filter(([_, v]) => v !== '')
         ),
         page: pagination.page,
-        pageSize: 7,
+        pageSize: pagination.pageSize,
       }
     );
     if (response?.status !== 0) return;
     const { data: dataRes } = response;
     const { issues, components } = dataRes || { components: [], issues: [] };
-    setPagination({
+    setPagination((prev) => ({
+      ...prev,
       page: dataRes.p,
       total: dataRes.total,
-    });
+    }));
     const issuesOfComponents: Record<string, unknown> = {};
     issues?.reduce((objectResult, issue) => {
       if (objectResult[issue.component]) {
@@ -100,7 +107,77 @@ const Submission = () => {
     dispatch(setSubmissionIssues(issuesOfComponents));
     setComponents(components);
     setLoading(false);
-  }, [dataSelected, filters, pagination.page, dispatch]);
+  }, [dataSelected, filters, pagination.page, pagination.pageSize, dispatch]);
+
+  const handleGetAllIssues = useCallback(async () => {
+    if (
+      !dataSelected?.courseId ||
+      !dataSelected?.assignmentId ||
+      !dataSelected?.submissionId
+    ) {
+      return;
+    }
+    setLoadingIssues(true);
+    const response = await getIssuesSubmission(
+      dataSelected?.courseId,
+      dataSelected?.assignmentId,
+      dataSelected?.submissionId
+    );
+
+    if (response?.status !== 0) return;
+    const { data: dataRes } = response;
+    const { issues } = dataRes || { components: [], issues: [] };
+    const issuesOfComponents: Record<string, unknown> = {};
+    issues?.reduce((objectResult, issue) => {
+      if (objectResult[issue.component]) {
+        const data = [...objectResult[issue.component]];
+        data.push(issue);
+        objectResult[issue.component] = data;
+      } else {
+        objectResult[issue.component] = [issue];
+      }
+      return objectResult;
+    }, issuesOfComponents);
+    setSubmissionIssuesDetail(issuesOfComponents);
+    setLoadingIssues(false);
+  }, [
+    dataSelected?.assignmentId,
+    dataSelected?.courseId,
+    dataSelected?.submissionId,
+  ]);
+
+  const fetchListFiles = useCallback(async () => {
+    try {
+      if (componentFiles.length > 0) return;
+      if (
+        !dataSelected?.courseId ||
+        !dataSelected?.assignmentId ||
+        !dataSelected?.submissionId
+      )
+        return;
+      setLoadingFile(true);
+      const response = await getComponentsSubmission(
+        dataSelected?.courseId,
+        dataSelected?.assignmentId,
+        dataSelected?.submissionId
+      );
+      if (response?.status !== 0) return;
+      setComponentFiles(response?.data?.components);
+      console.log(response);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoadingFile(false);
+    }
+  }, [
+    dataSelected?.assignmentId,
+    dataSelected?.courseId,
+    dataSelected?.submissionId,
+  ]);
+
+  useEffect(() => {
+    fetchListFiles();
+  }, [fetchListFiles]);
 
   const handleSetIssue = useCallback(
     (issue: Issue) => {
@@ -112,6 +189,10 @@ const Submission = () => {
   useEffect(() => {
     handleFetchData();
   }, [handleFetchData]);
+
+  useEffect(() => {
+    handleGetAllIssues();
+  }, [handleGetAllIssues]);
 
   useEffect(() => {
     window.addEventListener('resize', () => {
@@ -135,13 +216,13 @@ const Submission = () => {
     dispatch(setSubmissionSelected({ courseId, assignmentId, submissionId }));
   }, [dispatch, location.search, navigate]);
 
+  console.log(data);
   return (
     <>
       {!loading && issueSelected && (
         <DetailSubmission
-          courseId={dataSelected?.courseId}
-          assignmentId={dataSelected?.assignmentId}
-          submissionId={dataSelected?.submissionId || ''}
+          submissionIssues={submissionIssues}
+          loadingIssues={loadingIssues}
         />
       )}
 
@@ -166,20 +247,23 @@ const Submission = () => {
               </div>
             )}
           </div>
-          <div className="flex gap-4 h-full ">
+          <div className="flex gap-4 " style={{ height: 'calc(100% - 54px)' }}>
             {width >= 1024 ? (
               <SubmissionFilter
+                componentFiles={componentFiles}
+                loading={loadingFile}
                 filters={filters}
                 setFilters={setFilters}
                 components={components}
               />
             ) : (
               <SubmissionFilterMobile
+                componentFiles={componentFiles}
+                loading={loadingFile}
                 filters={filters}
                 setFilters={setFilters}
                 open={open}
                 setOpen={setOpen}
-                components={components}
               />
             )}
 
@@ -205,7 +289,7 @@ const Submission = () => {
                       const fileNameShort = value[value.length - 1];
 
                       return (
-                        <div key={key} className="h-full flex flex-col">
+                        <div key={key}>
                           <p className="mt-4 mb-2 flex items-center">
                             <FileTextOutlined />
                             <span className="ml-2 overflow-auto">
@@ -237,10 +321,14 @@ const Submission = () => {
                     }}
                     defaultCurrent={pagination.page}
                     total={pagination.total}
-                    pageSize={7}
-                    onChange={(val) =>
-                      setPagination((prev) => ({ ...prev, page: val }))
+                    pageSize={pagination.pageSize}
+                    pageSizeOptions={['7', '14', '21', '28']}
+                    onShowSizeChange={(_, size) =>
+                      setPagination((prev) => ({ ...prev, pageSize: size }))
                     }
+                    onChange={(val) => {
+                      setPagination((prev) => ({ ...prev, page: val }));
+                    }}
                   />
                 </>
               )}
