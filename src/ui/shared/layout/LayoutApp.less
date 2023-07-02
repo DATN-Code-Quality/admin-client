@@ -28,6 +28,7 @@
     overflow-x: scroll;
     min-height: calc(100vh - 64px - 24px - 24px);
   }
+  
 
   .site-layout .site-layout-background-header {
     background: #fff;
@@ -142,5 +143,17 @@
     min-width: unset !important;
     max-width: unset !important;
     width: 90% !important;
+  }
+}
+
+.cms-layout-app .site-layout .site-layout-background {
+  padding: 24px !important;
+  margin: 24px 80px !important;
+}
+
+@media screen and (max-width: 767px) {
+  .cms-layout-app .site-layout .site-layout-background {
+    padding: 16px !important;
+    margin: 16px 0 !important;
   }
 }
