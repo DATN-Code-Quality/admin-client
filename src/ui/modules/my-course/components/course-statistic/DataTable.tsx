@@ -26,14 +26,15 @@ const DataTable: React.FC<{ courseReport: ReportCourse[]; total: number }> = ({
     const { submission } = item;
     const waitToScan = submission.waitToScan || 0;
     const { pass, fail } = { pass: 0, fail: 0, ...submission.scanSuccess };
-
+    const scanning = submission?.scanning || 0;
     const scanFail = submission.scanFail || 0;
-    const notSubmit = total - waitToScan - scanFail - pass - fail;
+    const notSubmit = total - scanning - waitToScan - scanFail - pass - fail;
 
     return {
       key: item.assignment.id,
       name: item.assignment.name,
       waitToScan,
+      scanning,
       submissionPass: pass,
       submissionFail: fail,
       scanFail,
@@ -51,6 +52,12 @@ const DataTable: React.FC<{ courseReport: ReportCourse[]; total: number }> = ({
       title: 'Wait to Scan',
       dataIndex: 'waitToScan',
       key: 'waitToScan',
+      align: 'center',
+    },
+    {
+      title: 'Scanning',
+      dataIndex: 'scanning',
+      key: 'scanning',
       align: 'center',
     },
     {
