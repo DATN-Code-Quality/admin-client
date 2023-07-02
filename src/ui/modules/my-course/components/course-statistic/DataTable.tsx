@@ -28,7 +28,7 @@ const DataTable: React.FC<{ courseReport: ReportCourse[]; total: number }> = ({
     const { pass, fail } = { pass: 0, fail: 0, ...submission.scanSuccess };
     const scanning = submission?.scanning || 0;
     const scanFail = submission.scanFail || 0;
-    const notSubmit = total - waitToScan - scanFail - pass - fail;
+    const notSubmit = total - scanning - waitToScan - scanFail - pass - fail;
 
     return {
       key: item.assignment.id,
