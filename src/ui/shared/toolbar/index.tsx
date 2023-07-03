@@ -4,13 +4,14 @@ import './style.less';
 
 interface TableToolbarProps {
   title?: string;
+  style?: React.CSSProperties;
   children?: React.ReactNode;
 }
 
 const TableToolbar: React.FC<TableToolbarProps> = (props) => {
-  const { title } = props;
+  const { title, style } = props;
   return (
-    <div className="table-toolbar">
+    <div className="table-toolbar" style={style}>
       <div className="left-wrapper">
         {title && (
           <div className="title" style={{ fontSize: '16px' }}>
