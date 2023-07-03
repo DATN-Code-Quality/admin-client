@@ -47,7 +47,7 @@ const DataTable: React.FC<{ courseId: string; assignmentId: string }> = ({
         statusStr = 'Error';
         break;
       default:
-        statusStr = 'Submitted';
+        statusStr = 'Not submitted';
         backgroundColor = 'gray';
     }
 
