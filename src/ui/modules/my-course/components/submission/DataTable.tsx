@@ -1,6 +1,6 @@
 /* eslint-disable no-unsafe-optional-chaining */
 /* eslint-disable no-restricted-syntax */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { ExportOutlined } from '@ant-design/icons';
 import ProTable from '@ant-design/pro-table';
@@ -27,11 +27,16 @@ const DataTable: React.FC<{
     obj[item?.key] = +item?.value;
     return obj;
   }, {});
-  console.log(conditions);
+  const [page, setPage] = useState(1);
   const [data, setData] = useState();
   const [dataFilter, setDataFilter] = useState();
   const [loading, setLoading] = useState(false);
   const { getDataExportAssignment } = useSubmission();
+
+  const paginationData = useMemo(() => {
+    const start = (page - 1) * 10;
+    return [...(data || [])]?.splice(start, 10);
+  }, [data, page]);
 
   const renderStatus = useCallback((status: SubmissionType) => {
     let backgroundColor = '';
@@ -82,11 +87,11 @@ const DataTable: React.FC<{
     ({ current, pageSize, ...filters }) => {
       setLoading(true);
       if (Object.keys(filters)?.length === 0 || !filters) {
-        setDataFilter(data);
+        setDataFilter(paginationData);
         setLoading(false);
         return;
       }
-      const filterData = data?.filter((item) => {
+      const filterData = paginationData?.filter((item) => {
         const v = Object.entries(filters).every(([field, value]) => {
           if (!value) return true;
           if (field === 'userName') {
@@ -103,15 +108,16 @@ const DataTable: React.FC<{
             }
             return item[field] === key;
           }
+          console.log('Value', item, field, item[field], value);
           return item[field] <= +value;
         });
         return v;
       });
-
+      console.log('Filter data', filterData);
       setDataFilter(filterData);
       setLoading(false);
     },
-    [data]
+    [paginationData]
   );
 
   const fetchReport = useCallback(async () => {
@@ -170,7 +176,7 @@ const DataTable: React.FC<{
     {
       title: 'Total',
       dataIndex: 'violations',
-      key: 'total',
+      key: 'violations',
       render: (val) => {
         console.log(val, conditions, val > +conditions?.violations);
         return (
@@ -193,9 +199,208 @@ const DataTable: React.FC<{
       },
     },
     {
+      title: 'Bugs',
+      dataIndex: 'bugs',
+      key: 'bugs',
+      align: 'center',
+      hideInTable: true,
+      render: (val) => {
+        return (
+          <p
+            style={{
+              color: +val > +conditions?.bugs ? 'red' : 'black',
+            }}
+          >
+            {val}
+          </p>
+        );
+      },
+      sorter: {
+        compare: (a, b) => {
+          const val_a = Math.floor(parseFloat(a.bugs ?? '0'));
+          const val_b = Math.floor(parseFloat(b.bugs ?? '0'));
+          return val_a - val_b;
+        },
+      },
+    },
+    {
+      title: 'Code Smells',
+      dataIndex: 'code_smells',
+      key: 'code_smells',
+      align: 'center',
+      hideInTable: true,
+      render: (val) => {
+        return (
+          <p
+            style={{
+              color: +val > +conditions?.code_smells ? 'red' : 'black',
+            }}
+          >
+            {val}
+          </p>
+        );
+      },
+      sorter: {
+        compare: (a, b) => {
+          const val_a = Math.floor(parseFloat(a.code_smells ?? '0'));
+          const val_b = Math.floor(parseFloat(b.code_smells ?? '0'));
+          return val_a - val_b;
+        },
+      },
+    },
+    {
+      title: 'Vulnerabilities',
+      dataIndex: 'vulnerabilities',
+      key: 'vulnerabilities',
+      align: 'center',
+      hideInTable: true,
+      render: (val) => {
+        return (
+          <p
+            style={{
+              color: +val > +conditions?.vulnerabilities ? 'red' : 'black',
+            }}
+          >
+            {val}
+          </p>
+        );
+      },
+      sorter: {
+        compare: (a, b) => {
+          const val_a = Math.floor(parseFloat(a.vulnerabilities ?? '0'));
+          const val_b = Math.floor(parseFloat(b.vulnerabilities ?? '0'));
+          return val_a - val_b;
+        },
+      },
+    },
+    {
+      title: 'Blocker',
+      dataIndex: 'blocker_violations',
+      key: 'blocker_violations',
+      align: 'center',
+      hideInTable: true,
+      render: (val) => {
+        return (
+          <p
+            style={{
+              color: +val > +conditions?.blocker_violations ? 'red' : 'black',
+            }}
+          >
+            {val}
+          </p>
+        );
+      },
+      sorter: {
+        compare: (a, b) => {
+          const val_a = Math.floor(parseFloat(a.blocker_violations ?? '0'));
+          const val_b = Math.floor(parseFloat(b.blocker_violations ?? '0'));
+          return val_a - val_b;
+        },
+      },
+    },
+    {
+      title: 'Critical',
+      dataIndex: 'critical_violations',
+      key: 'critical_violations',
+      align: 'center',
+      showInSearch: true,
+      hideInTable: true,
+      render: (val) => {
+        return (
+          <p
+            style={{
+              color: +val > +conditions?.critical_violations ? 'red' : 'black',
+            }}
+          >
+            {val}
+          </p>
+        );
+      },
+      sorter: {
+        compare: (a, b) => {
+          const val_a = Math.floor(parseFloat(a.critical_violations ?? '0'));
+          const val_b = Math.floor(parseFloat(b.critical_violations ?? '0'));
+          return val_a - val_b;
+        },
+      },
+    },
+    {
+      title: 'Major',
+      dataIndex: 'major_violations',
+      key: 'major_violations',
+      align: 'center',
+      hideInTable: true,
+      render: (val) => {
+        return (
+          <p
+            style={{
+              color: +val > +conditions?.major_violations ? 'red' : 'black',
+            }}
+          >
+            {val}
+          </p>
+        );
+      },
+      sorter: {
+        compare: (a, b) => {
+          const val_a = Math.floor(parseFloat(a.major_violations ?? '0'));
+          const val_b = Math.floor(parseFloat(b.major_violations ?? '0'));
+          return val_a - val_b;
+        },
+      },
+    },
+    {
+      title: 'Minor',
+      dataIndex: 'minor_violations',
+      key: 'minor_violations',
+      align: 'center',
+      hideInTable: true,
+      render: (val) => {
+        return (
+          <p
+            style={{
+              color: +val > +conditions?.minor_violations ? 'red' : 'black',
+            }}
+          >
+            {val}
+          </p>
+        );
+      },
+      sorter: {
+        compare: (a, b) => {
+          const val_a = Math.floor(parseFloat(a.minor_violations ?? '0'));
+          const val_b = Math.floor(parseFloat(b.minor_violations ?? '0'));
+          return val_a - val_b;
+        },
+      },
+    },
+    {
+      title: 'Info',
+      dataIndex: 'info_violations',
+      key: 'info_violations',
+      align: 'center',
+      hideInTable: true,
+      render: (val) => {
+        return (
+          <p
+            style={{
+              color: +val > +conditions?.info_violations ? 'red' : 'black',
+            }}
+          >
+            {val}
+          </p>
+        );
+      },
+      sorter: {
+        compare: (a, b) => {
+          const val_a = Math.floor(parseFloat(a.info_violations ?? '0'));
+          const val_b = Math.floor(parseFloat(b.info_violations ?? '0'));
+          return val_a - val_b;
+        },
+      },
+    },
+    {
       title: 'Type',
-      dataIndex: 'type',
-      key: 'type',
       children: [
         {
           title: 'Bugs',
@@ -271,11 +476,9 @@ const DataTable: React.FC<{
         },
       ],
     },
-
     {
       title: 'Severity',
-      dataIndex: 'type',
-      key: 'type',
+      hideInSearch: true,
       children: [
         {
           title: 'Blocker',
@@ -307,6 +510,7 @@ const DataTable: React.FC<{
           dataIndex: 'critical_violations',
           key: 'critical',
           align: 'center',
+          showInSearch: true,
           render: (val) => {
             return (
               <p
@@ -409,7 +613,7 @@ const DataTable: React.FC<{
     {
       title: 'Duplicated Lines Density',
       dataIndex: 'duplicated_lines_density',
-      key: 'duplicatedLinesDensity',
+      key: 'duplicated_lines_density',
       align: 'center',
       render: (val) => {
         return (
@@ -441,11 +645,11 @@ const DataTable: React.FC<{
       ...item,
       status: SubmissionTypeConstant[item.status],
     }));
-    const exportInstance = new tableExport(dataExport, columns);
+    const columnsExport = columns.filter((item) => item.key);
+
+    const exportInstance = new tableExport(dataExport, columnsExport);
     exportInstance.download('overview', 'xlsx');
   };
-
-  console.log(data, dataFilter);
 
   return (
     <div
@@ -463,6 +667,13 @@ const DataTable: React.FC<{
         loading={loading}
         options={{
           reload: false,
+        }}
+        pagination={{
+          pageSize: 10, // Number of items per page
+          total: data?.length, // Total number of items (optional)
+          onChange: (current, pageSize) => {
+            setPage(current);
+          },
         }}
         toolBarRender={() => {
           return (
