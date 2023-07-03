@@ -107,6 +107,12 @@ export const MOODLE = {
   },
 };
 
+export const FACULTY = {
+  GET: {
+    FACULTY: '/faculty',
+  },
+};
+
 const API = {
   DASHBOARD,
   AUTH,
@@ -116,6 +122,7 @@ const API = {
   ASSIGNMENT,
   SUBMISSION,
   MOODLE,
+  FACULTY,
 };
 
 export default API;

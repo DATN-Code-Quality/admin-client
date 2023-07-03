@@ -4,9 +4,10 @@ import { formatResponse, getWithPath } from '../api.http';
 
 import { ResponseData } from '~/constant';
 import API from '~/constant/api';
+import { Assignment } from '~/domain/assignment';
+import { Course } from '~/domain/course';
 import { User } from '~/domain/user';
 import { mockReport } from '~/mock/report.mock';
-import { Assignment } from '~/domain/assignment';
 
 export type Result = Partial<{
   total: string;
@@ -59,14 +60,16 @@ export function useStatistics() {
         }[];
       }>
     > {
+      const { limit, offset } = filter || {};
       const response = await getWithPath(
         `${API.COURSE.GET.COURSE}/${courseId}/user-result`
+        // { limit, offset }
       );
       // const response = await mockReport().getCourseUserStatistics();
       return formatResponse(response);
     },
 
-    async getCourseAssignmentStatistics(
+    async getCourseUserDetailedStatistics(
       courseId,
       userId
     ): Promise<
@@ -79,6 +82,50 @@ export function useStatistics() {
     > {
       const response = await getWithPath(
         `${API.COURSE.GET.COURSE}/${courseId}/${userId}/assignment-result`
+      );
+      // const response = await mockReport().getCourseUserStatistics();
+      return formatResponse(response);
+    },
+
+    async getFacultyMetricStatistics(): Promise<
+      ResponseData<{ result: Result }>
+    > {
+      const response = await getWithPath(
+        `${API.FACULTY.GET.FACULTY}/statistic`
+      );
+      // const response = await mockReport().geCourseStatistics();
+      response.data.result = handleFilterResult(response.data.result);
+      return formatResponse(response);
+    },
+
+    async getFacultyUserStatistics(filter?): Promise<
+      ResponseData<{
+        results: {
+          user: User;
+          result: Result;
+        }[];
+      }>
+    > {
+      const { limit, offset } = filter || {};
+      const response = await getWithPath(
+        `${API.FACULTY.GET.FACULTY}/user/statistic`
+        // { limit, offset }
+      );
+      // const response = await mockReport().getCourseUserStatistics();
+      return formatResponse(response);
+    },
+
+    async getFacultyUserDetailedStatistics(userId): Promise<
+      ResponseData<{
+        courses: Course[];
+        results: {
+          assignment: Assignment;
+          result: Result;
+        }[];
+      }>
+    > {
+      const response = await getWithPath(
+        `${API.FACULTY.GET.FACULTY}/${userId}/detailed-result`
       );
       // const response = await mockReport().getCourseUserStatistics();
       return formatResponse(response);
