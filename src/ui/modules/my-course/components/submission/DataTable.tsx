@@ -1,3 +1,4 @@
+/* eslint-disable no-unsafe-optional-chaining */
 /* eslint-disable no-restricted-syntax */
 import React, { useCallback, useEffect, useState } from 'react';
 
@@ -17,10 +18,16 @@ const SubmissionTypeConstant: Record<SubmissionType, string> = {
   [SubmissionType.FAIL]: 'Fail',
 };
 
-const DataTable: React.FC<{ courseId: string; assignmentId: string }> = ({
-  courseId,
-  assignmentId,
-}) => {
+const DataTable: React.FC<{
+  courseId: string;
+  assignmentId: string;
+  conditionsRaw: any;
+}> = ({ courseId, assignmentId, conditionsRaw }) => {
+  const conditions = conditionsRaw?.reduce((obj, item) => {
+    obj[item?.key] = +item?.value;
+    return obj;
+  }, {});
+  console.log(conditions);
   const [data, setData] = useState();
   const [dataFilter, setDataFilter] = useState();
   const [loading, setLoading] = useState(false);
@@ -162,13 +169,25 @@ const DataTable: React.FC<{ courseId: string; assignmentId: string }> = ({
     },
     {
       title: 'Total',
-      dataIndex: 'total',
+      dataIndex: 'violations',
       key: 'total',
+      render: (val) => {
+        console.log(val, conditions, val > +conditions?.violations);
+        return (
+          <p
+            style={{
+              color: +val > +conditions?.violations ? 'red' : 'black',
+            }}
+          >
+            {val}
+          </p>
+        );
+      },
       align: 'center',
       sorter: {
         compare: (a, b) => {
-          const val_a = Math.floor(parseFloat(a.total ?? '0'));
-          const val_b = Math.floor(parseFloat(b.total ?? '0'));
+          const val_a = Math.floor(parseFloat(a.violations ?? '0'));
+          const val_b = Math.floor(parseFloat(b.violations ?? '0'));
           return val_a - val_b;
         },
       },
@@ -180,26 +199,48 @@ const DataTable: React.FC<{ courseId: string; assignmentId: string }> = ({
       children: [
         {
           title: 'Bugs',
-          dataIndex: 'bug',
-          key: 'bug',
+          dataIndex: 'bugs',
+          key: 'bugs',
           align: 'center',
+          render: (val) => {
+            return (
+              <p
+                style={{
+                  color: +val > +conditions?.bugs ? 'red' : 'black',
+                }}
+              >
+                {val}
+              </p>
+            );
+          },
           sorter: {
             compare: (a, b) => {
-              const val_a = Math.floor(parseFloat(a.bug ?? '0'));
-              const val_b = Math.floor(parseFloat(b.bug ?? '0'));
+              const val_a = Math.floor(parseFloat(a.bugs ?? '0'));
+              const val_b = Math.floor(parseFloat(b.bugs ?? '0'));
               return val_a - val_b;
             },
           },
         },
         {
           title: 'Code Smells',
-          dataIndex: 'codeSmell',
+          dataIndex: 'code_smells',
           key: 'codeSmell',
           align: 'center',
+          render: (val) => {
+            return (
+              <p
+                style={{
+                  color: +val > +conditions?.code_smells ? 'red' : 'black',
+                }}
+              >
+                {val}
+              </p>
+            );
+          },
           sorter: {
             compare: (a, b) => {
-              const val_a = Math.floor(parseFloat(a.codeSmell ?? '0'));
-              const val_b = Math.floor(parseFloat(b.codeSmell ?? '0'));
+              const val_a = Math.floor(parseFloat(a.code_smells ?? '0'));
+              const val_b = Math.floor(parseFloat(b.code_smells ?? '0'));
               return val_a - val_b;
             },
           },
@@ -209,6 +250,17 @@ const DataTable: React.FC<{ courseId: string; assignmentId: string }> = ({
           dataIndex: 'vulnerabilities',
           key: 'vulnerabilities',
           align: 'center',
+          render: (val) => {
+            return (
+              <p
+                style={{
+                  color: +val > +conditions?.vulnerabilities ? 'red' : 'black',
+                }}
+              >
+                {val}
+              </p>
+            );
+          },
           sorter: {
             compare: (a, b) => {
               const val_a = Math.floor(parseFloat(a.vulnerabilities ?? '0'));
@@ -227,65 +279,126 @@ const DataTable: React.FC<{ courseId: string; assignmentId: string }> = ({
       children: [
         {
           title: 'Blocker',
-          dataIndex: 'blocker',
+          dataIndex: 'blocker_violations',
           key: 'blocker',
           align: 'center',
+          render: (val) => {
+            return (
+              <p
+                style={{
+                  color:
+                    +val > +conditions?.blocker_violations ? 'red' : 'black',
+                }}
+              >
+                {val}
+              </p>
+            );
+          },
           sorter: {
             compare: (a, b) => {
-              const val_a = Math.floor(parseFloat(a.blocker ?? '0'));
-              const val_b = Math.floor(parseFloat(b.blocker ?? '0'));
+              const val_a = Math.floor(parseFloat(a.blocker_violations ?? '0'));
+              const val_b = Math.floor(parseFloat(b.blocker_violations ?? '0'));
               return val_a - val_b;
             },
           },
         },
         {
           title: 'Critical',
-          dataIndex: 'critical',
+          dataIndex: 'critical_violations',
           key: 'critical',
           align: 'center',
+          render: (val) => {
+            return (
+              <p
+                style={{
+                  color:
+                    +val > +conditions?.critical_violations ? 'red' : 'black',
+                }}
+              >
+                {val}
+              </p>
+            );
+          },
           sorter: {
             compare: (a, b) => {
-              const val_a = Math.floor(parseFloat(a.critical ?? '0'));
-              const val_b = Math.floor(parseFloat(b.critical ?? '0'));
+              const val_a = Math.floor(
+                parseFloat(a.critical_violations ?? '0')
+              );
+              const val_b = Math.floor(
+                parseFloat(b.critical_violations ?? '0')
+              );
               return val_a - val_b;
             },
           },
         },
         {
           title: 'Major',
-          dataIndex: 'major',
+          dataIndex: 'major_violations',
           key: 'major',
           align: 'center',
+          render: (val) => {
+            return (
+              <p
+                style={{
+                  color: +val > +conditions?.major_violations ? 'red' : 'black',
+                }}
+              >
+                {val}
+              </p>
+            );
+          },
           sorter: {
             compare: (a, b) => {
-              const val_a = Math.floor(parseFloat(a.major ?? '0'));
-              const val_b = Math.floor(parseFloat(b.major ?? '0'));
+              const val_a = Math.floor(parseFloat(a.major_violations ?? '0'));
+              const val_b = Math.floor(parseFloat(b.major_violations ?? '0'));
               return val_a - val_b;
             },
           },
         },
         {
           title: 'Minor',
-          dataIndex: 'minor',
+          dataIndex: 'minor_violations',
           key: 'minor',
           align: 'center',
+          render: (val) => {
+            return (
+              <p
+                style={{
+                  color: +val > +conditions?.minor_violations ? 'red' : 'black',
+                }}
+              >
+                {val}
+              </p>
+            );
+          },
           sorter: {
             compare: (a, b) => {
-              const val_a = Math.floor(parseFloat(a.minor ?? '0'));
-              const val_b = Math.floor(parseFloat(b.minor ?? '0'));
+              const val_a = Math.floor(parseFloat(a.minor_violations ?? '0'));
+              const val_b = Math.floor(parseFloat(b.minor_violations ?? '0'));
               return val_a - val_b;
             },
           },
         },
         {
           title: 'Info',
-          dataIndex: 'info',
+          dataIndex: 'info_violations',
           key: 'info',
           align: 'center',
+          render: (val) => {
+            return (
+              <p
+                style={{
+                  color: +val > +conditions?.info_violations ? 'red' : 'black',
+                }}
+              >
+                {val}
+              </p>
+            );
+          },
           sorter: {
             compare: (a, b) => {
-              const val_a = Math.floor(parseFloat(a.info ?? '0'));
-              const val_b = Math.floor(parseFloat(b.info ?? '0'));
+              const val_a = Math.floor(parseFloat(a.info_violations ?? '0'));
+              const val_b = Math.floor(parseFloat(b.info_violations ?? '0'));
               return val_a - val_b;
             },
           },
@@ -295,13 +408,29 @@ const DataTable: React.FC<{ courseId: string; assignmentId: string }> = ({
 
     {
       title: 'Duplicated Lines Density',
-      dataIndex: 'duplicatedLinesDensity',
+      dataIndex: 'duplicated_lines_density',
       key: 'duplicatedLinesDensity',
       align: 'center',
+      render: (val) => {
+        return (
+          <p
+            style={{
+              color:
+                +val > +conditions?.duplicated_lines_density ? 'red' : 'black',
+            }}
+          >
+            {val}
+          </p>
+        );
+      },
       sorter: {
         compare: (a, b) => {
-          const val_a = Math.floor(parseFloat(a.duplicatedLinesDensity ?? '0'));
-          const val_b = Math.floor(parseFloat(b.duplicatedLinesDensity ?? '0'));
+          const val_a = Math.floor(
+            parseFloat(a.duplicated_lines_density ?? '0')
+          );
+          const val_b = Math.floor(
+            parseFloat(b.duplicated_lines_density ?? '0')
+          );
           return val_a - val_b;
         },
       },
