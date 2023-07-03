@@ -9,6 +9,7 @@ import tableExport from 'antd-table-export';
 
 import { useSubmission } from '~/adapters/appService/submission.service';
 import { SubmissionType } from '~/constant/enum';
+import useCurrentWidth from '~/hooks/useCurrentWidth';
 
 const SubmissionTypeConstant: Record<SubmissionType, string> = {
   [SubmissionType.SUBMITTED]: 'Submitted',
@@ -146,6 +147,8 @@ const DataTable: React.FC<{
     fetchReport();
   }, [fetchReport]);
 
+  const width = useCurrentWidth();
+
   const columns = [
     {
       title: 'Name',
@@ -162,7 +165,7 @@ const DataTable: React.FC<{
       title: 'Result',
       dataIndex: 'status',
       key: 'status',
-      fixed: 'left',
+      fixed: width > 1023 ? 'left' : 'unset',
       width: '100px',
       render: (value) => {
         return <span>{renderStatus(value)}</span>;
@@ -408,7 +411,7 @@ const DataTable: React.FC<{
           key: 'bugs',
           align: 'center',
           render: (val) => {
-            console.log("val", val)
+            console.log('val', val);
             return (
               <p
                 style={{
@@ -664,7 +667,9 @@ const DataTable: React.FC<{
       <ProTable
         dataSource={dataFilter}
         columns={columns}
-        scroll={{ x: 1300 }}
+        scroll={{ x: '1200px' }}
+        responsive
+        className="responsive-table"
         loading={loading}
         options={{
           reload: false,
