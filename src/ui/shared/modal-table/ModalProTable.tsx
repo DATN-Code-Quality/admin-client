@@ -8,7 +8,10 @@ import BaseTable from '../tables';
 import { PAGE_SIZE_OPTIONS } from '~/constant';
 import useList from '~/hooks/useList';
 import TableToolbar from '~/ui/shared/toolbar';
-import './ModalTable.less';
+import './ModalProTable.less';
+import ProTable from '@ant-design/pro-table';
+import Button from 'antd-button-color';
+import { ExportOutlined } from '@ant-design/icons';
 
 export interface ModalTableProps {
   idKey?: string;
@@ -21,7 +24,7 @@ export interface ModalTableProps {
   onCancel: () => void;
 }
 
-const ModalTable: React.FC<ModalTableProps> = ({
+const ModalProTable: React.FC<ModalTableProps> = ({
   idKey = 'id',
   title,
   baseFilterMeta,
@@ -74,7 +77,7 @@ const ModalTable: React.FC<ModalTableProps> = ({
       )}
       <div className="mt-4 mb-4" />
       <h2>{title}</h2>
-      <BaseTable
+      {/* <BaseTable
         className="modal-table"
         idKey={idKey}
         columns={tableColumns}
@@ -84,9 +87,38 @@ const ModalTable: React.FC<ModalTableProps> = ({
           pageSizeOptions: PAGE_SIZE_OPTIONS,
         }}
         onChange={onPageChange}
+      /> */}
+      <ProTable
+        dataSource={list.items}
+        columns={tableColumns}
+        scroll={{ x: 1300 }}
+        loading={list.isLoading}
+        options={{
+          reload: false,
+        }}
+        toolBarRender={() => {
+          return (
+            <Button
+              type="primary"
+              icon={<ExportOutlined />}
+              // onClick={exportToExcel}
+            >
+              Export to Excel
+            </Button>
+          );
+        }}
+        onReset={() => {
+          // handleFilter({});
+        }}
+        request={(params) => {
+          // handleFilter(params);
+        }}
+        onFilter={(val) => {
+          console.log(val);
+        }}
       />
     </Modal>
   );
 };
 
-export default ModalTable;
+export default ModalProTable;

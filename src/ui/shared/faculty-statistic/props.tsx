@@ -24,11 +24,13 @@ export const metaFilterUser = () => {
   } as IMetaFormBuilder;
 };
 
-export const columnTableUser = (): ColumnType<any>[] => [
+export const columnTableUser = (): any[] => [
   {
     title: 'Name',
     dataIndex: 'userName',
     key: 'userName',
+    width: 150,
+    ellipsis: true,
     fixed: 'left',
     sorter: {
       compare: (a, b) => {
@@ -37,9 +39,120 @@ export const columnTableUser = (): ColumnType<any>[] => [
     },
   },
   {
+    title: 'Bugs',
+    dataIndex: 'bugs',
+    key: 'bugs',
+    align: 'center',
+    hideInTable: true,
+    sorter: {
+      compare: (a, b) => {
+        const val_a = Math.floor(parseFloat(a.bugs ?? '0'));
+        const val_b = Math.floor(parseFloat(b.bugs ?? '0'));
+        return val_a - val_b;
+      },
+    },
+  },
+  {
+    title: 'Code Smells',
+    dataIndex: 'code_smells',
+    key: 'code_smells',
+    align: 'center',
+    hideInTable: true,
+    sorter: {
+      compare: (a, b) => {
+        const val_a = Math.floor(parseFloat(a.code_smells ?? '0'));
+        const val_b = Math.floor(parseFloat(b.code_smells ?? '0'));
+        return val_a - val_b;
+      },
+    },
+  },
+  {
+    title: 'Vulnerabilities',
+    dataIndex: 'vulnerabilities',
+    key: 'vulnerabilities',
+    align: 'center',
+    hideInTable: true,
+    sorter: {
+      compare: (a, b) => {
+        const val_a = Math.floor(parseFloat(a.vulnerabilities ?? '0'));
+        const val_b = Math.floor(parseFloat(b.vulnerabilities ?? '0'));
+        return val_a - val_b;
+      },
+    },
+  },
+  {
+    title: 'Blocker',
+    dataIndex: 'blocker_violations',
+    key: 'blocker_violations',
+    align: 'center',
+    hideInTable: true,
+    sorter: {
+      compare: (a, b) => {
+        const val_a = Math.floor(parseFloat(a.blocker_violations ?? '0'));
+        const val_b = Math.floor(parseFloat(b.blocker_violations ?? '0'));
+        return val_a - val_b;
+      },
+    },
+  },
+  {
+    title: 'Critical',
+    dataIndex: 'critical_violations',
+    key: 'critical_violations',
+    align: 'center',
+    showInSearch: true,
+    hideInTable: true,
+    sorter: {
+      compare: (a, b) => {
+        const val_a = Math.floor(parseFloat(a.critical_violations ?? '0'));
+        const val_b = Math.floor(parseFloat(b.critical_violations ?? '0'));
+        return val_a - val_b;
+      },
+    },
+  },
+  {
+    title: 'Major',
+    dataIndex: 'major_violations',
+    key: 'major_violations',
+    align: 'center',
+    hideInTable: true,
+    sorter: {
+      compare: (a, b) => {
+        const val_a = Math.floor(parseFloat(a.major_violations ?? '0'));
+        const val_b = Math.floor(parseFloat(b.major_violations ?? '0'));
+        return val_a - val_b;
+      },
+    },
+  },
+  {
+    title: 'Minor',
+    dataIndex: 'minor_violations',
+    key: 'minor_violations',
+    align: 'center',
+    hideInTable: true,
+    sorter: {
+      compare: (a, b) => {
+        const val_a = Math.floor(parseFloat(a.minor_violations ?? '0'));
+        const val_b = Math.floor(parseFloat(b.minor_violations ?? '0'));
+        return val_a - val_b;
+      },
+    },
+  },
+  {
+    title: 'Info',
+    dataIndex: 'info_violations',
+    key: 'info_violations',
+    align: 'center',
+    hideInTable: true,
+    sorter: {
+      compare: (a, b) => {
+        const val_a = Math.floor(parseFloat(a.info_violations ?? '0'));
+        const val_b = Math.floor(parseFloat(b.info_violations ?? '0'));
+        return val_a - val_b;
+      },
+    },
+  },
+  {
     title: 'Type',
-    dataIndex: 'type',
-    key: 'type',
     children: [
       {
         title: 'Bugs',
@@ -82,11 +195,9 @@ export const columnTableUser = (): ColumnType<any>[] => [
       },
     ],
   },
-
   {
     title: 'Severity',
-    dataIndex: 'type',
-    key: 'type',
+    hideInSearch: true,
     children: [
       {
         title: 'Blocker',
@@ -106,6 +217,7 @@ export const columnTableUser = (): ColumnType<any>[] => [
         dataIndex: 'critical_violations',
         key: 'critical',
         align: 'center',
+        showInSearch: true,
         sorter: {
           compare: (a, b) => {
             const val_a = Math.floor(parseFloat(a.critical_violations ?? '0'));
@@ -159,7 +271,7 @@ export const columnTableUser = (): ColumnType<any>[] => [
   {
     title: 'Duplicated Lines Density',
     dataIndex: 'duplicated_lines_density',
-    key: 'duplicatedLinesDensity',
+    key: 'duplicated_lines_density',
     align: 'center',
     sorter: {
       compare: (a, b) => {
@@ -171,10 +283,25 @@ export const columnTableUser = (): ColumnType<any>[] => [
   },
 ];
 
-export const columnTableDetailMetrics = (): ColumnType<any>[] => [
+export const columnTableDetailedMetrics = (): any[] => [
   {
-    title: 'Name',
+    title: 'Course Name',
+    dataIndex: 'courseName',
+    width: 150,
+    ellipsis: true,
+    key: 'courseName',
+    fixed: 'left',
+    sorter: {
+      compare: (a, b) => {
+        return a.courseName.localeCompare(b.courseName);
+      },
+    },
+  },
+  {
+    title: 'Assignment Name',
     dataIndex: 'assignmentName',
+    width: 150,
+    ellipsis: true,
     key: 'assignmentName',
     fixed: 'left',
     sorter: {
@@ -184,9 +311,120 @@ export const columnTableDetailMetrics = (): ColumnType<any>[] => [
     },
   },
   {
+    title: 'Bugs',
+    dataIndex: 'bugs',
+    key: 'bugs',
+    align: 'center',
+    hideInTable: true,
+    sorter: {
+      compare: (a, b) => {
+        const val_a = Math.floor(parseFloat(a.bugs ?? '0'));
+        const val_b = Math.floor(parseFloat(b.bugs ?? '0'));
+        return val_a - val_b;
+      },
+    },
+  },
+  {
+    title: 'Code Smells',
+    dataIndex: 'code_smells',
+    key: 'code_smells',
+    align: 'center',
+    hideInTable: true,
+    sorter: {
+      compare: (a, b) => {
+        const val_a = Math.floor(parseFloat(a.code_smells ?? '0'));
+        const val_b = Math.floor(parseFloat(b.code_smells ?? '0'));
+        return val_a - val_b;
+      },
+    },
+  },
+  {
+    title: 'Vulnerabilities',
+    dataIndex: 'vulnerabilities',
+    key: 'vulnerabilities',
+    align: 'center',
+    hideInTable: true,
+    sorter: {
+      compare: (a, b) => {
+        const val_a = Math.floor(parseFloat(a.vulnerabilities ?? '0'));
+        const val_b = Math.floor(parseFloat(b.vulnerabilities ?? '0'));
+        return val_a - val_b;
+      },
+    },
+  },
+  {
+    title: 'Blocker',
+    dataIndex: 'blocker_violations',
+    key: 'blocker_violations',
+    align: 'center',
+    hideInTable: true,
+    sorter: {
+      compare: (a, b) => {
+        const val_a = Math.floor(parseFloat(a.blocker_violations ?? '0'));
+        const val_b = Math.floor(parseFloat(b.blocker_violations ?? '0'));
+        return val_a - val_b;
+      },
+    },
+  },
+  {
+    title: 'Critical',
+    dataIndex: 'critical_violations',
+    key: 'critical_violations',
+    align: 'center',
+    showInSearch: true,
+    hideInTable: true,
+    sorter: {
+      compare: (a, b) => {
+        const val_a = Math.floor(parseFloat(a.critical_violations ?? '0'));
+        const val_b = Math.floor(parseFloat(b.critical_violations ?? '0'));
+        return val_a - val_b;
+      },
+    },
+  },
+  {
+    title: 'Major',
+    dataIndex: 'major_violations',
+    key: 'major_violations',
+    align: 'center',
+    hideInTable: true,
+    sorter: {
+      compare: (a, b) => {
+        const val_a = Math.floor(parseFloat(a.major_violations ?? '0'));
+        const val_b = Math.floor(parseFloat(b.major_violations ?? '0'));
+        return val_a - val_b;
+      },
+    },
+  },
+  {
+    title: 'Minor',
+    dataIndex: 'minor_violations',
+    key: 'minor_violations',
+    align: 'center',
+    hideInTable: true,
+    sorter: {
+      compare: (a, b) => {
+        const val_a = Math.floor(parseFloat(a.minor_violations ?? '0'));
+        const val_b = Math.floor(parseFloat(b.minor_violations ?? '0'));
+        return val_a - val_b;
+      },
+    },
+  },
+  {
+    title: 'Info',
+    dataIndex: 'info_violations',
+    key: 'info_violations',
+    align: 'center',
+    hideInTable: true,
+    sorter: {
+      compare: (a, b) => {
+        const val_a = Math.floor(parseFloat(a.info_violations ?? '0'));
+        const val_b = Math.floor(parseFloat(b.info_violations ?? '0'));
+        return val_a - val_b;
+      },
+    },
+  },
+  {
     title: 'Type',
-    dataIndex: 'type',
-    key: 'type',
     children: [
       {
         title: 'Bugs',
@@ -229,11 +467,9 @@ export const columnTableDetailMetrics = (): ColumnType<any>[] => [
       },
     ],
   },
-
   {
     title: 'Severity',
-    dataIndex: 'type',
-    key: 'type',
+    hideInSearch: true,
     children: [
       {
         title: 'Blocker',
@@ -253,6 +489,7 @@ export const columnTableDetailMetrics = (): ColumnType<any>[] => [
         dataIndex: 'critical_violations',
         key: 'critical',
         align: 'center',
+        showInSearch: true,
         sorter: {
           compare: (a, b) => {
             const val_a = Math.floor(parseFloat(a.critical_violations ?? '0'));
@@ -306,7 +543,7 @@ export const columnTableDetailMetrics = (): ColumnType<any>[] => [
   {
     title: 'Duplicated Lines Density',
     dataIndex: 'duplicated_lines_density',
-    key: 'duplicatedLinesDensity',
+    key: 'duplicated_lines_density',
     align: 'center',
     sorter: {
       compare: (a, b) => {
