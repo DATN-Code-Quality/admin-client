@@ -12,6 +12,7 @@ import LineChart, { ILineChartData } from '~/ui/shared/line-chart';
 import Loading from '~/ui/shared/loading';
 import { formatNumber } from '~/utils';
 import './Dashboard.less';
+import FacultyStatistic from '~/ui/shared/faculty-statistic';
 
 function Dashboard() {
   const { getOverview } = useDashboard();
@@ -59,6 +60,12 @@ function Dashboard() {
 
   return (
     <>
+      <FacultyStatistic />
+    </>
+  );
+
+  return (
+    <>
       <BaseFilter
         loading={loading}
         meta={metaFilterDashboard({ courses })}
@@ -94,7 +101,7 @@ function Dashboard() {
         <div className="chart-container">
           {series && series?.length > 0 && (
             <LineChart series={series} colors={[]} />
-          )} 
+          )}
         </div>
       </Card>
       {/* <Card className="dashboard-card" title="Submission">

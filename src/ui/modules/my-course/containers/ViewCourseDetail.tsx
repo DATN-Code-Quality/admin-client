@@ -4,7 +4,6 @@ import { ArrowLeftOutlined } from '@ant-design/icons';
 import { Tabs } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
-import CourseStatistic from '../components/course-statistic';
 import { TableViewAssignment } from '../components/table-view-assignment';
 import { TableViewParticipant } from '../components/table-view-participant';
 
@@ -15,6 +14,7 @@ import { authSelector } from '~/adapters/redux/selectors/auth';
 import { Role, SubRole } from '~/constant/enum';
 import ROUTE from '~/constant/routes';
 import useQuery from '~/hooks/useQuery';
+import CourseStatistic from '~/ui/shared/course-statistic';
 
 function ViewCourseDetailContainer() {
   const query = useQuery();
@@ -41,17 +41,17 @@ function ViewCourseDetailContainer() {
 
   const items = [
     {
-      label: 'Course Detail',
+      label: 'Course Details',
       key: 'overview',
       children: <ViewCourse course={course} initialViewMode />,
     },
     {
-      label: 'Participant',
+      label: 'Participants',
       key: 'participant',
       children: <TableViewParticipant course={course} />,
     },
     {
-      label: 'Assignment',
+      label: 'Assignments',
       key: 'assignment',
       children: <TableViewAssignment course={course} />,
     },
