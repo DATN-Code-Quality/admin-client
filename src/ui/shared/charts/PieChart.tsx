@@ -20,7 +20,7 @@ const PieChart: React.FC<{
       colors: color,
       responsive: [
         {
-          breakpoint: 480,
+          breakpoint: 580,
           options: {
             chart: {
               width: 350,

@@ -10,13 +10,12 @@ import { columnTableDetailMetrics, columnTableUser } from './props';
 
 import { useCourse } from '~/adapters/appService/course.service';
 import { useStatistics } from '~/adapters/appService/statistics.service';
-import { MAP_CONFIG_OBJECT } from '~/constant';
+import { MAP_CONFIG_OBJECT, PAGE_SIZE_OPTIONS } from '~/constant';
 import { ReportCourse } from '~/domain/course';
 import useDialog from '~/hooks/useDialog';
 import useList from '~/hooks/useList';
 import ColumnChart from '~/ui/shared/charts/ColumnChart';
-import ImportedModal from '~/ui/shared/imported-modal/ImportedModal';
-import ModalTable from '~/ui/shared/modal-table/ModalTable';
+import ModalProTable from '~/ui/shared/modal-table/ModalProTable';
 import TableToolbar from '~/ui/shared/toolbar';
 import { getMappingLabelByValue, insertAt, splitStr } from '~/utils';
 
@@ -40,7 +39,7 @@ const CourseStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
   const {
     getCourseMetricStatistics,
     getCourseUserStatistics,
-    getCourseAssignmentStatistics,
+    getCourseUserDetailedStatistics,
   } = useStatistics();
 
   const [metricsChart, setMetricsChart] = useState<{
@@ -108,21 +107,23 @@ const CourseStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
     setMetricsChart(formatMetricsChart(result));
   };
 
-  const fetchReport = useCallback(async () => {
-    setLoading(true);
-    const response = await getReportCourse(courseId);
-    if (response?.status !== 0) return;
-    const reportData = response.data.report;
-    const { total, assignment } = reportData;
+  const fetchReport = async () => {
+    try {
+      setLoading(true);
+      const response = await getReportCourse(courseId);
+      if (response?.status !== 0) return;
+      const reportData = response.data.report;
+      const { total, assignment } = reportData;
 
-    setReport({ total, assignment });
-    setDataChart(formatDataChart(total, assignment));
-    setLoading(false);
-  }, [courseId, formatDataChart]);
-
+      setReport({ total, assignment });
+      setDataChart(formatDataChart(total, assignment));
+    } finally {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
     fetchReport();
-  }, [fetchReport]);
+  }, []);
 
   useEffect(() => {
     handleFetchMetricsChart();
@@ -148,7 +149,8 @@ const CourseStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
   const [selectedUserId, setSelectedUserId] = useState<any>(null);
 
   const handleGetDetailMetrics = async (args?) => {
-    const response = await getCourseAssignmentStatistics(
+    console.log('args', args);
+    const response = await getCourseUserDetailedStatistics(
       courseId,
       selectedUserId
     );
@@ -181,8 +183,9 @@ const CourseStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
     columns = insertAt(
       columns,
       {
-        title: 'Detail Metrics',
+        title: 'Detailed Metrics',
         fixed: 'left',
+        width: 120,
         key: 'detail',
         render: (text, record) => {
           return (
@@ -193,7 +196,7 @@ const CourseStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
                 detailMetricsModalActions.handleOpen();
               }}
             >
-              View Detail
+              View Details
             </Button>
           );
         },
@@ -225,8 +228,10 @@ const CourseStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
         <ProTable
           dataSource={list.items}
           columns={columnTableUserMetrics()}
-          scroll={{ x: 1300 }}
-          loading={loading}
+          scroll={{ x: '1200px' }}
+          responsive
+          className="responsive-table"
+          loading={list.isLoading}
           options={{
             reload: false,
           }}
@@ -240,6 +245,11 @@ const CourseStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
                 Export to Excel
               </Button>
             );
+          }}
+          pagination={{
+            showSizeChanger: true,
+            pageSizeOptions: PAGE_SIZE_OPTIONS,
+            defaultPageSize: 10,
           }}
           onReset={onFilterChange}
           request={onFilterChange}
@@ -258,8 +268,8 @@ const CourseStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
         <DataTable courseReport={report.assignment} total={report.total} />
       </Card> */}
       {detailMetricsModalVisible && (
-        <ModalTable
-          title="Detail Metrics"
+        <ModalProTable
+          title="Detailed Metrics"
           idKey="assignmentId"
           columns={columnTableDetailMetrics()}
           fetchFn={(args) => handleGetDetailMetrics(args)}
