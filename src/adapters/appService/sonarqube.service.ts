@@ -51,7 +51,9 @@ export function useSonarqube() {
       submissionId: string
     ): Promise<OverviewSubmissionResponse> {
       const response = await getWithPath(
-        `/sonarqube/result/${courseId}/${assignmentId}/${submissionId}`
+        // `/sonarqube/result/${courseId}/${assignmentId}/${submissionId}`
+        `/result/${courseId}/${assignmentId}/${submissionId}`
+
       );
 
       return response;

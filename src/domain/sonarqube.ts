@@ -73,13 +73,36 @@ export interface IssueWithSourceResponse {
   data: IssueWithSource[];
 }
 
+export interface OverviewDataRespond {
+  result?: ResultOverview;
+  role?: string;
+}
+
+export interface ResultOverview {
+  id?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  deletedAt?: any;
+  submissionId?: string;
+  violations?: number;
+  code_smells?: number;
+  bugs?: number;
+  vulnerabilities?: number;
+  blocker_violations?: number;
+  critical_violations?: number;
+  major_violations?: number;
+  minor_violations?: number;
+  info_violations?: number;
+  duplicated_lines_density?: number;
+  coverage?: number;
+  reliability_rating?: number;
+  security_rating?: number;
+  sqale_rating?: number;
+  ncloc?: number;
+}
 export interface OverviewSubmissionResponse {
   status?: number;
-  error?: number;
-  data: {
-    paging: Record<string, string>;
-    measures: { metric: string; history: { date: string; value: string }[] }[];
-  };
+  data?: ResultOverview;
 }
 
 export interface SubmissionIssues {
