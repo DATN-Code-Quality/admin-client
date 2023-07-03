@@ -150,6 +150,7 @@ const DataTable: React.FC<{ courseId: string; assignmentId: string }> = ({
       dataIndex: 'status',
       key: 'status',
       fixed: 'left',
+      width: '100px',
       render: (value) => {
         return <span>{renderStatus(value)}</span>;
       },
@@ -160,135 +161,147 @@ const DataTable: React.FC<{ courseId: string; assignmentId: string }> = ({
       },
     },
     {
-      title: 'Bugs',
-      dataIndex: 'bugs',
-      key: 'bugs',
+      title: 'Total',
+      dataIndex: 'total',
+      key: 'total',
       align: 'center',
       sorter: {
         compare: (a, b) => {
-          const val_a = Math.floor(parseFloat(a.bug ?? '0'));
-          const val_b = Math.floor(parseFloat(b.bug ?? '0'));
+          const val_a = Math.floor(parseFloat(a.total ?? '0'));
+          const val_b = Math.floor(parseFloat(b.total ?? '0'));
           return val_a - val_b;
         },
       },
     },
     {
-      title: 'Code Smells',
-      dataIndex: 'code_smells',
-      key: 'code_smells',
-      align: 'center',
-      sorter: {
-        compare: (a, b) => {
-          const val_a = Math.floor(parseFloat(a.code_smells ?? '0'));
-          const val_b = Math.floor(parseFloat(b.code_smells ?? '0'));
-          return val_a - val_b;
+      title: 'Type',
+      dataIndex: 'type',
+      key: 'type',
+      children: [
+        {
+          title: 'Bugs',
+          dataIndex: 'bug',
+          key: 'bug',
+          align: 'center',
+          sorter: {
+            compare: (a, b) => {
+              const val_a = Math.floor(parseFloat(a.bug ?? '0'));
+              const val_b = Math.floor(parseFloat(b.bug ?? '0'));
+              return val_a - val_b;
+            },
+          },
         },
-      },
+        {
+          title: 'Code Smells',
+          dataIndex: 'codeSmell',
+          key: 'codeSmell',
+          align: 'center',
+          sorter: {
+            compare: (a, b) => {
+              const val_a = Math.floor(parseFloat(a.codeSmell ?? '0'));
+              const val_b = Math.floor(parseFloat(b.codeSmell ?? '0'));
+              return val_a - val_b;
+            },
+          },
+        },
+        {
+          title: 'Vulnerabilities',
+          dataIndex: 'vulnerabilities',
+          key: 'vulnerabilities',
+          align: 'center',
+          sorter: {
+            compare: (a, b) => {
+              const val_a = Math.floor(parseFloat(a.vulnerabilities ?? '0'));
+              const val_b = Math.floor(parseFloat(b.vulnerabilities ?? '0'));
+              return val_a - val_b;
+            },
+          },
+        },
+      ],
     },
+
     {
-      title: 'Coverage',
-      dataIndex: 'coverage',
-      key: 'coverage',
-      align: 'center',
-      sorter: {
-        compare: (a, b) => {
-          const val_a = Math.floor(parseFloat(a.coverage ?? '0'));
-          const val_b = Math.floor(parseFloat(b.coverage ?? '0'));
-          return val_a - val_b;
+      title: 'Severity',
+      dataIndex: 'type',
+      key: 'type',
+      children: [
+        {
+          title: 'Blocker',
+          dataIndex: 'blocker',
+          key: 'blocker',
+          align: 'center',
+          sorter: {
+            compare: (a, b) => {
+              const val_a = Math.floor(parseFloat(a.blocker ?? '0'));
+              const val_b = Math.floor(parseFloat(b.blocker ?? '0'));
+              return val_a - val_b;
+            },
+          },
         },
-      },
+        {
+          title: 'Critical',
+          dataIndex: 'critical',
+          key: 'critical',
+          align: 'center',
+          sorter: {
+            compare: (a, b) => {
+              const val_a = Math.floor(parseFloat(a.critical ?? '0'));
+              const val_b = Math.floor(parseFloat(b.critical ?? '0'));
+              return val_a - val_b;
+            },
+          },
+        },
+        {
+          title: 'Major',
+          dataIndex: 'major',
+          key: 'major',
+          align: 'center',
+          sorter: {
+            compare: (a, b) => {
+              const val_a = Math.floor(parseFloat(a.major ?? '0'));
+              const val_b = Math.floor(parseFloat(b.major ?? '0'));
+              return val_a - val_b;
+            },
+          },
+        },
+        {
+          title: 'Minor',
+          dataIndex: 'minor',
+          key: 'minor',
+          align: 'center',
+          sorter: {
+            compare: (a, b) => {
+              const val_a = Math.floor(parseFloat(a.minor ?? '0'));
+              const val_b = Math.floor(parseFloat(b.minor ?? '0'));
+              return val_a - val_b;
+            },
+          },
+        },
+        {
+          title: 'Info',
+          dataIndex: 'info',
+          key: 'info',
+          align: 'center',
+          sorter: {
+            compare: (a, b) => {
+              const val_a = Math.floor(parseFloat(a.info ?? '0'));
+              const val_b = Math.floor(parseFloat(b.info ?? '0'));
+              return val_a - val_b;
+            },
+          },
+        },
+      ],
     },
+
     {
       title: 'Duplicated Lines Density',
-      dataIndex: 'duplicated_lines_density',
-      key: 'duplicated_lines_density',
+      dataIndex: 'duplicatedLinesDensity',
+      key: 'duplicatedLinesDensity',
       align: 'center',
       sorter: {
         compare: (a, b) => {
-          const val_a = Math.floor(
-            parseFloat(a.duplicated_lines_density ?? '0')
-          );
-          const val_b = Math.floor(
-            parseFloat(b.duplicated_lines_density ?? '0')
-          );
-          return val_a - val_b;
-        },
-      },
-    },
-    {
-      title: 'NCLOC',
-      dataIndex: 'ncloc',
-      key: 'ncloc',
-      align: 'center',
-      sorter: {
-        compare: (a, b) => {
-          const val_a = Math.floor(parseFloat(a.ncloc ?? '0'));
-          const val_b = Math.floor(parseFloat(b.ncloc ?? '0'));
-          return val_a - val_b;
-        },
-      },
-    },
-    {
-      title: 'Reliability Rating',
-      dataIndex: 'reliability_rating',
-      key: 'reliability_rating',
-      align: 'center',
-      sorter: {
-        compare: (a, b) => {
-          const val_a = Math.floor(parseFloat(a.reliability_rating ?? '0'));
-          const val_b = Math.floor(parseFloat(b.reliability_rating ?? '0'));
-          return val_a - val_b;
-        },
-      },
-    },
-    {
-      title: 'Security Rating',
-      dataIndex: 'security_rating',
-      key: 'security_rating',
-      align: 'center',
-      sorter: {
-        compare: (a, b) => {
-          const val_a = Math.floor(parseFloat(a.security_rating ?? '0'));
-          const val_b = Math.floor(parseFloat(b.security_rating ?? '0'));
-          return val_a - val_b;
-        },
-      },
-    },
-    {
-      title: 'SQALE Index',
-      dataIndex: 'sqale_index',
-      key: 'sqale_index',
-      align: 'center',
-      sorter: {
-        compare: (a, b) => {
-          const val_a = Math.floor(parseFloat(a.sqale_index ?? '0'));
-          const val_b = Math.floor(parseFloat(b.sqale_index ?? '0'));
-          return val_a - val_b;
-        },
-      },
-    },
-    {
-      title: 'SQALE Rating',
-      dataIndex: 'sqale_rating',
-      key: 'sqale_rating',
-      align: 'center',
-      sorter: {
-        compare: (a, b) => {
-          const val_a = Math.floor(parseFloat(a.sqale_rating ?? '0'));
-          const val_b = Math.floor(parseFloat(b.sqale_rating ?? '0'));
-          return val_a - val_b;
-        },
-      },
-    },
-    {
-      title: 'Vulnerabilities',
-      dataIndex: 'vulnerabilities',
-      key: 'vulnerabilities',
-      align: 'center',
-      sorter: {
-        compare: (a, b) => {
-          const val_a = Math.floor(parseFloat(a.vulnerabilities ?? '0'));
-          const val_b = Math.floor(parseFloat(b.vulnerabilities ?? '0'));
+          const val_a = Math.floor(parseFloat(a.duplicatedLinesDensity ?? '0'));
+          const val_b = Math.floor(parseFloat(b.duplicatedLinesDensity ?? '0'));
           return val_a - val_b;
         },
       },
@@ -311,6 +324,7 @@ const DataTable: React.FC<{ courseId: string; assignmentId: string }> = ({
         width: '100%',
         margin: '0 auto',
       }}
+      className="tableContainer"
     >
       <h2>Data Table</h2>
       <ProTable
