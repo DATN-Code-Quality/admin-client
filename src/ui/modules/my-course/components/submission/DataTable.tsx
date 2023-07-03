@@ -203,6 +203,7 @@ const DataTable: React.FC<{
           key: 'bugs',
           align: 'center',
           render: (val) => {
+            console.log("val", val)
             return (
               <p
                 style={{
