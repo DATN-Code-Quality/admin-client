@@ -13,6 +13,7 @@ import { Assignment } from '~/domain/assignment';
 import { Submission } from '~/domain/submission';
 import useCurrentWidth from '~/hooks/useCurrentWidth';
 import { renderColorRatting } from '~/utils';
+import { OverviewDataRespond, ResultOverview } from '~/domain/sonarqube';
 
 const Overview: React.FC<{
   submission?: Submission;
@@ -22,7 +23,7 @@ const Overview: React.FC<{
   const { getOverViewSubmission } = useSonarqube();
   const navigate = useNavigate();
 
-  const [data, setData] = useState<Map<string, number>>(new Map());
+  const [data, setData] = useState<ResultOverview>({});
   const [loading, setLoading] = useState(false);
 
   const handleShowResult = useCallback(() => {
@@ -33,7 +34,7 @@ const Overview: React.FC<{
   const fetchOverview = useCallback(async () => {
     const initMap = new Map();
     if (!submission) {
-      setData(initMap);
+      setData({});
       return;
     }
 
@@ -53,15 +54,9 @@ const Overview: React.FC<{
       setData(initMap);
       return;
     }
-    const rawData = response.data?.measures || [];
-    const dataRes = rawData?.reduce((obj, item) => {
-      const { history } = item;
+    const resultData = response.data;
 
-      const { value } = history[history.length - 1];
-      obj.set(item.metric, value);
-      return obj;
-    }, initMap);
-    setData(dataRes);
+    setData(resultData || {});
     setLoading(false);
   }, [assignment?.courseId, assignment?.id, submission]);
 
@@ -69,7 +64,7 @@ const Overview: React.FC<{
     fetchOverview();
   }, [fetchOverview]);
 
-  if (!data || data?.size === 0 || ![3, 4].includes(submission?.status)) {
+  if (!data || ![3, 4].includes(submission?.status)) {
     return (
       <div
         style={{
@@ -102,7 +97,7 @@ const Overview: React.FC<{
           >
             <p className="flex items-center">
               <span className="issues-amount mr-2" style={{ minWidth: '50px' }}>
-                {data.get('bugs')}
+                {data.bugs}
               </span>
               <span>
                 <BugOutlined style={{ color: 'red' }} /> Bugs
@@ -111,7 +106,7 @@ const Overview: React.FC<{
             <p className="flex items-center">
               <span className="mr-2">Reliability</span>
               {renderColorRatting(
-                +(data.get('reliability_rating') || 0),
+                +(data.reliability_rating || 0),
                 'rating'
               )}
             </p>
@@ -123,7 +118,7 @@ const Overview: React.FC<{
           >
             <p className="flex items-center">
               <span className="issues-amount mr-2" style={{ minWidth: '50px' }}>
-                {data.get('vulnerabilities')}
+                {data.vulnerabilities}
               </span>
               <span>
                 <UnlockOutlined style={{ color: 'black' }} /> Vulnerabilities
@@ -132,7 +127,7 @@ const Overview: React.FC<{
             <p className="flex items-center">
               <span className="mr-2">Reliability</span>
               {renderColorRatting(
-                +(data.get('security_rating') || 0),
+                +(data.security_rating || 0),
                 'rating'
               )}
             </p>
@@ -144,7 +139,7 @@ const Overview: React.FC<{
           >
             <p className="flex items-center">
               <span className="issues-amount mr-2" style={{ minWidth: '50px' }}>
-                {data.get('code_smells')}
+                {data.code_smells}
               </span>
               <span>
                 <DribbbleCircleFilled /> Code Smell
@@ -152,19 +147,19 @@ const Overview: React.FC<{
             </p>
             <p className="flex items-center">
               <span className="mr-2">Sqale</span>
-              {renderColorRatting(+(data.get('sqale_rating') || 0), 'rating')}
+              {renderColorRatting(+(data.sqale_rating || 0), 'rating')}
             </p>
           </div>
 
           <div className="flex items-center justify-between py-4">
             <p className="flex items-center">
               <span className="issues-amount mr-2" style={{ minWidth: '50px' }}>
-                {data.get('duplicated_lines_density') || 0}
+                {data.duplicated_lines_density|| 0}
               </span>
               <span>Duplicated lines</span>
               <span className="ml-2 mr-2 font-semibold">in</span>
               <span className="issues-amount mr-1">
-                {data.get('ncloc') || 0}
+                {data.ncloc || 0}
               </span>
               <span>lines</span>
             </p>
