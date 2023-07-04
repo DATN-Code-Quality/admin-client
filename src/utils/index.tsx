@@ -1,13 +1,14 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { message } from 'antd';
+import TableExport from 'antd-table-export';
 import dayjs, { Dayjs } from 'dayjs';
 
 import Is from './is';
 
 import { Role } from '~/constant/enum';
 import { MESSAGE } from '~/constant/message';
-import { List } from '~/constant/type';
 import ROUTE from '~/constant/routes';
+import { List } from '~/constant/type';
 
 export const buildParams = (data?: any) => {
   if (data) {
@@ -420,4 +421,16 @@ export const configObjectToConditions = (configObject) => {
     key,
     value,
   }));
+};
+
+export const handleExportToExcel = (
+  data: any[],
+  columns: any[],
+  fileName: string
+) => {
+  const dataExport = data?.map((item) => ({
+    ...item,
+  }));
+  const exportInstance = new TableExport(dataExport, columns);
+  exportInstance.download(fileName, 'xlsx');
 };
