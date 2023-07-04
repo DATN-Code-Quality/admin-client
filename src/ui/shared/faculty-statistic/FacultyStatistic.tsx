@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 
 import { ExportOutlined } from '@ant-design/icons';
 import ProTable from '@ant-design/pro-table';
-import { Card } from 'antd';
+import { Card, Input } from 'antd';
 import Button from 'antd-button-color';
-import tableExport from 'antd-table-export';
 
 import { columnTableDetailedMetrics, columnTableUser } from './props';
 
@@ -15,10 +14,34 @@ import useList from '~/hooks/useList';
 import ColumnChart from '~/ui/shared/charts/ColumnChart';
 import ModalProTable from '~/ui/shared/modal-table/ModalProTable';
 import TableToolbar from '~/ui/shared/toolbar';
-import { getMappingLabelByValue, insertAt, splitStr } from '~/utils';
+import {
+  debounce,
+  getMappingLabelByValue,
+  handleExportToExcel,
+  insertAt,
+  splitStr,
+} from '~/utils';
+
+const generateSeriesByMetric = (metricObject) => {
+  const series = Object.keys(metricObject).map((metric) => {
+    return {
+      name: getMappingLabelByValue(MAP_CONFIG_OBJECT, metric) || metric,
+      data: [metricObject[metric]],
+    };
+  });
+  return series;
+};
+
+const formatMetricsChart = (result) => {
+  const series = generateSeriesByMetric(result);
+  const label = '';
+  const labels = [splitStr(label, 2)];
+  return { labels, data: series };
+};
 
 const FacultyStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
   const [loading, setLoading] = useState(false);
+  const [detailMetricsModalVisible, detailMetricsModalActions] = useDialog();
   const {
     getFacultyMetricStatistics,
     getFacultyUserStatistics,
@@ -32,23 +55,6 @@ const FacultyStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
     labels: [],
     data: [],
   });
-
-  const generateSeriesByMetric = (metricObject) => {
-    const series = Object.keys(metricObject).map((metric) => {
-      return {
-        name: getMappingLabelByValue(MAP_CONFIG_OBJECT, metric) || metric,
-        data: [metricObject[metric]],
-      };
-    });
-    return series;
-  };
-
-  const formatMetricsChart = (result) => {
-    const series = generateSeriesByMetric(result);
-    const label = '';
-    const labels = [splitStr(label, 2)];
-    return { labels, data: series };
-  };
 
   const handleFetchMetricsChart = async () => {
     const response = await getFacultyMetricStatistics(courseId);
@@ -73,7 +79,7 @@ const FacultyStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
     const updatedReponse = {
       ...response,
       data: convertedResults,
-      total: convertedResults.length,
+      total: response.data.total,
     };
     return updatedReponse;
   };
@@ -101,12 +107,13 @@ const FacultyStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
         total: convertedResults.length,
       };
       return updatedReponse;
-    } catch(err) {
-      console.log("err", err);
+    } catch (err) {
+      console.log('err', err);
     }
   };
 
   useEffect(() => {
+    if (!selectedUserId) return;
     handleGetDetailMetrics();
   }, [selectedUserId]);
 
@@ -142,16 +149,6 @@ const FacultyStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
     return columns;
   };
 
-  const exportToExcel = () => {
-    const dataExport = list.items?.map((item) => ({
-      ...item,
-    }));
-    const exportInstance = new tableExport(dataExport, columnTableUser());
-    exportInstance.download('overview', 'xlsx');
-  };
-
-  const [detailMetricsModalVisible, detailMetricsModalActions] = useDialog();
-
   return (
     <>
       <Card>
@@ -163,6 +160,7 @@ const FacultyStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
         />
         <ProTable
           dataSource={list.items}
+          search={false}
           columns={columnTableUserMetrics()}
           scroll={{ x: '1200px' }}
           responsive
@@ -172,24 +170,43 @@ const FacultyStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
             reload: false,
           }}
           toolBarRender={() => {
-            return (
+            return [
+              <Input
+                key="search"
+                placeholder="Username, Name or Email"
+                onChange={debounce((e) => {
+                  const filter = {
+                    search: e.target.value,
+                  };
+                  onFilterChange(filter);
+                }, 200)}
+              />,
               <Button
+                key="export"
                 type="primary"
                 icon={<ExportOutlined />}
-                onClick={exportToExcel}
+                onClick={() =>
+                  handleExportToExcel(
+                    list.items,
+                    columnTableUser(),
+                    'faculty_metrics'
+                  )
+                }
               >
                 Export to Excel
-              </Button>
-            );
+              </Button>,
+            ];
           }}
           pagination={{
             showSizeChanger: true,
             pageSizeOptions: PAGE_SIZE_OPTIONS,
             defaultPageSize: 10,
+            total: list.total,
           }}
-          onReset={onFilterChange}
-          request={onFilterChange}
-          onFilter={onFilterChange}
+          // onReset={onFilterChange}
+          // request={onFilterChange}
+          // onFilter={onFilterChange}
+          onChange={onPageChange}
         />
       </Card>
       <div className="mt-4 mb-4" />

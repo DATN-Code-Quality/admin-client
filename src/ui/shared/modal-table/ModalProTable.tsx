@@ -12,6 +12,7 @@ import './ModalProTable.less';
 import ProTable from '@ant-design/pro-table';
 import Button from 'antd-button-color';
 import { ExportOutlined } from '@ant-design/icons';
+import { handleExportToExcel } from '~/utils';
 
 export interface ModalTableProps {
   idKey?: string;
@@ -77,45 +78,39 @@ const ModalProTable: React.FC<ModalTableProps> = ({
       )}
       <div className="mt-4 mb-4" />
       <h2>{title}</h2>
-      {/* <BaseTable
-        className="modal-table"
-        idKey={idKey}
-        columns={tableColumns}
-        data={list}
-        paginationProps={{
-          showSizeChanger: true,
-          pageSizeOptions: PAGE_SIZE_OPTIONS,
-        }}
-        onChange={onPageChange}
-      /> */}
       <ProTable
         dataSource={list.items}
         columns={tableColumns}
         scroll={{ x: 1300 }}
         loading={list.isLoading}
+        search={false}
         options={{
           reload: false,
         }}
         toolBarRender={() => {
-          return (
+          return [
             <Button
+              key="export"
               type="primary"
               icon={<ExportOutlined />}
-              // onClick={exportToExcel}
+              onClick={() =>
+                handleExportToExcel(list.items, tableColumns, 'user_details')
+              }
             >
               Export to Excel
-            </Button>
-          );
+            </Button>,
+          ];
         }}
-        onReset={() => {
-          // handleFilter({});
+        pagination={{
+          showSizeChanger: true,
+          pageSizeOptions: PAGE_SIZE_OPTIONS,
+          defaultPageSize: 10,
+          total: list.total,
         }}
-        request={(params) => {
-          // handleFilter(params);
-        }}
-        onFilter={(val) => {
-          console.log(val);
-        }}
+        // onReset={onFilterChange}
+        // request={onFilterChange}
+        // onFilter={onFilterChange}
+        onChange={onPageChange}
       />
     </Modal>
   );
