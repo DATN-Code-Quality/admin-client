@@ -54,16 +54,17 @@ export function useStatistics() {
       filter?
     ): Promise<
       ResponseData<{
+        total: number;
         results: {
           user: User;
           result: Result;
         }[];
       }>
     > {
-      const { limit, offset } = filter || {};
+      const { limit, offset, search } = filter || {};
       const response = await getWithPath(
-        `${API.COURSE.GET.COURSE}/${courseId}/user-result`
-        // { limit, offset }
+        `${API.COURSE.GET.COURSE}/${courseId}/user-result`,
+        { limit, offset, search }
       );
       // const response = await mockReport().getCourseUserStatistics();
       return formatResponse(response);
@@ -100,16 +101,17 @@ export function useStatistics() {
 
     async getFacultyUserStatistics(filter?): Promise<
       ResponseData<{
+        total: number;
         results: {
           user: User;
           result: Result;
         }[];
       }>
     > {
-      const { limit, offset } = filter || {};
+      const { limit, offset, search } = filter || {};
       const response = await getWithPath(
-        `${API.FACULTY.GET.FACULTY}/user/statistic`
-        // { limit, offset }
+        `${API.FACULTY.GET.FACULTY}/user/statistic`,
+        { limit, offset, search }
       );
       // const response = await mockReport().getCourseUserStatistics();
       return formatResponse(response);
