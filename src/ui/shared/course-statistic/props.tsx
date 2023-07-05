@@ -2,8 +2,30 @@
 /* eslint-disable no-unsafe-optional-chaining */
 import { ColumnType } from 'antd/lib/table';
 
-import { MAP_ROLES } from '~/constant';
+import { MAP_REPORT_TYPE, MAP_ROLES } from '~/constant';
 import { IMetaFormBuilder } from '~/ui/shared/forms/FormBuilder/FormBuilder';
+
+export const metaFilterReport = () => {
+  return {
+    columns: 3,
+    fields: [
+      {
+        key: 'type',
+        colSpan: 3,
+        options: MAP_REPORT_TYPE,
+        widget: 'select',
+        initialValue: MAP_REPORT_TYPE[0],
+        widgetProps: {
+          maxTagCount: 'responsive',
+          style: {
+            minWidth: '12rem',
+          },
+          placeholder: 'Report Type',
+        },
+      },
+    ],
+  } as IMetaFormBuilder;
+};
 
 export const metaFilterUser = () => {
   return {
