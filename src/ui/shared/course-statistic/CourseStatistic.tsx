@@ -24,6 +24,7 @@ import {
   insertAt,
   splitStr,
 } from '~/utils';
+import TopIssues from '~/ui/modules/my-course/components/submission/TopIssues';
 
 const generateSeriesByMetric = (metricObject) => {
   const series = Object.keys(metricObject).map((metric) => {
@@ -222,6 +223,9 @@ const CourseStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
           labels={metricsChart.labels}
           loading={loading}
         />
+        <div className="mt-2">
+          <TopIssues courseId={courseId} assignmentId={null} type="course" />
+        </div>
         <ProTable
           dataSource={list.items}
           columns={columnTableUserMetrics()}
@@ -284,6 +288,7 @@ const CourseStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
         <div className="mt-4" />
         <DataTable courseReport={report.assignment} total={report.total} />
       </Card> */}
+
       {detailMetricsModalVisible && (
         <ModalProTable
           title="Detailed Metrics"
