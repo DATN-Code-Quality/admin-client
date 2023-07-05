@@ -6,6 +6,7 @@ import { useSubmission } from '~/adapters/appService/submission.service';
 import PieChart from '~/ui/shared/charts/PieChart';
 import { useAssignment } from '~/adapters/appService/assignment.service';
 import { configObjectToConditions } from '~/utils';
+import TopIssues from './TopIssues';
 
 const Statistic: React.FC<{ courseId: string; assignmentId: string }> = ({
   courseId,
@@ -15,7 +16,7 @@ const Statistic: React.FC<{ courseId: string; assignmentId: string }> = ({
     labels: [],
     data: [],
   });
-  const { getDetailAssignment } = useAssignment();
+  const { getDetailAssignment, getTopIssuesAsssignment } = useAssignment();
   const [conditions, setConditions] = useState([]);
 
   const [loading, setLoading] = useState(false);
@@ -71,8 +72,6 @@ const Statistic: React.FC<{ courseId: string; assignmentId: string }> = ({
     });
   }, [assignmentId, courseId]);
 
-  console.log('Conditions', conditions);
-
   return (
     <div>
       <PieChart
@@ -88,6 +87,13 @@ const Statistic: React.FC<{ courseId: string; assignmentId: string }> = ({
         ]}
         loading={loading}
       />
+      <div className="mt-2">
+        <TopIssues
+          courseId={courseId}
+          assignmentId={assignmentId}
+          type="assignment"
+        />
+      </div>
       <div className="mt-2">
         <DataTable
           courseId={courseId}
