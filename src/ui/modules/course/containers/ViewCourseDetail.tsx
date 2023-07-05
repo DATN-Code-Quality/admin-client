@@ -32,7 +32,7 @@ function ViewCourseDetailContainer() {
 
   const items = [
     {
-      label: 'Course Details',
+      label: 'Course Detail',
       key: 'overview',
       children: <ViewOrCreateCourse course={course} initialViewMode />,
     },
@@ -42,7 +42,7 @@ function ViewCourseDetailContainer() {
       children: <TableViewParticipant course={course} />,
     },
     {
-      label: 'Statistics',
+      label: 'Report',
       key: 'course-report',
       children: <CourseStatistic courseId={course?.id} />,
     },
