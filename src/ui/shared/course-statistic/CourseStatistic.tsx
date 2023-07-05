@@ -24,6 +24,7 @@ import {
   insertAt,
   splitStr,
 } from '~/utils';
+import TopIssues from '~/ui/modules/my-course/components/submission/TopIssues';
 
 const generateSeriesByMetric = (metricObject) => {
   const series = Object.keys(metricObject).map((metric) => {
@@ -39,6 +40,7 @@ const formatMetricsChart = (result) => {
   const series = generateSeriesByMetric(result);
   const label = '';
   const labels = [splitStr(label, 2)];
+  console.log(JSON.stringify({ labels, data: series }));
   return { labels, data: series };
 };
 
@@ -66,7 +68,15 @@ const CourseStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
   } = useStatistics();
 
   const [detailMetricsModalVisible, detailMetricsModalActions] = useDialog();
-  const [metricsChart, setMetricsChart] = useState<{
+  const [typeMetricsChart, setTypeMetricsChart] = useState<{
+    labels: string[][];
+    data: { name: string; data: number[] }[];
+  }>({
+    labels: [],
+    data: [],
+  });
+
+  const [severityMetricsChart, setSeverityMetricsChart] = useState<{
     labels: string[][];
     data: { name: string; data: number[] }[];
   }>({
@@ -111,7 +121,26 @@ const CourseStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
   const handleFetchMetricsChart = async () => {
     const response = await getCourseMetricStatistics(courseId);
     const { result } = response.data;
-    setMetricsChart(formatMetricsChart(result));
+
+    const typeChartData = {
+      violations: result.violations ?? '0',
+      code_smells: result.code_smells ?? '0',
+      bugs: result.bugs ?? '0',
+      vulnerabilities: result.vulnerabilities ?? '0',
+      duplicated_lines_density: result.duplicated_lines_density ?? '0',
+      coverage: result.coverage ?? '0',
+    };
+    const severityChartData = {
+      blocker_violations: result.blocker_violations ?? '0',
+      critical_violations: result.critical_violations ?? '0',
+      major_violations: result.major_violations ?? '0',
+      minor_violations: result.minor_violations ?? '0',
+      info_violations: result.info_violations ?? '0',
+
+    };
+    console.log('Report respond: ' + JSON.stringify(result));
+    setTypeMetricsChart(formatMetricsChart(typeChartData));
+    setSeverityMetricsChart(formatMetricsChart(severityChartData));
   };
 
   const fetchReport = async () => {
@@ -213,15 +242,48 @@ const CourseStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
     return columns;
   };
 
+  console.log(JSON.stringify(typeMetricsChart));
+  console.log(JSON.stringify(severityMetricsChart));
+
+
+
   return (
     <>
       <Card>
-        <TableToolbar title="Metrics Statistics" />
+        <TableToolbar title="Course reports" />
         <ColumnChart
-          series={metricsChart.data}
-          labels={metricsChart.labels}
+          series={typeMetricsChart.data}
+          labels={typeMetricsChart.labels}
           loading={loading}
         />
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            fontWeight: 500,
+            marginBottom: 16,
+          }}
+        >
+          Average count by types of bug in course
+        </div>
+        <ColumnChart
+          series={severityMetricsChart.data}
+          labels={severityMetricsChart.labels}
+          loading={loading}
+        />
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            fontWeight: 500,
+            marginBottom: 16,
+          }}
+        >
+          Average count by severity of bug in course
+        </div>
+        <div className="mt-2">
+          <TopIssues courseId={courseId} assignmentId={null} type="course" />
+        </div>
         <ProTable
           dataSource={list.items}
           columns={columnTableUserMetrics()}
@@ -284,6 +346,7 @@ const CourseStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
         <div className="mt-4" />
         <DataTable courseReport={report.assignment} total={report.total} />
       </Card> */}
+
       {detailMetricsModalVisible && (
         <ModalProTable
           title="Detailed Metrics"

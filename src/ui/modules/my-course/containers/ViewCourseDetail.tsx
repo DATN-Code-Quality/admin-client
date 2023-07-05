@@ -41,7 +41,7 @@ function ViewCourseDetailContainer() {
 
   const items = [
     {
-      label: 'Course Details',
+      label: 'Course Detail',
       key: 'overview',
       children: <ViewCourse course={course} initialViewMode />,
     },
@@ -60,7 +60,7 @@ function ViewCourseDetailContainer() {
   const extraTab = useMemo(
     () => [
       {
-        label: 'Statistics',
+        label: 'Report',
         key: 'course-report',
         children: <CourseStatistic courseId={course?.id} />,
         hidden: true,
