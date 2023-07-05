@@ -139,7 +139,10 @@ const DetailRule: React.FC<{
               </span>
               {data?.name}
             </p>
-            <CloseOutlined style={{ right: '20px', color: 'white' }} />
+            <CloseOutlined
+              style={{ right: '20px', color: 'white' }}
+              onClick={onClose}
+            />
           </div>
         }
         placement="bottom"
