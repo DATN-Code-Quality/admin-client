@@ -12,12 +12,23 @@ import {
   WarningOutlined,
 } from '@ant-design/icons';
 import ProTable from '@ant-design/pro-table';
-import { Drawer } from 'antd';
+import { Drawer, Select } from 'antd';
+import Button from 'antd-button-color';
 import parse from 'html-react-parser';
 
 import { useAssignment } from '~/adapters/appService/assignment.service';
-import { BugType, SeverityType, SeverityTypeConstant } from '~/constant/enum';
 import { useCourse } from '~/adapters/appService/course.service';
+import { BugType, SeverityType, SeverityTypeConstant } from '~/constant/enum';
+import TableToolbar from '~/ui/shared/toolbar';
+import BaseFilter from '~/ui/shared/forms/baseFilter';
+import { metaFilterTopIssues } from './props';
+import { MAP_LANGUAGE } from '~/constant';
+
+const ISSUE_LIMIT_OPTIONS = [
+  { value: 5, label: 'Top 5' },
+  { value: 10, label: 'Top 10' },
+  { value: 20, label: 'Top 20' },
+];
 
 const TopIssues = ({ courseId, assignmentId, type }) => {
   const { getTopIssuesAsssignment } = useAssignment();
@@ -25,35 +36,59 @@ const TopIssues = ({ courseId, assignmentId, type }) => {
   const [ruleSelected, setRuleSelected] = useState(null);
   const [data, setData] = useState();
   const [loading, setLoading] = useState(false);
+  const [languages, setLanguages] = useState<string[]>([]);
+  const [filter, setFilter] = useState({
+    limit: ISSUE_LIMIT_OPTIONS[1].value,
+  });
 
-  const getData = useCallback(async () => {
+  const getData = async () => {
+    console.log(filter);
     setLoading(true);
     let response;
     if (type === 'assignment') {
-      response = await getTopIssuesAsssignment(courseId, assignmentId, 5);
+      response = await getTopIssuesAsssignment(courseId, assignmentId, filter);
     } else {
-      response = await getTopIssuesCourse(courseId, 5);
+      response = await getTopIssuesCourse(courseId, filter);
     }
 
     if (response?.status !== 0) {
       setLoading(false);
       return;
     }
-    setData(response?.data);
+    setData(response?.data?.issues?.rules);
+    setLanguages(response?.data?.languages);
     setLoading(false);
-  }, [assignmentId, courseId]);
+  };
+
+  const languageOptions = useMemo(() => {
+    return languages.map((language) => {
+      return MAP_LANGUAGE.find((item) => item.value === language);
+    });
+  }, [languages]);
 
   useEffect(() => {
     getData();
-  }, [getData]);
+  }, [filter]);
   const columns = [
     {
       title: 'Key',
       dataIndex: 'rule',
       key: 'rule',
       fixed: 'left',
-      render: (val) => {
-        return <p>{val.key}</p>;
+      render: (val, record) => {
+        return (
+          <Button
+            type="link"
+            style={{
+              color: '#236a97',
+            }}
+            onClick={() => {
+              setRuleSelected(record?.rule);
+            }}
+          >
+            {val.key}
+          </Button>
+        );
       },
     },
     {
@@ -70,31 +105,65 @@ const TopIssues = ({ courseId, assignmentId, type }) => {
       key: 'count',
       align: 'center',
       render: (val) => {
-        return <b>{val}</b>;
+        return (
+          <b
+            style={{
+              color: 'red',
+            }}
+          >
+            {val}
+          </b>
+        );
       },
     },
   ];
+
+  const handleFilter = (type, value) => {
+    console.log(type, value);
+    console.log('filter', filter);
+    setFilter((prevFilter) => {
+      console.log('prevFilter', prevFilter);
+      return {
+        ...prevFilter,
+        [type]: value,
+      };
+    });
+  };
+
   return (
     <div>
-      <h2>Top 5 Issues</h2>
       <ProTable
-        onRow={(record, rowIndex) => {
-          return {
-            onClick: () => {
-              setRuleSelected(record?.rule);
-            },
-          };
-        }}
         search={false}
         dataSource={data}
         columns={columns}
-        // scroll={{ x: '1200px' }}
+        scroll={{ x: '800px' }}
         responsive
         className="responsive-table top-issues"
         loading={loading}
         options={{
           reload: false,
         }}
+        pagination={false}
+        toolBarRender={() => [
+          <Select
+            loading={loading}
+            key="limit"
+            options={ISSUE_LIMIT_OPTIONS}
+            defaultValue={ISSUE_LIMIT_OPTIONS[1].value}
+            placeholder="Limit"
+            onChange={(option) => handleFilter('limit', option)}
+          />,
+          <Select
+            loading={loading}
+            key="language"
+            options={languageOptions}
+            placeholder="Language"
+            onChange={(option) => {
+              console.log('option', option);
+              handleFilter('language', option);
+            }}
+          />,
+        ]}
       />
       <IssueDetail
         data={ruleSelected}

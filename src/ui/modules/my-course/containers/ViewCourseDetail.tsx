@@ -14,7 +14,8 @@ import { authSelector } from '~/adapters/redux/selectors/auth';
 import { Role, SubRole } from '~/constant/enum';
 import ROUTE from '~/constant/routes';
 import useQuery from '~/hooks/useQuery';
-import CourseStatistic from '~/ui/shared/course-statistic';
+import CourseMetricsStatistic from '~/ui/shared/course-statistic';
+import CourseSubmissionsStatistic from '~/ui/shared/course-statistic/CourseSubmissionsStatistic';
 
 function ViewCourseDetailContainer() {
   const query = useQuery();
@@ -60,9 +61,15 @@ function ViewCourseDetailContainer() {
   const extraTab = useMemo(
     () => [
       {
-        label: 'Report',
-        key: 'course-report',
-        children: <CourseStatistic courseId={course?.id} />,
+        label: 'Submissions Report',
+        key: 'course-submissions-report',
+        children: <CourseSubmissionsStatistic courseId={course?.id} />,
+        hidden: true,
+      },
+      {
+        label: 'Metrics Report',
+        key: 'course-metrics-report',
+        children: <CourseMetricsStatistic courseId={course?.id} />,
         hidden: true,
       },
     ],
