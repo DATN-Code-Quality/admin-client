@@ -197,7 +197,7 @@ export const menus = [
   // },
   {
     id: 'configMoodle',
-    name: 'Config Moodle',
+    name: 'Moodle Configuration',
     // icon: DownloadOutlined,
     route: ROUTE.CONFIG_MOODLE,
     roles: [Role.ADMIN, Role.SUPERADMIN],
