@@ -1,15 +1,41 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { Card } from 'antd';
+import { ExportOutlined } from '@ant-design/icons';
+import ProTable from '@ant-design/pro-table';
+import { Card, Input } from 'antd';
+import Button from 'antd-button-color';
+
+import BaseFilter from '../forms/baseFilter';
 
 import DataTable from './DataTable';
+import {
+  columnTableDetailMetrics,
+  columnTableUser,
+  metaFilterReport,
+} from './props';
 
 import { useCourse } from '~/adapters/appService/course.service';
+import { useStatistics } from '~/adapters/appService/statistics.service';
+import { MAP_CONFIG_OBJECT, PAGE_SIZE_OPTIONS } from '~/constant';
+import { ReportType } from '~/constant/enum';
 import { ReportCourse } from '~/domain/course';
+import useDialog from '~/hooks/useDialog';
+import useList from '~/hooks/useList';
+import TopIssues from '~/ui/modules/my-course/components/submission/TopIssues';
 import ColumnChart from '~/ui/shared/charts/ColumnChart';
-import { splitStr } from '~/utils';
+import ModalProTable from '~/ui/shared/modal-table/ModalProTable';
+import TableToolbar from '~/ui/shared/toolbar';
+import {
+  debounce,
+  getMappingLabelByValue,
+  handleExportToExcel,
+  insertAt,
+  splitStr,
+} from '~/utils';
 
-const CourseStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
+const CourseSubmissionsStatistic: React.FC<{ courseId: string }> = ({
+  courseId,
+}) => {
   const [report, setReport] = useState<{
     total: number;
     assignment: ReportCourse[];
@@ -26,7 +52,6 @@ const CourseStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
     data: [],
   });
   const { getReportCourse } = useCourse();
-
   const formatDataChart = useCallback(
     (total: number, assignment: ReportCourse[]) => {
       const series: { name: string; data: number[] }[] = [
@@ -61,32 +86,38 @@ const CourseStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
     []
   );
 
-  const fetchReport = useCallback(async () => {
-    setLoading(true);
-    const response = await getReportCourse(courseId);
-    if (response?.status !== 0) return;
-    const reportData = response.data.report;
-    const { total, assignment } = reportData;
+  const fetchReport = async () => {
+    try {
+      setLoading(true);
+      const response = await getReportCourse(courseId);
+      if (response?.status !== 0) return;
+      const reportData = response.data.report;
+      const { total, assignment } = reportData;
 
-    setReport({ total, assignment });
-    setDataChart(formatDataChart(total, assignment));
-    setLoading(false);
-  }, [courseId, formatDataChart]);
-
+      setReport({ total, assignment });
+      setDataChart(formatDataChart(total, assignment));
+    } finally {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
     fetchReport();
-  }, [fetchReport]);
+  }, []);
 
   return (
-    <Card>
-      <ColumnChart
-        series={dataChart.data}
-        labels={dataChart.labels}
-        loading={loading}
-      />
-      <DataTable courseReport={report.assignment} total={report.total} />
-    </Card>
+    <>
+      <Card>
+        <TableToolbar title="Submissions Reports" />
+        <ColumnChart
+          series={dataChart.data}
+          labels={dataChart.labels}
+          loading={loading}
+        />
+        <div className="mt-4" />
+        <DataTable courseReport={report.assignment} total={report.total} />
+      </Card>
+    </>
   );
 };
 
-export default CourseStatistic;
+export default CourseSubmissionsStatistic;

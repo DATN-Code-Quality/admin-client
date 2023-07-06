@@ -12,6 +12,8 @@ import { useCourse } from '~/adapters/appService/course.service';
 import ROUTE from '~/constant/routes';
 import useQuery from '~/hooks/useQuery';
 import Card from '~/ui/shared/card';
+import CourseMetricsStatistic from '~/ui/shared/course-statistic';
+import CourseSubmissionsStatistic from '~/ui/shared/course-statistic/CourseSubmissionsStatistic';
 
 function ViewCourseDetailContainer() {
   const query = useQuery();
@@ -36,9 +38,21 @@ function ViewCourseDetailContainer() {
       children: <ViewOrCreateCourse course={course} initialViewMode />,
     },
     {
-      label: 'Participant',
+      label: 'Participants',
       key: 'participant',
       children: <TableViewParticipant course={course} />,
+    },
+    {
+      label: 'Submissions Report',
+      key: 'course-submissions-report',
+      children: <CourseSubmissionsStatistic courseId={course?.id} />,
+      hidden: true,
+    },
+    {
+      label: 'Metrics Report',
+      key: 'course-metrics-report',
+      children: <CourseMetricsStatistic courseId={course?.id} />,
+      hidden: true,
     },
   ];
 

@@ -119,6 +119,13 @@ export function useCourse() {
       };
       return covertedResponse;
     },
+    async getTopIssuesCourse(courseId: string, filter?): Promise<any> {
+      const response = await getWithPath(
+        `/course/${courseId}/top-issue`,
+        filter
+      );
+      return response;
+    },
 
     async getAllMoodleCourses(
       filter?: CourseFilter

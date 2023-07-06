@@ -4,7 +4,6 @@ import { ArrowLeftOutlined } from '@ant-design/icons';
 import { Tabs } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
-import CourseStatistic from '../components/course-statistic';
 import { TableViewAssignment } from '../components/table-view-assignment';
 import { TableViewParticipant } from '../components/table-view-participant';
 
@@ -15,6 +14,8 @@ import { authSelector } from '~/adapters/redux/selectors/auth';
 import { Role, SubRole } from '~/constant/enum';
 import ROUTE from '~/constant/routes';
 import useQuery from '~/hooks/useQuery';
+import CourseMetricsStatistic from '~/ui/shared/course-statistic';
+import CourseSubmissionsStatistic from '~/ui/shared/course-statistic/CourseSubmissionsStatistic';
 
 function ViewCourseDetailContainer() {
   const query = useQuery();
@@ -46,12 +47,12 @@ function ViewCourseDetailContainer() {
       children: <ViewCourse course={course} initialViewMode />,
     },
     {
-      label: 'Participant',
+      label: 'Participants',
       key: 'participant',
       children: <TableViewParticipant course={course} />,
     },
     {
-      label: 'Assignment',
+      label: 'Assignments',
       key: 'assignment',
       children: <TableViewAssignment course={course} />,
     },
@@ -60,9 +61,15 @@ function ViewCourseDetailContainer() {
   const extraTab = useMemo(
     () => [
       {
-        label: 'Statistics',
-        key: 'course-report',
-        children: <CourseStatistic courseId={course?.id} />,
+        label: 'Submissions Report',
+        key: 'course-submissions-report',
+        children: <CourseSubmissionsStatistic courseId={course?.id} />,
+        hidden: true,
+      },
+      {
+        label: 'Metrics Report',
+        key: 'course-metrics-report',
+        children: <CourseMetricsStatistic courseId={course?.id} />,
         hidden: true,
       },
     ],

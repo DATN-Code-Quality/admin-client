@@ -9,6 +9,7 @@ import { SubRole, SubmisisonTab } from '~/constant/enum';
 import { Assignment } from '~/domain/assignment';
 import { ReportAssignment, Submission } from '~/domain/submission';
 
+
 import AddSubmission from './AddSubmission';
 
 import { Empty, Tabs } from 'antd';
@@ -20,6 +21,7 @@ import useQuery from '~/hooks/useQuery';
 import { useNavigate, useNavigation } from 'react-router-dom';
 import useCurrentWidth from '~/hooks/useCurrentWidth';
 import { FormAddAssignment } from '../form-add-assignment';
+import { DOMAIN_API_URL } from '~/constant';
 
 const SubmissionComponent: React.FC<{ assignment: Assignment }> = ({
   assignment,
@@ -224,6 +226,14 @@ const SubmissionItem: React.FC<{
       </div>
     );
   }, []);
+
+  let submissionUrl = submission.link;
+  if (!submissionUrl.startsWith('http')) {
+    if (submissionUrl.startsWith('/')) {
+      const apiURL = DOMAIN_API_URL?.replace('/api', '');
+      submissionUrl = apiURL + submissionUrl;
+    }
+  }
   return (
     <div
       className="rounded-2 p-4 mt-4 cursor-pointer"
@@ -246,12 +256,12 @@ const SubmissionItem: React.FC<{
             )}
             {/* {submission?.updatedAt} */}
           </div>
-          {/* <div>
+          <div>
             <span className="font-semibold">Submitted file: </span>
-            <a href={submission.link} target="_blank" rel="noopener noreferrer">
+            <a href={submissionUrl} target="_blank" rel="noopener noreferrer">
               link
             </a>
-          </div> */}
+          </div>
         </div>
         <div
           style={{

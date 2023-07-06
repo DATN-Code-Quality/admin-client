@@ -4,6 +4,9 @@ import DataTable from './DataTable';
 
 import { useSubmission } from '~/adapters/appService/submission.service';
 import PieChart from '~/ui/shared/charts/PieChart';
+import { useAssignment } from '~/adapters/appService/assignment.service';
+import { configObjectToConditions } from '~/utils';
+import TopIssues from './TopIssues';
 
 const Statistic: React.FC<{ courseId: string; assignmentId: string }> = ({
   courseId,
@@ -13,6 +16,9 @@ const Statistic: React.FC<{ courseId: string; assignmentId: string }> = ({
     labels: [],
     data: [],
   });
+  const { getDetailAssignment, getTopIssuesAsssignment } = useAssignment();
+  const [conditions, setConditions] = useState([]);
+
   const [loading, setLoading] = useState(false);
 
   const { getReportAssignment, formatReportData } = useSubmission();
@@ -59,6 +65,13 @@ const Statistic: React.FC<{ courseId: string; assignmentId: string }> = ({
     fetchReport();
   }, [fetchReport]);
 
+  useEffect(() => {
+    getDetailAssignment({ courseId, assignmentId }).then((res) => {
+      const data = res.data.assignment;
+      setConditions(configObjectToConditions(data.configObject));
+    });
+  }, [assignmentId, courseId]);
+
   return (
     <div>
       <PieChart
@@ -75,7 +88,18 @@ const Statistic: React.FC<{ courseId: string; assignmentId: string }> = ({
         loading={loading}
       />
       <div className="mt-2">
-        <DataTable courseId={courseId} assignmentId={assignmentId} />
+        <TopIssues
+          courseId={courseId}
+          assignmentId={assignmentId}
+          type="assignment"
+        />
+      </div>
+      <div className="mt-2">
+        <DataTable
+          courseId={courseId}
+          assignmentId={assignmentId}
+          conditionsRaw={conditions}
+        />
       </div>
     </div>
   );

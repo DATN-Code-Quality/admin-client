@@ -113,6 +113,18 @@ export function useAssignment() {
       return covertedResponse;
     },
 
+    async getTopIssuesAsssignment(
+      courseId: string,
+      assignmentId: string,
+      filter?
+    ): Promise<any> {
+      const response = await getWithPath(
+        `/assignment/${courseId}/${assignmentId}/top-issue`,
+        filter
+      );
+      return response;
+    },
+
     async updateAssignment(
       courseId: string,
       body
