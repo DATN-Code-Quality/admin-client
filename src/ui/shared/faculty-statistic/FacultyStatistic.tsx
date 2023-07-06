@@ -77,12 +77,9 @@ const FacultyStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
     const response = await getFacultyMetricStatistics(courseId);
     const { result } = response.data;
     const typeChartData = {
-      violations: result.violations ?? '0',
       code_smells: result.code_smells ?? '0',
       bugs: result.bugs ?? '0',
       vulnerabilities: result.vulnerabilities ?? '0',
-      duplicated_lines_density: result.duplicated_lines_density ?? '0',
-      coverage: result.coverage ?? '0',
     };
     const severityChartData = {
       blocker_violations: result.blocker_violations ?? '0',
