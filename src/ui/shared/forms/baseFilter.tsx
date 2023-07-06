@@ -16,6 +16,7 @@ type BaseFilterProps = {
   meta: any;
   filterOnChange?: boolean;
   showSubmitButton?: boolean;
+  formProps?: any;
   style?: any;
 };
 
@@ -27,6 +28,7 @@ const BaseFilter: React.FC<BaseFilterProps> = (props) => {
     meta,
     filterOnChange,
     showSubmitButton = true,
+    formProps = {},
     style = {},
   } = props;
   const [form] = Form.useForm();
@@ -70,6 +72,7 @@ const BaseFilter: React.FC<BaseFilterProps> = (props) => {
         gap: '12px 0',
         ...style,
       }}
+      {...formProps}
       initialValues={meta.initialValues}
       form={form}
       onFinish={handleChange}

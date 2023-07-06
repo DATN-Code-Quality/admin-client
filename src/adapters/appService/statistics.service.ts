@@ -10,7 +10,7 @@ import { User } from '~/domain/user';
 import { mockReport } from '~/mock/report.mock';
 
 export type Result = Partial<{
-  total: string;
+  violations: string;
   code_smells: string;
   bugs: string;
   vulnerabilities: string;
