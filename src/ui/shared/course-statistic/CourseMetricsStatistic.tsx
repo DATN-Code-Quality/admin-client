@@ -219,7 +219,7 @@ const CourseMetricsStatistic: React.FC<{ courseId: string }> = ({
                 marginBottom: 16,
               }}
             >
-              Average count by types of bug in course
+              Number of metric types in course
             </div>
           </>
         )}
@@ -238,7 +238,7 @@ const CourseMetricsStatistic: React.FC<{ courseId: string }> = ({
                 marginBottom: 16,
               }}
             >
-              Average count by severity of bug in course
+              Number of severity types in course
             </div>
           </>
         )}
