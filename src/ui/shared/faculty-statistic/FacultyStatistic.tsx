@@ -22,7 +22,10 @@ import {
   splitStr,
 } from '~/utils';
 import { ReportType } from '~/constant/enum';
-import { metaDashboardFilterReport, metaFilterReport } from '../course-statistic/props';
+import {
+  metaDashboardFilterReport,
+  metaFilterReport,
+} from '../course-statistic/props';
 import BaseFilter from '../forms/baseFilter';
 
 const generateSeriesByMetric = (metricObject) => {
@@ -46,7 +49,7 @@ const FacultyStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
   const [loading, setLoading] = useState(false);
   const [detailMetricsModalVisible, detailMetricsModalActions] = useDialog();
   const [reportType, setReportType] = useState<ReportType>(
-    ReportType.METRICS_TYPE
+    ReportType.ISSUE_TYPE
   );
 
   const {
@@ -182,7 +185,7 @@ const FacultyStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
   return (
     <>
       <Card>
-        <TableToolbar title="Metrics Statistics">
+        <TableToolbar title="Faculty Reports">
           <BaseFilter
             loading={list.isLoading}
             meta={metaDashboardFilterReport()}
@@ -196,7 +199,7 @@ const FacultyStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
             }}
           />
         </TableToolbar>
-        {reportType === ReportType.METRICS_TYPE && (
+        {reportType === ReportType.ISSUE_TYPE && (
           <>
             <ColumnChart
               series={typeMetricsChart.data}
@@ -211,11 +214,11 @@ const FacultyStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
                 marginBottom: 16,
               }}
             >
-              Number of metric types in course
+              Average number of issues by type
             </div>
           </>
         )}
-        {reportType === ReportType.METRICS_SEVERITY && (
+        {reportType === ReportType.ISSUE_SEVERITY && (
           <>
             <ColumnChart
               series={severityMetricsChart.data}
@@ -230,7 +233,7 @@ const FacultyStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
                 marginBottom: 16,
               }}
             >
-              Number of severity types in course
+              Average number of issues by severity
             </div>
           </>
         )}
