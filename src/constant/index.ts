@@ -113,6 +113,11 @@ export const MAP_REPORT_TYPE = [
   { value: ReportType.TOP_ISSUES, label: 'Top Issues' },
 ];
 
+export const MAP_DASHBOARD_REPORT_TYPE = [
+  { value: ReportType.METRICS_TYPE, label: 'Metrics Type' },
+  { value: ReportType.METRICS_SEVERITY, label: 'Metrics Severity' },
+];
+
 export const LINE_EMPTY_CODE = '';
 
 export const DEFAULT_PAGE_SIZE = 10;

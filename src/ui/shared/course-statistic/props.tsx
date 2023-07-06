@@ -2,7 +2,7 @@
 /* eslint-disable no-unsafe-optional-chaining */
 import { ColumnType } from 'antd/lib/table';
 
-import { MAP_REPORT_TYPE, MAP_ROLES } from '~/constant';
+import { MAP_DASHBOARD_REPORT_TYPE, MAP_REPORT_TYPE, MAP_ROLES } from '~/constant';
 import { IMetaFormBuilder } from '~/ui/shared/forms/FormBuilder/FormBuilder';
 
 export const metaFilterReport = () => {
@@ -27,6 +27,28 @@ export const metaFilterReport = () => {
   } as IMetaFormBuilder;
 };
 
+
+export const metaDashboardFilterReport = () => {
+  return {
+    columns: MAP_DASHBOARD_REPORT_TYPE.length,
+    fields: [
+      {
+        key: 'type',
+        colSpan: 3,
+        options: MAP_DASHBOARD_REPORT_TYPE,
+        widget: 'select',
+        initialValue: MAP_DASHBOARD_REPORT_TYPE[0],
+        widgetProps: {
+          maxTagCount: 'responsive',
+          style: {
+            minWidth: '12rem',
+          },
+          placeholder: 'Report Type',
+        },
+      },
+    ],
+  } as IMetaFormBuilder;
+};
 export const metaFilterUser = () => {
   return {
     columns: 3,
