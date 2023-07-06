@@ -16,6 +16,7 @@ const ColumnChart: React.FC<{
     xaxis: {
       categories: labels,
     },
+    colors: ['#008ffb', '#00e396', '#feb019', '#ff4560', '#775dd0', '#ffee00'],
   };
 
   return (

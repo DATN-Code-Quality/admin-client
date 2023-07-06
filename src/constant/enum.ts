@@ -88,3 +88,9 @@ export enum SubmisisonTab {
   STATISTIC = 'STATISTIC',
   SUBMISSION = 'SUBMISSION',
 }
+
+export enum ReportType {
+  ISSUE_TYPE = 1,
+  ISSUE_SEVERITY = 2,
+  TOP_ISSUES = 3,
+}

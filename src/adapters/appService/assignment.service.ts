@@ -116,13 +116,11 @@ export function useAssignment() {
     async getTopIssuesAsssignment(
       courseId: string,
       assignmentId: string,
-      limit?: number
+      filter?
     ): Promise<any> {
       const response = await getWithPath(
         `/assignment/${courseId}/${assignmentId}/top-issue`,
-        {
-          limit,
-        }
+        filter
       );
       return response;
     },

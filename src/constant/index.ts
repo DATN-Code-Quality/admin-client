@@ -1,6 +1,7 @@
 import {
   ChartType,
   PartnerType,
+  ReportType,
   Role,
   ServiceType,
   SubRole,
@@ -84,9 +85,37 @@ export const CONDITION_OPERATOR = {
   vulnerabilities: 'GT',
 };
 
+export const MAP_LANGUAGE = [
+  { value: 'c', label: 'C' },
+  { value: 'cpp', label: 'C++' },
+  { value: 'cs', label: 'C#' },
+  { value: 'objc', label: 'Objective-C' },
+  { value: 'py', label: 'Python' },
+  { value: 'js', label: 'JavaScript' },
+  { value: 'ts', label: 'TypeScript' },
+  { value: 'css', label: 'CSS' },
+  { value: 'xml', label: 'XML' },
+  { value: 'go', label: 'Go' },
+  { value: 'java', label: 'Java' },
+  { value: 'kotlin', label: 'Kotlin' },
+  { value: 'php', label: 'PHP' },
+  { value: 'ruby', label: 'Ruby' },
+];
+
 export const MAP_CONDITION_OPERATOR = [
   { value: 'LT', label: 'Less than' },
   { value: 'GT', label: 'Greater than' },
+];
+
+export const MAP_REPORT_TYPE = [
+  { value: ReportType.ISSUE_TYPE, label: 'Issue Type' },
+  { value: ReportType.ISSUE_SEVERITY, label: 'Issue Severity' },
+  { value: ReportType.TOP_ISSUES, label: 'Top Issues' },
+];
+
+export const MAP_DASHBOARD_REPORT_TYPE = [
+  { value: ReportType.ISSUE_TYPE, label: 'Issue Type' },
+  { value: ReportType.ISSUE_SEVERITY, label: 'Issue Severity' },
 ];
 
 export const LINE_EMPTY_CODE = '';

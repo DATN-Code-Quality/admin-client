@@ -21,6 +21,12 @@ import {
   insertAt,
   splitStr,
 } from '~/utils';
+import { ReportType } from '~/constant/enum';
+import {
+  metaDashboardFilterReport,
+  metaFilterReport,
+} from '../course-statistic/props';
+import BaseFilter from '../forms/baseFilter';
 
 const generateSeriesByMetric = (metricObject) => {
   const series = Object.keys(metricObject).map((metric) => {
@@ -42,13 +48,24 @@ const formatMetricsChart = (result) => {
 const FacultyStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
   const [loading, setLoading] = useState(false);
   const [detailMetricsModalVisible, detailMetricsModalActions] = useDialog();
+  const [reportType, setReportType] = useState<ReportType>(
+    ReportType.ISSUE_TYPE
+  );
+
   const {
     getFacultyMetricStatistics,
     getFacultyUserStatistics,
     getFacultyUserDetailedStatistics,
   } = useStatistics();
+  const [typeMetricsChart, setTypeMetricsChart] = useState<{
+    labels: string[][];
+    data: { name: string; data: number[] }[];
+  }>({
+    labels: [],
+    data: [],
+  });
 
-  const [metricsChart, setMetricsChart] = useState<{
+  const [severityMetricsChart, setSeverityMetricsChart] = useState<{
     labels: string[][];
     data: { name: string; data: number[] }[];
   }>({
@@ -59,7 +76,23 @@ const FacultyStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
   const handleFetchMetricsChart = async () => {
     const response = await getFacultyMetricStatistics(courseId);
     const { result } = response.data;
-    setMetricsChart(formatMetricsChart(result));
+    const typeChartData = {
+      violations: result.violations ?? '0',
+      code_smells: result.code_smells ?? '0',
+      bugs: result.bugs ?? '0',
+      vulnerabilities: result.vulnerabilities ?? '0',
+      duplicated_lines_density: result.duplicated_lines_density ?? '0',
+      coverage: result.coverage ?? '0',
+    };
+    const severityChartData = {
+      blocker_violations: result.blocker_violations ?? '0',
+      critical_violations: result.critical_violations ?? '0',
+      major_violations: result.major_violations ?? '0',
+      minor_violations: result.minor_violations ?? '0',
+      info_violations: result.info_violations ?? '0',
+    };
+    setTypeMetricsChart(formatMetricsChart(typeChartData));
+    setSeverityMetricsChart(formatMetricsChart(severityChartData));
   };
 
   useEffect(() => {
@@ -152,12 +185,58 @@ const FacultyStatistic: React.FC<{ courseId: string }> = ({ courseId }) => {
   return (
     <>
       <Card>
-        <TableToolbar title="Metrics Statistics" />
-        <ColumnChart
-          series={metricsChart.data}
-          labels={metricsChart.labels}
-          loading={loading}
-        />
+        <TableToolbar title="Faculty Reports">
+          <BaseFilter
+            loading={list.isLoading}
+            meta={metaDashboardFilterReport()}
+            onFilter={(value) => setReportType(value.type)}
+            filterOnChange
+            showSubmitButton={false}
+            formProps={{
+              style: {
+                marginBottom: 0,
+              },
+            }}
+          />
+        </TableToolbar>
+        {reportType === ReportType.ISSUE_TYPE && (
+          <>
+            <ColumnChart
+              series={typeMetricsChart.data}
+              labels={typeMetricsChart.labels}
+              loading={loading}
+            />
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                fontWeight: 500,
+                marginBottom: 16,
+              }}
+            >
+              Average number of issues by type
+            </div>
+          </>
+        )}
+        {reportType === ReportType.ISSUE_SEVERITY && (
+          <>
+            <ColumnChart
+              series={severityMetricsChart.data}
+              labels={severityMetricsChart.labels}
+              loading={loading}
+            />
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                fontWeight: 500,
+                marginBottom: 16,
+              }}
+            >
+              Average number of issues by severity
+            </div>
+          </>
+        )}
         <ProTable
           dataSource={list.items}
           search={false}

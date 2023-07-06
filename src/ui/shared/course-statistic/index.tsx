@@ -1,3 +1,3 @@
-import CourseStatistic from './CourseStatistic';
+import CourseMetricsStatistic from './CourseMetricsStatistic';
 
-export default CourseStatistic;
+export default CourseMetricsStatistic;
