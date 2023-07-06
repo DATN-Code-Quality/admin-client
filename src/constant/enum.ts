@@ -90,7 +90,7 @@ export enum SubmisisonTab {
 }
 
 export enum ReportType {
-  METRICS_TYPE = 1,
-  METRICS_SEVERITY = 2,
+  ISSUE_TYPE = 1,
+  ISSUE_SEVERITY = 2,
   TOP_ISSUES = 3,
 }

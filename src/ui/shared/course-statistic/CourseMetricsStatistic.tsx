@@ -54,7 +54,7 @@ const CourseMetricsStatistic: React.FC<{ courseId: string }> = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const [reportType, setReportType] = useState<ReportType>(
-    ReportType.METRICS_TYPE
+    ReportType.ISSUE_TYPE
   );
   const {
     getCourseMetricStatistics,
@@ -204,7 +204,7 @@ const CourseMetricsStatistic: React.FC<{ courseId: string }> = ({
             }}
           />
         </TableToolbar>
-        {reportType === ReportType.METRICS_TYPE && (
+        {reportType === ReportType.ISSUE_TYPE && (
           <>
             <ColumnChart
               series={typeMetricsChart.data}
@@ -219,11 +219,11 @@ const CourseMetricsStatistic: React.FC<{ courseId: string }> = ({
                 marginBottom: 16,
               }}
             >
-              Average count by types of bug in course
+              Average number of issues by type
             </div>
           </>
         )}
-        {reportType === ReportType.METRICS_SEVERITY && (
+        {reportType === ReportType.ISSUE_SEVERITY && (
           <>
             <ColumnChart
               series={severityMetricsChart.data}
@@ -238,7 +238,7 @@ const CourseMetricsStatistic: React.FC<{ courseId: string }> = ({
                 marginBottom: 16,
               }}
             >
-              Average count by severity of bug in course
+              Average number of issues by severity
             </div>
           </>
         )}
